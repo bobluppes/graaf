@@ -17,6 +17,8 @@ namespace graaf {
 			graaf(std::initializer_list<vertex_type> vertices, std::initializer_list<edge_type> edges)
 				: vertices_{vertices}, edges_{edges} {}
 
+			[[nodiscard]] std::size_t number_of_vertices() const { return vertices_.size(); }
+
 		private:
 			std::unordered_set<vertex_type, types::vertex_hash> vertices_;
 			std::unordered_set<edge_type, types::edge_hash> edges_;
