@@ -1,12 +1,16 @@
+#include <graaflib/graph.h>
+
 #include <gtest/gtest.h>
 
-#include "../src/graaf.h"
+namespace graaf {
 
-TEST(GraafTest, SimpleGraafSize) {
-    const graaf::graaf<int> graph{
-        {{0, 10}, {1, 11}, {2, 12}},
-        {{0, 1}, {1, 2}}
-    };
-    EXPECT_EQ(graph.number_of_vertices(), 3);
+    TEST(GraafTest, SimpleGraafSize) {
+        const graph<int> graph{
+            {{0, 10}, {1, 11}, {2, 12}},
+            {{0, 1}, {1, 2}}
+        };
+    EXPECT_EQ(graph.vertex_count(), 3);
+}
+
 }
 
