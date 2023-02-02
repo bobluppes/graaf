@@ -3,6 +3,7 @@
 #include <initializer_list>
 #include <unordered_set>
 
+#include <graaflib/builders/graphbuilder.h>
 #include <graaflib/graph_fwd.h>
 #include <graaflib/types/edge.h>
 #include <graaflib/types/vertex.h>
@@ -17,6 +18,8 @@ namespace graaf {
 			using vertices_type = std::unordered_set<vertex_type, types::vertex_hash>;
 			using edges_type = std::unordered_set<edge_type, types::edge_hash>;
 
+			graph(vertices_type&& vertices, edges_type&& edges) : vertices_{vertices}, edges_{edges} {}
+
 			graph(std::initializer_list<vertex_type> vertices, std::initializer_list<edge_type> edges)
 				: vertices_{vertices}, edges_{edges} {}
 
@@ -25,6 +28,8 @@ namespace graaf {
 
 			[[nodiscard]] const vertices_type& vertices() const noexcept { return vertices_; }
 			[[nodiscard]] const edges_type& edges() const noexcept { return edges_; }
+
+			using builder = graaf::builders::graphbuilder<T, T_HASH, vertex_type, types::vertex_hash, edge_type, types::edge_hash>;
 
 		private:
 			vertices_type vertices_;
