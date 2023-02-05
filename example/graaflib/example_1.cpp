@@ -23,10 +23,10 @@ int main() {
 	const user_struct v1{3, "some string data"};
 	const user_struct v2{5, "some other string data"};
 
-	graaf::graph<user_struct, user_struct_hash> example_graph{
-		{{0, v1}, {1, v2}}, 	// vertices
-		{{0, 1}}				// edges
-	};
+	// graaf::graph<user_struct, user_struct_hash> example_graph{
+	// 	{{0, v1}, {1, v2}}, 	// vertices
+	// 	{{0, 1}}				// edges
+	// };
 
-	std::cout << example_graph.vertex_count() << std::endl;
+	// std::cout << example_graph.vertex_count() << std::endl;
 }

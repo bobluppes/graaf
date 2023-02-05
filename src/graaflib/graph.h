@@ -1,22 +1,25 @@
 #pragma once
 
 #include <initializer_list>
-#include <unordered_set>
+#include <stdexcept>
+#include <unordered_map>
+#include <vector>
 
-#include <graaflib/builders/graphbuilder.h>
-#include <graaflib/graph_fwd.h>
 #include <graaflib/types/edge.h>
 #include <graaflib/types/vertex.h>
 
 namespace graaf {
 
-	template <typename T, typename T_HASH>
+	template <typename T>
 	class graph {
 		public:
-			using vertex_type = types::vertex<T, T_HASH>;
+			using vertex_type = types::vertex<T>;
 			using edge_type = types::edge;
-			using vertices_type = std::unordered_set<vertex_type, types::vertex_hash>;
-			using edges_type = std::unordered_set<edge_type, types::edge_hash>;
+
+			// Unordered map for fast access by vertex ID
+			using vertices_type = std::unordered_map<types::vertex_id_t, vertex_type>;
+			// The index into the vector is the ID of the edge, all vertex IDs should be consecutive and start at 0
+			using edges_type = std::vector<edge_type>;
 
 			graph(vertices_type&& vertices, edges_type&& edges) : vertices_{vertices}, edges_{edges} {}
 
@@ -29,7 +32,19 @@ namespace graaf {
 			[[nodiscard]] const vertices_type& vertices() const noexcept { return vertices_; }
 			[[nodiscard]] const edges_type& edges() const noexcept { return edges_; }
 
-			using builder = graaf::builders::graphbuilder<T, T_HASH, vertex_type, types::vertex_hash, edge_type, types::edge_hash>;
+			[[nodiscard]] const vertex_type& get_vertex(types::vertex_id_t id) const {
+				if (!vertices_.contains(id)) {
+					throw std::out_of_range("Vertex not contained in graph.");
+				}
+				return vertices_[id];
+			}
+
+			[[nodiscard]] const edge_type& get_edge(types::edge_id_t id) {
+				if (id >= edges_.size()) {
+					throw std::out_of_range("Edge not contained in graph.");
+				}
+				return edges_[id];
+			}
 
 		private:
 			vertices_type vertices_;
