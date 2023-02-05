@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 
 #include <graaflib/graph.h>
 
@@ -22,8 +23,12 @@ int main() {
 	const user_struct v1{3, "some string data"};
 	const user_struct v2{5, "some other string data"};
 
-	graaf::graph<user_struct, user_struct_hash> example_graph{
-		{{0, v1}, {1, v2}}, 	// vertices
-		{{0, 1}}				// edges
-	};
+	const auto graph {graaf::graph<user_struct, user_struct_hash>::builder().vertices({
+        {0, v1},
+        {1, v2}
+    }).edges({
+        {0, 1}
+    }).build()};
+
+    std::cout << graph.vertex_count() << std::endl;
 }
