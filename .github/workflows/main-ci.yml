@@ -1,4 +1,4 @@
-name: CMake
+name: Main-CI
 
 on:
   push:
