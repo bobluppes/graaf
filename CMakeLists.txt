@@ -16,5 +16,6 @@ add_subdirectory(example)
 # The graph library itself
 add_subdirectory(src)
 
-# Unit tests
+# Enables testing in CMAKE, needs to be called BEFORE call to add_subdirectory
+enable_testing()
 add_subdirectory(test)

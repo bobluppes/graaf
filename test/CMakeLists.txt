@@ -9,9 +9,6 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-# Enables testing in CMAKE
-enable_testing()
-
 file(GLOB TEST_SOURCES "graaflib/*.cpp" "graaflib/*/*.cpp")
 add_executable(
   ${PROJECT_NAME}_test
