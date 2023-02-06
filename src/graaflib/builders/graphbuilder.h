@@ -4,40 +4,51 @@
 #include <unordered_set>
 
 #include <graaflib/graph_fwd.h>
+#include <graaflib/types/edge.h>
+#include <graaflib/types/vertex.h>
 
 namespace graaf::builders {
 
-    template <typename T, typename T_HASH, typename V, typename V_HASH, typename E, typename E_HASH>
+    template <class GRAPH>
     class graphbuilder {
         public:
-            using vertices_type = std::unordered_set<V, V_HASH>;
-            using edges_type = std::unordered_set<E, E_HASH>;
+            using vertices_type = typename GRAPH::vertices_t;
+            using edges_type = typename GRAPH::edges_t;
 
-            graphbuilder& vertices(std::initializer_list<V> vertices) {
+            // TODO: this implicitly relies on the container types
+            using vertex_t = typename vertices_type::value_type;
+            using edge_t = typename edges_type::value_type;
+
+            using element_t = typename vertex_t::element_t;
+
+            graphbuilder& vertices(std::initializer_list<typename vertices_type::value_type> vertices) {
                 // TODO: assert vertices_ empty
                 vertices_ = vertices;
                 return *this;
             }
 
-            graphbuilder& edges(std::initializer_list<E> edges) {
+            graphbuilder& edges(std::initializer_list<edge_t> edges) {
                 // TODO: assert edges_ empty
                 edges_ = edges;
                 return *this;
             }
 
-            [[nodiscard]] std::size_t add_vertex(T element) {
-                [[maybe_unused]] const auto [vertex, success]{vertices_.insert({id_supplier_++, std::move(element)})};
-                // TODO: assert success
-                return vertex->get_id();
+            [[nodiscard]] types::vertex_id_t add_vertex(element_t element) {
+                vertices_.emplace_back(vertex_t{id_supplier_++, std::move(element)});
+                
+                // The ID of the vertex is it's index into the container
+                return vertices_.size() - 1;
             }
 
-            void add_edge(std::size_t l, std::size_t r) {
-                edges_.insert({l, r});  // TODO: maybe use emplace
-                // TODO: assert success
+            types::edge_id_t add_edge(std::size_t l, std::size_t r) {
+                edges_.emplace_back(edge_t{l, r});
+
+                // The ID of the vertex is it's index into the container
+                return edges_.size() - 1;
             }
 
-            graaf::graph<T, T_HASH> build() {
-                return graaf::graph<T, T_HASH>{std::move(vertices_), std::move(edges_)};
+            GRAPH build() {
+                return {std::move(vertices_), std::move(edges_)};
             }
 
         private:

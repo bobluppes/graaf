@@ -4,7 +4,7 @@
 
 namespace graaf {
 
-    template <typename T, typename T_HASH = std::hash<T>>
+    template <typename T, typename EDGE>
     class graph;
 
 }
