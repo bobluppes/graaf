@@ -6,6 +6,7 @@
 #include <vector>
 
 #include <fmt/core.h>
+#include <fmt/ostream.h>
 
 #include <graaflib/types/vertex.h>
 
@@ -23,8 +24,7 @@ namespace graaf::types {
 		}
 
 		friend std::ostream& operator<<(std::ostream& os, const directed_edge& e) {
-				os << fmt::format("[{} -> {}]", e.from, e.to);
-				return os;
+				return os << fmt::format("{} -> {}", e.from, e.to);
 			}
 	};
 
@@ -45,9 +45,11 @@ namespace graaf::types {
 		}
 
 		friend std::ostream& operator<<(std::ostream& os, const undirected_edge& e) {
-				os << fmt::format("[{} -- {}]", e.lhs, e.rhs);
-				return os;
+				return os << fmt::format("{} -- {}", e.lhs, e.rhs);
 			}
 	};
 
 }
+
+template <> struct fmt::formatter<graaf::types::directed_edge> : ostream_formatter {};
+template <> struct fmt::formatter<graaf::types::undirected_edge> : ostream_formatter {};
