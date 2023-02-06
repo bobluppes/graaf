@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <utility>
 
 #include <graaflib/builders/graphbuilder.h>
@@ -25,6 +26,10 @@ namespace graaf {
 				: graph<T, edge_t>(vertices, edges) {
                     do_validate();
                 }
+
+            [[nodiscard]] std::string get_graph_type() const override {
+                return "digraph";
+            }
 
             using builder = builders::graphbuilder<directed_graph<T>>;
         private:

@@ -26,6 +26,10 @@ namespace graaf {
                     do_validate();
                 }
 
+            [[nodiscard]] std::string get_graph_type() const override {
+                return "graph";
+            }
+
             using builder = builders::graphbuilder<undirected_graph<T>>;
         private:
             void do_validate() const {

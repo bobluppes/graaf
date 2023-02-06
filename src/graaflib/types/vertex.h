@@ -25,8 +25,7 @@ namespace graaf::types {
 			}
 
 			friend std::ostream& operator<<(std::ostream& os, const vertex& v) {
-				os << fmt::format("[{}, {}]", v.get_id(), v.get_element());
-				return os;
+				return os << fmt::format("[{}, {}]", v.get_id(), v.get_element());
 			}
 			
 		private:

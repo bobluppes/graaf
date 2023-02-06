@@ -6,6 +6,7 @@
 
 #include <graaflib/types/edge.h>
 #include <graaflib/types/vertex.h>
+#include <graaflib/utils/dot.h>
 
 namespace graaf {
 
@@ -42,6 +43,12 @@ namespace graaf {
 					throw std::out_of_range("Edge not contained in graph.");
 				}
 				return edges_[id];
+			}
+
+			[[nodiscard]] virtual std::string get_graph_type() const = 0;
+
+			friend std::ostream& operator<<(std::ostream& os, const graph<T, EDGE>& graph) {
+				return os << utils::to_dot(graph);
 			}
 
 		private:

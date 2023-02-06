@@ -1,6 +1,8 @@
 #include <string>
 #include <iostream>
 
+#include <fmt/ostream.h>
+
 #include <graaflib/directed_graph.h>
 
 struct user_struct {
@@ -10,7 +12,13 @@ struct user_struct {
 	bool operator==(const user_struct& rhs) const {
 		return number == rhs.number && data == rhs.data;
 	}
+
+	friend std::ostream& operator<<(std::ostream& os, const user_struct& s) {
+		return os << fmt::format("[{}, {}]", s.number, s.data);
+	}
 };
+
+template <> struct fmt::formatter<user_struct> : ostream_formatter {};
 
 int main() {
 
@@ -24,5 +32,5 @@ int main() {
         {0, 1}
     }).build()};
 
-    std::cout << graph.vertex_count() << std::endl;
+    std::cout << graph << std::endl;
 }
