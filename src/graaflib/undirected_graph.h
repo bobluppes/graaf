@@ -2,25 +2,31 @@
 
 #include <utility>
 
+#include <graaflib/builders/graphbuilder.h>
+#include <graaflib/types/edge.h>
 #include <graaflib/graph.h>
 
 namespace graaf {
 
     template <typename T>
-    class undirected_graph : public graph<T>{
-
-        using vertices_type = typename graph<T>::vertices_type;
-        using edges_types = typename graph<T>::edges_type;
-
+    class undirected_graph final : public graph<T, types::undirected_edge>{
         public:
-            undirected_graph(vertices_type&& vertices, edges_types&& edges) : graph<T>(std::forward(vertices), std::forward(edges)) {
+
+            using edge_t = types::undirected_edge;
+
+            using vertices_t = typename graph<T, edge_t>::vertices_t;
+            using edges_t = typename graph<T, edge_t>::edges_t;
+
+            undirected_graph(vertices_t&& vertices, edges_t&& edges) : graph<T, edge_t>(std::move(vertices), std::move(edges)) {
                 do_validate();
             }
 
-			undirected_graph(std::initializer_list<typename vertices_type::value_type> vertices, std::initializer_list<typename edges_types::value_type> edges)
-				: graph<T>(vertices, edges) {
+			undirected_graph(std::initializer_list<typename vertices_t::value_type> vertices, std::initializer_list<edge_t> edges)
+				: graph<T, edge_t>(vertices, edges) {
                     do_validate();
                 }
+
+            using builder = builders::graphbuilder<undirected_graph<T>>;
         private:
             void do_validate() const {
                 // TODO: validation logic
