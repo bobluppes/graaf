@@ -5,6 +5,8 @@
 #include <cstddef>
 #include <vector>
 
+#include <fmt/core.h>
+
 #include <graaflib/types/vertex.h>
 
 namespace graaf::types {
