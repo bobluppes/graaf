@@ -1,20 +1,31 @@
-![graaf](docs/img/graaf.png)
-
-# Graaf
+# ![graaf](docs/img/graaf.png) Graaf
 A light-weight C++ based graph library.
+
+Graaf is a general-purpose lightweight C++ library designed for versatile graph operations. Graaf allows users to easily create, modify, and query graphs. It is well-suited for various applications, including social network analysis, routing algorithms, and more.
+
+## Features
+The Graaf library is designed with generality in mind. As such, it comes with specializations for a `directed_graph` as well as an `undirected_graph`. Furthermore, it can be used to store user-defined vertex and edge classes:
+
+```c++
+graaf::undirected_graph<User, Connection> my_graph{};
+
+const auto bob = my_graph.add_vertex(User{
+  .name = "Bob",
+  .age = 42
+});
+
+const auto alice = my_graph.add_vertex(User{
+  .name = "Alice",
+  .age = 33
+});
+
+my_graph.add_edge(bob, alice, Connection{
+  .weight = 3
+});
+```
 
 ## Requirements
 - C++ 20
-
-## Features
-The Graaf library provides support for both directed as well as undirected graph structures. Vertices in these graphs can wrap either predefined or user-defined types:
-
-```c++
-const auto my_graph = graaf::directed_graph<my_class>::builder()
-        .vertices(...)  // Your vertex definitions here
-        .edges(...)     // Your edge definitions here
-        .build();
-```
 
 ## Installation
 This project supports CMake and can be pulled in using `FetchContent`:
@@ -35,18 +46,8 @@ Now you can link your target against `Graaf_lib`:
 target_link_libraries(${PROJECT_NAME} PRIVATE Graaf_lib)
 ```
 
-## Building locally
-You can also build the project yourself:
+## Contributing
+The Graaf library is open to contributions, learn more [here](CONTRIBUTING.md).
 
-```bash
-# Clone the repository
-git clone https://github.com/bobluppes/graaf
-mkdir -p graaf/build && cd graaf/build
-
-# Build the project
-cmake ..
-cmake --build .
-
-# Optionally, run the tests
-ctest
-```
+## License
+This project is licensed under the [MIT license](LICENSE.md).
