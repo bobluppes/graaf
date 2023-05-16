@@ -1,6 +1,8 @@
 ![graaf](docs/img/graaf.png)
 
 # Graaf
+[![Main-CI](https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml/badge.svg)](https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml)
+
 A light-weight C++ based graph library.
 
 ## Requirements
