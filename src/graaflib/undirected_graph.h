@@ -1,39 +1,29 @@
 #pragma once
 
-#include <utility>
-
-#include <graaflib/builders/graphbuilder.h>
-#include <graaflib/types/edge.h>
 #include <graaflib/graph.h>
 
 namespace graaf {
 
-    template <typename T>
-    class undirected_graph final : public graph<T, types::undirected_edge>{
-        public:
-
-            using edge_t = types::undirected_edge;
-
-            using vertices_t = typename graph<T, edge_t>::vertices_t;
-            using edges_t = typename graph<T, edge_t>::edges_t;
-
-            undirected_graph(vertices_t&& vertices, edges_t&& edges) : graph<T, edge_t>(std::move(vertices), std::move(edges)) {
-                do_validate();
-            }
-
-			undirected_graph(std::initializer_list<typename vertices_t::value_type> vertices, std::initializer_list<edge_t> edges)
-				: graph<T, edge_t>(vertices, edges) {
-                    do_validate();
-                }
-
-            [[nodiscard]] std::string get_graph_type() const override {
-                return "graph";
-            }
-
-            using builder = builders::graphbuilder<undirected_graph<T>>;
+    template <typename VERTEX_T, typename EDGE_T>
+    class undirected_graph final : public graph<VERTEX_T, EDGE_T, GRAPH_SPEC::UNDIRECTED>{
         private:
-            void do_validate() const {
-                // TODO: validation logic
+            using vertex_id_t = graph<VERTEX_T, EDGE_T, GRAPH_SPEC::UNDIRECTED>::vertex_id_t;
+            using vertex_ids_t = graph<VERTEX_T, EDGE_T, GRAPH_SPEC::UNDIRECTED>::vertex_ids_t;
+
+            void do_add_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs, EDGE_T edge) override {
+                this->adjacency_list_[vertex_id_lhs].insert(vertex_id_rhs);
+                this->adjacency_list_[vertex_id_rhs].insert(vertex_id_lhs);
+
+                // TODO: avoid duplication of edge here
+                this->edges_.emplace(std::make_pair(vertex_id_lhs, vertex_id_rhs), edge);
+                this->edges_.emplace(std::make_pair(vertex_id_rhs, vertex_id_lhs), std::move(edge));
+            }
+
+            void do_remove_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) override {
+                this->adjacency_list_.at(vertex_id_lhs).erase(vertex_id_rhs);
+                this->adjacency_list_.at(vertex_id_rhs).erase(vertex_id_lhs);
+                this->edges_.erase(std::make_pair(vertex_id_lhs, vertex_id_rhs));
+                this->edges_.erase(std::make_pair(vertex_id_rhs, vertex_id_lhs));
             }
     };
 

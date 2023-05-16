@@ -10,9 +10,6 @@ project(Graaf
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Shows example usages of the library
-add_subdirectory(example)
-
 # The graph library itself
 add_subdirectory(src)
 

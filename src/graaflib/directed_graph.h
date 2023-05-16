@@ -1,40 +1,23 @@
 #pragma once
 
-#include <string>
-#include <utility>
-
-#include <graaflib/builders/graphbuilder.h>
-#include <graaflib/types/edge.h>
 #include <graaflib/graph.h>
 
 namespace graaf {
 
-    template <typename T>
-    class directed_graph final : public graph<T, types::directed_edge> {
-        public:
-
-            using edge_t = types::directed_edge;
-
-            using vertices_t = typename graph<T, edge_t>::vertices_t;
-            using edges_t = typename graph<T, edge_t>::edges_t;
-
-            directed_graph(vertices_t&& vertices, edges_t&& edges) : graph<T, edge_t>(std::move(vertices), std::move(edges)) {
-                do_validate();
-            }
-
-			directed_graph(std::initializer_list<typename vertices_t::value_type> vertices, std::initializer_list<edge_t> edges)
-				: graph<T, edge_t>(vertices, edges) {
-                    do_validate();
-                }
-
-            [[nodiscard]] std::string get_graph_type() const override {
-                return "digraph";
-            }
-
-            using builder = builders::graphbuilder<directed_graph<T>>;
+    template <typename VERTEX_T, typename EDGE_T>
+    class directed_graph final : public graph<VERTEX_T, EDGE_T, GRAPH_SPEC::DIRECTED> {
         private:
-            void do_validate() const {
-                // TODO: validation logic
+            using vertex_id_t = graph<VERTEX_T, EDGE_T, GRAPH_SPEC::DIRECTED>::vertex_id_t;
+            using vertex_ids_t = graph<VERTEX_T, EDGE_T, GRAPH_SPEC::DIRECTED>::vertex_ids_t;
+
+			void do_add_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs, EDGE_T edge) override {
+                this->adjacency_list_[vertex_id_lhs].insert(vertex_id_rhs);
+                this->edges_.emplace(std::make_pair(vertex_id_lhs, vertex_id_rhs), std::move(edge));
+            }
+
+            void do_remove_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) override {
+                this->adjacency_list_.at(vertex_id_lhs).erase(vertex_id_rhs);
+                this->edges_.erase(std::make_pair(vertex_id_lhs, vertex_id_rhs));
             }
     };
 

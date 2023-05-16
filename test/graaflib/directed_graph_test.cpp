@@ -5,10 +5,10 @@
 namespace graaf {
 
     TEST(DirectedGraphTest, SimpleGraafSize) {
-        const directed_graph<int> test_graph{
-            {{0, 10}, {1, 11}, {2, 12}},
-            {{0, 1}, {1, 2}}
-        };
+        directed_graph<int, float> test_graph{};
+        test_graph.add_vertex(5);
+        test_graph.add_vertex(6);
+        test_graph.add_vertex(7);
         EXPECT_EQ(test_graph.vertex_count(), 3);
     }
 

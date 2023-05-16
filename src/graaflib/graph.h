@@ -1,59 +1,143 @@
 #pragma once
 
+#include <algorithm>
 #include <initializer_list>
 #include <stdexcept>
-#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
 
-#include <graaflib/types/edge.h>
-#include <graaflib/types/vertex.h>
-#include <graaflib/utils/dot.h>
+#include <fmt/core.h>
 
 namespace graaf {
 
-	template <typename T, typename EDGE>
+	enum class GRAPH_SPEC {DIRECTED, UNDIRECTED};
+
+	template <typename VERTEX_T, typename EDGE_T, GRAPH_SPEC GRAPH_SPEC_V>
 	class graph {
 		public:
-			using vertex_t = types::vertex<T>;
-			using edge_t = EDGE;
+			using vertex_t = VERTEX_T;
+			using edge_t = EDGE_T;
 
-			// The index into the vector is the ID of the vertex or edge, all IDs should be consecutive and start at 0
-			using vertices_t = std::vector<vertex_t>;
-			using edges_t = std::vector<edge_t>;
+			using vertex_id_t = std::size_t;
+			using vertex_ids_t = std::pair<vertex_id_t, vertex_id_t>;
+			using edge_id_t = std::size_t;
 
-			graph(vertices_t&& vertices, edges_t&& edges) : vertices_{vertices}, edges_{edges} {}
+			using vertices_t = std::unordered_set<vertex_id_t>;
 
-			graph(std::initializer_list<typename vertices_t::value_type> vertices, std::initializer_list<edge_t> edges)
-				: vertices_{vertices}, edges_{edges} {}
+			[[nodiscard]] constexpr bool is_directed() const { return std::is_same_v<GRAPH_SPEC_V, GRAPH_SPEC::DIRECTED>; }
+			[[nodiscard]] constexpr bool is_undirected() const { return std::is_same_v<GRAPH_SPEC_V, GRAPH_SPEC::UNDIRECTED>; }
 
+			/**
+			 * STATISTICS
+			*/
 			[[nodiscard]] std::size_t vertex_count() const noexcept { return vertices_.size(); }
 			[[nodiscard]] std::size_t edge_count() const noexcept { return edges_.size(); }
 
-			[[nodiscard]] const vertices_t& vertices() const noexcept { return vertices_; }
-			[[nodiscard]] const edges_t& edges() const noexcept { return edges_; }
+			/**
+			 * GETTERS
+			*/
+			[[nodiscard]] bool has_vertex(vertex_id_t vertex_id) const noexcept {
+				return vertices_.contains(vertex_id);
+			}
+			[[nodiscard]] bool has_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const noexcept { 
+				return edges_.contains({vertex_id_lhs, vertex_id_rhs});
+			 }
 
-			[[nodiscard]] const vertex_t& get_vertex(types::vertex_id_t id) const {
-				if (id >= edges_.size()) {
-					throw std::out_of_range("Vertex not contained in graph.");
+			[[nodiscard]] vertex_t& get_vertex(vertex_id_t vertex_id) {
+				if (!has_vertex(vertex_id)) {
+					throw std::out_of_range{fmt::format("Vertex with ID [{}] not found in graph.", vertex_id)};
 				}
-				return vertices_[id];
+				return vertices_.at(vertex_id);
+			}
+			[[nodiscard]] const vertex_t& get_vertex(vertex_id_t vertex_id) const {
+				return get_vertex(vertex_id);
 			}
 
-			[[nodiscard]] const edge_t& get_edge(types::edge_id_t id) {
-				if (id >= edges_.size()) {
-					throw std::out_of_range("Edge not contained in graph.");
+			[[nodiscard]] edge_t& get_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) { 
+				if (!has_edge(vertex_id_lhs, vertex_id_rhs)) {
+					throw std::out_of_range{fmt::format("No edge found between vertices [{}] -> [{}].", vertex_id_lhs, vertex_id_rhs)};
 				}
-				return edges_[id];
+				return edges_.at({vertex_id_lhs, vertex_id_rhs});
+			 }
+			[[nodiscard]] const edge_t& get_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const {
+				return get_edge(vertex_id_lhs, vertex_id_rhs);
 			}
 
-			[[nodiscard]] virtual std::string get_graph_type() const = 0;
-
-			friend std::ostream& operator<<(std::ostream& os, const graph<T, EDGE>& graph) {
-				return os << utils::to_dot(graph);
+			[[nodiscard]] const vertices_t& get_neighbors(vertex_id_t vertex_id) const {
+				if (!has_vertex(vertex_id)) {
+					throw std::out_of_range{fmt::format("Vertex with ID [{}] not found in graph.", vertex_id)};
+				}
+				
+				return adjacency_list_.at(vertex_id);
 			}
+
+			/**
+			 * SETTERS
+			*/
+			vertex_id_t add_vertex(VERTEX_T vertex) {
+				// TODO: check overflow
+				const auto vertex_id{vertex_id_supplier_++};
+				vertices_.emplace(vertex_id, std::move(vertex));
+				return vertex_id;
+			}
+
+			void remove_vertex(vertex_id_t vertex_id) {
+
+				for (auto& target_vertex_id : adjacency_list_.at(vertex_id)) {
+					edges_.erase({vertex_id, target_vertex_id});
+				}
+
+				adjacency_list_.erase(vertex_id);
+				vertices_.erase(vertex_id);
+
+				for (auto& [source_vertex_id, neighbors] : adjacency_list_) {
+					neighbors.erase(vertex_id);
+					edges_.erase({source_vertex_id, vertex_id});
+				}
+			}
+
+			void add_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs, EDGE_T edge) {
+				if (!has_vertex(vertex_id_lhs) || !has_vertex(vertex_id_rhs)) {
+					throw std::out_of_range{fmt::format("Vertices with ID [{}] and [{}] not found in graph.", vertex_id_lhs, vertex_id_rhs)};
+				}
+				do_add_edge(vertex_id_lhs, vertex_id_rhs, std::move(edge));
+			}
+
+			vertex_ids_t add_edge(VERTEX_T vertex_lhs, VERTEX_T vertex_rhs, EDGE_T edge) {
+				const auto vertex_id_lhs{add_vertex(std::move(vertex_lhs))};
+				const auto vertex_id_rhs{add_vertex(std::move(vertex_rhs))};
+				add_edge(vertex_id_lhs, vertex_id_rhs, std::move(edge));
+				return {vertex_id_lhs, vertex_id_rhs};
+			}
+
+			void remove_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) { do_remove_edge(vertex_id_lhs, vertex_id_rhs); }
+
+		protected:
+			struct vertex_ids_hash {
+				[[nodiscard]] std::size_t operator()(const vertex_ids_t& key) const {
+					const auto h1{std::hash<vertex_id_t>{}(key.first)};
+					const auto h2{std::hash<vertex_id_t>{}(key.second)};
+					
+					// TODO: use something like boost::hash_combine
+					return h1 ^ h2;
+				}
+			};
+
+			using vertex_id_to_vertex_t = std::unordered_map<vertex_id_t, vertex_t>;
+			using vertex_ids_to_edge_t = std::unordered_map<vertex_ids_t, edge_t, vertex_ids_hash>;
+
+			std::unordered_map<vertex_id_t, vertices_t> adjacency_list_{};
+
+			vertex_id_to_vertex_t vertices_{};
+			vertex_ids_to_edge_t edges_{};
+
 
 		private:
-			vertices_t vertices_;
-			edges_t edges_;
+			virtual void do_add_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs, EDGE_T edge) = 0;
+			virtual void do_remove_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) = 0;
+
+			size_t vertex_id_supplier_{0};
 		};
 
 
