@@ -41,6 +41,6 @@ We follow a specific code style to maintain consistency throughout the library. 
 - Follow existing naming conventions and code patterns.
 
 ## Code of Conduct
-Please note that we have a Code of Conduct in place to ensure a respectful and inclusive community environment. By participating in the Graaf project, you agree to abide by its terms. Instances of abusive, harassing, or otherwise unacceptable behavior should be reported to the project maintainers.
+Please note that we have a [Code of Conduct](CODE_OF_CONDUCT.md) in place to ensure a respectful and inclusive community environment. By participating in the Graaf project, you agree to abide by its terms. Instances of abusive, harassing, or otherwise unacceptable behavior should be reported to the project maintainers.
 
 Thank you for your interest in contributing to Graaf! Your contributions are greatly appreciated and help make the library better for everyone.
