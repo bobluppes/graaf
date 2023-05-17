@@ -1,8 +1,6 @@
 # ![graaf](docs/img/graaf.png) Graaf
 [![Main-CI](https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml/badge.svg)](https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml)
 
-A light-weight C++ based graph library.
-
 Graaf is a general-purpose lightweight C++ library designed for versatile graph operations. Graaf allows users to easily create, modify, and query graphs. It is well-suited for various applications, including social network analysis, routing algorithms, and more.
 
 ## Features
