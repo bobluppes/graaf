@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <initializer_list>
+#include <optional>
 #include <stdexcept>
 #include <unordered_map>
 #include <unordered_set>
@@ -25,8 +26,8 @@ namespace graaf {
 
 			using vertices_t = std::unordered_set<vertex_id_t>;
 
-			[[nodiscard]] constexpr bool is_directed() const { return std::is_same_v<GRAPH_SPEC_V, GRAPH_SPEC::DIRECTED>; }
-			[[nodiscard]] constexpr bool is_undirected() const { return std::is_same_v<GRAPH_SPEC_V, GRAPH_SPEC::UNDIRECTED>; }
+			[[nodiscard]] constexpr bool is_directed() const { return GRAPH_SPEC_V == GRAPH_SPEC::DIRECTED; }
+			[[nodiscard]] constexpr bool is_undirected() const { return GRAPH_SPEC_V == GRAPH_SPEC::UNDIRECTED; }
 
 			/**
 			 * STATISTICS
@@ -41,7 +42,7 @@ namespace graaf {
 				return vertices_.contains(vertex_id);
 			}
 			[[nodiscard]] bool has_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const noexcept { 
-				return edges_.contains({vertex_id_lhs, vertex_id_rhs});
+				return do_has_edge(vertex_id_lhs, vertex_id_rhs);
 			 }
 
 			[[nodiscard]] vertex_t& get_vertex(vertex_id_t vertex_id) {
@@ -58,15 +59,15 @@ namespace graaf {
 				if (!has_edge(vertex_id_lhs, vertex_id_rhs)) {
 					throw std::out_of_range{fmt::format("No edge found between vertices [{}] -> [{}].", vertex_id_lhs, vertex_id_rhs)};
 				}
-				return edges_.at({vertex_id_lhs, vertex_id_rhs});
+				return do_get_edge(vertex_id_lhs, vertex_id_rhs);
 			 }
 			[[nodiscard]] const edge_t& get_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const {
 				return get_edge(vertex_id_lhs, vertex_id_rhs);
 			}
 
 			[[nodiscard]] const vertices_t& get_neighbors(vertex_id_t vertex_id) const {
-				if (!has_vertex(vertex_id)) {
-					throw std::out_of_range{fmt::format("Vertex with ID [{}] not found in graph.", vertex_id)};
+				if (!adjacency_list_.contains(vertex_id)) {
+					throw std::out_of_range{fmt::format("Vertex with ID [{}] has no neighbors in graph.", vertex_id)};
 				}
 				
 				return adjacency_list_.at(vertex_id);
@@ -84,8 +85,10 @@ namespace graaf {
 
 			void remove_vertex(vertex_id_t vertex_id) {
 
-				for (auto& target_vertex_id : adjacency_list_.at(vertex_id)) {
-					edges_.erase({vertex_id, target_vertex_id});
+				if (adjacency_list_.contains(vertex_id)) {
+					for (auto& target_vertex_id : adjacency_list_.at(vertex_id)) {
+						edges_.erase({vertex_id, target_vertex_id});
+					}
 				}
 
 				adjacency_list_.erase(vertex_id);
@@ -134,6 +137,8 @@ namespace graaf {
 
 
 		private:
+			[[nodiscard]] virtual bool do_has_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const noexcept = 0;
+			[[nodiscard]] virtual edge_t& do_get_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) = 0;
 			virtual void do_add_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs, EDGE_T edge) = 0;
 			virtual void do_remove_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) = 0;
 

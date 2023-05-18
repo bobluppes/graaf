@@ -9,6 +9,15 @@ namespace graaf {
         private:
             using vertex_id_t = graph<VERTEX_T, EDGE_T, GRAPH_SPEC::DIRECTED>::vertex_id_t;
             using vertex_ids_t = graph<VERTEX_T, EDGE_T, GRAPH_SPEC::DIRECTED>::vertex_ids_t;
+            using edge_t = graph<VERTEX_T, EDGE_T, GRAPH_SPEC::DIRECTED>::edge_t;
+
+            [[nodiscard]] bool do_has_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const noexcept override {
+                return this->edges_.contains({vertex_id_lhs, vertex_id_rhs});
+            }
+
+			[[nodiscard]] edge_t& do_get_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) override {
+                return this->edges_.at({vertex_id_lhs, vertex_id_rhs});
+            }
 
 			void do_add_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs, EDGE_T edge) override {
                 this->adjacency_list_[vertex_id_lhs].insert(vertex_id_rhs);
