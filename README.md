@@ -1,5 +1,6 @@
 # ![graaf](docs/img/graaf.png) Graaf
 [![Main-CI](https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml/badge.svg)](https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml)
+[![Documentation](https://img.shields.io/badge/documentation-doxygen-informational)](https://bobluppes.github.io/graaf/)
 
 A light-weight C++ based graph library.
 
@@ -25,6 +26,8 @@ my_graph.add_edge(bob, alice, Connection{
   .weight = 3
 });
 ```
+
+For more details, take a look at the [documentation](https://bobluppes.github.io/graaf/).
 
 ## Requirements
 - C++ 20
