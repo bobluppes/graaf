@@ -1,0 +1,39 @@
+name: Documentation
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Graaf repository
+        uses: actions/checkout@v3
+        
+      - name: Pull custom Doxygen theme
+        uses: actions/checkout@master
+        with:
+            repository: jothepro/doxygen-awesome-css
+            ref: v2.2.0
+            path: doxygen-awesome-css
+
+      - name: Install Doxygen
+        run: sudo apt-get install doxygen graphviz -y
+        shell: bash
+
+      - name: Generate Doxygen Documentation
+        run: doxygen docs/Doxyfile
+        shell: bash
+      
+      - name: Create .nojekyll (ensures pages with underscores work on gh pages)
+        run: touch docs/html/.nojekyll
+        shell: bash
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+            branch: gh-pages
+            folder: docs/html

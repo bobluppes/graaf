@@ -1,5 +1,6 @@
 # ![graaf](docs/img/graaf.png) Graaf
 [![Main-CI](https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml/badge.svg)](https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml)
+[![Documentation](https://img.shields.io/badge/documentation-doxygen-informational)](https://bobluppes.github.io/graaf/)
 
 Graaf is a general-purpose lightweight C++ library designed for versatile graph operations. Graaf allows users to easily create, modify, and query graphs. It is well-suited for various graph-based applications, including social network analysis, CNNs, and more.
 
@@ -23,6 +24,8 @@ my_graph.add_edge(bob, alice, Connection{
   .type = connection_type::FRIENDS
 });
 ```
+
+For more details, take a look at the [documentation](https://bobluppes.github.io/graaf/).
 
 ## Requirements
 - C++ 20
