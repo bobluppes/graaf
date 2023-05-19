@@ -15,11 +15,23 @@ add_executable(
   ${TEST_SOURCES}
 )
 
+if (ENABLE_COVERAGE)
+  include(CodeCoverage)
+  append_coverage_compiler_flags_to_target(${PROJECT_NAME}_test)
+
+  setup_target_for_coverage_gcovr_xml(
+    NAME ctest_coverage
+    EXECUTABLE ctest -j ${PROCESSOR_COUNT}
+    DEPENDENCIES ${PROJECT_NAME}_test
+  )
+endif()
+
 # Include src such that we can #include <graaflib/*> in the sources
 target_include_directories(${PROJECT_NAME}_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../src)
 
 target_link_libraries(
   ${PROJECT_NAME}_test
+  PRIVATE
   ${PROJECT_NAME}_lib
   gtest_main
 )
