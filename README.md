@@ -1,5 +1,6 @@
 # ![graaf](docs/img/graaf.png) Graaf
 [![Main-CI](https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml/badge.svg)](https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml)
+[![codecov](https://codecov.io/github/bobluppes/graaf/branch/main/graph/badge.svg?token=ZFBLNFN39C)](https://codecov.io/github/bobluppes/graaf)
 [![Documentation](https://img.shields.io/badge/documentation-doxygen-informational)](https://bobluppes.github.io/graaf/)
 
 Graaf is a general-purpose lightweight C++ library designed for versatile graph operations. Graaf allows users to easily create, modify, and query graphs. It is well-suited for various graph-based applications, including social network analysis, CNNs, and more.
