@@ -23,6 +23,7 @@ if (ENABLE_COVERAGE)
     NAME ctest_coverage
     EXECUTABLE ctest -j ${PROCESSOR_COUNT}
     DEPENDENCIES ${PROJECT_NAME}_test
+    EXCLUDE "test/graaflib/*"
   )
 endif()
 
