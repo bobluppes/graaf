@@ -16,6 +16,7 @@ add_executable(
 )
 
 if (ENABLE_COVERAGE)
+  list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/../cmake-modules)
   include(CodeCoverage)
   append_coverage_compiler_flags_to_target(${PROJECT_NAME}_test)
 
