@@ -25,7 +25,7 @@ jobs:
       uses: actions/checkout@v3
       with:
         repository: bilke/cmake-modules
-        ref: 877bab9
+        ref: 877bab9dd1b17468c5d939cacaa2ad7ba99d1977
         path: cmake-modules
 
     - name: Configure CMake
