@@ -49,12 +49,14 @@ namespace graaf {
         ASSERT_TRUE(neighbors_vertex_1.contains(vertex_id_3));
 
         // WHEN - THEN
-        // The edges are directed, so vertex 2 has no neighbors
-        ASSERT_THROW(const auto test{graph.get_neighbors(vertex_id_2)}, std::out_of_range);
+        // The graph is directed so vertex 2 has no neighbors
+        const auto neighbors_vertex_2{graph.get_neighbors(vertex_id_2)};
+        ASSERT_TRUE(neighbors_vertex_2.empty());
 
         // WHEN - THEN
-        // The edges are directed, so vertex 3 has no neighbors
-        ASSERT_THROW(const auto test{graph.get_neighbors(vertex_id_3)}, std::out_of_range);
+        // The graph is directed so vertex 3 has no neighbors
+        const auto neighbors_vertex_3{graph.get_neighbors(vertex_id_3)};
+        ASSERT_TRUE(neighbors_vertex_3.empty());
     }
 
 }
