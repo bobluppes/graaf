@@ -29,7 +29,7 @@ my_graph.add_edge(bob, alice, Connection{
 Implementations for common graph algorithms are provided under the `algorithm` namespace. For instance, there is support for traversing a graph using *depth-first search* and *breadth-first search* strategies.
 
 ```c++
-const auto print_vertex_callback{[&visited_vertices](const auto vertex) {
+const auto print_vertex_callback{[](const auto vertex) {
   std::cout << vertex << std::endl;
 }};
 
