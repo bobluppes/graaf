@@ -10,6 +10,8 @@
 
 #include <fmt/core.h>
 
+#include <graaflib/types.h>
+
 namespace graaf {
 
 	enum class GRAPH_SPEC {DIRECTED, UNDIRECTED};
@@ -20,9 +22,7 @@ namespace graaf {
 			using vertex_t = VERTEX_T;
 			using edge_t = EDGE_T;
 
-			using vertex_id_t = std::size_t;
 			using vertex_ids_t = std::pair<vertex_id_t, vertex_id_t>;
-			using edge_id_t = std::size_t;
 
 			using vertices_t = std::unordered_set<vertex_id_t>;
 			
@@ -136,16 +136,15 @@ namespace graaf {
 			[[nodiscard]] const edge_t& get_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const {
 				return get_edge(vertex_id_lhs, vertex_id_rhs);
 			}
-
                         /**
                          * Get a list of neighbour vertices   
                          *
                          * @param  vertex_id The ID of the vertex
                          * @return vertices_t - A list of neigbounthood vertices
                         */
-			[[nodiscard]] const vertices_t& get_neighbors(vertex_id_t vertex_id) const {
+			[[nodiscard]] vertices_t get_neighbors(vertex_id_t vertex_id) const {
 				if (!adjacency_list_.contains(vertex_id)) {
-					throw std::out_of_range{fmt::format("Vertex with ID [{}] has no neighbors in graph.", vertex_id)};
+					return {};
 				}
 				return adjacency_list_.at(vertex_id);
 			}

@@ -20,11 +20,11 @@ if (ENABLE_COVERAGE)
   include(CodeCoverage)
   append_coverage_compiler_flags_to_target(${PROJECT_NAME}_test)
 
-  setup_target_for_coverage_gcovr_xml(
+  setup_target_for_coverage_lcov(
     NAME ctest_coverage
     EXECUTABLE ctest -j ${PROCESSOR_COUNT}
     DEPENDENCIES ${PROJECT_NAME}_test
-    EXCLUDE "test/graaflib/*"
+    NO_DEMANGLE
   )
 endif()
 
