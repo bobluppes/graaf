@@ -35,7 +35,7 @@ namespace graaf::algorithm {
         }};
 
     // WHEN
-    depth_first_search(graph, vertex_1, record_vertex_callback);
+    traverse<search_strategy::DFS>(graph, vertex_1, record_vertex_callback);
 
     // THEN
     const vertex_vector_t expected_vertices{vertex_1};
@@ -62,7 +62,7 @@ namespace graaf::algorithm {
         }};
 
     // WHEN
-    depth_first_search(graph, vertex_1, record_vertex_callback);
+    traverse<search_strategy::DFS>(graph, vertex_1, record_vertex_callback);
 
     // THEN
     const vertex_vector_t expected_vertices{vertex_1, vertex_2};
@@ -86,7 +86,7 @@ namespace graaf::algorithm {
         }};
 
     // WHEN - here vertex 1 has no neighbors due to the edge direction
-    depth_first_search(graph, vertex_1, record_vertex_callback);
+    traverse<search_strategy::DFS>(graph, vertex_1, record_vertex_callback);
 
     // THEN
     const vertex_vector_t expected_vertices{vertex_1};
@@ -119,7 +119,7 @@ namespace graaf::algorithm {
         }};
 
     // WHEN
-    depth_first_search(graph, vertex_1, record_vertex_callback);
+    traverse<search_strategy::DFS>(graph, vertex_1, record_vertex_callback);
 
     // THEN
     const vertex_set_t expected_vertices{vertex_1, vertex_2, vertex_3, vertex_4, vertex_5};
@@ -151,7 +151,7 @@ namespace graaf::algorithm {
         }};
 
     // WHEN
-    depth_first_search(graph, vertex_1, record_vertex_callback);
+    traverse<search_strategy::DFS>(graph, vertex_1, record_vertex_callback);
 
     // THEN
     const vertex_set_t expected_vertices{vertex_1, vertex_2, vertex_3, vertex_4};
