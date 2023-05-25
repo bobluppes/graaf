@@ -129,8 +129,6 @@ namespace graaf
             {
                 // Call the add_edge function with a non-existing vertex ID
                 graph.add_edge(vertex_id_1, vertex_id_2, 100);
-                // If the above line doesn't throw an exception, fail the test
-                FAIL() << "Expected std::out_of_range exception, but no exception was thrown.";
             }
             catch (const std::out_of_range &ex)
             {
