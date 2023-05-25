@@ -43,6 +43,6 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        files: ./build/ctest_coverage.xml
+        files: ./build/ctest_coverage.info
         verbose: true # optional (default = false)
 
