@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>
+
 namespace graaf {
 
 using vertex_id_t = std::size_t;
