@@ -13,9 +13,9 @@
 
 namespace graaf {
 
-enum class GRAPH_SPEC { DIRECTED, UNDIRECTED };
+enum class graph_spec { DIRECTED, UNDIRECTED };
 
-template <typename VERTEX_T, typename EDGE_T, GRAPH_SPEC GRAPH_SPEC_V>
+template <typename VERTEX_T, typename EDGE_T, graph_spec graph_spec_V>
 class graph {
  public:
   using vertex_t = VERTEX_T;
@@ -31,7 +31,7 @@ class graph {
    * @return booleon - This return True for directed graph otherwise False
    */
   [[nodiscard]] constexpr bool is_directed() const {
-    return GRAPH_SPEC_V == GRAPH_SPEC::DIRECTED;
+    return graph_spec_V == graph_spec::DIRECTED;
   }
 
   /**
@@ -40,7 +40,7 @@ class graph {
    * @return booleon - This return True for  undirected graph otherwise False
    */
   [[nodiscard]] constexpr bool is_undirected() const {
-    return GRAPH_SPEC_V == GRAPH_SPEC::UNDIRECTED;
+    return graph_spec_V == graph_spec::UNDIRECTED;
   }
 
   // STATISTICS

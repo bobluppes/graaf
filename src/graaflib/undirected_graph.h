@@ -7,11 +7,11 @@ namespace graaf {
 
 template <typename VERTEX_T, typename EDGE_T>
 class undirected_graph final
-    : public graph<VERTEX_T, EDGE_T, GRAPH_SPEC::UNDIRECTED> {
+    : public graph<VERTEX_T, EDGE_T, graph_spec::UNDIRECTED> {
  private:
   using vertex_ids_t =
-      graph<VERTEX_T, EDGE_T, GRAPH_SPEC::UNDIRECTED>::vertex_ids_t;
-  using edge_t = graph<VERTEX_T, EDGE_T, GRAPH_SPEC::UNDIRECTED>::edge_t;
+      graph<VERTEX_T, EDGE_T, graph_spec::UNDIRECTED>::vertex_ids_t;
+  using edge_t = graph<VERTEX_T, EDGE_T, graph_spec::UNDIRECTED>::edge_t;
 
   vertex_ids_t make_sorted_pair(vertex_id_t vertex_id_lhs,
                                 vertex_id_t vertex_id_rhs) const {
