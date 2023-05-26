@@ -1,26 +1,30 @@
 #include <graaflib/directed_graph.h>
 #include <graaflib/undirected_graph.h>
 
+
 #include <gtest/gtest.h>
 
 /**
  * Tests which test the common functionality of the graph
  * class go here. Any test specific to a graph specification
  * should go in the respective test files.
-*/
+ */
 
-namespace graaf {
+namespace graaf
+{
 
-    template<typename T>
+    template <typename T>
     struct GraphTest : public testing::Test
     {
         using graph_t = T;
     };
 
     using graph_types = testing::Types<directed_graph<int, int>, undirected_graph<int, int>>;
+
     TYPED_TEST_CASE(GraphTest, graph_types);
 
-    TYPED_TEST(GraphTest, VertexCount) {
+    TYPED_TEST(GraphTest, VertexCount)
+    {
         // GIVEN
         using graph_t = typename TestFixture::graph_t;
         graph_t graph{};
@@ -39,29 +43,56 @@ namespace graaf {
         ASSERT_EQ(graph.get_vertex(vertex_id_2), 20);
     }
 
-    TYPED_TEST(GraphTest, RemoveVertex) {
+    TYPED_TEST(GraphTest, RemoveVertex)
+    {
         // GIVEN
         using graph_t = typename TestFixture::graph_t;
         graph_t graph{};
         const auto vertex_id_1{graph.add_vertex(10)};
         const auto vertex_id_2{graph.add_vertex(20)};
+        const auto vertex_id_3{graph.add_vertex(30)};
 
-        ASSERT_EQ(graph.vertex_count(), 2);
+        graph.add_edge(vertex_id_1, vertex_id_2, 100);
+        graph.add_edge(vertex_id_1, vertex_id_3, 200);
+
+        ASSERT_EQ(graph.vertex_count(), 3);
+        ASSERT_EQ(graph.edge_count(), 2);
 
         // WHEN - THEN
         graph.remove_vertex(vertex_id_1);
-        ASSERT_EQ(graph.vertex_count(), 1);
+        ASSERT_EQ(graph.vertex_count(), 2);
+        ASSERT_EQ(graph.edge_count(), 0);
         ASSERT_FALSE(graph.has_vertex(vertex_id_1));
         ASSERT_TRUE(graph.has_vertex(vertex_id_2));
+        ASSERT_TRUE(graph.has_vertex(vertex_id_3));
 
-        // WHEN - THEN
+        // WHEN - removing a vertex
         graph.remove_vertex(vertex_id_2);
-        ASSERT_EQ(graph.vertex_count(), 0);
-        ASSERT_FALSE(graph.has_vertex(vertex_id_1));
+        // THEN - verify the vertex and edge count, adjacency list, and edges
+        ASSERT_EQ(graph.vertex_count(), 1);
         ASSERT_FALSE(graph.has_vertex(vertex_id_2));
+        ASSERT_FALSE(graph.has_vertex(vertex_id_1));
+        ASSERT_TRUE(graph.has_vertex(vertex_id_3));
+        ASSERT_EQ(graph.edge_count(), 0);
+        ASSERT_FALSE(graph.has_edge(vertex_id_1, vertex_id_2));
+        ASSERT_FALSE(graph.has_edge(vertex_id_2, vertex_id_3));
+
+        // WHEN - removing a non-existent vertex
+        const auto invalid_vertex_id = vertex_id_1 + vertex_id_3 + 1;
+        graph.remove_vertex(invalid_vertex_id);
+
+        // THEN - verify the vertex and edge count
+        ASSERT_EQ(graph.vertex_count(), 1);
+        ASSERT_FALSE(graph.has_vertex(invalid_vertex_id));
+        ASSERT_FALSE(graph.has_vertex(vertex_id_1));
+        ASSERT_TRUE(graph.has_vertex(vertex_id_3));
+        ASSERT_EQ(graph.edge_count(), 0);
+        ASSERT_FALSE(graph.has_edge(vertex_id_1, invalid_vertex_id));
+        ASSERT_FALSE(graph.has_edge(invalid_vertex_id, vertex_id_3));
     }
 
-    TYPED_TEST(GraphTest, RemoveEdge) {
+    TYPED_TEST(GraphTest, RemoveEdge)
+    {
         // GIVEN
         using graph_t = typename TestFixture::graph_t;
         graph_t graph{};
@@ -84,6 +115,90 @@ namespace graaf {
         ASSERT_EQ(graph.vertex_count(), 2);
         ASSERT_TRUE(graph.has_vertex(vertex_id_1));
         ASSERT_TRUE(graph.has_vertex(vertex_id_2));
+    }
+    TYPED_TEST(GraphTest, AddEdge)
+    {
+        using graph_t = typename TestFixture::graph_t;
+
+        graph_t graph{};
+        const auto vertex_id_1{graph.add_vertex(10)};
+        const auto vertex_id_2 = graph.vertex_count() + 1;
+
+        ASSERT_THROW({
+            try
+            {
+                // Call the add_edge function with a non-existing vertex ID
+                graph.add_edge(vertex_id_1, vertex_id_2, 100);
+            }
+            catch (const std::out_of_range &ex)
+            {
+                // Verify that the exception message contains the expected error message
+                EXPECT_EQ(ex.what(), fmt::format("Vertices with ID [{}] and [{}] not found in graph.", vertex_id_1, vertex_id_2));
+                throw; 
+            }
+        },
+                     std::out_of_range);
+
+        EXPECT_FALSE(graph.has_edge(vertex_id_1, vertex_id_2));
+    }
+
+    TYPED_TEST(GraphTest, VertexTests)
+    {
+        using graph_t = typename TestFixture::graph_t;
+        graph_t graph{};
+        const auto vertex_id_1{graph.add_vertex(1)};
+        const auto vertex_id_2{graph.add_vertex(20)};
+
+        // Verify that the graph has the first vertex with the given ID
+        EXPECT_TRUE(graph.has_vertex(vertex_id_1));
+        EXPECT_EQ(graph.get_vertex(vertex_id_1), 1);
+
+        // The graph doesn't have the second vertex with the given ID
+        const auto nonExistingVertexId = graph.vertex_count() + 1;
+        
+        ASSERT_THROW({
+            try
+            {
+                // Call the get_vertex function for a non-existing vertex
+                graph.get_vertex(nonExistingVertexId);
+                FAIL() << "Expected std::out_of_range exception, but no exception was thrown.";
+            }
+            catch (const std::out_of_range &ex)
+            {
+                EXPECT_EQ(ex.what(), fmt::format("Vertex with ID [{}] not found in graph.", nonExistingVertexId));
+                throw;
+            }
+        },
+                     std::out_of_range);
+        EXPECT_TRUE(graph.has_vertex(vertex_id_1));
+        EXPECT_FALSE(graph.has_vertex(nonExistingVertexId));
+        EXPECT_TRUE(graph.has_vertex(vertex_id_2));
+        EXPECT_EQ(graph.get_vertex(vertex_id_2), 20);
+    }
+
+    TYPED_TEST(GraphTest, GetEdgeNonExistingEdge)
+    {
+        using vertex_id_t = std::size_t;
+        using graph_t = typename TestFixture::graph_t;
+        graph_t graph{};
+        const auto vertex_id_1 = graph.add_vertex(1);
+        const auto vertex_id_2 = graph.add_vertex(2);
+        const auto nonExistingVertexId = graph.vertex_count() + 1;
+        ASSERT_THROW({
+            try
+            {
+                // Call the get_edge function for non-existing vertices
+                graph.get_edge(vertex_id_1, nonExistingVertexId);
+                // If the above line doesn't throw an exception, fail the test
+                FAIL() << "Expected std::out_of_range exception, but no exception was thrown.";
+            }
+            catch (const std::out_of_range &ex)
+            {
+                // Verify that the exception message contains the expected error message
+                EXPECT_EQ(ex.what(), fmt::format("No edge found between vertices [{}] -> [{}].", vertex_id_1, nonExistingVertexId));
+                throw;
+            }
+        },std::out_of_range);
     }
 
 }

@@ -26,6 +26,16 @@ my_graph.add_edge(bob, alice, Connection{
 });
 ```
 
+Implementations for common graph algorithms are provided under the `algorithm` namespace. For instance, there is support for traversing a graph using *depth-first search* and *breadth-first search* strategies.
+
+```c++
+const auto print_vertex_callback{[](const auto vertex) {
+  std::cout << vertex << std::endl;
+}};
+
+traverse<search_strategy::BFS>(my_graph, start_vertex, print_vertex_callback);
+```
+
 For more details, take a look at the [documentation](https://bobluppes.github.io/graaf/).
 
 ## Requirements
