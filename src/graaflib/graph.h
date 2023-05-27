@@ -4,16 +4,8 @@
 
 #include <unordered_map>
 #include <unordered_set>
-#include <utility>
 
 namespace graaf {
-
-namespace detail {
-using vertex_ids_t = std::pair<vertex_id_t, vertex_id_t>;
-
-// Implemented in the .tpp file
-struct vertex_ids_hash;
-}  // namespace detail
 
 enum class graph_spec { DIRECTED, UNDIRECTED };
 
@@ -22,8 +14,6 @@ class graph {
  public:
   using vertex_t = VERTEX_T;
   using edge_t = EDGE_T;
-
-  using vertex_ids_t = detail::vertex_ids_t;
 
   using vertices_t = std::unordered_set<vertex_id_t>;
 
@@ -176,7 +166,7 @@ class graph {
  protected:
   using vertex_id_to_vertex_t = std::unordered_map<vertex_id_t, vertex_t>;
   using vertex_ids_to_edge_t =
-      std::unordered_map<vertex_ids_t, edge_t, detail::vertex_ids_hash>;
+      std::unordered_map<vertex_ids_t, edge_t, vertex_ids_hash>;
 
   std::unordered_map<vertex_id_t, vertices_t> adjacency_list_{};
 

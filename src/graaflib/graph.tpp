@@ -2,22 +2,9 @@
 
 #include <fmt/core.h>
 
-#include <functional>
 #include <stdexcept>
 
 namespace graaf {
-
-namespace detail {
-struct vertex_ids_hash {
-  [[nodiscard]] std::size_t operator()(const vertex_ids_t& key) const {
-    const auto h1{std::hash<vertex_id_t>{}(key.first)};
-    const auto h2{std::hash<vertex_id_t>{}(key.second)};
-
-    // TODO: use something like boost::hash_combine
-    return h1 ^ h2;
-  }
-};
-}  // namespace detail
 
 template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
 std::size_t graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::vertex_count()
@@ -125,10 +112,8 @@ void graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::add_edge(vertex_id_t vertex_id_lhs,
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::vertex_ids_t
-graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::add_edge(VERTEX_T vertex_lhs,
-                                                VERTEX_T vertex_rhs,
-                                                EDGE_T edge) {
+vertex_ids_t graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::add_edge(
+    VERTEX_T vertex_lhs, VERTEX_T vertex_rhs, EDGE_T edge) {
   const auto vertex_id_lhs{add_vertex(std::move(vertex_lhs))};
   const auto vertex_id_rhs{add_vertex(std::move(vertex_rhs))};
   add_edge(vertex_id_lhs, vertex_id_rhs, std::move(edge));

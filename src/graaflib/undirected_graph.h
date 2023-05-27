@@ -9,9 +9,6 @@ template <typename VERTEX_T, typename EDGE_T>
 class undirected_graph final
     : public graph<VERTEX_T, EDGE_T, graph_spec::UNDIRECTED> {
  private:
-  using vertex_ids_t =
-      graph<VERTEX_T, EDGE_T, graph_spec::UNDIRECTED>::vertex_ids_t;
-
   [[nodiscard]] bool do_has_edge(
       vertex_id_t vertex_id_lhs,
       vertex_id_t vertex_id_rhs) const noexcept override;
