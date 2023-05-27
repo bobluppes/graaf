@@ -3,10 +3,7 @@
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
 
-#include <algorithm>
 #include <concepts>
-#include <queue>
-#include <unordered_set>
 
 namespace graaf::algorithm {
 

@@ -1,6 +1,23 @@
 #pragma once
 
+#include <fmt/core.h>
+
+#include <functional>
+#include <stdexcept>
+
 namespace graaf {
+
+namespace detail {
+struct vertex_ids_hash {
+  [[nodiscard]] std::size_t operator()(const vertex_ids_t& key) const {
+    const auto h1{std::hash<vertex_id_t>{}(key.first)};
+    const auto h2{std::hash<vertex_id_t>{}(key.second)};
+
+    // TODO: use something like boost::hash_combine
+    return h1 ^ h2;
+  }
+};
+}  // namespace detail
 
 template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
 std::size_t graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::vertex_count()

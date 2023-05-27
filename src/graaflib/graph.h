@@ -1,17 +1,19 @@
 #pragma once
 
-#include <fmt/core.h>
 #include <graaflib/types.h>
 
-#include <algorithm>
-#include <initializer_list>
-#include <optional>
-#include <stdexcept>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
 
 namespace graaf {
+
+namespace detail {
+using vertex_ids_t = std::pair<vertex_id_t, vertex_id_t>;
+
+// Implemented in the .tpp file
+struct vertex_ids_hash;
+}  // namespace detail
 
 enum class graph_spec { DIRECTED, UNDIRECTED };
 
@@ -21,7 +23,7 @@ class graph {
   using vertex_t = VERTEX_T;
   using edge_t = EDGE_T;
 
-  using vertex_ids_t = std::pair<vertex_id_t, vertex_id_t>;
+  using vertex_ids_t = detail::vertex_ids_t;
 
   using vertices_t = std::unordered_set<vertex_id_t>;
 
@@ -172,19 +174,9 @@ class graph {
   void remove_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs);
 
  protected:
-  struct vertex_ids_hash {
-    [[nodiscard]] std::size_t operator()(const vertex_ids_t& key) const {
-      const auto h1{std::hash<vertex_id_t>{}(key.first)};
-      const auto h2{std::hash<vertex_id_t>{}(key.second)};
-
-      // TODO: use something like boost::hash_combine
-      return h1 ^ h2;
-    }
-  };
-
   using vertex_id_to_vertex_t = std::unordered_map<vertex_id_t, vertex_t>;
   using vertex_ids_to_edge_t =
-      std::unordered_map<vertex_ids_t, edge_t, vertex_ids_hash>;
+      std::unordered_map<vertex_ids_t, edge_t, detail::vertex_ids_hash>;
 
   std::unordered_map<vertex_id_t, vertices_t> adjacency_list_{};
 

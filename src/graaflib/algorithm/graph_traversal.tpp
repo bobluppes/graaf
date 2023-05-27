@@ -1,5 +1,9 @@
 #pragma once
 
+#include <algorithm>
+#include <queue>
+#include <unordered_set>
+
 namespace graaf::algorithm {
 
 namespace detail {
