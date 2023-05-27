@@ -154,7 +154,8 @@ TYPED_TEST(GraphTest, VertexTests) {
       {
         try {
           // Call the get_vertex function for a non-existing vertex
-          graph.get_vertex(nonExistingVertexId);
+          [[maybe_unused]] const auto vertex{
+              graph.get_vertex(nonExistingVertexId)};
           FAIL() << "Expected std::out_of_range exception, but no exception "
                     "was thrown.";
         } catch (const std::out_of_range &ex) {
@@ -182,7 +183,8 @@ TYPED_TEST(GraphTest, GetEdgeNonExistingEdge) {
       {
         try {
           // Call the get_edge function for non-existing vertices
-          graph.get_edge(vertex_id_1, nonExistingVertexId);
+          [[maybe_unused]] const auto edge{
+              graph.get_edge(vertex_id_1, nonExistingVertexId)};
           // If the above line doesn't throw an exception, fail the test
           FAIL() << "Expected std::out_of_range exception, but no exception "
                     "was thrown.";
