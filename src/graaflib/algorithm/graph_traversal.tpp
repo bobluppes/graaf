@@ -1,10 +1,14 @@
 #pragma once
 
+#include <algorithm>
+#include <queue>
+#include <unordered_set>
+
 namespace graaf::algorithm {
 
 namespace detail {
 
-template <typename V, typename E, GRAPH_SPEC S, typename CALLBACK_T>
+template <typename V, typename E, graph_spec S, typename CALLBACK_T>
 void do_dfs(const graph<V, E, S>& graph,
             std::unordered_set<vertex_id_t>& seen_vertices, vertex_id_t current,
             const CALLBACK_T& callback) {
@@ -18,7 +22,7 @@ void do_dfs(const graph<V, E, S>& graph,
   }
 }
 
-template <typename V, typename E, GRAPH_SPEC S, typename CALLBACK_T>
+template <typename V, typename E, graph_spec S, typename CALLBACK_T>
 void do_bfs(const graph<V, E, S>& graph,
             std::unordered_set<vertex_id_t>& seen_vertices,
             vertex_id_t start_vertex, const CALLBACK_T& callback) {
@@ -47,7 +51,7 @@ void do_bfs(const graph<V, E, S>& graph,
 
 }  // namespace detail
 
-template <search_strategy ALGORITHM, typename V, typename E, GRAPH_SPEC S,
+template <search_strategy ALGORITHM, typename V, typename E, graph_spec S,
           typename CALLBACK_T>
   requires std::invocable<const CALLBACK_T&, vertex_id_t>
 void traverse(const graph<V, E, S>& graph, vertex_id_t start_vertex,

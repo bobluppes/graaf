@@ -3,10 +3,7 @@
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
 
-#include <algorithm>
 #include <concepts>
-#include <queue>
-#include <unordered_set>
 
 namespace graaf::algorithm {
 
@@ -23,7 +20,7 @@ enum class search_strategy { DFS, BFS };
  * @param callback A callback which is called for each traversed vertex. Should
  * be invocable with a vertex_id_t.
  */
-template <search_strategy ALGORITHM, typename V, typename E, GRAPH_SPEC S,
+template <search_strategy ALGORITHM, typename V, typename E, graph_spec S,
           typename CALLBACK_T>
   requires std::invocable<const CALLBACK_T &, vertex_id_t>
 void traverse(const graph<V, E, S> &graph, vertex_id_t start_vertex,
