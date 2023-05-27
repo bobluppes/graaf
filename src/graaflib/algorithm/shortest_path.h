@@ -3,10 +3,8 @@
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
 
-#include <algorithm>
 #include <concepts>
-#include <queue>
-#include <unordered_set>
+#include <vector>
 
 namespace graaf::algorithm {
 
@@ -22,7 +20,7 @@ struct GraphPath {
   }
 };
 
-template <edge_strategy EDGE_STRATEGY, typename V, typename E, GRAPH_SPEC S>
+template <edge_strategy EDGE_STRATEGY, typename V, typename E, graph_spec S>
 GraphPath<E> get_shortest_path(const graph<V, E, S>& graph,
                                vertex_id_t start_vertex,
                                vertex_id_t end_vertex);

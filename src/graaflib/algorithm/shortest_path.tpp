@@ -1,10 +1,15 @@
 #pragma once
 
+#include <algorithm>
+#include <queue>
+#include <unordered_set>
+#include <unordered_map>
+
 namespace graaf::algorithm {
 
 namespace detail {
 
-template <typename V, typename E, GRAPH_SPEC S>
+template <typename V, typename E, graph_spec S>
 GraphPath<int> get_unweighted_shortest_path(const graph<V, E, S>& graph,
                                             vertex_id_t start_vertex,
                                             vertex_id_t end_vertex) {
@@ -54,7 +59,7 @@ GraphPath<int> get_unweighted_shortest_path(const graph<V, E, S>& graph,
 
 }  // namespace detail
 
-template <edge_strategy EDGE_STRATEGY, typename V, typename E, GRAPH_SPEC S>
+template <edge_strategy EDGE_STRATEGY, typename V, typename E, graph_spec S>
 GraphPath<E> get_shortest_path(const graph<V, E, S>& graph,
                                vertex_id_t start_vertex,
                                vertex_id_t end_vertex) {
