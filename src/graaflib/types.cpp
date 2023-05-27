@@ -1,6 +1,6 @@
-#include <functional>
-
 #include "types.h"
+
+#include <functional>
 
 namespace graaf {
 std::size_t vertex_ids_hash::operator()(const vertex_ids_t& key) const {
