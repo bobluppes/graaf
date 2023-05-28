@@ -28,9 +28,11 @@ constexpr const char* spec_to_string(const graph_spec& spec) {
     case UNDIRECTED:
       return "graph";
       break;
+    // LCOV_EXCL_START
     default:
       // We should never reach this
       std::abort();
+      // LCOV_EXCL_STOP
   }
 }
 
@@ -52,9 +54,11 @@ constexpr const char* spec_to_edge_specifier(const graph_spec& spec) {
     case UNDIRECTED:
       return "--";
       break;
+    // LCOV_EXCL_START
     default:
       // We should never reach this
       std::abort();
+      // LCOV_EXCL_STOP
   }
 }
 }  // namespace detail
