@@ -22,18 +22,17 @@ const auto int_edge_writer{
 
 template <typename T>
 const auto make_vertex_string{
-    [](vertex_id_t vertex_id, T vertex_properties) -> std::string {
-      return fmt::format("{} [properties=\"{}\"];", vertex_id,
-                         std::to_string(vertex_properties));
+    [](vertex_id_t vertex_id, T vertex_label) -> std::string {
+      return fmt::format("{} [label=\"{}\"];", vertex_id,
+                         std::to_string(vertex_label));
     }};
 
 template <typename T>
 const auto make_edge_string{[](vertex_ids_t vertices,
                                const std::string& edge_specifier,
-                               T edge_properties) -> std::string {
-  return fmt::format("{} {} {} [properties=\"{}\"];", vertices.first,
-                     edge_specifier, vertices.second,
-                     std::to_string(edge_properties));
+                               T edge_label) -> std::string {
+  return fmt::format("{} {} {} [label=\"{}\"];", vertices.first, edge_specifier,
+                     vertices.second, std::to_string(edge_label));
 }};
 
 /**
@@ -215,13 +214,13 @@ TEST(DotTest, UserProvidedVertexAndEdgeClass) {
 
   // THEN
   const auto dot_content{read_to_string(path)};
-  ASSERT_TRUE(dot_content.find(fmt::format("{} [properties=\"10, vertex 1\"];",
+  ASSERT_TRUE(dot_content.find(fmt::format("{} [label=\"10, vertex 1\"];",
                                            vertex_1)) != std::string::npos);
-  ASSERT_TRUE(dot_content.find(fmt::format("{} [properties=\"20, vertex 2\"];",
+  ASSERT_TRUE(dot_content.find(fmt::format("{} [label=\"20, vertex 2\"];",
                                            vertex_2)) != std::string::npos);
-  ASSERT_TRUE(
-      dot_content.find(fmt::format("{} -> {} [properties=\"100, edge 1\"];",
-                                   vertex_1, vertex_2)) != std::string::npos);
+  ASSERT_TRUE(dot_content.find(fmt::format("{} -> {} [label=\"100, edge 1\"];",
+                                           vertex_1, vertex_2)) !=
+              std::string::npos);
 }
 
 TEST(DotTest, DefaultWriters) {
@@ -238,14 +237,13 @@ TEST(DotTest, DefaultWriters) {
 
   // THEN
   const auto dot_content{read_to_string(path)};
-  ASSERT_TRUE(dot_content.find(fmt::format("{} [properties=\"10\"];",
-                                           vertex_1)) != std::string::npos);
-  ASSERT_TRUE(dot_content.find(fmt::format("{} [properties=\"20\"];",
-                                           vertex_2)) != std::string::npos);
-  // For the float value we only check up until the first decimal place
-  ASSERT_TRUE(dot_content.find(fmt::format("{} -> {} [properties=\"3.3",
-                                           vertex_1, vertex_2)) !=
+  ASSERT_TRUE(dot_content.find(fmt::format("{} [label=\"10\"];", vertex_1)) !=
               std::string::npos);
+  ASSERT_TRUE(dot_content.find(fmt::format("{} [label=\"20\"];", vertex_2)) !=
+              std::string::npos);
+  // For the float value we only check up until the first decimal place
+  ASSERT_TRUE(dot_content.find(fmt::format("{} -> {} [label=\"3.3", vertex_1,
+                                           vertex_2)) != std::string::npos);
 }
 
 }  // namespace graaf::io
