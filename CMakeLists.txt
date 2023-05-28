@@ -13,6 +13,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # The graph library itself
 add_subdirectory(src)
 
+# Example usages of the library
+add_subdirectory(examples)
+
 # Enables testing in CMAKE, needs to be called BEFORE call to add_subdirectory
 enable_testing()
 add_subdirectory(test)
