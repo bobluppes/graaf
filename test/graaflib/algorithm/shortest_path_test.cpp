@@ -46,8 +46,7 @@ TYPED_TEST(TypedShortestPathTest, UnweightedNoAvailablePath) {
       get_shortest_path<edge_strategy::UNWEIGHTED>(graph, vertex_1, vertex_2);
 
   // THEN
-  const GraphPath<int> expected_path{{}, -1};
-  ASSERT_EQ(path, expected_path);
+  ASSERT_FALSE(path.has_value());
 }
 
 TYPED_TEST(TypedShortestPathTest, UnweightedSimpleShortestPath) {

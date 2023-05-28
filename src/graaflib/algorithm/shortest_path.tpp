@@ -1,18 +1,19 @@
 #pragma once
 
 #include <algorithm>
+#include <optional>
 #include <queue>
-#include <unordered_set>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace graaf::algorithm {
 
 namespace detail {
 
 template <typename V, typename E, graph_spec S>
-GraphPath<int> get_unweighted_shortest_path(const graph<V, E, S>& graph,
-                                            vertex_id_t start_vertex,
-                                            vertex_id_t end_vertex) {
+std::optional<GraphPath<int>> get_unweighted_shortest_path(
+    const graph<V, E, S>& graph, vertex_id_t start_vertex,
+    vertex_id_t end_vertex) {
   std::unordered_set<vertex_id_t> seen_vertices{};
   std::unordered_map<vertex_id_t, vertex_id_t> prev_vertex{};
   std::queue<vertex_id_t> to_explore{};
@@ -53,16 +54,16 @@ GraphPath<int> get_unweighted_shortest_path(const graph<V, E, S>& graph,
     return path;
 
   } else {
-    return GraphPath<int>{{}, -1};
+    return std::nullopt;
   }
 }
 
 }  // namespace detail
 
 template <edge_strategy EDGE_STRATEGY, typename V, typename E, graph_spec S>
-GraphPath<E> get_shortest_path(const graph<V, E, S>& graph,
-                               vertex_id_t start_vertex,
-                               vertex_id_t end_vertex) {
+std::optional<GraphPath<E>> get_shortest_path(const graph<V, E, S>& graph,
+                                              vertex_id_t start_vertex,
+                                              vertex_id_t end_vertex) {
   using enum edge_strategy;
   if constexpr (EDGE_STRATEGY == UNWEIGHTED) {
     return detail::get_unweighted_shortest_path(graph, start_vertex,

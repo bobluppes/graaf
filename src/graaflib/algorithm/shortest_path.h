@@ -4,6 +4,7 @@
 #include <graaflib/types.h>
 
 #include <concepts>
+#include <optional>
 #include <vector>
 
 namespace graaf::algorithm {
@@ -21,9 +22,9 @@ struct GraphPath {
 };
 
 template <edge_strategy EDGE_STRATEGY, typename V, typename E, graph_spec S>
-GraphPath<E> get_shortest_path(const graph<V, E, S>& graph,
-                               vertex_id_t start_vertex,
-                               vertex_id_t end_vertex);
+std::optional<GraphPath<E>> get_shortest_path(const graph<V, E, S>& graph,
+                                              vertex_id_t start_vertex,
+                                              vertex_id_t end_vertex);
 
 }  // namespace graaf::algorithm
 
