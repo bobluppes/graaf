@@ -17,9 +17,9 @@ namespace detail {
  * UNDIRECTED: digraph
  *
  * @param spec The graph specialization
- * @return constexpr std::string String with the correct dot keyword
+ * @return constexpr const char* String with the correct dot keyword
  */
-constexpr std::string spec_to_string(const graph_spec& spec) {
+constexpr const char* spec_to_string(const graph_spec& spec) {
   switch (spec) {
     using enum graph_spec;
     case DIRECTED:
@@ -41,9 +41,9 @@ constexpr std::string spec_to_string(const graph_spec& spec) {
  * UNDIRECTED: --
  *
  * @param spec The graph specialization
- * @return constexpr std::string String with the correct dot edge specifier
+ * @return constexpr const char* String with the correct dot edge specifier
  */
-constexpr std::string spec_to_edge_specifier(const graph_spec& spec) {
+constexpr const char* spec_to_edge_specifier(const graph_spec& spec) {
   switch (spec) {
     using enum graph_spec;
     case DIRECTED:
