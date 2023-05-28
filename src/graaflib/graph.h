@@ -11,6 +11,10 @@ enum class graph_spec { DIRECTED, UNDIRECTED };
 
 template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
 class graph {
+  using vertex_id_to_vertex_t = std::unordered_map<vertex_id_t, VERTEX_T>;
+  using vertex_ids_to_edge_t =
+      std::unordered_map<vertex_ids_t, EDGE_T, vertex_ids_hash>;
+
  public:
   using vertex_t = VERTEX_T;
   using edge_t = EDGE_T;
@@ -48,6 +52,14 @@ class graph {
    * @return size_t - Number of edges
    */
   [[nodiscard]] std::size_t edge_count() const noexcept;
+
+  [[nodiscard]] const vertex_id_to_vertex_t& get_vertices() const noexcept {
+    return vertices_;
+  }
+
+  [[nodiscard]] const vertex_ids_to_edge_t& get_edges() const noexcept {
+    return edges_;
+  }
 
   /**
    * Checks whether a vertex with a given ID is contained in the graph.
@@ -164,10 +176,6 @@ class graph {
   void remove_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs);
 
  protected:
-  using vertex_id_to_vertex_t = std::unordered_map<vertex_id_t, vertex_t>;
-  using vertex_ids_to_edge_t =
-      std::unordered_map<vertex_ids_t, edge_t, vertex_ids_hash>;
-
   std::unordered_map<vertex_id_t, vertices_t> adjacency_list_{};
 
   vertex_id_to_vertex_t vertices_{};
