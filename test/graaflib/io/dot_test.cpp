@@ -201,7 +201,6 @@ TEST(DotTest, UserProvidedVertexAndEdgeClass) {
 
   const auto vertex_1{graph.add_vertex({10, "vertex 1"})};
   const auto vertex_2{graph.add_vertex({20, "vertex 2"})};
-
   graph.add_edge(vertex_1, vertex_2, {100, "edge 1"});
 
   const auto vertex_writer{[](const vertex_t& vertex) {
@@ -223,6 +222,30 @@ TEST(DotTest, UserProvidedVertexAndEdgeClass) {
   ASSERT_TRUE(
       dot_content.find(fmt::format("{} -> {} [properties=\"100, edge 1\"];",
                                    vertex_1, vertex_2)) != std::string::npos);
+}
+
+TEST(DotTest, DefaultWriters) {
+  // GIVEN
+  const std::filesystem::path path{"./test.dot"};
+  directed_graph<int, float> graph{};
+
+  const auto vertex_1{graph.add_vertex(10)};
+  const auto vertex_2{graph.add_vertex(20)};
+  graph.add_edge(vertex_1, vertex_2, 3.3);
+
+  // WHEN
+  to_dot(graph, path);
+
+  // THEN
+  const auto dot_content{read_to_string(path)};
+  ASSERT_TRUE(dot_content.find(fmt::format("{} [properties=\"10\"];",
+                                           vertex_1)) != std::string::npos);
+  ASSERT_TRUE(dot_content.find(fmt::format("{} [properties=\"20\"];",
+                                           vertex_2)) != std::string::npos);
+  // For the float value we only check up until the first decimal place
+  ASSERT_TRUE(dot_content.find(fmt::format("{} -> {} [properties=\"3.3",
+                                           vertex_1, vertex_2)) !=
+              std::string::npos);
 }
 
 }  // namespace graaf::io
