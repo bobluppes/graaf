@@ -21,6 +21,7 @@ std::optional<GraphPath<int>> get_unweighted_shortest_path(
   to_explore.push(start_vertex);
   seen_vertices.insert(start_vertex);
 
+  // TODO: align/merge with implementation of do_bfs in graph_traversal.tpp
   while (!to_explore.empty()) {
     auto current{to_explore.front()};
     to_explore.pop();
@@ -38,7 +39,7 @@ std::optional<GraphPath<int>> get_unweighted_shortest_path(
     }
   }
 
-  if (seen_vertices.contains(end_vertex)) {
+  const auto reconstruct_path = [&start_vertex, &end_vertex, &prev_vertex]() {
     GraphPath<int> path;
     auto current{end_vertex};
 
@@ -51,7 +52,10 @@ std::optional<GraphPath<int>> get_unweighted_shortest_path(
     path.total_weight = path.vertices.size();
 
     return path;
+  };
 
+  if (seen_vertices.contains(end_vertex)) {
+    return reconstruct_path();
   } else {
     return std::nullopt;
   }
