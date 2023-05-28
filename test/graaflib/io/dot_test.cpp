@@ -14,11 +14,13 @@
 namespace graaf::io {
 
 namespace {
-const auto int_vertex_writer{
-    [](int vertex) -> std::string { return std::to_string(vertex); }};
+const auto int_vertex_writer{[](int vertex) -> std::string {
+  return fmt::format("label=\"{}\"", std::to_string(vertex));
+}};
 
-const auto int_edge_writer{
-    [](int edge) -> std::string { return std::to_string(edge); }};
+const auto int_edge_writer{[](int edge) -> std::string {
+  return fmt::format("label=\"{}\"", std::to_string(edge));
+}};
 
 template <typename T>
 const auto make_vertex_string{
@@ -214,13 +216,12 @@ TEST(DotTest, UserProvidedVertexAndEdgeClass) {
 
   // THEN
   const auto dot_content{read_to_string(path)};
-  ASSERT_TRUE(dot_content.find(fmt::format("{} [label=\"10, vertex 1\"];",
-                                           vertex_1)) != std::string::npos);
-  ASSERT_TRUE(dot_content.find(fmt::format("{} [label=\"20, vertex 2\"];",
-                                           vertex_2)) != std::string::npos);
-  ASSERT_TRUE(dot_content.find(fmt::format("{} -> {} [label=\"100, edge 1\"];",
-                                           vertex_1, vertex_2)) !=
+  ASSERT_TRUE(dot_content.find(fmt::format("{} [10, vertex 1];", vertex_1)) !=
               std::string::npos);
+  ASSERT_TRUE(dot_content.find(fmt::format("{} [20, vertex 2];", vertex_2)) !=
+              std::string::npos);
+  ASSERT_TRUE(dot_content.find(fmt::format("{} -> {} [100, edge 1];", vertex_1,
+                                           vertex_2)) != std::string::npos);
 }
 
 TEST(DotTest, DefaultWriters) {

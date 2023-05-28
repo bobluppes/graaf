@@ -75,15 +75,14 @@ void to_dot(const graph<V, E, S>& graph, const std::filesystem::path& path,
   append_line(fmt::format("{} {{", detail::spec_to_string(S)));
 
   for (const auto& [vertex_id, vertex] : graph.get_vertices()) {
-    append_line(
-        fmt::format("\t{} [label=\"{}\"];", vertex_id, vertex_writer(vertex)));
+    append_line(fmt::format("\t{} [{}];", vertex_id, vertex_writer(vertex)));
   }
 
   const auto edge_specifier{detail::spec_to_edge_specifier(S)};
   for (const auto& [vertices, edge] : graph.get_edges()) {
     const auto [source_id, target_id]{vertices};
-    append_line(fmt::format("\t{} {} {} [label=\"{}\"];", source_id,
-                            edge_specifier, target_id, edge_writer(edge)));
+    append_line(fmt::format("\t{} {} {} [{}];", source_id, edge_specifier,
+                            target_id, edge_writer(edge)));
   }
 
   append_line("}");

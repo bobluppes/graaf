@@ -16,14 +16,15 @@ concept string_convertible = requires(T element) { std::to_string(element); };
 
 template <typename T>
   requires string_convertible<T>
-const auto default_vertex_writer{
-    [](const T& vertex) -> std::string { return std::to_string(vertex); }};
+const auto default_vertex_writer{[](const T& vertex) -> std::string {
+  return fmt::format("label=\"{}\"", std::to_string(vertex));
+}};
 
 template <typename T>
   requires string_convertible<T>
-const auto default_edge_writer{
-    [](const T& edge) -> std::string { return std::to_string(edge); }};
-
+const auto default_edge_writer{[](const T& edge) -> std::string {
+  return fmt::format("label=\"{}\"", std::to_string(edge));
+}};
 }  // namespace detail
 
 /**
@@ -36,8 +37,8 @@ const auto default_edge_writer{
  * accept a type V and serialize it to a string. Default implementations are
  * provided for primitive numeric types.
  * @param edge_writer Function used for serializing the edges. Should accept a
- * type E and serialize it to a string. Default implementations are provided for
- * primitive numeric types.
+ * type E and serialize it to a string. Default implementations are provided
+ * for primitive numeric types.
  * @param path Path to the output dot file.
  */
 template <typename V, typename E, graph_spec S,
