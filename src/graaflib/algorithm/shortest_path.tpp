@@ -43,12 +43,11 @@ std::optional<GraphPath<int>> get_unweighted_shortest_path(
     auto current{end_vertex};
 
     while (current != start_vertex) {
-      path.vertices.push_back(current);
+      path.vertices.push_front(current);
       current = prev_vertex[current];
     }
 
-    path.vertices.push_back(start_vertex);
-    reverse(path.vertices.begin(), path.vertices.end());
+    path.vertices.push_front(start_vertex);
     path.total_weight = path.vertices.size();
 
     return path;

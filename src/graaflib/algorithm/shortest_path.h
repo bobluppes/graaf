@@ -4,8 +4,8 @@
 #include <graaflib/types.h>
 
 #include <concepts>
+#include <list>
 #include <optional>
-#include <vector>
 
 namespace graaf::algorithm {
 
@@ -13,7 +13,7 @@ enum class edge_strategy { WEIGHTED, UNWEIGHTED };
 
 template <typename E>
 struct GraphPath {
-  std::vector<vertex_id_t> vertices;
+  std::list<vertex_id_t> vertices;
   E total_weight;
 
   bool operator==(const GraphPath& other) const {
