@@ -1,10 +1,16 @@
-# ![graaf](docs/img/graaf.png) Graaf
-[![Main-CI](https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml/badge.svg)](https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml)
-[![codecov](https://codecov.io/github/bobluppes/graaf/branch/main/graph/badge.svg?token=ZFBLNFN39C)](https://codecov.io/github/bobluppes/graaf)
-[![Documentation](https://img.shields.io/badge/documentation-doxygen-informational)](https://bobluppes.github.io/graaf/)
-[![License](https://img.shields.io/badge/license-MIT-black)](LICENSE.md)
+<p align="center"><img src="docs/img/graaf.png"></p>
+<h1 align="center">Graaf Lib</h1>
 
-Graaf is a general-purpose lightweight C++ library designed for versatile graph operations. Graaf allows users to easily create, modify, and query graphs. It is well-suited for various graph-based applications, including social network analysis, CNNs, and more.
+<p align="center">
+  Graaf is a general-purpose lightweight C++ library designed for versatile graph operations. Graaf allows users to easily create, modify, and query graphs. It is well-suited for various graph-based applications, including social network analysis, CNNs, and more.
+</p>
+
+<p align="center">
+  <a href="https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml"><img src="https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml/badge.svg" height="20"></a>
+  <a href="https://codecov.io/github/bobluppes/graaf"><img src="https://codecov.io/github/bobluppes/graaf/branch/main/graph/badge.svg?token=ZFBLNFN39C" height="20"></a>
+  <a href="https://bobluppes.github.io/graaf/"><img src="https://img.shields.io/badge/documentation-doxygen-informational" height="20"></a>
+  <a href="LICENSE.md"><img src="(https://img.shields.io/badge/license-MIT-black" height="20"></a>
+</p>
 
 ## Features
 The Graaf library is designed with generality in mind. As such, it comes with specializations for a `directed_graph` as well as an `undirected_graph`. Furthermore, it can be used to store user-defined vertex and edge classes:
