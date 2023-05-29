@@ -30,4 +30,10 @@ void directed_graph<VERTEX_T, EDGE_T>::do_remove_edge(
   this->edges_.erase(std::make_pair(vertex_id_lhs, vertex_id_rhs));
 }
 
+template <typename VERTEX_T, typename EDGE_T>
+std::size_t directed_graph<VERTEX_T, EDGE_T>::get_vertex_outdegree(
+    vertex_id_t vertex_id) const noexcept {
+  return (this->get_neighbors(vertex_id)).size();
+}
+
 }  // namespace graaf
