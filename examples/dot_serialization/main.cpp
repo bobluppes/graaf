@@ -1,6 +1,7 @@
 #include <fmt/core.h>
 #include <graaflib/directed_graph.h>
 #include <graaflib/io/dot.h>
+#include <graaflib/types.h>
 
 #include <filesystem>
 #include <string>
@@ -49,17 +50,20 @@ auto create_graph() {
 int main() {
   const auto my_graph{create_graph()};
 
-  const auto vertex_writer{[](const my_vertex& vertex) -> std::string {
+  const auto vertex_writer{[](graaf::vertex_id_t vertex_id,
+                              const my_vertex& vertex) -> std::string {
     const auto color{vertex.number <= 25 ? "lightcyan" : "mediumspringgreen"};
-    return fmt::format("label=\"{}\", fillcolor={}, style=filled", vertex.name,
-                       color);
+    return fmt::format("label=\"{}: {}\", fillcolor={}, style=filled",
+                       vertex_id, vertex.name, color);
   }};
 
-  const auto edge_writer{[](const my_edge& edge) -> std::string {
+  const auto edge_writer{[](const graaf::vertex_ids_t& /*edge_id*/,
+                            const my_edge& edge) -> std::string {
     const auto style{edge.priority == edge_priority::HIGH ? "solid" : "dashed"};
-    return fmt::format("label=\"{}\", style={}", edge.weight, style);
+    return fmt::format("label=\"{}\", style={}, color=gray, fontcolor=gray",
+                       edge.weight, style);
   }};
 
-  const std::filesystem::path dof_file_path{"./my_graph.dot"};
+  const std::filesystem::path dof_file_path{"./dot_example.dot"};
   graaf::io::to_dot(my_graph, dof_file_path, vertex_writer, edge_writer);
 }
