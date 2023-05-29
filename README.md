@@ -3,13 +3,18 @@
 
 <p align="center">
   Graaf is a general-purpose lightweight C++ library designed for versatile graph operations. Graaf allows users to easily create, modify, and query graphs. It is well-suited for various graph-based applications, including social network analysis, CNNs, and more.
-</p>
+</p>S
 
 <p align="center">
   <a href="https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml"><img src="https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml/badge.svg" height="20"></a>
   <a href="https://codecov.io/github/bobluppes/graaf"><img src="https://codecov.io/github/bobluppes/graaf/branch/main/graph/badge.svg?token=ZFBLNFN39C" height="20"></a>
-  <a href="https://bobluppes.github.io/graaf/"><img src="https://img.shields.io/badge/documentation-doxygen-informational" height="20"></a>
+  <a href="https://bobluppes.github.io/graaf/"><img src="https://img.shields.io/badge/documentation-doxygen-%23ff69b4" height="20"></a>
   <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-black" height="20"></a>
+</p>
+
+<p align="center">
+  <a href="https://discord.gg/cGczwRHJ9K"><img src="https://img.shields.io/badge/chat-discord-%237289DA?style=flat&logo=discord&labelColor=white" height="20"></a>
+  <a href="https://twitter.com/graaflib"><img src="https://img.shields.io/badge/follow-@graaflib-%231DA1F2?style=flat&logo=twitter&labelColor=white" heigth="20"></a>
 </p>
 
 ## Features
@@ -70,6 +75,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Graaf_lib)
 
 ## Contributing
 The Graaf library is open to contributions, learn more [here](CONTRIBUTING.md).
+
+A more detailed roadmap can be found on our [YouTrack](https://graaf.youtrack.cloud/agiles/147-2/current).
 
 ## License
 This project is licensed under the [MIT license](LICENSE.md).
