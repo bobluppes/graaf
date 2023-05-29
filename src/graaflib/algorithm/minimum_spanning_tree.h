@@ -1,11 +1,11 @@
 #pragma once
 
-#include <vector>
-#include <utility>
-#include <algorithm>
-
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
+
+#include <algorithm>
+#include <utility>
+#include <vector>
 
 namespace graaf::algorithm {
 
@@ -17,13 +17,11 @@ struct DisjointSet {
   DisjointSet(size_t num_vertices) {
     parent.resize(num_vertices);
     rank.resize(num_vertices, 0);
-    for (vertex_id_t i = 0; i < num_vertices; ++i)
-      parent[i] = i;
+    for (vertex_id_t i = 0; i < num_vertices; ++i) parent[i] = i;
   }
 
   vertex_id_t find(vertex_id_t vertex) {
-    if (vertex != parent[vertex])
-      parent[vertex] = find(parent[vertex]);
+    if (vertex != parent[vertex]) parent[vertex] = find(parent[vertex]);
     return parent[vertex];
   }
 
@@ -31,17 +29,16 @@ struct DisjointSet {
     vertex_id_t root1 = find(vertex1);
     vertex_id_t root2 = find(vertex2);
     if (root1 != root2) {
-      if (rank[root1] < rank[root2])
-        std::swap(root1, root2);
+      if (rank[root1] < rank[root2]) std::swap(root1, root2);
       parent[root2] = root1;
-      if (rank[root1] == rank[root2])
-        ++rank[root1];
+      if (rank[root1] == rank[root2]) ++rank[root1];
     }
   }
 };
 
 template <typename V, typename E, graph_spec S>
-std::vector<std::pair<vertex_id_t, vertex_id_t>> minimum_spanning_tree(const graph<V, E, S>& graph) {
+std::vector<std::pair<vertex_id_t, vertex_id_t>> minimum_spanning_tree(
+    const graph<V, E, S>& graph) {
   using Edge = std::pair<edge_weight_t, std::pair<vertex_id_t, vertex_id_t>>;
   std::vector<Edge> edges;
 
