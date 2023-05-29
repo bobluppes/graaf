@@ -8,6 +8,10 @@ namespace graaf {
 template <typename VERTEX_T, typename EDGE_T>
 class undirected_graph final
     : public graph<VERTEX_T, EDGE_T, graph_spec::UNDIRECTED> {
+ public:
+  [[nodiscard]] std::size_t get_vertex_degree(
+      vertex_id_t vertex_id) const noexcept;
+
  private:
   [[nodiscard]] bool do_has_edge(
       vertex_id_t vertex_id_lhs,
