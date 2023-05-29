@@ -9,6 +9,15 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+# Include fmt/fmtlib as a dependency
+include(FetchContent)
+FetchContent_Declare(
+  fmt
+  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+  GIT_TAG        9.1.0
+)
+FetchContent_MakeAvailable(fmt)
+
 file(GLOB TEST_SOURCES "graaflib/*.cpp" "graaflib/*/*.cpp")
 add_executable(
   ${PROJECT_NAME}_test
@@ -34,8 +43,8 @@ target_include_directories(${PROJECT_NAME}_test PUBLIC ${CMAKE_CURRENT_SOURCE_DI
 target_link_libraries(
   ${PROJECT_NAME}_test
   PRIVATE
-  ${PROJECT_NAME}_lib
   gtest_main
+  fmt::fmt
 )
 
 # Enable CMAKE's test runner to discover tests

@@ -8,11 +8,15 @@
 <p align="center">
   <a href="https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml"><img src="https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml/badge.svg" height="20"></a>
   <a href="https://codecov.io/github/bobluppes/graaf"><img src="https://codecov.io/github/bobluppes/graaf/branch/main/graph/badge.svg?token=ZFBLNFN39C" height="20"></a>
-  <a href="https://bobluppes.github.io/graaf/"><img src="https://img.shields.io/badge/documentation-doxygen-informational" height="20"></a>
+  <a href="https://bobluppes.github.io/graaf/"><img src="https://img.shields.io/badge/documentation-doxygen-%23ff69b4" height="20"></a>
   <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-black" height="20"></a>
 </p>
 
-## Features
+<p align="center">
+  <a href="https://discord.gg/cGczwRHJ9K"><img src="https://img.shields.io/badge/chat-discord-%237289DA?style=flat&logo=discord&labelColor=white" height="20"></a>
+</p>
+
+# Features
 The Graaf library is designed with generality in mind. As such, it comes with specializations for a `directed_graph` as well as an `undirected_graph`. Furthermore, it can be used to store user-defined vertex and edge classes:
 
 ```c++
@@ -46,11 +50,27 @@ traverse<search_strategy::BFS>(my_graph, start_vertex, print_vertex_callback);
 For more examples, take a look at our [example section](./examples/README.md).
 More details can be found in our [documentation](https://bobluppes.github.io/graaf/).
 
-## Requirements
-- C++ 20
+# Installation
+## Header-Only Library
+The Graaf libary can be included as a header-only library. It requires a compiler with C++ 20 support and requires linking against fmt.
 
-## Installation
-This project supports CMake and can be pulled in using `FetchContent`:
+### Requirements
+- C++ 20
+- [fmt/fmtlib](https://github.com/fmtlib/fmt)
+
+Just add the `src/graaflib` directory to the `INCLUDE_DIRECTORIES` and you can start using Graaf in your source files:
+
+```CMake
+include_directories("graaf/src/graaflib")
+```
+
+```c++
+// main.cpp
+#include <graaflib/directed_graph>
+```
+
+## CMake FetchContent
+Alternatively, this project can be pulled in using CMake's `FetchContent`:
 
 ```CMake
 include(FetchContent)
@@ -68,8 +88,20 @@ Now you can link your target against `Graaf_lib`:
 target_link_libraries(${PROJECT_NAME} PRIVATE Graaf_lib)
 ```
 
-## Contributing
-The Graaf library is open to contributions, learn more [here](CONTRIBUTING.md).
+# Contributing
+The Graaf library welcomes contributions! 
 
-## License
+If you're interested in improving, fixing bugs, or adding features, please refer to the [wiki](https://github.com/bobluppes/graaf/wiki) for guidelines. Check out our roadmap on [YouTrack](https://graaf.youtrack.cloud/agiles/147-2/current) to stay up to date on planned features and improvements. We also have an [issue tracker](https://github.com/bobluppes/graaf/issues) for bug reports and feature requests. 
+
+Feel free to join our [Discord](https://discord.gg/cGczwRHJ9K) for assistance and a smooth contribution experience.
+
+# Important Links & Docs
+- [Issue tracker](https://github.com/bobluppes/graaf/issues)
+- [Roadmap](https://graaf.youtrack.cloud/agiles/147-2/current)
+- [Documentation](https://bobluppes.github.io/graaf/)
+- [Examples](examples/README.md)
+- [Wiki](https://github.com/bobluppes/graaf/wiki)
+- [Discord](https://discord.gg/cGczwRHJ9K)
+
+# License
 This project is licensed under the [MIT license](LICENSE.md).
