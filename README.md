@@ -37,7 +37,8 @@ const auto print_vertex_callback{[](const auto vertex) {
 traverse<search_strategy::BFS>(my_graph, start_vertex, print_vertex_callback);
 ```
 
-For more details, take a look at the [documentation](https://bobluppes.github.io/graaf/).
+For more examples, take a look at our [example section](./examples/README.md).
+More details can be found in our [documentation](https://bobluppes.github.io/graaf/).
 
 ## Requirements
 - C++ 20

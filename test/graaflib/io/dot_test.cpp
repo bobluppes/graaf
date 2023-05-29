@@ -14,13 +14,15 @@
 namespace graaf::io {
 
 namespace {
-const auto int_vertex_writer{[](int vertex) -> std::string {
-  return fmt::format("label=\"{}\"", std::to_string(vertex));
-}};
+const auto int_vertex_writer{
+    [](vertex_id_t /*vertex_id*/, int vertex) -> std::string {
+      return fmt::format("label=\"{}\"", std::to_string(vertex));
+    }};
 
-const auto int_edge_writer{[](int edge) -> std::string {
-  return fmt::format("label=\"{}\"", std::to_string(edge));
-}};
+const auto int_edge_writer{
+    [](const vertex_ids_t& /*edge_id*/, int edge) -> std::string {
+      return fmt::format("label=\"{}\"", std::to_string(edge));
+    }};
 
 template <typename T>
 const auto make_vertex_string{
@@ -204,12 +206,14 @@ TEST(DotTest, UserProvidedVertexAndEdgeClass) {
   const auto vertex_2{graph.add_vertex({20, "vertex 2"})};
   graph.add_edge(vertex_1, vertex_2, {100, "edge 1"});
 
-  const auto vertex_writer{[](const vertex_t& vertex) {
-    return fmt::format("{}, {}", vertex.numeric_data, vertex.string_data);
-  }};
-  const auto edge_writer{[](const edge_t& edge) {
-    return fmt::format("{}, {}", edge.numeric_data, edge.string_data);
-  }};
+  const auto vertex_writer{
+      [](vertex_id_t /*vertex_id*/, const vertex_t& vertex) {
+        return fmt::format("{}, {}", vertex.numeric_data, vertex.string_data);
+      }};
+  const auto edge_writer{
+      [](const vertex_ids_t& /*edge_id*/, const edge_t& edge) {
+        return fmt::format("{}, {}", edge.numeric_data, edge.string_data);
+      }};
 
   // WHEN
   to_dot(graph, path, vertex_writer, edge_writer);
@@ -238,10 +242,10 @@ TEST(DotTest, DefaultWriters) {
 
   // THEN
   const auto dot_content{read_to_string(path)};
-  ASSERT_TRUE(dot_content.find(fmt::format("{} [label=\"10\"];", vertex_1)) !=
-              std::string::npos);
-  ASSERT_TRUE(dot_content.find(fmt::format("{} [label=\"20\"];", vertex_2)) !=
-              std::string::npos);
+  ASSERT_TRUE(dot_content.find(fmt::format("{} [label=\"{}: 10\"];", vertex_1,
+                                           vertex_1)) != std::string::npos);
+  ASSERT_TRUE(dot_content.find(fmt::format("{} [label=\"{}: 20\"];", vertex_2,
+                                           vertex_2)) != std::string::npos);
   // For the float value we only check up until the first decimal place
   ASSERT_TRUE(dot_content.find(fmt::format("{} -> {} [label=\"3.3", vertex_1,
                                            vertex_2)) != std::string::npos);

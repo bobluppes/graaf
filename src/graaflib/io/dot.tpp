@@ -66,8 +66,9 @@ constexpr const char* spec_to_edge_specifier(const graph_spec& spec) {
 template <typename V, typename E, graph_spec S, typename VERTEX_WRITER_T,
           typename EDGE_WRITER_T>
   requires std::is_invocable_r_v<std::string, const VERTEX_WRITER_T&,
-                                 const V&> &&
-           std::is_invocable_r_v<std::string, const EDGE_WRITER_T&, const E&>
+                                 vertex_id_t, const V&> &&
+           std::is_invocable_r_v<std::string, const EDGE_WRITER_T&,
+                                 const graaf::vertex_ids_t&, const E&>
 void to_dot(const graph<V, E, S>& graph, const std::filesystem::path& path,
             const VERTEX_WRITER_T& vertex_writer,
             const EDGE_WRITER_T& edge_writer) {
@@ -79,14 +80,15 @@ void to_dot(const graph<V, E, S>& graph, const std::filesystem::path& path,
   append_line(fmt::format("{} {{", detail::spec_to_string(S)));
 
   for (const auto& [vertex_id, vertex] : graph.get_vertices()) {
-    append_line(fmt::format("\t{} [{}];", vertex_id, vertex_writer(vertex)));
+    append_line(
+        fmt::format("\t{} [{}];", vertex_id, vertex_writer(vertex_id, vertex)));
   }
 
   const auto edge_specifier{detail::spec_to_edge_specifier(S)};
-  for (const auto& [vertices, edge] : graph.get_edges()) {
-    const auto [source_id, target_id]{vertices};
+  for (const auto& [edge_id, edge] : graph.get_edges()) {
+    const auto [source_id, target_id]{edge_id};
     append_line(fmt::format("\t{} {} {} [{}];", source_id, edge_specifier,
-                            target_id, edge_writer(edge)));
+                            target_id, edge_writer(edge_id, edge)));
   }
 
   append_line("}");
