@@ -70,13 +70,35 @@ TEST(DirectedGraphTest, VertexOutDegree) {
   // WHEN
   graph.add_edge(vertex_id_1, vertex_id_2, 100);
   graph.add_edge(vertex_id_2, vertex_id_3, 200);
-  graph.add_edge(vertex_id_2, vertex_id_4, 200);
+  graph.add_edge(vertex_id_2, vertex_id_4, 300);
 
   // THEN
   ASSERT_EQ(graph.get_vertex_outdegree(vertex_id_1), 1);
   ASSERT_EQ(graph.get_vertex_outdegree(vertex_id_2), 2);
   ASSERT_EQ(graph.get_vertex_outdegree(vertex_id_3), 0);
   ASSERT_EQ(graph.get_vertex_outdegree(vertex_id_4), 0);
+}
+
+TEST(DirectedGraphTest, VertexInDegree) {
+  // GIVEN
+  directed_graph<int, int> graph{};
+
+  const auto vertex_id_1{graph.add_vertex(10)};
+  const auto vertex_id_2{graph.add_vertex(20)};
+  const auto vertex_id_3{graph.add_vertex(30)};
+  const auto vertex_id_4{graph.add_vertex(40)};
+
+  // WHEN
+  graph.add_edge(vertex_id_1, vertex_id_2, 100);
+  graph.add_edge(vertex_id_1, vertex_id_3, 200);
+  graph.add_edge(vertex_id_3, vertex_id_4, 300);
+  graph.add_edge(vertex_id_2, vertex_id_4, 400);
+
+  // THEN
+  ASSERT_EQ(graph.get_vertex_indegree(vertex_id_1), 0);
+  ASSERT_EQ(graph.get_vertex_indegree(vertex_id_2), 1);
+  ASSERT_EQ(graph.get_vertex_indegree(vertex_id_3), 1);
+  ASSERT_EQ(graph.get_vertex_indegree(vertex_id_4), 2);
 }
 
 }  // namespace graaf

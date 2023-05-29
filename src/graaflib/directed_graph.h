@@ -12,6 +12,9 @@ class directed_graph final
   [[nodiscard]] std::size_t get_vertex_outdegree(
       vertex_id_t vertex_id) const noexcept;
 
+  [[nodiscard]] std::size_t get_vertex_indegree(
+      vertex_id_t vertex_id) const noexcept;
+
  private:
   [[nodiscard]] bool do_has_edge(
       vertex_id_t vertex_id_lhs,

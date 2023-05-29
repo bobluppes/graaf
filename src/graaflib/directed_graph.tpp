@@ -36,4 +36,16 @@ std::size_t directed_graph<VERTEX_T, EDGE_T>::get_vertex_outdegree(
   return (this->get_neighbors(vertex_id)).size();
 }
 
+template <typename VERTEX_T, typename EDGE_T>
+std::size_t directed_graph<VERTEX_T, EDGE_T>::get_vertex_indegree(
+    vertex_id_t vertex_id) const noexcept {
+  int indegree{0};
+  for (const auto& current_vertex : this->get_vertices()) {
+    if (this->get_neighbors(current_vertex.first).contains(vertex_id)) {
+      indegree++;
+    }
+  }
+  return indegree;
+}
+
 }  // namespace graaf
