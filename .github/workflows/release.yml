@@ -2,7 +2,6 @@ name: Create Release
 
 on:
   push:
-    branches: [ "release-workflow" ]
     tags:
         - "v*.*.*" # Push events to matching v*.*.*, i.e. v2.1.0
 
@@ -25,4 +24,3 @@ jobs:
               header-only.zip
               header-only.tar.gz
             generate_release_notes: true
-            tag_name: test
