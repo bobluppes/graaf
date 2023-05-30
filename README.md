@@ -58,16 +58,14 @@ The Graaf libary can be included as a header-only library. It requires a compile
 - C++ 20
 - [fmt/fmtlib](https://github.com/fmtlib/fmt)
 
-Just add the `src/graaflib` directory to the `INCLUDE_DIRECTORIES` and you can start using Graaf in your source files:
-
-```CMake
-include_directories("graaf/src/graaflib")
-```
+Download the `header-only` library from our [release page](https://github.com/bobluppes/graaf/releases) and add the `include/graaflib` directory to your include path. You can now use Graaf in your source files:
 
 ```c++
 // main.cpp
 #include <graaflib/directed_graph>
 ```
+
+For more details, see the [installation README](include/README.md).
 
 ## CMake FetchContent
 Alternatively, this project can be pulled in using CMake's `FetchContent`:
