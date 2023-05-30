@@ -11,10 +11,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Install dependencies
+        run: sudo apt-get install tar zip -y
+      - name: Create tarball
+        run: tar -czvf header-only.tar.gz include
+      - name: Create zip
+        run: zip -r header-only.zip include
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
             files: | 
-              include/*
-              include/**/*
-            generate_release_notes: false
+              header-only.zip
+              header-only.tar.gz
+            generate_release_notes: true
