@@ -1,5 +1,3 @@
-# .github/release.yml
-
 changelog:
   exclude:
     labels:
@@ -12,12 +10,11 @@ changelog:
         - breaking-change
     - title: Exciting New Features 🎉
       labels:
-        - feat
+        - enhancement
     - title: Documentation changes
       labels:
-        - docs
-        - example
-        - test
+        - documentation
+        - tests
     - title: Other changes
       labels:
         - refactor
