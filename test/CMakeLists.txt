@@ -38,7 +38,7 @@ if (ENABLE_COVERAGE)
 endif()
 
 # Include src such that we can #include <graaflib/*> in the sources
-target_include_directories(${PROJECT_NAME}_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../src)
+target_include_directories(${PROJECT_NAME}_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
 target_link_libraries(
   ${PROJECT_NAME}_test

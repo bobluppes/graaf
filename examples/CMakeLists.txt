@@ -20,7 +20,7 @@ foreach (EXAMPLE ${EXAMPLES})
     )
 
     # Include src such that we can #include <graaflib/*> in the sources
-    target_include_directories(${PROJECT_NAME}_${EXAMPLE_NAME}_example PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../src)
+    target_include_directories(${PROJECT_NAME}_${EXAMPLE_NAME}_example PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
     target_link_libraries(
         ${PROJECT_NAME}_${EXAMPLE_NAME}_example
