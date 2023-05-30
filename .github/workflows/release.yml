@@ -1,0 +1,18 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+        - "v*.*.*" # Push events to matching v*.*.*, i.e. v2.1.0
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+            files: include/
+            generate_release_notes: true
