@@ -14,5 +14,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-            files: include/
+            files: | 
+              include/*
+              include/**/*
             generate_release_notes: true
