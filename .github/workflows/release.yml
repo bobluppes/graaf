@@ -25,3 +25,4 @@ jobs:
               header-only.zip
               header-only.tar.gz
             generate_release_notes: false
+            tag_name: test
