@@ -17,4 +17,4 @@ jobs:
             files: | 
               include/*
               include/**/*
-            generate_release_notes: true
+            generate_release_notes: false
