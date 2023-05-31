@@ -1,4 +1,4 @@
-<p align="center"><img src="docs/img/graaf.png"></p>
+<p align="center"><img src="docs/static/img/graaf.png"></p>
 <h1 align="center">Graaf Lib</h1>
 
 <p align="center">
@@ -8,7 +8,7 @@
 <p align="center">
   <a href="https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml"><img src="https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml/badge.svg" height="20"></a>
   <a href="https://codecov.io/github/bobluppes/graaf"><img src="https://codecov.io/github/bobluppes/graaf/branch/main/graph/badge.svg?token=ZFBLNFN39C" height="20"></a>
-  <a href="https://bobluppes.github.io/graaf/"><img src="https://img.shields.io/badge/documentation-doxygen-%23ff69b4" height="20"></a>
+  <a href="https://bobluppes.github.io/graaf/"><img src="https://img.shields.io/badge/documentation-docusaurus-%23ff69b4" height="20"></a>
   <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-black" height="20"></a>
 </p>
 

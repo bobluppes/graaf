@@ -1,9 +1,0 @@
-# We want this directory to remain empty, 
-# but git can only check-in files, not directories.
-# Hence we check in this file.
-
-# Ignore everything in this directory
-*
-# Except this file and our custom css
-!.gitignore
-!custom_header.html
