@@ -1,5 +1,7 @@
 #pragma once
 
+#include <algorithm>
+
 namespace graaf::properties {
 
 template <typename V, typename E, graph_spec S>
@@ -27,14 +29,15 @@ std::size_t get_vertex_outdegree(const graaf::graph<V, E, S>& graph,
 template <typename V, typename E, graph_spec S>
 std::size_t get_vertex_indegree(const graaf::graph<V, E, S>& graph,
                                 vertex_id_t vertex_id) {
+  using vertex_id_to_vertex_t = std::unordered_map<vertex_id_t, V>;
+
   if constexpr (S == graph_spec::DIRECTED) {
-    int indegree{0};
-    for (const auto& current_vertex : graph.get_vertices()) {
-      if (graph.get_neighbors(current_vertex.first).contains(vertex_id)) {
-        indegree++;
-      }
-    }
-    return indegree;
+    return std::ranges::count_if(
+        graph.get_vertices(),
+        [&graph, vertex_id](const vertex_id_to_vertex_t::value_type& kv_pair) {
+          const auto& [current_vertex_id, _]{kv_pair};
+          return graph.get_neighbors(current_vertex_id).contains(vertex_id);
+        });
   }
 
   if constexpr (S == graph_spec::UNDIRECTED) {
