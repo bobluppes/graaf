@@ -3,8 +3,6 @@
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
 
-#include <concepts>
-
 namespace graaf::properties {
 
 template <typename V, typename E, graph_spec S>

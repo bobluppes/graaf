@@ -11,7 +11,7 @@ std::size_t get_vertex_degree(const graaf::graph<V, E, S>& graph,
   }
 
   if constexpr (S == graph_spec::UNDIRECTED) {
-    return (graph.get_neighbors(vertex_id)).size();
+    return get_vertex_outdegree(graph, vertex_id);
   }
 
   // Should never reach this
