@@ -12,8 +12,7 @@ enum class graph_spec { DIRECTED, UNDIRECTED };
 template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
 class graph {
   using vertex_id_to_vertex_t = std::unordered_map<vertex_id_t, VERTEX_T>;
-  using vertex_ids_to_edge_t =
-      std::unordered_map<vertex_ids_t, EDGE_T, vertex_ids_hash>;
+  using edge_id_to_edge_t = std::unordered_map<edge_id_t, EDGE_T, edge_id_hash>;
 
  public:
   using vertex_t = VERTEX_T;
@@ -57,7 +56,7 @@ class graph {
     return vertices_;
   }
 
-  [[nodiscard]] const vertex_ids_to_edge_t& get_edges() const noexcept {
+  [[nodiscard]] const edge_id_to_edge_t& get_edges() const noexcept {
     return edges_;
   }
 
@@ -163,9 +162,9 @@ class graph {
    * @param  vertex_id_lhs The ID of the first vertex
    * @param  vertex_id_rhs The ID of the second vertex
    * @param  edge
-   * @return vertex_ids_t - Vertices ID of the pair of vertices
+   * @return edge_id_t - The ID of the new edge
    */
-  vertex_ids_t add_edge(VERTEX_T vertex_lhs, VERTEX_T vertex_rhs, EDGE_T edge);
+  edge_id_t add_edge(VERTEX_T vertex_lhs, VERTEX_T vertex_rhs, EDGE_T edge);
 
   /**
    * Remove the edge between two vertices
@@ -179,7 +178,7 @@ class graph {
   std::unordered_map<vertex_id_t, vertices_t> adjacency_list_{};
 
   vertex_id_to_vertex_t vertices_{};
-  vertex_ids_to_edge_t edges_{};
+  edge_id_to_edge_t edges_{};
 
  private:
   [[nodiscard]] virtual bool do_has_edge(

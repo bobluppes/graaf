@@ -7,12 +7,10 @@
 namespace graaf {
 
 using vertex_id_t = std::size_t;
-using edge_id_t = std::size_t;
+using edge_id_t = std::pair<vertex_id_t, vertex_id_t>;
 
-using vertex_ids_t = std::pair<vertex_id_t, vertex_id_t>;
-
-struct vertex_ids_hash {
-  [[nodiscard]] std::size_t operator()(const vertex_ids_t& key) const {
+struct edge_id_hash {
+  [[nodiscard]] std::size_t operator()(const edge_id_t& key) const {
     const auto h1{std::hash<vertex_id_t>{}(key.first)};
     const auto h2{std::hash<vertex_id_t>{}(key.second)};
 
