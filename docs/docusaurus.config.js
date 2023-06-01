@@ -21,6 +21,8 @@ const config = {
   organizationName : 'bobluppes',  // Usually your GitHub org/user name.
   projectName : 'graaf',           // Usually your repo name.
 
+  trailingSlash : false,
+
   onBrokenLinks : 'throw',
   onBrokenMarkdownLinks : 'warn',
 
