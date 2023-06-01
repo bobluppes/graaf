@@ -11,29 +11,24 @@ jobs:
     steps:
       - name: Checkout Graaf repository
         uses: actions/checkout@v3
-        
-      - name: Pull custom Doxygen theme
-        uses: actions/checkout@master
+
+      # Node is required for npm
+      - name: Set up Node
+        uses: actions/setup-node@v3
         with:
-            repository: jothepro/doxygen-awesome-css
-            ref: v2.2.0
-            path: doxygen-awesome-css
+          node-version: "18"
 
-      - name: Install Doxygen
-        run: sudo apt-get install doxygen graphviz -y
-        shell: bash
-
-      - name: Generate Doxygen Documentation
-        run: doxygen docs/Doxyfile
-        shell: bash
-      
-      - name: Create .nojekyll (ensures pages with underscores work on gh pages)
-        run: touch docs/html/.nojekyll
-        shell: bash
+      - name: Build Docusaurus website
+        run: |
+          cd docs
+          npm install 
+          npm run build
 
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v2
         with:
-            token: ${{ secrets.GITHUB_TOKEN }}
-            branch: gh-pages
-            folder: docs/html
+          target_branch: gh-pages
+          build_dir: docs/build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
