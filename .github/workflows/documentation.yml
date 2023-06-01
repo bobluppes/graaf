@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - docusaurus
 
 jobs:
   deploy:
@@ -11,29 +12,12 @@ jobs:
     steps:
       - name: Checkout Graaf repository
         uses: actions/checkout@v3
-        
-      - name: Pull custom Doxygen theme
-        uses: actions/checkout@master
-        with:
-            repository: jothepro/doxygen-awesome-css
-            ref: v2.2.0
-            path: doxygen-awesome-css
 
-      - name: Install Doxygen
-        run: sudo apt-get install doxygen graphviz -y
-        shell: bash
+      - name: Install node
+        run: sudo apt-get install nodejs npm -y
 
-      - name: Generate Doxygen Documentation
-        run: doxygen docs/Doxyfile
-        shell: bash
-      
-      - name: Create .nojekyll (ensures pages with underscores work on gh pages)
-        run: touch docs/html/.nojekyll
-        shell: bash
+      - name: Install yarn
+        run: npm install --global yarn
 
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-            token: ${{ secrets.GITHUB_TOKEN }}
-            branch: gh-pages
-            folder: docs/html
+      - name: Build docs and deploy
+        run: cd docs && yarn && yarn deploy
