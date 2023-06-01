@@ -14,28 +14,27 @@ const FeatureList: FeatureItem[] = [
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Graaf is designed as a lightweight alternative for Boost Graph. The library 
+        is created to be easy to use right from the start.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'General-Purpose',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Graphs can wrap arbitrary types, i.e. <code>graaf::directed_graph&lt;MyVertexClass, MyEdgeClass&gt;</code>
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'Lightning Fast',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Graaf is written in C++ with performance in mind. This allows users to
+        efficiently perform complex algorithms on large graphs.
       </>
     ),
   },
