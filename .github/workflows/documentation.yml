@@ -13,11 +13,23 @@ jobs:
       - name: Checkout Graaf repository
         uses: actions/checkout@v3
 
-      - name: Install node
-        run: sudo apt-get install nodejs npm -y
+      # Node is required for npm
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
 
-      - name: Install yarn
-        run: npm install --global yarn
+      - name: Build Docusaurus website
+        run: |
+          cd docs
+          npm install 
+          npm run build
 
-      - name: Build docs and deploy
-        run: cd docs && yarn && yarn deploy
+      - name: Deploy to GitHub Pages
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v2
+        with:
+          target_branch: gh-pages
+          build_dir: docs/build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
