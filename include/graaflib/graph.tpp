@@ -151,16 +151,6 @@ void graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::add_edge(
 
 template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
           graph_spec GRAPH_SPEC_V>
-edge_id_t graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::add_edge(
-    VERTEX_T vertex_lhs, VERTEX_T vertex_rhs, EDGE_T edge) {
-  const auto vertex_id_lhs{add_vertex(std::move(vertex_lhs))};
-  const auto vertex_id_rhs{add_vertex(std::move(vertex_rhs))};
-  add_edge(vertex_id_lhs, vertex_id_rhs, std::move(edge));
-  return {vertex_id_lhs, vertex_id_rhs};
-}
-
-template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
-          graph_spec GRAPH_SPEC_V>
 void graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::remove_edge(
     vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) {
   do_remove_edge(vertex_id_lhs, vertex_id_rhs);

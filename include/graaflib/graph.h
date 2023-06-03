@@ -202,16 +202,6 @@ class graph {
                 EDGE_T edge);
 
   /**
-   * Add two connected new vertices to the graph
-   *
-   * @param  vertex_id_lhs The ID of the first vertex
-   * @param  vertex_id_rhs The ID of the second vertex
-   * @param  edge
-   * @return edge_id_t - The ID of the new edge
-   */
-  edge_id_t add_edge(VERTEX_T vertex_lhs, VERTEX_T vertex_rhs, EDGE_T edge);
-
-  /**
    * Remove the edge between two vertices
    *
    * @param  vertex_id_lhs The ID of the first vertex
