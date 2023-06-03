@@ -7,6 +7,7 @@
 
 namespace graaf {
 
+// TODO: push this into the base class
 template <typename T>
 class my_edge : public weighted_edge<T> {
  public:
@@ -30,52 +31,40 @@ using graph_types = testing::Types<
     /**
      * Primitive edge type directed graph
      */
-    std::pair<directed_graph<int, bool, edge_type::WEIGHTED>, bool>,
-    std::pair<directed_graph<int, int, edge_type::WEIGHTED>, int>,
-    std::pair<directed_graph<int, unsigned long, edge_type::WEIGHTED>,
-              unsigned long>,
-    std::pair<directed_graph<int, float, edge_type::WEIGHTED>, float>,
-    std::pair<directed_graph<int, long double, edge_type::WEIGHTED>,
-              long double>,
+    std::pair<directed_graph<int, bool>, bool>,
+    std::pair<directed_graph<int, int>, int>,
+    std::pair<directed_graph<int, unsigned long>, unsigned long>,
+    std::pair<directed_graph<int, float>, float>,
+    std::pair<directed_graph<int, long double>, long double>,
 
     /**
      * Non primitive edge type directed graph
      */
-    std::pair<directed_graph<int, my_edge<bool>, edge_type::WEIGHTED>,
-              my_edge<bool>>,
-    std::pair<directed_graph<int, my_edge<int>, edge_type::WEIGHTED>,
-              my_edge<int>>,
-    std::pair<directed_graph<int, my_edge<unsigned long>, edge_type::WEIGHTED>,
+    std::pair<directed_graph<int, my_edge<bool>>, my_edge<bool>>,
+    std::pair<directed_graph<int, my_edge<int>>, my_edge<int>>,
+    std::pair<directed_graph<int, my_edge<unsigned long>>,
               my_edge<unsigned long>>,
-    std::pair<directed_graph<int, my_edge<float>, edge_type::WEIGHTED>,
-              my_edge<float>>,
-    std::pair<directed_graph<int, my_edge<long double>, edge_type::WEIGHTED>,
-              my_edge<long double>>,
+    std::pair<directed_graph<int, my_edge<float>>, my_edge<float>>,
+    std::pair<directed_graph<int, my_edge<long double>>, my_edge<long double>>,
 
     /**
      * Primitive edge type undirected graph
      */
-    std::pair<undirected_graph<int, bool, edge_type::WEIGHTED>, bool>,
-    std::pair<undirected_graph<int, int, edge_type::WEIGHTED>, int>,
-    std::pair<undirected_graph<int, unsigned long, edge_type::WEIGHTED>,
-              unsigned long>,
-    std::pair<undirected_graph<int, float, edge_type::WEIGHTED>, float>,
-    std::pair<undirected_graph<int, long double, edge_type::WEIGHTED>,
-              long double>,
+    std::pair<undirected_graph<int, bool>, bool>,
+    std::pair<undirected_graph<int, int>, int>,
+    std::pair<undirected_graph<int, unsigned long>, unsigned long>,
+    std::pair<undirected_graph<int, float>, float>,
+    std::pair<undirected_graph<int, long double>, long double>,
 
     /**
      * Non primitive edge type undirected graph
      */
-    std::pair<undirected_graph<int, my_edge<bool>, edge_type::WEIGHTED>,
-              my_edge<bool>>,
-    std::pair<undirected_graph<int, my_edge<int>, edge_type::WEIGHTED>,
-              my_edge<int>>,
-    std::pair<
-        undirected_graph<int, my_edge<unsigned long>, edge_type::WEIGHTED>,
-        my_edge<unsigned long>>,
-    std::pair<undirected_graph<int, my_edge<float>, edge_type::WEIGHTED>,
-              my_edge<float>>,
-    std::pair<undirected_graph<int, my_edge<long double>, edge_type::WEIGHTED>,
+    std::pair<undirected_graph<int, my_edge<bool>>, my_edge<bool>>,
+    std::pair<undirected_graph<int, my_edge<int>>, my_edge<int>>,
+    std::pair<undirected_graph<int, my_edge<unsigned long>>,
+              my_edge<unsigned long>>,
+    std::pair<undirected_graph<int, my_edge<float>>, my_edge<float>>,
+    std::pair<undirected_graph<int, my_edge<long double>>,
               my_edge<long double>>>;
 
 TYPED_TEST_CASE(WeightedGraphTest, graph_types);

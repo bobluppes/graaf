@@ -27,7 +27,7 @@ TEST(UndirectedGraphTest, EdgeCount) {
   ASSERT_EQ(graph.edge_count(), 1);
   ASSERT_TRUE(graph.has_edge(vertex_id_1, vertex_id_2));
   ASSERT_TRUE(graph.has_edge(vertex_id_2, vertex_id_1));
-  ASSERT_EQ(graph.get_edge(vertex_id_1, vertex_id_2), 100);
+  ASSERT_EQ(graph.get_edge(vertex_id_1, vertex_id_2)->get_weight(), 100);
 }
 
 TEST(UndirectedGraphTest, GetNeighbors) {

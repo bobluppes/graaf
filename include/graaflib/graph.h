@@ -12,35 +12,26 @@ namespace graaf {
 namespace detail {
 
 // Type trait to check if the type is a primitive numeric type
-template <typename T>
+template <typename EDGE_T>
 struct is_primitive_numeric;
 
-// Type trait to check if a type derives from weighted_edge
-template <typename T>
-struct is_weighted_edge;
+template <typename EDGE_T>
+inline constexpr bool is_primitive_numeric_v =
+    is_primitive_numeric<EDGE_T>::value;
 
 }  // namespace detail
 
-enum class edge_type { WEIGHTED, UNWEIGHTED };
 enum class graph_spec { DIRECTED, UNDIRECTED };
 
-template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
-          graph_spec GRAPH_SPEC_V>
+template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
 class graph {
-  using weighted_edge_t =
-      std::conditional_t<detail::is_primitive_numeric<EDGE_T>::value,
-                         std::shared_ptr<primitive_numeric_adapter<EDGE_T>>,
-                         std::shared_ptr<EDGE_T>>;
-
-  static_assert(EDGE_TYPE_V == edge_type::UNWEIGHTED ||
-                detail::is_weighted_edge<
-                    typename weighted_edge_t::element_type>::impl::value);
-
  public:
   using vertex_t = VERTEX_T;
 
-  using edge_t = std::conditional_t<EDGE_TYPE_V == edge_type::UNWEIGHTED,
-                                    EDGE_T, weighted_edge_t>;
+  using edge_t =
+      std::conditional_t<detail::is_primitive_numeric_v<EDGE_T>,
+                         std::shared_ptr<primitive_numeric_adapter<EDGE_T>>,
+                         std::shared_ptr<EDGE_T>>;
 
   using vertices_t = std::unordered_set<vertex_id_t>;
 
@@ -63,24 +54,6 @@ class graph {
    */
   [[nodiscard]] constexpr bool is_undirected() const {
     return GRAPH_SPEC_V == graph_spec::UNDIRECTED;
-  }
-
-  /**
-   * Checks whether the edges of a graph are weighted.
-   *
-   * @return bool
-   */
-  [[nodiscard]] constexpr bool is_weighted() const {
-    return EDGE_TYPE_V == edge_type::WEIGHTED;
-  }
-
-  /**
-   * Checks whether the edges of a graph are unweighted.
-   *
-   * @return bool
-   */
-  [[nodiscard]] constexpr bool is_unweighted() const {
-    return EDGE_TYPE_V == edge_type::UNWEIGHTED;
   }
 
   /**

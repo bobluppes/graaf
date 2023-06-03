@@ -16,10 +16,8 @@ struct GraphTest : public testing::Test {
 };
 
 using graph_types =
-    testing::Types<directed_graph<int, int>,
-                   directed_graph<int, int, edge_type::WEIGHTED>,
-                   undirected_graph<int, int>,
-                   undirected_graph<int, int, edge_type::WEIGHTED>>;
+    testing::Types<directed_graph<int, int>, directed_graph<int, int>,
+                   undirected_graph<int, int>, undirected_graph<int, int>>;
 
 TYPED_TEST_CASE(GraphTest, graph_types);
 
