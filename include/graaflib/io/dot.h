@@ -43,7 +43,7 @@ const auto default_edge_writer{
  * are provided for primitive numeric types.
  * @param path Path to the output dot file.
  */
-template <typename V, typename E, graph_spec S,
+template <typename V, typename E, edge_type T, graph_spec S,
           typename VERTEX_WRITER_T = decltype(detail::default_vertex_writer<V>),
           typename EDGE_WRITER_T = decltype(detail::default_edge_writer<E>)>
   requires std::is_invocable_r_v<std::string, const VERTEX_WRITER_T&,
@@ -51,7 +51,7 @@ template <typename V, typename E, graph_spec S,
            std::is_invocable_r_v<std::string, const EDGE_WRITER_T&,
                                  const graaf::edge_id_t&, const E&>
 void to_dot(
-    const graph<V, E, S>& graph, const std::filesystem::path& path,
+    const graph<V, E, T, S>& graph, const std::filesystem::path& path,
     const VERTEX_WRITER_T& vertex_writer = detail::default_vertex_writer<V>,
     const EDGE_WRITER_T& edge_writer = detail::default_edge_writer<E>);
 

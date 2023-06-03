@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <functional>
+#include <type_traits>
 #include <utility>
 
 namespace graaf {
@@ -17,6 +18,23 @@ struct edge_id_hash {
     // TODO: use something like boost::hash_combine
     return h1 ^ h2;
   }
+};
+
+template <typename T>
+class weighted_edge {
+ public:
+  [[nodiscard]] virtual T get_weight() const noexcept = 0;
+};
+
+template <typename T>
+class primitive_numeric_adapter final : public weighted_edge<T> {
+ public:
+  explicit primitive_numeric_adapter(T value) : value_{value} {}
+
+  [[nodiscard]] T get_weight() const noexcept override { return value_; }
+
+ private:
+  T value_{};
 };
 
 }  // namespace graaf

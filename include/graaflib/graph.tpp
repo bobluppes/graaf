@@ -6,31 +6,37 @@
 
 namespace graaf {
 
-template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-std::size_t graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::vertex_count()
+template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
+          graph_spec GRAPH_SPEC_V>
+std::size_t graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::vertex_count()
     const noexcept {
   return vertices_.size();
 }
 
-template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-std::size_t graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::edge_count() const noexcept {
+template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
+          graph_spec GRAPH_SPEC_V>
+std::size_t graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::edge_count()
+    const noexcept {
   return edges_.size();
 }
 
-template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-bool graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::has_vertex(
+template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
+          graph_spec GRAPH_SPEC_V>
+bool graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::has_vertex(
     vertex_id_t vertex_id) const noexcept {
   return vertices_.contains(vertex_id);
 }
 
-template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-bool graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::has_edge(
+template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
+          graph_spec GRAPH_SPEC_V>
+bool graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::has_edge(
     vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const noexcept {
   return do_has_edge(vertex_id_lhs, vertex_id_rhs);
 }
 
-template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-VERTEX_T& graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_vertex(
+template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
+          graph_spec GRAPH_SPEC_V>
+VERTEX_T& graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::get_vertex(
     vertex_id_t vertex_id) {
   if (!has_vertex(vertex_id)) {
     throw std::out_of_range{
@@ -40,14 +46,17 @@ VERTEX_T& graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_vertex(
   return vertices_.at(vertex_id);
 }
 
-template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-const VERTEX_T& graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_vertex(
+template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
+          graph_spec GRAPH_SPEC_V>
+const VERTEX_T& graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::get_vertex(
     vertex_id_t vertex_id) const {
   return get_vertex(vertex_id);
 }
 
-template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-EDGE_T& graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_edge(
+template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
+          graph_spec GRAPH_SPEC_V>
+graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::edge_t&
+graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::get_edge(
     vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) {
   if (!has_edge(vertex_id_lhs, vertex_id_rhs)) {
     throw std::out_of_range{
@@ -57,15 +66,18 @@ EDGE_T& graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_edge(
   return do_get_edge(vertex_id_lhs, vertex_id_rhs);
 }
 
-template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-const EDGE_T& graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_edge(
+template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
+          graph_spec GRAPH_SPEC_V>
+const graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::edge_t&
+graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::get_edge(
     vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const {
   return get_edge(vertex_id_lhs, vertex_id_rhs);
 }
 
-template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::vertices_t
-graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_neighbors(
+template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
+          graph_spec GRAPH_SPEC_V>
+graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::vertices_t
+graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::get_neighbors(
     vertex_id_t vertex_id) const {
   if (!adjacency_list_.contains(vertex_id)) {
     return {};
@@ -73,16 +85,19 @@ graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_neighbors(
   return adjacency_list_.at(vertex_id);
 }
 
-template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::add_vertex(VERTEX_T vertex) {
+template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
+          graph_spec GRAPH_SPEC_V>
+vertex_id_t graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::add_vertex(
+    VERTEX_T vertex) {
   // TODO: check overflow
   const auto vertex_id{vertex_id_supplier_++};
   vertices_.emplace(vertex_id, std::move(vertex));
   return vertex_id;
 }
 
-template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-void graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::remove_vertex(
+template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
+          graph_spec GRAPH_SPEC_V>
+void graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::remove_vertex(
     vertex_id_t vertex_id) {
   if (adjacency_list_.contains(vertex_id)) {
     for (auto& target_vertex_id : adjacency_list_.at(vertex_id)) {
@@ -99,30 +114,31 @@ void graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::remove_vertex(
   }
 }
 
-template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-void graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::add_edge(vertex_id_t vertex_id_lhs,
-                                                     vertex_id_t vertex_id_rhs,
-                                                     EDGE_T edge) {
+template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
+          graph_spec GRAPH_SPEC_V>
+void graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::add_edge(
+    vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs, EDGE_T edge) {
   if (!has_vertex(vertex_id_lhs) || !has_vertex(vertex_id_rhs)) {
     throw std::out_of_range{
         fmt::format("Vertices with ID [{}] and [{}] not found in graph.",
                     vertex_id_lhs, vertex_id_rhs)};
   }
-  do_add_edge(vertex_id_lhs, vertex_id_rhs, std::move(edge));
+  do_add_edge(vertex_id_lhs, vertex_id_rhs, edge_t{edge});
 }
 
-template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-edge_id_t graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::add_edge(VERTEX_T vertex_lhs,
-                                                          VERTEX_T vertex_rhs,
-                                                          EDGE_T edge) {
+template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
+          graph_spec GRAPH_SPEC_V>
+edge_id_t graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::add_edge(
+    VERTEX_T vertex_lhs, VERTEX_T vertex_rhs, EDGE_T edge) {
   const auto vertex_id_lhs{add_vertex(std::move(vertex_lhs))};
   const auto vertex_id_rhs{add_vertex(std::move(vertex_rhs))};
   add_edge(vertex_id_lhs, vertex_id_rhs, std::move(edge));
   return {vertex_id_lhs, vertex_id_rhs};
 }
 
-template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-void graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::remove_edge(
+template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
+          graph_spec GRAPH_SPEC_V>
+void graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::remove_edge(
     vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) {
   do_remove_edge(vertex_id_lhs, vertex_id_rhs);
 }
