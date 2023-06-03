@@ -56,3 +56,21 @@ jobs:
         uses: jidicula/clang-format-action@v4.11.0
         with:
           clang-format-version: '15'
+
+  verify_documentation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # Node is required for npm
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Build Docusaurus website
+        run: |
+          cd docs
+          npm install 
+          npm run build
