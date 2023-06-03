@@ -123,7 +123,12 @@ void graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::add_edge(
         fmt::format("Vertices with ID [{}] and [{}] not found in graph.",
                     vertex_id_lhs, vertex_id_rhs)};
   }
-  do_add_edge(vertex_id_lhs, vertex_id_rhs, edge_t{edge});
+  if constexpr (EDGE_TYPE_V == edge_type::WEIGHTED) {
+    do_add_edge(vertex_id_lhs, vertex_id_rhs,
+                std::make_shared<typename edge_t::element_type>(edge));
+  } else {
+    do_add_edge(vertex_id_lhs, vertex_id_rhs, edge);
+  }
 }
 
 template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,

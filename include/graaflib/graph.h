@@ -18,6 +18,13 @@ struct is_primitive_numeric
     : std::integral_constant<bool,
                              std::is_arithmetic_v<T> && !std::is_class_v<T>> {};
 
+std::false_type is_weighted_edge_impl(...);
+template <typename T>
+std::true_type is_weighted_edge_impl(weighted_edge<T>*);
+
+template <typename T>
+using is_weighted_edge = decltype(is_weighted_edge_impl(std::declval<T*>()));
+
 template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
           graph_spec GRAPH_SPEC_V>
 class graph {
@@ -25,6 +32,10 @@ class graph {
       std::conditional_t<is_primitive_numeric<EDGE_T>::value,
                          std::shared_ptr<primitive_numeric_adapter<EDGE_T>>,
                          std::shared_ptr<EDGE_T>>;
+
+  static_assert(
+      EDGE_TYPE_V == edge_type::UNWEIGHTED ||
+      is_weighted_edge<typename weighted_edge_t::element_type>::value);
 
  public:
   using vertex_t = VERTEX_T;
@@ -56,7 +67,11 @@ class graph {
   }
 
   [[nodiscard]] constexpr bool is_weighted() const {
-    return std::is_base_of_v<weighted_edge, edge_t>;
+    return EDGE_TYPE_V == edge_type::WEIGHTED;
+  }
+
+  [[nodiscard]] constexpr bool is_unweighted() const {
+    return EDGE_TYPE_V == edge_type::UNWEIGHTED;
   }
 
   /**
