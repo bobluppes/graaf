@@ -16,7 +16,10 @@ struct GraphTest : public testing::Test {
 };
 
 using graph_types =
-    testing::Types<directed_graph<int, int>, undirected_graph<int, int>>;
+    testing::Types<directed_graph<int, int>,
+                   directed_graph<int, int, edge_type::WEIGHTED>,
+                   undirected_graph<int, int>,
+                   undirected_graph<int, int, edge_type::WEIGHTED>>;
 
 TYPED_TEST_CASE(GraphTest, graph_types);
 
@@ -110,6 +113,7 @@ TYPED_TEST(GraphTest, RemoveEdge) {
   ASSERT_TRUE(graph.has_vertex(vertex_id_1));
   ASSERT_TRUE(graph.has_vertex(vertex_id_2));
 }
+
 TYPED_TEST(GraphTest, AddEdge) {
   using graph_t = typename TestFixture::graph_t;
 
