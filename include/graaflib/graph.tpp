@@ -6,6 +6,24 @@
 
 namespace graaf {
 
+namespace detail {
+
+template <typename T>
+struct is_primitive_numeric
+    : std::integral_constant<bool,
+                             std::is_arithmetic_v<T> && !std::is_class_v<T>> {};
+
+std::false_type is_weighted_edge_impl(...);
+template <typename T>
+std::true_type is_weighted_edge_impl(weighted_edge<T>*);
+
+template <typename T>
+struct is_weighted_edge {
+  using impl = decltype(is_weighted_edge_impl(std::declval<T*>()));
+};
+
+}  // namespace detail
+
 template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
           graph_spec GRAPH_SPEC_V>
 std::size_t graph<VERTEX_T, EDGE_T, EDGE_TYPE_V, GRAPH_SPEC_V>::vertex_count()

@@ -9,33 +9,32 @@
 
 namespace graaf {
 
-enum class edge_type { WEIGHTED, UNWEIGHTED };
-enum class graph_spec { DIRECTED, UNDIRECTED };
+namespace detail {
 
 // Type trait to check if the type is a primitive numeric type
 template <typename T>
-struct is_primitive_numeric
-    : std::integral_constant<bool,
-                             std::is_arithmetic_v<T> && !std::is_class_v<T>> {};
+struct is_primitive_numeric;
 
-std::false_type is_weighted_edge_impl(...);
+// Type trait to check if a type derives from weighted_edge
 template <typename T>
-std::true_type is_weighted_edge_impl(weighted_edge<T>*);
+struct is_weighted_edge;
 
-template <typename T>
-using is_weighted_edge = decltype(is_weighted_edge_impl(std::declval<T*>()));
+}  // namespace detail
+
+enum class edge_type { WEIGHTED, UNWEIGHTED };
+enum class graph_spec { DIRECTED, UNDIRECTED };
 
 template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
           graph_spec GRAPH_SPEC_V>
 class graph {
   using weighted_edge_t =
-      std::conditional_t<is_primitive_numeric<EDGE_T>::value,
+      std::conditional_t<detail::is_primitive_numeric<EDGE_T>::value,
                          std::shared_ptr<primitive_numeric_adapter<EDGE_T>>,
                          std::shared_ptr<EDGE_T>>;
 
-  static_assert(
-      EDGE_TYPE_V == edge_type::UNWEIGHTED ||
-      is_weighted_edge<typename weighted_edge_t::element_type>::value);
+  static_assert(EDGE_TYPE_V == edge_type::UNWEIGHTED ||
+                detail::is_weighted_edge<
+                    typename weighted_edge_t::element_type>::impl::value);
 
  public:
   using vertex_t = VERTEX_T;
@@ -51,7 +50,7 @@ class graph {
   /**
    * Checks whether graph is directed.
    *
-   * @return boolean - Return true for directed graph otherwise false
+   * @return bool - Return true for directed graphs otherwise false
    */
   [[nodiscard]] constexpr bool is_directed() const {
     return GRAPH_SPEC_V == graph_spec::DIRECTED;
@@ -60,16 +59,26 @@ class graph {
   /**
    * Checks whether graph is undirected.
    *
-   * @return boolean - Returns true for undirected graph otherwise false
+   * @return bool - Returns true for undirected graphs otherwise false
    */
   [[nodiscard]] constexpr bool is_undirected() const {
     return GRAPH_SPEC_V == graph_spec::UNDIRECTED;
   }
 
+  /**
+   * Checks whether the edges of a graph are weighted.
+   *
+   * @return bool
+   */
   [[nodiscard]] constexpr bool is_weighted() const {
     return EDGE_TYPE_V == edge_type::WEIGHTED;
   }
 
+  /**
+   * Checks whether the edges of a graph are unweighted.
+   *
+   * @return bool
+   */
   [[nodiscard]] constexpr bool is_unweighted() const {
     return EDGE_TYPE_V == edge_type::UNWEIGHTED;
   }

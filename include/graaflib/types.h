@@ -2,7 +2,6 @@
 
 #include <cstddef>
 #include <functional>
-#include <type_traits>
 #include <utility>
 
 namespace graaf {
@@ -20,21 +19,39 @@ struct edge_id_hash {
   }
 };
 
-template <typename T>
+/**
+ * @brief Interface for a weighted edge.
+ *
+ * This is what is stored internally and returned from a weighted graph in
+ * order to make sure each edge in a weighted graph has a common interface to
+ * extract the weight.
+ *
+ * @tparam WEIGHT_T The type of the weight.
+ */
+template <typename WEIGHT_T>
 class weighted_edge {
  public:
-  [[nodiscard]] virtual T get_weight() const noexcept = 0;
+  [[nodiscard]] virtual WEIGHT_T get_weight() const noexcept = 0;
 };
 
-template <typename T>
-class primitive_numeric_adapter final : public weighted_edge<T> {
+/**
+ * @brief Adapter for a weighted edge which wraps a primitive type.
+ *
+ * Weighted graphs support having primitive numeric types for the edges.
+ * In this case, the edges are internally wrapped in this adapter to provide a
+ * common interface for weighted edges.
+ *
+ * @tparam WEIGHT_T The type of the weight.
+ */
+template <typename WEIGHT_T>
+class primitive_numeric_adapter final : public weighted_edge<WEIGHT_T> {
  public:
-  explicit primitive_numeric_adapter(T value) : value_{value} {}
+  explicit primitive_numeric_adapter(WEIGHT_T value) : value_{value} {}
 
-  [[nodiscard]] T get_weight() const noexcept override { return value_; }
+  [[nodiscard]] WEIGHT_T get_weight() const noexcept override { return value_; }
 
  private:
-  T value_{};
+  WEIGHT_T value_{};
 };
 
 }  // namespace graaf
