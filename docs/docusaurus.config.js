@@ -71,6 +71,12 @@ const config = {
               label : 'Tutorial',
             },
             {
+              type : 'docSidebar',
+              sidebarId : 'exampleSidebar',
+              position : 'left',
+              label : 'Examples',
+            },
+            {
               href : 'https://github.com/bobluppes/graaf',
               label : 'GitHub',
               position : 'right',
