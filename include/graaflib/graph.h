@@ -2,29 +2,55 @@
 
 #include <graaflib/types.h>
 
+#include <memory>
+#include <type_traits>
 #include <unordered_map>
 #include <unordered_set>
 
 namespace graaf {
 
+namespace detail {
+
+// Type trait to check if the type is a primitive numeric type
+template <typename T>
+struct is_primitive_numeric;
+
+// Type trait to check if a type derives from weighted_edge
+template <typename T>
+struct is_weighted_edge;
+
+}  // namespace detail
+
+enum class edge_type { WEIGHTED, UNWEIGHTED };
 enum class graph_spec { DIRECTED, UNDIRECTED };
 
-template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
+template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
+          graph_spec GRAPH_SPEC_V>
 class graph {
-  using vertex_id_to_vertex_t = std::unordered_map<vertex_id_t, VERTEX_T>;
-  using vertex_ids_to_edge_t =
-      std::unordered_map<vertex_ids_t, EDGE_T, vertex_ids_hash>;
+  using weighted_edge_t =
+      std::conditional_t<detail::is_primitive_numeric<EDGE_T>::value,
+                         std::shared_ptr<primitive_numeric_adapter<EDGE_T>>,
+                         std::shared_ptr<EDGE_T>>;
+
+  static_assert(EDGE_TYPE_V == edge_type::UNWEIGHTED ||
+                detail::is_weighted_edge<
+                    typename weighted_edge_t::element_type>::impl::value);
 
  public:
   using vertex_t = VERTEX_T;
-  using edge_t = EDGE_T;
+
+  using edge_t = std::conditional_t<EDGE_TYPE_V == edge_type::UNWEIGHTED,
+                                    EDGE_T, weighted_edge_t>;
 
   using vertices_t = std::unordered_set<vertex_id_t>;
+
+  using vertex_id_to_vertex_t = std::unordered_map<vertex_id_t, VERTEX_T>;
+  using edge_id_to_edge_t = std::unordered_map<edge_id_t, edge_t, edge_id_hash>;
 
   /**
    * Checks whether graph is directed.
    *
-   * @return boolean - Return true for directed graph otherwise false
+   * @return bool - Return true for directed graphs otherwise false
    */
   [[nodiscard]] constexpr bool is_directed() const {
     return GRAPH_SPEC_V == graph_spec::DIRECTED;
@@ -33,10 +59,28 @@ class graph {
   /**
    * Checks whether graph is undirected.
    *
-   * @return boolean - Returns true for undirected graph otherwise false
+   * @return bool - Returns true for undirected graphs otherwise false
    */
   [[nodiscard]] constexpr bool is_undirected() const {
     return GRAPH_SPEC_V == graph_spec::UNDIRECTED;
+  }
+
+  /**
+   * Checks whether the edges of a graph are weighted.
+   *
+   * @return bool
+   */
+  [[nodiscard]] constexpr bool is_weighted() const {
+    return EDGE_TYPE_V == edge_type::WEIGHTED;
+  }
+
+  /**
+   * Checks whether the edges of a graph are unweighted.
+   *
+   * @return bool
+   */
+  [[nodiscard]] constexpr bool is_unweighted() const {
+    return EDGE_TYPE_V == edge_type::UNWEIGHTED;
   }
 
   /**
@@ -57,7 +101,7 @@ class graph {
     return vertices_;
   }
 
-  [[nodiscard]] const vertex_ids_to_edge_t& get_edges() const noexcept {
+  [[nodiscard]] const edge_id_to_edge_t& get_edges() const noexcept {
     return edges_;
   }
 
@@ -163,9 +207,9 @@ class graph {
    * @param  vertex_id_lhs The ID of the first vertex
    * @param  vertex_id_rhs The ID of the second vertex
    * @param  edge
-   * @return vertex_ids_t - Vertices ID of the pair of vertices
+   * @return edge_id_t - The ID of the new edge
    */
-  vertex_ids_t add_edge(VERTEX_T vertex_lhs, VERTEX_T vertex_rhs, EDGE_T edge);
+  edge_id_t add_edge(VERTEX_T vertex_lhs, VERTEX_T vertex_rhs, EDGE_T edge);
 
   /**
    * Remove the edge between two vertices
@@ -179,7 +223,7 @@ class graph {
   std::unordered_map<vertex_id_t, vertices_t> adjacency_list_{};
 
   vertex_id_to_vertex_t vertices_{};
-  vertex_ids_to_edge_t edges_{};
+  edge_id_to_edge_t edges_{};
 
  private:
   [[nodiscard]] virtual bool do_has_edge(
@@ -187,7 +231,7 @@ class graph {
   [[nodiscard]] virtual edge_t& do_get_edge(vertex_id_t vertex_id_lhs,
                                             vertex_id_t vertex_id_rhs) = 0;
   virtual void do_add_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs,
-                           EDGE_T edge) = 0;
+                           edge_t edge) = 0;
   virtual void do_remove_edge(vertex_id_t vertex_id_lhs,
                               vertex_id_t vertex_id_rhs) = 0;
 

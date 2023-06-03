@@ -4,8 +4,8 @@
 
 namespace graaf::properties {
 
-template <typename V, typename E, graph_spec S>
-std::size_t get_vertex_degree(const graaf::graph<V, E, S>& graph,
+template <typename V, typename E, edge_type T, graph_spec S>
+std::size_t get_vertex_degree(const graaf::graph<V, E, T, S>& graph,
                               vertex_id_t vertex_id) {
   if constexpr (S == graph_spec::DIRECTED) {
     return get_vertex_outdegree(graph, vertex_id) +
@@ -20,14 +20,14 @@ std::size_t get_vertex_degree(const graaf::graph<V, E, S>& graph,
   std::abort();
 }
 
-template <typename V, typename E, graph_spec S>
-std::size_t get_vertex_outdegree(const graaf::graph<V, E, S>& graph,
+template <typename V, typename E, edge_type T, graph_spec S>
+std::size_t get_vertex_outdegree(const graaf::graph<V, E, T, S>& graph,
                                  vertex_id_t vertex_id) {
   return (graph.get_neighbors(vertex_id)).size();
 }
 
-template <typename V, typename E, graph_spec S>
-std::size_t get_vertex_indegree(const graaf::graph<V, E, S>& graph,
+template <typename V, typename E, edge_type T, graph_spec S>
+std::size_t get_vertex_indegree(const graaf::graph<V, E, T, S>& graph,
                                 vertex_id_t vertex_id) {
   using vertex_id_to_vertex_t = std::unordered_map<vertex_id_t, V>;
 

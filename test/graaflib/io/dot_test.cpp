@@ -20,7 +20,7 @@ const auto int_vertex_writer{
     }};
 
 const auto int_edge_writer{
-    [](const vertex_ids_t& /*edge_id*/, int edge) -> std::string {
+    [](const edge_id_t& /*edge_id*/, int edge) -> std::string {
       return fmt::format("label=\"{}\"", std::to_string(edge));
     }};
 
@@ -32,11 +32,11 @@ const auto make_vertex_string{
     }};
 
 template <typename T>
-const auto make_edge_string{[](vertex_ids_t vertices,
+const auto make_edge_string{[](edge_id_t edge_id,
                                const std::string& edge_specifier,
                                T edge_label) -> std::string {
-  return fmt::format("{} {} {} [label=\"{}\"];", vertices.first, edge_specifier,
-                     vertices.second, std::to_string(edge_label));
+  return fmt::format("{} {} {} [label=\"{}\"];", edge_id.first, edge_specifier,
+                     edge_id.second, std::to_string(edge_label));
 }};
 
 /**
@@ -210,10 +210,9 @@ TEST(DotTest, UserProvidedVertexAndEdgeClass) {
       [](vertex_id_t /*vertex_id*/, const vertex_t& vertex) {
         return fmt::format("{}, {}", vertex.numeric_data, vertex.string_data);
       }};
-  const auto edge_writer{
-      [](const vertex_ids_t& /*edge_id*/, const edge_t& edge) {
-        return fmt::format("{}, {}", edge.numeric_data, edge.string_data);
-      }};
+  const auto edge_writer{[](const edge_id_t& /*edge_id*/, const edge_t& edge) {
+    return fmt::format("{}, {}", edge.numeric_data, edge.string_data);
+  }};
 
   // WHEN
   to_dot(graph, path, vertex_writer, edge_writer);

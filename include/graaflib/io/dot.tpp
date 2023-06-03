@@ -63,13 +63,13 @@ constexpr const char* spec_to_edge_specifier(const graph_spec& spec) {
 }
 }  // namespace detail
 
-template <typename V, typename E, graph_spec S, typename VERTEX_WRITER_T,
-          typename EDGE_WRITER_T>
+template <typename V, typename E, edge_type T, graph_spec S,
+          typename VERTEX_WRITER_T, typename EDGE_WRITER_T>
   requires std::is_invocable_r_v<std::string, const VERTEX_WRITER_T&,
                                  vertex_id_t, const V&> &&
            std::is_invocable_r_v<std::string, const EDGE_WRITER_T&,
-                                 const graaf::vertex_ids_t&, const E&>
-void to_dot(const graph<V, E, S>& graph, const std::filesystem::path& path,
+                                 const graaf::edge_id_t&, const E&>
+void to_dot(const graph<V, E, T, S>& graph, const std::filesystem::path& path,
             const VERTEX_WRITER_T& vertex_writer,
             const EDGE_WRITER_T& edge_writer) {
   std::ofstream dot_file{path};

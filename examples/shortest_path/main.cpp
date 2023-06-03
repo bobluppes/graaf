@@ -44,7 +44,7 @@ int main() {
   assert(maybe_shortest_path.has_value());
   auto shortest_path{maybe_shortest_path.value()};
 
-  std::unordered_set<graaf::vertex_ids_t, graaf::vertex_ids_hash>
+  std::unordered_set<graaf::edge_id_t, graaf::edge_id_hash>
       edges_on_shortest_path{};
 
   graaf::vertex_id_t prev{shortest_path.vertices.front()};
@@ -65,8 +65,8 @@ int main() {
       }};
 
   const auto edge_writer{
-      [&edges_on_shortest_path](const graaf::vertex_ids_t& edge_id,
-                                int edge) -> std::string {
+      [&edges_on_shortest_path](const graaf::edge_id_t& edge_id,
+                                const int /*edge*/) -> std::string {
         if (edges_on_shortest_path.contains(edge_id)) {
           return "label=\"\", color=red";
         }

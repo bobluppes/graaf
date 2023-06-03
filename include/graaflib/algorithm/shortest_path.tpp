@@ -10,9 +10,9 @@ namespace graaf::algorithm {
 
 namespace detail {
 
-template <typename V, typename E, graph_spec S>
+template <typename V, typename E, edge_type T, graph_spec S>
 std::optional<GraphPath<int>> get_unweighted_shortest_path(
-    const graph<V, E, S>& graph, vertex_id_t start_vertex,
+    const graph<V, E, T, S>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex) {
   std::unordered_set<vertex_id_t> seen_vertices{};
   std::unordered_map<vertex_id_t, vertex_id_t> prev_vertex{};
@@ -63,8 +63,9 @@ std::optional<GraphPath<int>> get_unweighted_shortest_path(
 
 }  // namespace detail
 
-template <edge_strategy EDGE_STRATEGY, typename V, typename E, graph_spec S>
-std::optional<GraphPath<E>> get_shortest_path(const graph<V, E, S>& graph,
+template <edge_strategy EDGE_STRATEGY, typename V, typename E, edge_type T,
+          graph_spec S>
+std::optional<GraphPath<E>> get_shortest_path(const graph<V, E, T, S>& graph,
                                               vertex_id_t start_vertex,
                                               vertex_id_t end_vertex) {
   using enum edge_strategy;
