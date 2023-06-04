@@ -173,4 +173,74 @@ TYPED_TEST(UnitWeightedGraphTest, AddUnitWeightedEdge) {
             static_cast<weight_t>(1));
 }
 
+/**
+ * We do not derive from weighted edge, so we do not have the default provided
+ * get_weight method.
+ */
+template <typename T>
+struct my_unweighted_edge {
+  using weight_t = T;
+  T val{};
+};
+
+template <typename T>
+struct UnweightedGraphTest : public testing::Test {
+  using graph_t = T::first_type;
+  using edge_t = T::second_type;
+};
+
+using unweighted_graph_types = testing::Types<
+
+    /**
+     * Unweighted edge type directed graph
+     */
+    std::pair<directed_graph<int, my_unweighted_edge<bool>>,
+              my_unweighted_edge<bool>>,
+    std::pair<directed_graph<int, my_unweighted_edge<int>>,
+              my_unweighted_edge<int>>,
+    std::pair<directed_graph<int, my_unweighted_edge<unsigned long>>,
+              my_unweighted_edge<unsigned long>>,
+    std::pair<directed_graph<int, my_unweighted_edge<float>>,
+              my_unweighted_edge<float>>,
+    std::pair<directed_graph<int, my_unweighted_edge<long double>>,
+              my_unweighted_edge<long double>>,
+
+    /**
+     * Unweighted edge type undirected graph
+     */
+    std::pair<undirected_graph<int, my_unweighted_edge<bool>>,
+              my_unweighted_edge<bool>>,
+    std::pair<undirected_graph<int, my_unweighted_edge<int>>,
+              my_unweighted_edge<int>>,
+    std::pair<undirected_graph<int, my_unweighted_edge<unsigned long>>,
+              my_unweighted_edge<unsigned long>>,
+    std::pair<undirected_graph<int, my_unweighted_edge<float>>,
+              my_unweighted_edge<float>>,
+    std::pair<undirected_graph<int, my_unweighted_edge<long double>>,
+              my_unweighted_edge<long double>>>;
+
+TYPED_TEST_CASE(UnweightedGraphTest, unweighted_graph_types);
+
+TYPED_TEST(UnweightedGraphTest, AddUnweightedEdge) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  using edge_t = typename TestFixture::edge_t;
+  using weight_t = extract_weight<edge_t>::type;
+
+  graph_t graph{};
+
+  const auto vertex_id_1{graph.add_vertex(10)};
+  const auto vertex_id_2{graph.add_vertex(20)};
+
+  // WHEN
+  graph.add_edge(vertex_id_1, vertex_id_2, edge_t{static_cast<weight_t>(42)});
+
+  // THEN
+  ASSERT_TRUE(graph.has_edge(vertex_id_1, vertex_id_2));
+
+  // By default each edge has a unit weight
+  ASSERT_EQ(graph.get_edge(vertex_id_1, vertex_id_2)->val,
+            static_cast<weight_t>(42));
+}
+
 }  // namespace graaf
