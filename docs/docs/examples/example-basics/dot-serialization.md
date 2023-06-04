@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Dot Serialization Example
 
 The `to_dot` function as defined under `graaf::io` can be used to searialize graphs to the [dot format](https://graphviz.org/doc/info/lang.html). This can be handy for debugging purposes, as well as for post-processing of your graphs in another tool which supports the format.
