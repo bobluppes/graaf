@@ -4,7 +4,7 @@ The shortest path algorithm implemented in `graaf::algorithm::get_shortest_path`
 Consider the following graph:
 
 <p align="center">
-    <img src="./graph.png">
+    <img src="./shortest-path-graph.png">
 </p>
 
 In order to compute the shortest path between *vertex 0* and *vertex 2*, we call:
