@@ -28,6 +28,13 @@ class graph {
  public:
   using vertex_t = VERTEX_T;
 
+  /**
+   * To provide a common interface for weighted edges, user provided edge
+   * classes can publically derive from weighted edge and optionally override
+   * the get_weight method. If a primitive numeric type is passes as the edge
+   * type, it is internally wrapped in a primitive_numeric_adapter, which
+   * derives from weighted_edge.
+   */
   using edge_t =
       std::conditional_t<detail::is_primitive_numeric_v<EDGE_T>,
                          std::shared_ptr<primitive_numeric_adapter<EDGE_T>>,
@@ -70,10 +77,25 @@ class graph {
    */
   [[nodiscard]] std::size_t edge_count() const noexcept;
 
+  /**
+   * @brief Get the intrnal vertices
+   *
+   * @return const vertex_id_to_vertex_t& Map from vertex id to the user
+   * provided vertex.
+   */
   [[nodiscard]] const vertex_id_to_vertex_t& get_vertices() const noexcept {
     return vertices_;
   }
 
+  /**
+   * @brief Get the internal edges
+   *
+   * One thing to not here is that edges are internally stored as shared
+   * pointers to either the user provided edge type or to
+   * primitive_numeric_adapter.
+   *
+   * @return const edge_id_to_edge_t& Map from edge id to edge_t.
+   */
   [[nodiscard]] const edge_id_to_edge_t& get_edges() const noexcept {
     return edges_;
   }
@@ -120,11 +142,12 @@ class graph {
   [[nodiscard]] const vertex_t& get_vertex(vertex_id_t vertex_id) const;
 
   /**
-   * Get edge between two vertices with theirs ID
+   * Get edge between two vertices with their ID
    *
    * @param  vertex_id_lhs The ID of the first vertex
    * @param  vertex_id_rhs The ID of the second vertex
-   * @return edge_t - A reference to edge
+   * @return edge_t - Shared pointer to either the provided edge or to
+   * primitive_numeric_adapter.
    * @throws out_of_range exception - If No edge exit between the two vertices
    */
   [[nodiscard]] edge_t& get_edge(vertex_id_t vertex_id_lhs,
@@ -137,7 +160,8 @@ class graph {
    * @see    graph#get_edge()
    * @param  vertex_id_lhs The ID of the first vertex
    * @param  vertex_id_rhs The ID of the second vertex
-   * @return edge_t - A const reference to the edge
+   * @return edge_t - Shared pointer to either the provided edge or to
+   * primitive_numeric_adapter.
    */
   [[nodiscard]] const edge_t& get_edge(vertex_id_t vertex_id_lhs,
                                        vertex_id_t vertex_id_rhs) const;
