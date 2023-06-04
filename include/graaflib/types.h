@@ -31,6 +31,7 @@ struct edge_id_hash {
 template <typename WEIGHT_T = int>
 class weighted_edge {
  public:
+  using weight_t = WEIGHT_T;
   /**
    * By default an edge has a unit weight.
    */
