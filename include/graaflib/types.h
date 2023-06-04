@@ -28,10 +28,14 @@ struct edge_id_hash {
  *
  * @tparam WEIGHT_T The type of the weight.
  */
-template <typename WEIGHT_T>
+template <typename WEIGHT_T = int>
 class weighted_edge {
  public:
-  [[nodiscard]] virtual WEIGHT_T get_weight() const noexcept = 0;
+  using weight_t = WEIGHT_T;
+  /**
+   * By default an edge has a unit weight.
+   */
+  [[nodiscard]] virtual WEIGHT_T get_weight() const noexcept { return 1; };
 };
 
 /**

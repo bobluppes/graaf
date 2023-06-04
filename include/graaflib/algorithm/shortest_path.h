@@ -32,9 +32,8 @@ struct GraphPath {
  * @param start_vertex Vertex id where the shortest path should start.
  * @param end_vertex Vertex id where the shortest path should end.
  */
-template <edge_strategy EDGE_STRATEGY, typename V, typename E, edge_type T,
-          graph_spec S>
-std::optional<GraphPath<E>> get_shortest_path(const graph<V, E, T, S>& graph,
+template <edge_strategy EDGE_STRATEGY, typename V, typename E, graph_spec S>
+std::optional<GraphPath<E>> get_shortest_path(const graph<V, E, S>& graph,
                                               vertex_id_t start_vertex,
                                               vertex_id_t end_vertex);
 

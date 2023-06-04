@@ -20,8 +20,8 @@ const auto int_vertex_writer{
     }};
 
 const auto int_edge_writer{
-    [](const edge_id_t& /*edge_id*/, int edge) -> std::string {
-      return fmt::format("label=\"{}\"", std::to_string(edge));
+    [](const edge_id_t& /*edge_id*/, const auto& edge) -> std::string {
+      return fmt::format("label=\"{}\"", std::to_string(edge->get_weight()));
     }};
 
 template <typename T>
@@ -210,8 +210,8 @@ TEST(DotTest, UserProvidedVertexAndEdgeClass) {
       [](vertex_id_t /*vertex_id*/, const vertex_t& vertex) {
         return fmt::format("{}, {}", vertex.numeric_data, vertex.string_data);
       }};
-  const auto edge_writer{[](const edge_id_t& /*edge_id*/, const edge_t& edge) {
-    return fmt::format("{}, {}", edge.numeric_data, edge.string_data);
+  const auto edge_writer{[](const edge_id_t& /*edge_id*/, const auto& edge) {
+    return fmt::format("{}, {}", edge->numeric_data, edge->string_data);
   }};
 
   // WHEN

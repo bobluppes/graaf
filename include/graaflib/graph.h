@@ -12,35 +12,33 @@ namespace graaf {
 namespace detail {
 
 // Type trait to check if the type is a primitive numeric type
-template <typename T>
+template <typename EDGE_T>
 struct is_primitive_numeric;
 
-// Type trait to check if a type derives from weighted_edge
-template <typename T>
-struct is_weighted_edge;
+template <typename EDGE_T>
+inline constexpr bool is_primitive_numeric_v =
+    is_primitive_numeric<EDGE_T>::value;
 
 }  // namespace detail
 
-enum class edge_type { WEIGHTED, UNWEIGHTED };
 enum class graph_spec { DIRECTED, UNDIRECTED };
 
-template <typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V,
-          graph_spec GRAPH_SPEC_V>
+template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
 class graph {
-  using weighted_edge_t =
-      std::conditional_t<detail::is_primitive_numeric<EDGE_T>::value,
-                         std::shared_ptr<primitive_numeric_adapter<EDGE_T>>,
-                         std::shared_ptr<EDGE_T>>;
-
-  static_assert(EDGE_TYPE_V == edge_type::UNWEIGHTED ||
-                detail::is_weighted_edge<
-                    typename weighted_edge_t::element_type>::impl::value);
-
  public:
   using vertex_t = VERTEX_T;
 
-  using edge_t = std::conditional_t<EDGE_TYPE_V == edge_type::UNWEIGHTED,
-                                    EDGE_T, weighted_edge_t>;
+  /**
+   * To provide a common interface for weighted edges, user provided edge
+   * classes can publically derive from weighted edge and optionally override
+   * the get_weight method. If a primitive numeric type is passes as the edge
+   * type, it is internally wrapped in a primitive_numeric_adapter, which
+   * derives from weighted_edge.
+   */
+  using edge_t =
+      std::conditional_t<detail::is_primitive_numeric_v<EDGE_T>,
+                         std::shared_ptr<primitive_numeric_adapter<EDGE_T>>,
+                         std::shared_ptr<EDGE_T>>;
 
   using vertices_t = std::unordered_set<vertex_id_t>;
 
@@ -66,24 +64,6 @@ class graph {
   }
 
   /**
-   * Checks whether the edges of a graph are weighted.
-   *
-   * @return bool
-   */
-  [[nodiscard]] constexpr bool is_weighted() const {
-    return EDGE_TYPE_V == edge_type::WEIGHTED;
-  }
-
-  /**
-   * Checks whether the edges of a graph are unweighted.
-   *
-   * @return bool
-   */
-  [[nodiscard]] constexpr bool is_unweighted() const {
-    return EDGE_TYPE_V == edge_type::UNWEIGHTED;
-  }
-
-  /**
    * Query the number of vertices
    *
    * @return size_t - Number of vertices
@@ -97,10 +77,25 @@ class graph {
    */
   [[nodiscard]] std::size_t edge_count() const noexcept;
 
+  /**
+   * @brief Get the intrnal vertices
+   *
+   * @return const vertex_id_to_vertex_t& Map from vertex id to the user
+   * provided vertex.
+   */
   [[nodiscard]] const vertex_id_to_vertex_t& get_vertices() const noexcept {
     return vertices_;
   }
 
+  /**
+   * @brief Get the internal edges
+   *
+   * One thing to not here is that edges are internally stored as shared
+   * pointers to either the user provided edge type or to
+   * primitive_numeric_adapter.
+   *
+   * @return const edge_id_to_edge_t& Map from edge id to edge_t.
+   */
   [[nodiscard]] const edge_id_to_edge_t& get_edges() const noexcept {
     return edges_;
   }
@@ -147,11 +142,12 @@ class graph {
   [[nodiscard]] const vertex_t& get_vertex(vertex_id_t vertex_id) const;
 
   /**
-   * Get edge between two vertices with theirs ID
+   * Get edge between two vertices with their ID
    *
    * @param  vertex_id_lhs The ID of the first vertex
    * @param  vertex_id_rhs The ID of the second vertex
-   * @return edge_t - A reference to edge
+   * @return edge_t - Shared pointer to either the provided edge or to
+   * primitive_numeric_adapter.
    * @throws out_of_range exception - If No edge exit between the two vertices
    */
   [[nodiscard]] edge_t& get_edge(vertex_id_t vertex_id_lhs,
@@ -164,7 +160,8 @@ class graph {
    * @see    graph#get_edge()
    * @param  vertex_id_lhs The ID of the first vertex
    * @param  vertex_id_rhs The ID of the second vertex
-   * @return edge_t - A const reference to the edge
+   * @return edge_t - Shared pointer to either the provided edge or to
+   * primitive_numeric_adapter.
    */
   [[nodiscard]] const edge_t& get_edge(vertex_id_t vertex_id_lhs,
                                        vertex_id_t vertex_id_rhs) const;

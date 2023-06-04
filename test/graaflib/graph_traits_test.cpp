@@ -8,33 +8,16 @@ namespace graaf {
  * DIRECTED GRAPH
  */
 
-TEST(GraphTraitsTest, DirectedGraphUnweightedPrimitiveType) {
+TEST(GraphTraitsTest, DirectedGraphPrimitiveType) {
   // GIVEN - WHEN
   directed_graph<int, int> graph{};
 
   // THEN The graph is directed
   ASSERT_TRUE(graph.is_directed());
   ASSERT_FALSE(graph.is_undirected());
-
-  // By default the graph is unweighted
-  ASSERT_TRUE(graph.is_unweighted());
-  ASSERT_FALSE(graph.is_weighted());
 }
 
-TEST(GraphTraitsTest, DirectedGraphWeightedPrimitiveType) {
-  // GIVEN - WHEN
-  directed_graph<int, int, edge_type::WEIGHTED> graph{};
-
-  // THEN The graph is directed
-  ASSERT_TRUE(graph.is_directed());
-  ASSERT_FALSE(graph.is_undirected());
-
-  // The graph is weighted
-  ASSERT_TRUE(graph.is_weighted());
-  ASSERT_FALSE(graph.is_unweighted());
-}
-
-TEST(GraphTraitsTest, DirectedGraphUnweightedPNonrimitiveType) {
+TEST(GraphTraitsTest, DirectedGraphNonPrimitiveType) {
   // GIVEN - WHEN
   struct my_edge {};
 
@@ -43,58 +26,22 @@ TEST(GraphTraitsTest, DirectedGraphUnweightedPNonrimitiveType) {
   // THEN The graph is directed
   ASSERT_TRUE(graph.is_directed());
   ASSERT_FALSE(graph.is_undirected());
-
-  // By default the graph is unweighted
-  ASSERT_TRUE(graph.is_unweighted());
-  ASSERT_FALSE(graph.is_weighted());
-}
-
-TEST(GraphTraitsTest, DirectedGraphWeightedNonPrimitiveType) {
-  // GIVEN - WHEN
-  struct my_edge : public weighted_edge<int> {};
-
-  directed_graph<int, my_edge, edge_type::WEIGHTED> graph{};
-
-  // THEN The graph is directed
-  ASSERT_TRUE(graph.is_directed());
-  ASSERT_FALSE(graph.is_undirected());
-
-  // The graph is weighted
-  ASSERT_TRUE(graph.is_weighted());
-  ASSERT_FALSE(graph.is_unweighted());
 }
 
 /**
  * UNDIRECTED GRAPH
  */
 
-TEST(GraphTraitsTest, UndirectedGraphUnweightedPrimitiveType) {
+TEST(GraphTraitsTest, UndirectedGraphPrimitiveType) {
   // GIVEN - WHEN
   undirected_graph<int, int> graph{};
 
   // THEN The graph is undirected
   ASSERT_TRUE(graph.is_undirected());
   ASSERT_FALSE(graph.is_directed());
-
-  // By default the graph is unweighted
-  ASSERT_TRUE(graph.is_unweighted());
-  ASSERT_FALSE(graph.is_weighted());
 }
 
-TEST(GraphTraitsTest, UndirectedGraphWeightedPrimitiveType) {
-  // GIVEN - WHEN
-  undirected_graph<int, int, edge_type::WEIGHTED> graph{};
-
-  // THEN The graph is undirected
-  ASSERT_TRUE(graph.is_undirected());
-  ASSERT_FALSE(graph.is_directed());
-
-  // The graph is weighted
-  ASSERT_TRUE(graph.is_weighted());
-  ASSERT_FALSE(graph.is_unweighted());
-}
-
-TEST(GraphTraitsTest, UndirectedGraphUnweightedPNonrimitiveType) {
+TEST(GraphTraitsTest, UndirectedGraphNonPrimitiveType) {
   // GIVEN - WHEN
   struct my_edge {};
 
@@ -103,25 +50,6 @@ TEST(GraphTraitsTest, UndirectedGraphUnweightedPNonrimitiveType) {
   // THEN The graph is undirected
   ASSERT_TRUE(graph.is_undirected());
   ASSERT_FALSE(graph.is_directed());
-
-  // By default the graph is unweighted
-  ASSERT_TRUE(graph.is_unweighted());
-  ASSERT_FALSE(graph.is_weighted());
-}
-
-TEST(GraphTraitsTest, UndirectedGraphWeightedNonPrimitiveType) {
-  // GIVEN - WHEN
-  struct my_edge : public weighted_edge<int> {};
-
-  undirected_graph<int, my_edge, edge_type::WEIGHTED> graph{};
-
-  // THEN The graph is undirected
-  ASSERT_TRUE(graph.is_undirected());
-  ASSERT_FALSE(graph.is_directed());
-
-  // The graph is weighted
-  ASSERT_TRUE(graph.is_weighted());
-  ASSERT_FALSE(graph.is_unweighted());
 }
 
 }  // namespace graaf
