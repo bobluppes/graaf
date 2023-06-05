@@ -34,7 +34,8 @@ std::size_t get_vertex_indegree(const graaf::graph<V, E, S>& graph,
   if constexpr (S == graph_spec::DIRECTED) {
     return std::ranges::count_if(
         graph.get_vertices(),
-        [&graph, vertex_id](const vertex_id_to_vertex_t::value_type& kv_pair) {
+        [&graph,
+         vertex_id](const typename vertex_id_to_vertex_t::value_type& kv_pair) {
           const auto& [current_vertex_id, _]{kv_pair};
           return graph.get_neighbors(current_vertex_id).contains(vertex_id);
         });

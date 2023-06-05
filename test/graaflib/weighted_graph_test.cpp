@@ -20,8 +20,8 @@ class my_weighted_edge : public weighted_edge<T> {
 
 template <typename T>
 struct WeightedGraphTest : public testing::Test {
-  using graph_t = T::first_type;
-  using edge_t = T::second_type;
+  using graph_t = typename T::first_type;
+  using edge_t = typename T::second_type;
 };
 
 using weighted_graph_types = testing::Types<
@@ -72,7 +72,7 @@ using weighted_graph_types = testing::Types<
     std::pair<undirected_graph<int, my_weighted_edge<long double>>,
               my_weighted_edge<long double>>>;
 
-TYPED_TEST_CASE(WeightedGraphTest, weighted_graph_types);
+TYPED_TEST_SUITE(WeightedGraphTest, weighted_graph_types);
 
 // Type traits to extract the weight type from both classes and primitives
 template <typename T>
@@ -90,7 +90,7 @@ TYPED_TEST(WeightedGraphTest, AddWeightedEdge) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
-  using weight_t = extract_weight<edge_t>::type;
+  using weight_t = typename extract_weight<edge_t>::type;
 
   graph_t graph{};
 
@@ -115,8 +115,8 @@ class my_unit_weighted_edge : public weighted_edge<T> {};
 
 template <typename T>
 struct UnitWeightedGraphTest : public testing::Test {
-  using graph_t = T::first_type;
-  using edge_t = T::second_type;
+  using graph_t = typename T::first_type;
+  using edge_t = typename T::second_type;
 };
 
 using unit_weighted_graph_types = testing::Types<
@@ -149,13 +149,13 @@ using unit_weighted_graph_types = testing::Types<
     std::pair<undirected_graph<int, my_unit_weighted_edge<long double>>,
               my_unit_weighted_edge<long double>>>;
 
-TYPED_TEST_CASE(UnitWeightedGraphTest, unit_weighted_graph_types);
+TYPED_TEST_SUITE(UnitWeightedGraphTest, unit_weighted_graph_types);
 
 TYPED_TEST(UnitWeightedGraphTest, AddUnitWeightedEdge) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
-  using weight_t = extract_weight<edge_t>::type;
+  using weight_t = typename extract_weight<edge_t>::type;
 
   graph_t graph{};
 
@@ -185,8 +185,8 @@ struct my_unweighted_edge {
 
 template <typename T>
 struct UnweightedGraphTest : public testing::Test {
-  using graph_t = T::first_type;
-  using edge_t = T::second_type;
+  using graph_t = typename T::first_type;
+  using edge_t = typename T::second_type;
 };
 
 using unweighted_graph_types = testing::Types<
@@ -219,13 +219,13 @@ using unweighted_graph_types = testing::Types<
     std::pair<undirected_graph<int, my_unweighted_edge<long double>>,
               my_unweighted_edge<long double>>>;
 
-TYPED_TEST_CASE(UnweightedGraphTest, unweighted_graph_types);
+TYPED_TEST_SUITE(UnweightedGraphTest, unweighted_graph_types);
 
 TYPED_TEST(UnweightedGraphTest, AddUnweightedEdge) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
-  using weight_t = extract_weight<edge_t>::type;
+  using weight_t = typename extract_weight<edge_t>::type;
 
   graph_t graph{};
 

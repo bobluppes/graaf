@@ -56,7 +56,7 @@ const VERTEX_T& graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_vertex(
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::edge_t&
+typename graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::edge_t&
 graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_edge(vertex_id_t vertex_id_lhs,
                                                 vertex_id_t vertex_id_rhs) {
   if (!has_edge(vertex_id_lhs, vertex_id_rhs)) {
@@ -68,14 +68,14 @@ graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_edge(vertex_id_t vertex_id_lhs,
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-const graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::edge_t&
+const typename graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::edge_t&
 graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_edge(
     vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const {
   return get_edge(vertex_id_lhs, vertex_id_rhs);
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::vertices_t
+typename graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::vertices_t
 graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_neighbors(
     vertex_id_t vertex_id) const {
   if (!adjacency_list_.contains(vertex_id)) {

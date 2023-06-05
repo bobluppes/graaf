@@ -54,8 +54,11 @@ int main() {
     prev = current;
   }
 
+  // TODO(bluppes): Directly capture local binding once we have support for it
+  // in Clang-16
   const auto vertex_writer{
-      [start, target](graaf::vertex_id_t vertex_id, int vertex) -> std::string {
+      [start = start, target = target](graaf::vertex_id_t vertex_id,
+                                       int vertex) -> std::string {
         if (vertex_id == start) {
           return "label=start, fillcolor=white, style=filled";
         } else if (vertex_id == target) {

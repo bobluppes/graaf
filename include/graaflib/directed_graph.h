@@ -9,7 +9,7 @@ template <typename VERTEX_T, typename EDGE_T>
 class directed_graph final
     : public graph<VERTEX_T, EDGE_T, graph_spec::DIRECTED> {
  private:
-  using edge_t = graph<VERTEX_T, EDGE_T, graph_spec::DIRECTED>::edge_t;
+  using edge_t = typename graph<VERTEX_T, EDGE_T, graph_spec::DIRECTED>::edge_t;
 
   [[nodiscard]] bool do_has_edge(
       vertex_id_t vertex_id_lhs,

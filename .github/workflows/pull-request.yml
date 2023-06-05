@@ -1,14 +1,35 @@
-name: Main-CI
+name: Pull-Request-CI
 
 on:
-  push:
+  pull_request:
     branches: [ "main" ]
 
 env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+    # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Debug
 
 jobs:
+  compile_and_test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        compiler: [g++, clang++]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure CMake
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+      - name: Compile
+        working-directory: ${{github.workspace}}/build
+        run: cmake --build .
+
+      - name: Test
+        working-directory: ${{github.workspace}}/build
+        run: ctest
+
+
   coverage:
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
     # You can convert this to a matrix build if you need cross-platform coverage.
@@ -54,3 +75,21 @@ jobs:
         uses: jidicula/clang-format-action@v4.11.0
         with:
           clang-format-version: '15'
+
+  verify_documentation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # Node is required for npm
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Build Docusaurus website
+        run: |
+          cd docs
+          npm install 
+          npm run build

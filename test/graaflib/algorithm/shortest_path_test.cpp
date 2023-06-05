@@ -14,7 +14,7 @@ struct TypedShortestPathTest : public testing::Test {
 
 using graph_types =
     testing::Types<directed_graph<int, int>, undirected_graph<int, int>>;
-TYPED_TEST_CASE(TypedShortestPathTest, graph_types);
+TYPED_TEST_SUITE(TypedShortestPathTest, graph_types);
 }  // namespace
 
 TYPED_TEST(TypedShortestPathTest, UnweightedMinimalShortestPath) {
