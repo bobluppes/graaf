@@ -19,7 +19,7 @@ using graph_types =
     testing::Types<directed_graph<int, int>, directed_graph<int, int>,
                    undirected_graph<int, int>, undirected_graph<int, int>>;
 
-TYPED_TEST_CASE(GraphTest, graph_types);
+TYPED_TEST_SUITE(GraphTest, graph_types);
 
 TYPED_TEST(GraphTest, VertexCount) {
   // GIVEN

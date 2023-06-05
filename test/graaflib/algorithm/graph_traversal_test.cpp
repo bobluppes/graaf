@@ -19,7 +19,7 @@ struct TypedGraphTraversalTest : public testing::Test {
 
 using graph_types =
     testing::Types<directed_graph<int, int>, undirected_graph<int, int>>;
-TYPED_TEST_CASE(TypedGraphTraversalTest, graph_types);
+TYPED_TEST_SUITE(TypedGraphTraversalTest, graph_types);
 
 using seen_vertices_t = std::unordered_multiset<vertex_id_t>;
 using vertex_order_t = std::unordered_map<vertex_id_t, std::size_t>;

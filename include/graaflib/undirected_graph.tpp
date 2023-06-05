@@ -20,7 +20,7 @@ bool undirected_graph<VERTEX_T, EDGE_T>::do_has_edge(
 }
 
 template <typename VERTEX_T, typename EDGE_T>
-undirected_graph<VERTEX_T, EDGE_T>::edge_t&
+typename undirected_graph<VERTEX_T, EDGE_T>::edge_t&
 undirected_graph<VERTEX_T, EDGE_T>::do_get_edge(vertex_id_t vertex_id_lhs,
                                                 vertex_id_t vertex_id_rhs) {
   return this->edges_.at(
