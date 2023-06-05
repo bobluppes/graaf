@@ -85,6 +85,6 @@ dot -Tpng ./my_graph.dot -o my_graph.png
 
 <pre>
 <p align="center">
-  <img src="./dot-serialization-graph.png"></img>
+  <img src={require("/static/img/examples/dot-serialization-graph.png").default}></img>
 </p>
 </pre>
