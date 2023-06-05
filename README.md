@@ -33,7 +33,7 @@ const auto alice = my_graph.add_vertex(User{
 });
 
 my_graph.add_edge(bob, alice, Connection{
-  .type = connection_type::FRIENDS
+  .weight = 4.2
 });
 ```
 
