@@ -47,7 +47,7 @@ const auto print_vertex_callback{[](const auto vertex) {
 traverse<search_strategy::BFS>(my_graph, start_vertex, print_vertex_callback);
 ```
 
-For more examples, take a look at our [example section](./examples/README.md).
+For more examples, take a look at our [example section](https://bobluppes.github.io/graaf/docs/examples/Intro).
 More details can be found in our [documentation](https://bobluppes.github.io/graaf/).
 
 # Installation
@@ -97,7 +97,7 @@ Feel free to join our [Discord](https://discord.gg/cGczwRHJ9K) for assistance an
 - [Issue tracker](https://github.com/bobluppes/graaf/issues)
 - [Roadmap](https://graaf.youtrack.cloud/agiles/147-2/current)
 - [Documentation](https://bobluppes.github.io/graaf/)
-- [Examples](examples/README.md)
+- [Examples](https://bobluppes.github.io/graaf/docs/examples/Intro)
 - [Wiki](https://github.com/bobluppes/graaf/wiki)
 - [Discord](https://discord.gg/cGczwRHJ9K)
 
