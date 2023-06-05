@@ -72,6 +72,12 @@ const config = {
             },
             {
               type : 'docSidebar',
+              sidebarId : 'algorithmSidebar',
+              position : 'left',
+              label : 'Algorithms',
+            },
+            {
+              type : 'docSidebar',
               sidebarId : 'exampleSidebar',
               position : 'left',
               label : 'Examples',
@@ -92,6 +98,14 @@ const config = {
                 {
                   label : 'Tutorial',
                   to : '/docs/tutorial/intro',
+                },
+                {
+                  label : 'Algorithms',
+                  to : '/docs/algorithms/intro',
+                },
+                {
+                  label : 'Examples',
+                  to : '/docs/examples/intro',
                 },
               ],
             },
