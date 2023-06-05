@@ -2,7 +2,7 @@
 <h1 align="center">Graaf Lib</h1>
 
 <p align="center">
-  Graaf is a general-purpose graph library implemented in C++. Graaf allows users to easily create, modify, and query graphs. It is designed as a lightweight alternative to Boost Graph.
+  Graaf is a general-purpose graph library implemented in C++. It is designed as a lightweight alternative to Boost Graph.
 </p>
 
 <p align="center">
