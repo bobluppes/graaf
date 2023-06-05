@@ -7,9 +7,11 @@ The shortest path algorithm implemented in `graaf::algorithm::get_shortest_path`
 
 Consider the following graph:
 
+<pre>
 <p align="center">
-    <img src="./shortest-path-graph.png">
+    <img src="./shortest-path-graph.png"></img>
 </p>
+</pre>
 
 In order to compute the shortest path between *vertex 0* and *vertex 2*, we call:
 
@@ -62,6 +64,8 @@ const auto edge_writer{
 ```
 This yields us the following visualization:
 
+<pre>
 <p align="center">
-    <img src="./shortest_path.png">
+    <img src="./shortest_path.png"></img>
 </p>
+</pre>
