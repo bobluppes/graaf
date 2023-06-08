@@ -1,6 +1,4 @@
 # Examples
-This section contains example usages of the Graaf library. 
-If there is a usecase you would like to see an example of, please open an issue in our [issue tracker](https://github.com/bobluppes/graaf/issues).
+This section contains example usages of the Graaf library. Each subdirectory contains sources for a separate executable. More details on each example can be found in the [documentation](https://bobluppes.github.io/graaf/docs/examples/Intro).
 
-- [Shortest path](./shortest_path/README.md)
-- [Dot serialization](./dot_serialization/README.md)
+If there is a usecase you would like to see an example of, please open an issue in our [issue tracker](https://github.com/bobluppes/graaf/issues).

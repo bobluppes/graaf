@@ -9,7 +9,7 @@ Consider the following graph:
 
 <pre>
 <p align="center">
-    <img src="./shortest-path-graph.png"></img>
+    <img src={require("/static/img/examples/shortest-path-graph.png").default}></img>
 </p>
 </pre>
 
@@ -66,6 +66,6 @@ This yields us the following visualization:
 
 <pre>
 <p align="center">
-    <img src="./shortest_path.png"></img>
+    <img src={require("/static/img/examples/shortest_path.png").default}></img>
 </p>
 </pre>
