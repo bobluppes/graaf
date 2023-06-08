@@ -65,7 +65,10 @@ template <typename V, typename E, graph_spec S>
 std::optional<GraphPath<E>> get_weighted_shortest_path(
     const graph<V, E, S>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex) {
-  using weight_t = typename graph<V, E, S>::edge_t;
+  // using edge_ptr_t = typename decltype(graph)::edge_t;
+  using edge_ptr_t = typename std::remove_reference_t<decltype(graph)>::edge_t;
+  using wrapped_t = typename edge_ptr_t::element_type;
+  using weight_t = typename wrapped_t::weight_t;
 
   struct DijkstraVertex {
     vertex_id_t id;

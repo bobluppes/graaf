@@ -155,4 +155,64 @@ TEST(ShortestPathTest, UnweightedDirectedrWongDirectionShortestPath) {
   ASSERT_EQ(path, expected_path);
 }
 
+template <typename T>
+class my_weighted_edge : public weighted_edge<T> {
+ public:
+  explicit my_weighted_edge(T weight) : weight_{weight} {}
+
+  [[nodiscard]] T get_weight() const noexcept override { return weight_; }
+
+ private:
+  T weight_{};
+};
+
+template <typename T>
+struct WeightedGraphTest : public testing::Test {
+  using graph_t = typename T::first_type;
+  using edge_t = typename T::second_type;
+};
+
+using weighted_graph_types = testing::Types<
+    std::pair<directed_graph<int, int>, int>,
+    std::pair<directed_graph<int, my_weighted_edge<int>>,
+          my_weighted_edge<int>>,
+    std::pair<undirected_graph<int, int>, int>,
+    std::pair<undirected_graph<int, my_weighted_edge<int>>,
+          my_weighted_edge<int>>>;
+
+TYPED_TEST_SUITE(WeightedGraphTest, weighted_graph_types);
+
+// Type traits to extract the weight type from both classes and primitives
+template <typename T>
+struct extract_weight {
+  using type = T;
+};
+
+template <typename T>
+  requires requires { typename T::weight_t; }
+struct extract_weight<T> {
+  using type = typename T::weight_t;
+};
+
+TYPED_TEST(WeightedGraphTest, WeightedSimpleShortestPath) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  using edge_t = typename TestFixture::edge_t;
+  using weight_t = typename extract_weight<edge_t>::type;
+
+  graph_t graph{};
+
+  const auto vertex_id_1{graph.add_vertex(10)};
+  const auto vertex_id_2{graph.add_vertex(20)};
+
+  // WHEN
+  graph.add_edge(vertex_id_1, vertex_id_2, edge_t{static_cast<weight_t>(3)});
+  const auto path =
+      get_shortest_path<edge_strategy::WEIGHTED>(graph, vertex_id_1, vertex_id_2);
+
+  // THEN
+  const GraphPath<int> expected_path{{vertex_id_1, vertex_id_2}, 3};
+  ASSERT_EQ(path, expected_path);
+}
+
 }  // namespace graaf::algorithm
