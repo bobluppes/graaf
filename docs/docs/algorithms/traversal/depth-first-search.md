@@ -2,4 +2,4 @@
 sidebar_position: 2
 ---
 
-# Some other page
+# Depth First Search (DFS)

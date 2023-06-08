@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Tutorial Intro
+# Quickstart Intro
 
 Let's install Graaf in your project...
 

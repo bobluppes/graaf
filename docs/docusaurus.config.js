@@ -66,9 +66,15 @@ const config = {
           items : [
             {
               type : 'docSidebar',
-              sidebarId : 'tutorialSidebar',
+              sidebarId : 'quickstartSidebar',
               position : 'left',
-              label : 'Tutorial',
+              label : 'Quickstart',
+            },
+            {
+              type : 'docSidebar',
+              sidebarId : 'algorithmSidebar',
+              position : 'left',
+              label : 'Algorithms',
             },
             {
               type : 'docSidebar',
@@ -90,8 +96,16 @@ const config = {
               title : 'Docs',
               items : [
                 {
-                  label : 'Tutorial',
-                  to : '/docs/tutorial/intro',
+                  label : 'Quickstart',
+                  to : '/docs/quickstart/intro',
+                },
+                {
+                  label : 'Algorithms',
+                  to : '/docs/algorithms/intro',
+                },
+                {
+                  label : 'Examples',
+                  to : '/docs/examples/intro',
                 },
               ],
             },
