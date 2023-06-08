@@ -18,12 +18,15 @@ template <typename T>
   requires string_convertible<T>
 const auto default_vertex_writer{
     [](vertex_id_t vertex_id, const T& vertex) -> std::string {
-      return fmt::format("label=\"{}: {}\"", vertex_id, std::to_string(vertex));
+      // TODO(bluppes): replace with std::format once Clang supports it
+      return "label=\"" + std::to_string(vertex_id) + ": " +
+             std::to_string(vertex) + "\"";
     }};
 
 const auto default_edge_writer{
     [](const edge_id_t& /*edge_id*/, const auto& edge) -> std::string {
-      return fmt::format("label=\"{}\"", std::to_string(edge->get_weight()));
+      // TODO(bluppes): replace with std::format once Clang supports it
+      return "label=\"" + std::to_string(edge->get_weight()) + "\"";
     }};
 }  // namespace detail
 

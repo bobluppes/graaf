@@ -1,3 +1,4 @@
+#include <fmt/core.h>
 #include <graaflib/directed_graph.h>
 #include <graaflib/undirected_graph.h>
 #include <gtest/gtest.h>
