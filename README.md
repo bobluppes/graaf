@@ -50,9 +50,9 @@ undirected_graph<User, Connection> my_graph{};
 
 Implementations for common [graph algorithms](#algorithms) are provided under the `algorithm` namespace. Combining this with built-in `dot` format support allows us to do things like visualizing the shortest path between two vertices:
 
-<center>
+<p align="center">
 <img src="docs/static/img/graph_example.png">
-</center>
+</p>
 
 To get started, take a look at our [quickstart guide](https://bobluppes.github.io/graaf/docs/quickstart/intro).
 
