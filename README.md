@@ -54,10 +54,10 @@ Implementations for common [graph algorithms](#algorithms) are provided under th
 <img src="docs/static/img/graph_example.png">
 </center>
 
-To get started, take a look at our [quickstart guide]().
+To get started, take a look at our [quickstart guide](https://bobluppes.github.io/graaf/docs/quickstart/intro).
 
 # Installation
-The most straightforward way to use the Graaf in your project is to include it as a header-only library. Please take a look at the [installation guide]() for alternative installation methods.
+The most straightforward way to use the Graaf in your project is to include it as a header-only library. Please take a look at the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/installation) for alternative installation methods.
 
 ## Header-Only Library
 The Graaf libary can be included as a header-only library. All it requires is a compiler with C++ 20 support.
@@ -69,10 +69,10 @@ Download the `header-only` library from our [release page](https://github.com/bo
 #include <graaflib/directed_graph>
 ```
 
-For more details or alternative installation methods, see the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/quickstart-basics/installation).
+For more details or alternative installation methods, see the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/installation).
 
 # Algorithms
-Algorithms implemented in the Graaf library include the following. For more information on individual algorithms please take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/Intro).
+Algorithms implemented in the Graaf library include the following. For more information on individual algorithms please take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intro).
 
 1. [**Traversal Algorithms**](https://bobluppes.github.io/graaf/docs/category/traversal-algorithms):
     - Breadth-First Search (BFS)
