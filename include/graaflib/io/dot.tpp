@@ -1,6 +1,5 @@
 #pragma once
 
-#include <fmt/core.h>
 #include <graaflib/graph.h>
 
 #include <fstream>
@@ -78,18 +77,20 @@ void to_dot(const graph<V, E, S>& graph, const std::filesystem::path& path,
   const auto append_line{
       [&dot_file](const std::string& line) { dot_file << line << std::endl; }};
 
-  append_line(fmt::format("{} {{", detail::spec_to_string(S)));
+  // TODO(bluppes): replace with std::format once Clang supports it
+  append_line(std::string(detail::spec_to_string(S)) + " {");
 
   for (const auto& [vertex_id, vertex] : graph.get_vertices()) {
-    append_line(
-        fmt::format("\t{} [{}];", vertex_id, vertex_writer(vertex_id, vertex)));
+    append_line("\t" + std::to_string(vertex_id) + " [" +
+                vertex_writer(vertex_id, vertex) + "];");
   }
 
   const auto edge_specifier{detail::spec_to_edge_specifier(S)};
   for (const auto& [edge_id, edge] : graph.get_edges()) {
     const auto [source_id, target_id]{edge_id};
-    append_line(fmt::format("\t{} {} {} [{}];", source_id, edge_specifier,
-                            target_id, edge_writer(edge_id, edge)));
+    append_line("\t" + std::to_string(source_id) + " " + edge_specifier + " " +
+                std::to_string(target_id) + " [" + edge_writer(edge_id, edge) +
+                "];");
   }
 
   append_line("}");

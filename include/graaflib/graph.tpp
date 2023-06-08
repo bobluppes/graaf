@@ -1,8 +1,7 @@
 #pragma once
 
-#include <fmt/core.h>
-
 #include <stdexcept>
+#include <string>
 
 namespace graaf {
 
@@ -42,8 +41,9 @@ template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
 VERTEX_T& graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_vertex(
     vertex_id_t vertex_id) {
   if (!has_vertex(vertex_id)) {
-    throw std::out_of_range{
-        fmt::format("Vertex with ID [{}] not found in graph.", vertex_id)};
+    // TODO(bluppes): replace with std::format once Clang supports it
+    throw std::out_of_range{"Vertex with ID [" + std::to_string(vertex_id) +
+                            "] not found in graph."};
     // May be more accurate to throw std::invalid_argument.
   }
   return vertices_.at(vertex_id);
@@ -60,9 +60,10 @@ typename graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::edge_t&
 graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_edge(vertex_id_t vertex_id_lhs,
                                                 vertex_id_t vertex_id_rhs) {
   if (!has_edge(vertex_id_lhs, vertex_id_rhs)) {
-    throw std::out_of_range{
-        fmt::format("No edge found between vertices [{}] -> [{}].",
-                    vertex_id_lhs, vertex_id_rhs)};
+    // TODO(bluppes): replace with std::format once Clang supports it
+    throw std::out_of_range{"No edge found between vertices [" +
+                            std::to_string(vertex_id_lhs) + "] -> [" +
+                            std::to_string(vertex_id_rhs) + "]."};
   }
   return do_get_edge(vertex_id_lhs, vertex_id_rhs);
 }
@@ -115,9 +116,10 @@ void graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::add_edge(vertex_id_t vertex_id_lhs,
                                                      vertex_id_t vertex_id_rhs,
                                                      EDGE_T edge) {
   if (!has_vertex(vertex_id_lhs) || !has_vertex(vertex_id_rhs)) {
+    // TODO(bluppes): replace with std::format once Clang supports it
     throw std::out_of_range{
-        fmt::format("Vertices with ID [{}] and [{}] not found in graph.",
-                    vertex_id_lhs, vertex_id_rhs)};
+        "Vertices with ID [" + std::to_string(vertex_id_lhs) + "] and [" +
+        std::to_string(vertex_id_rhs) + "] not found in graph."};
   }
   do_add_edge(vertex_id_lhs, vertex_id_rhs,
               std::make_shared<typename edge_t::element_type>(edge));
