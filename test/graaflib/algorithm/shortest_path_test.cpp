@@ -167,20 +167,20 @@ class my_weighted_edge : public weighted_edge<T> {
 };
 
 template <typename T>
-struct WeightedGraphTest : public testing::Test {
+struct WeightedShortestPathTest : public testing::Test {
   using graph_t = typename T::first_type;
   using edge_t = typename T::second_type;
 };
 
-using weighted_graph_types = testing::Types<
-    std::pair<directed_graph<int, int>, int>,
-    std::pair<directed_graph<int, my_weighted_edge<int>>,
-          my_weighted_edge<int>>,
-    std::pair<undirected_graph<int, int>, int>,
-    std::pair<undirected_graph<int, my_weighted_edge<int>>,
-          my_weighted_edge<int>>>;
+using weighted_graph_types =
+    testing::Types<std::pair<directed_graph<int, int>, int>,
+                   std::pair<directed_graph<int, my_weighted_edge<int>>,
+                             my_weighted_edge<int>>,
+                   std::pair<undirected_graph<int, int>, int>,
+                   std::pair<undirected_graph<int, my_weighted_edge<int>>,
+                             my_weighted_edge<int>>>;
 
-TYPED_TEST_SUITE(WeightedGraphTest, weighted_graph_types);
+TYPED_TEST_SUITE(WeightedShortestPathTest, weighted_graph_types);
 
 // Type traits to extract the weight type from both classes and primitives
 template <typename T>
@@ -194,7 +194,7 @@ struct extract_weight<T> {
   using type = typename T::weight_t;
 };
 
-TYPED_TEST(WeightedGraphTest, WeightedSimpleShortestPath) {
+TYPED_TEST(WeightedShortestPathTest, WeightedSimpleShortestPath) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
@@ -207,8 +207,8 @@ TYPED_TEST(WeightedGraphTest, WeightedSimpleShortestPath) {
 
   // WHEN
   graph.add_edge(vertex_id_1, vertex_id_2, edge_t{static_cast<weight_t>(3)});
-  const auto path =
-      get_shortest_path<edge_strategy::WEIGHTED>(graph, vertex_id_1, vertex_id_2);
+  const auto path = get_shortest_path<edge_strategy::WEIGHTED>(
+      graph, vertex_id_1, vertex_id_2);
 
   // THEN
   const GraphPath<int> expected_path{{vertex_id_1, vertex_id_2}, 3};
