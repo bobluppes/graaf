@@ -215,8 +215,8 @@ class graph {
  private:
   [[nodiscard]] virtual bool do_has_edge(
       vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const noexcept = 0;
-  [[nodiscard]] virtual edge_t& do_get_edge(vertex_id_t vertex_id_lhs,
-                                            vertex_id_t vertex_id_rhs) = 0;
+  [[nodiscard]] virtual const edge_t& do_get_edge(
+      vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const = 0;
   virtual void do_add_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs,
                            edge_t edge) = 0;
   virtual void do_remove_edge(vertex_id_t vertex_id_lhs,
