@@ -10,8 +10,8 @@ namespace graaf::algorithm {
 
 namespace detail {
 
-template <typename V, typename E, graph_spec S>
-std::optional<GraphPath<int>> get_unweighted_shortest_path(
+template <typename V, typename E, graph_spec S, typename WEIGHT_T>
+std::optional<GraphPath<WEIGHT_T>> get_unweighted_shortest_path(
     const graph<V, E, S>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex) {
   std::unordered_set<vertex_id_t> seen_vertices{};
@@ -61,18 +61,13 @@ std::optional<GraphPath<int>> get_unweighted_shortest_path(
   }
 }
 
-template <typename V, typename E, graph_spec S>
-std::optional<GraphPath<E>> get_weighted_shortest_path(
+template <typename V, typename E, graph_spec S, typename WEIGHT_T>
+std::optional<GraphPath<WEIGHT_T>> get_weighted_shortest_path(
     const graph<V, E, S>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex) {
-  // using edge_ptr_t = typename decltype(graph)::edge_t;
-  using edge_ptr_t = typename std::remove_reference_t<decltype(graph)>::edge_t;
-  using wrapped_t = typename edge_ptr_t::element_type;
-  using weight_t = typename wrapped_t::weight_t;
-
   struct DijkstraVertex {
     vertex_id_t id;
-    weight_t distance;
+    WEIGHT_T distance;
     vertex_id_t previous;
   };
 
@@ -103,7 +98,7 @@ std::optional<GraphPath<E>> get_weighted_shortest_path(
     }
 
     for (const auto& neighbor : graph.get_neighbors(current.id)) {
-      weight_t distance =
+      WEIGHT_T distance =
           current.distance + graph.get_edge(current.id, neighbor)->get_weight();
 
       if (!vertex_info.contains(neighbor) ||
@@ -115,7 +110,7 @@ std::optional<GraphPath<E>> get_weighted_shortest_path(
   }
 
   const auto reconstruct_path = [&start_vertex, &end_vertex, &vertex_info]() {
-    GraphPath<weight_t> path;
+    GraphPath<WEIGHT_T> path;
     auto current = end_vertex;
 
     while (current != start_vertex) {
@@ -140,18 +135,20 @@ std::optional<GraphPath<E>> get_weighted_shortest_path(
 
 }  // namespace detail
 
-template <edge_strategy EDGE_STRATEGY, typename V, typename E, graph_spec S>
-std::optional<GraphPath<E>> get_shortest_path(const graph<V, E, S>& graph,
-                                              vertex_id_t start_vertex,
-                                              vertex_id_t end_vertex) {
+template <edge_strategy EDGE_STRATEGY, typename V, typename E, graph_spec S,
+          typename WEIGHT_T>
+std::optional<GraphPath<WEIGHT_T>> get_shortest_path(
+    const graph<V, E, S>& graph, vertex_id_t start_vertex,
+    vertex_id_t end_vertex) {
   using enum edge_strategy;
   if constexpr (EDGE_STRATEGY == UNWEIGHTED) {
-    return detail::get_unweighted_shortest_path(graph, start_vertex,
-                                                end_vertex);
+    return detail::get_unweighted_shortest_path<V, E, S, WEIGHT_T>(
+        graph, start_vertex, end_vertex);
   }
 
   if constexpr (EDGE_STRATEGY == WEIGHTED) {
-    return detail::get_weighted_shortest_path(graph, start_vertex, end_vertex);
+    return detail::get_weighted_shortest_path<V, E, S, WEIGHT_T>(
+        graph, start_vertex, end_vertex);
   }
 }
 
