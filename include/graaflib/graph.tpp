@@ -40,6 +40,16 @@ bool graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::has_edge(
 template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
 VERTEX_T& graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_vertex(
     vertex_id_t vertex_id) {
+  // Effective C++ item 3: we can safely call a const function from a non-const.
+  // one
+  return const_cast<VERTEX_T&>(
+      const_cast<const graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>*>(this)
+          ->get_vertex(vertex_id));
+}
+
+template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
+const VERTEX_T& graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_vertex(
+    vertex_id_t vertex_id) const {
   if (!has_vertex(vertex_id)) {
     // TODO(bluppes): replace with std::format once Clang supports it
     throw std::out_of_range{"Vertex with ID [" + std::to_string(vertex_id) +
@@ -50,15 +60,19 @@ VERTEX_T& graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_vertex(
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-const VERTEX_T& graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_vertex(
-    vertex_id_t vertex_id) const {
-  return get_vertex(vertex_id);
-}
-
-template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
 typename graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::edge_t&
 graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_edge(vertex_id_t vertex_id_lhs,
                                                 vertex_id_t vertex_id_rhs) {
+  // Effective C++ item 3: we can safely call a const function from a non-const.
+  return const_cast<graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::edge_t&>(
+      const_cast<const graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>*>(this)->get_edge(
+          vertex_id_lhs, vertex_id_rhs));
+}
+
+template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
+const typename graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::edge_t&
+graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_edge(
+    vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const {
   if (!has_edge(vertex_id_lhs, vertex_id_rhs)) {
     // TODO(bluppes): replace with std::format once Clang supports it
     throw std::out_of_range{"No edge found between vertices [" +
@@ -66,13 +80,6 @@ graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_edge(vertex_id_t vertex_id_lhs,
                             std::to_string(vertex_id_rhs) + "]."};
   }
   return do_get_edge(vertex_id_lhs, vertex_id_rhs);
-}
-
-template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-const typename graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::edge_t&
-graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_edge(
-    vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const {
-  return get_edge(vertex_id_lhs, vertex_id_rhs);
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>

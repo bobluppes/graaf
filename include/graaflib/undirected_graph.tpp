@@ -20,9 +20,9 @@ bool undirected_graph<VERTEX_T, EDGE_T>::do_has_edge(
 }
 
 template <typename VERTEX_T, typename EDGE_T>
-typename undirected_graph<VERTEX_T, EDGE_T>::edge_t&
-undirected_graph<VERTEX_T, EDGE_T>::do_get_edge(vertex_id_t vertex_id_lhs,
-                                                vertex_id_t vertex_id_rhs) {
+const typename undirected_graph<VERTEX_T, EDGE_T>::edge_t&
+undirected_graph<VERTEX_T, EDGE_T>::do_get_edge(
+    vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const {
   return this->edges_.at(
       detail::make_sorted_pair(vertex_id_lhs, vertex_id_rhs));
 }
