@@ -15,8 +15,8 @@ class directed_graph final
       vertex_id_t vertex_id_lhs,
       vertex_id_t vertex_id_rhs) const noexcept override;
 
-  [[nodiscard]] edge_t& do_get_edge(vertex_id_t vertex_id_lhs,
-                                    vertex_id_t vertex_id_rhs) override;
+  [[nodiscard]] const edge_t& do_get_edge(
+      vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const override;
 
   void do_add_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs,
                    edge_t edge) override;
