@@ -71,7 +71,6 @@ std::optional<GraphPath<WEIGHT_T>> get_weighted_shortest_path(
     vertex_id_t previous;
   };
 
-  std::unordered_set<vertex_id_t> seen_vertices{};
   std::unordered_map<vertex_id_t, DijkstraVertex> vertex_info;
   std::priority_queue<
       DijkstraVertex, std::vector<DijkstraVertex>,
@@ -86,12 +85,6 @@ std::optional<GraphPath<WEIGHT_T>> get_weighted_shortest_path(
   while (!to_explore.empty()) {
     auto current{to_explore.top()};
     to_explore.pop();
-
-    if (seen_vertices.contains(current.id)) {
-      continue;
-    }
-
-    seen_vertices.insert(current.id);
 
     if (current.id == end_vertex) {
       break;
@@ -126,7 +119,7 @@ std::optional<GraphPath<WEIGHT_T>> get_weighted_shortest_path(
     return path;
   };
 
-  if (seen_vertices.contains(end_vertex)) {
+  if (vertex_info.contains(end_vertex)) {
     return reconstruct_path();
   } else {
     return std::nullopt;
