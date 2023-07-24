@@ -4,3 +4,4 @@ build/
 # IDE
 .vscode/
 .cache/
+.vs/
