@@ -7,8 +7,9 @@
 
 namespace graaf::algorithm {
 
-enum vertex_color { UNVISITED, VISITED, NO_CYCLE };
 namespace detail {
+
+enum class vertex_color { UNVISITED, VISITED, NO_CYCLE };
 
 template <typename V, typename E, graph_spec S>
 bool do_dfs_directed(const graph<V, E, S>& graph,
@@ -62,9 +63,10 @@ template <typename V, typename E, graph_spec S>
 bool has_cycle(const graph<V, E, S>& graph) {
 
   if (graph.is_directed()) {
-        std::unordered_map<vertex_id_t, vertex_color> colored_vertices{};
+        std::unordered_map<vertex_id_t, detail::vertex_color> colored_vertices{};
 
         for (const auto& vertex : graph.get_vertices()) {
+            using enum detail::vertex_color;
             if (colored_vertices[vertex.first] == UNVISITED &&
                 detail::do_dfs_directed(graph, colored_vertices, vertex.first)) {
                         return true;
@@ -92,10 +94,6 @@ bool has_cycle(const graph<V, E, S>& graph) {
         }
   }
 
-  return false;
-
-  // We should never reach this
-  std::abort();
   return false;
 }
 

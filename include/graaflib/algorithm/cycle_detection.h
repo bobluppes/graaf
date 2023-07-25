@@ -5,7 +5,7 @@
 namespace graaf::algorithm {
 
 /*
- * @breif Traverses the graph and checks for cycles.
+ * @brief Traverses the graph and checks for cycles.
  *
  * @param graph The graph to traverse.
  */
