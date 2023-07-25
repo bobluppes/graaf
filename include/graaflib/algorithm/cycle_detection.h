@@ -1,19 +1,16 @@
 #pragma once
 
 #include <graaflib/graph.h>
-#include <graaflib/types.h>
-
-#include <concepts>
 
 namespace graaf::algorithm {
 
 /*
- * @breif Traverses the graph and check for cycles.
+ * @breif Traverses the graph and checks for cycles.
  *
  * @param graph The graph to traverse.
  */
 template <typename V, typename E, graph_spec S>
-bool has_cycle(const graph<V, E, S> &graph);
+[[nodiscard]] bool has_cycle(const graph<V, E, S> &graph);
 
 }  // namespace graaf::algorithm
 

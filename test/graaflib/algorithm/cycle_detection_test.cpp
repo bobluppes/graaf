@@ -23,7 +23,7 @@ TYPED_TEST_SUITE(GraphCycleTest, graph_types);
 
 }  // namespace
 
-TYPED_TEST(GraphCycleTest, GraphWithCycle) {
+TYPED_TEST(GraphCycleTest, DirectedGraphWithCycle) {
   // GIVEN
   directed_graph<int, int> graph{};
 
@@ -61,7 +61,7 @@ TYPED_TEST(GraphCycleTest, DirectedGraphWithCycleMiddle) {
   ASSERT_TRUE(cycle);
 }
 
-TYPED_TEST(GraphCycleTest, GraphWithoutCycle) {
+TYPED_TEST(GraphCycleTest, DirectedGraphWithoutCycle) {
   // GIVEN
   directed_graph<int, int> graph{};
 
