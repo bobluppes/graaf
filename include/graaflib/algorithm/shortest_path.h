@@ -22,6 +22,13 @@ struct GraphPath {
   }
 };
 
+template <typename E>
+struct PathVertex {
+  vertex_id_t id;
+  E dist_from_start;
+  vertex_id_t prev_id;
+};
+
 /**
  * @brief calculates the shortest path between on start_vertex and one
  * end_vertex.
