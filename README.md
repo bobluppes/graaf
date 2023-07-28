@@ -79,9 +79,12 @@ Algorithms implemented in the Graaf library include the following. For more info
     - Depth-First Search (DFS)
 2. [**Shortest Path Algorithms**](https://bobluppes.github.io/graaf/docs/category/shortest-path-algorithms):
     - BFS-Based Shortest Path
+    - Dijkstra
+3. [**Cycle Detection Algorithms**](https://bobluppes.github.io/graaf/docs/category/cycle-detection-algorithms):
+    - DFS-Based Cycle Detection
 
 # Contributing
-The Graaf library welcomes contributions! 
+The Graaf library welcomes contributions 🎊 
 
 If you're interested in improving, fixing bugs, or adding features, please refer to the [wiki](https://github.com/bobluppes/graaf/wiki) for guidelines. Check out our roadmap on [YouTrack](https://graaf.youtrack.cloud/agiles/147-2/current) to stay up to date on planned features and improvements. We also have an [issue tracker](https://github.com/bobluppes/graaf/issues) for bug reports and feature requests. 
 
