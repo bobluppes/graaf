@@ -12,10 +12,10 @@ namespace graaf::algorithm {
 // TODO(bluppes): I would expose the names of the underlying algorithms here.
 enum class edge_strategy { WEIGHTED, UNWEIGHTED };
 
-template <typename E>
+template <typename WEIGHT_T>
 struct GraphPath {
   std::list<vertex_id_t> vertices;
-  E total_weight;
+  WEIGHT_T total_weight;
 
   bool operator==(const GraphPath& other) const {
     return vertices == other.vertices && total_weight == other.total_weight;
