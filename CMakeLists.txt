@@ -16,3 +16,6 @@ add_subdirectory(examples)
 # Enables testing in CMAKE, needs to be called BEFORE call to add_subdirectory
 enable_testing()
 add_subdirectory(test)
+
+# Benchmarks
+add_subdirectory(perf)
