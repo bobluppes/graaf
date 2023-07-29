@@ -15,6 +15,10 @@ struct PathVertex {
   vertex_id_t id;
   WEIGHT_T dist_from_start;
   vertex_id_t prev_id;
+
+  [[nodiscard]] bool operator>(const PathVertex<WEIGHT_T>& other) {
+    return dist_from_start > other.dist_from_start;
+  }
 };
 
 template <typename WEIGHT_T>
@@ -73,13 +77,11 @@ std::optional<GraphPath<WEIGHT_T>> get_weighted_shortest_path(
     const graph<V, E, S>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex) {
   std::unordered_map<vertex_id_t, PathVertex<WEIGHT_T>> vertex_info;
-  std::priority_queue<PathVertex<WEIGHT_T>, std::vector<PathVertex<WEIGHT_T>>,
-                      std::function<bool(const PathVertex<WEIGHT_T>&,
-                                         const PathVertex<WEIGHT_T>&)>>
-      to_explore(
-          [](const PathVertex<WEIGHT_T>& v1, const PathVertex<WEIGHT_T>& v2) {
-            return v1.dist_from_start > v2.dist_from_start;
-          });
+
+  using weighted_path_item = PathVertex<WEIGHT_T>;
+  std::priority_queue<weighted_path_item, std::vector<weighted_path_item>,
+                      std::greater<>>
+      to_explore{};
 
   vertex_info[start_vertex] = {start_vertex, 0, start_vertex};
   to_explore.push(vertex_info[start_vertex]);
