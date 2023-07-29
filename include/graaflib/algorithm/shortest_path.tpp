@@ -10,10 +10,10 @@ namespace graaf::algorithm {
 
 namespace detail {
 
-template <typename E>
+template <typename WEIGHT_T>
 struct PathVertex {
   vertex_id_t id;
-  E dist_from_start;
+  WEIGHT_T dist_from_start;
   vertex_id_t prev_id;
 };
 
