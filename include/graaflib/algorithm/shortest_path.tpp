@@ -10,6 +10,13 @@ namespace graaf::algorithm {
 
 namespace detail {
 
+template <typename E>
+struct PathVertex {
+  vertex_id_t id;
+  E dist_from_start;
+  vertex_id_t prev_id;
+};
+
 template <typename WEIGHT_T>
 std::optional<GraphPath<WEIGHT_T>> reconstruct_path(
     vertex_id_t start_vertex, vertex_id_t end_vertex,
