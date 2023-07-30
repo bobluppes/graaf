@@ -3,8 +3,19 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 import os
 
-benchmark_dir = Path("../build")
-benchmark_filter = "bm_"
+"""
+This script can be used to visualize benchmark results. The script assumes multiple benchmark 
+results in csv files under the build directory. These results can be generated with the 
+Graaf_perf executable:
+
+build/perf/Graaf_perf --benchmark_out=benchmark_results.csv --benchmark_out_format=csv
+"""
+
+# Input variables
+benchmark_dir = Path("../build")  # The directory containing the csv files
+benchmark_filter = "bm_"  # Option to filter on specific benchmark names
+
+# Constants
 google_benchmark_skiprows = 10
 
 plt.figure()
