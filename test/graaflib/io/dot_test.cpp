@@ -202,9 +202,9 @@ TEST(DotTest, UserProvidedVertexAndEdgeClass) {
   const std::filesystem::path path{"./test.dot"};
   directed_graph<vertex_t, edge_t> graph{};
 
-  const auto vertex_1{graph.add_vertex({10, "vertex 1"})};
-  const auto vertex_2{graph.add_vertex({20, "vertex 2"})};
-  graph.add_edge(vertex_1, vertex_2, {100, "edge 1"});
+  const auto vertex_1{graph.add_vertex(vertex_t{10, "vertex 1"})};
+  const auto vertex_2{graph.add_vertex(vertex_t{20, "vertex 2"})};
+  graph.add_edge(vertex_1, vertex_2, edge_t{100, "edge 1"});
 
   const auto vertex_writer{
       [](vertex_id_t /*vertex_id*/, const vertex_t& vertex) {

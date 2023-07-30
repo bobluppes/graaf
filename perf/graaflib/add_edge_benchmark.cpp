@@ -1,7 +1,7 @@
 #include <benchmark/benchmark.h>
 #include <graaflib/directed_graph.h>
 
-#include <array>
+#include <vector>
 
 namespace {
 
@@ -35,7 +35,8 @@ static void bm_add_primitive_numeric_edge(benchmark::State& state) {
 }
 
 struct edge {
-  std::array<double, 100> data{};
+  // Something which benefits from move construction
+  std::vector<double> data{100};
 };
 
 static void bm_add_user_defined_edge(benchmark::State& state) {
@@ -48,7 +49,7 @@ static void bm_add_user_defined_edge(benchmark::State& state) {
   const auto vertices{create_vertices(graph, number_of_vertices)};
 
   for (auto _ : state) {
-    for (size_t i{0}; i < number_of_vertices; ++i) {
+    for (size_t i{0}; i < number_of_edges; ++i) {
       graph.add_edge(vertices[i], vertices[i + 1], edge{});
     }
   }
