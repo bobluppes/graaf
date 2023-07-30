@@ -93,10 +93,10 @@ graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::get_neighbors(
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
-vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::add_vertex(VERTEX_T vertex) {
+vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::add_vertex(auto&& vertex) {
   // TODO: check overflow
   const auto vertex_id{vertex_id_supplier_++};
-  vertices_.emplace(vertex_id, std::move(vertex));
+  vertices_.emplace(vertex_id, std::forward<VERTEX_T>(vertex));
   return vertex_id;
 }
 
@@ -121,7 +121,7 @@ void graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::remove_vertex(
 template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
 void graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::add_edge(vertex_id_t vertex_id_lhs,
                                                      vertex_id_t vertex_id_rhs,
-                                                     EDGE_T edge) {
+                                                     auto&& edge) {
   if (!has_vertex(vertex_id_lhs) || !has_vertex(vertex_id_rhs)) {
     // TODO(bluppes): replace with std::format once Clang supports it
     throw std::out_of_range{
@@ -129,7 +129,8 @@ void graph<VERTEX_T, EDGE_T, GRAPH_SPEC_V>::add_edge(vertex_id_t vertex_id_lhs,
         std::to_string(vertex_id_rhs) + "] not found in graph."};
   }
   do_add_edge(vertex_id_lhs, vertex_id_rhs,
-              std::make_shared<typename edge_t::element_type>(edge));
+              std::make_shared<typename edge_t::element_type>(
+                  std::forward<EDGE_T>(edge)));
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
