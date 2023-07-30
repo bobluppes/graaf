@@ -31,18 +31,18 @@ struct my_edge {
 auto create_graph() {
   graaf::directed_graph<my_vertex, my_edge> graph{};
 
-  const auto vertex_1{graph.add_vertex({10, "some data"})};
-  const auto vertex_2{graph.add_vertex({20, "some more data"})};
-  const auto vertex_3{graph.add_vertex({30, "abc"})};
-  const auto vertex_4{graph.add_vertex({40, "123"})};
-  const auto vertex_5{graph.add_vertex({50, "xyz"})};
+  const auto vertex_1{graph.add_vertex(my_vertex{10, "some data"})};
+  const auto vertex_2{graph.add_vertex(my_vertex{20, "some more data"})};
+  const auto vertex_3{graph.add_vertex(my_vertex{30, "abc"})};
+  const auto vertex_4{graph.add_vertex(my_vertex{40, "123"})};
+  const auto vertex_5{graph.add_vertex(my_vertex{50, "xyz"})};
 
-  graph.add_edge(vertex_1, vertex_2, {edge_priority::HIGH, 3.3});
-  graph.add_edge(vertex_2, vertex_1, {edge_priority::HIGH, 5.0});
-  graph.add_edge(vertex_1, vertex_3, {edge_priority::HIGH, 1.0});
-  graph.add_edge(vertex_3, vertex_4, {edge_priority::LOW, 2.0});
-  graph.add_edge(vertex_3, vertex_5, {edge_priority::HIGH, 3.0});
-  graph.add_edge(vertex_2, vertex_5, {edge_priority::LOW, 42.0});
+  graph.add_edge(vertex_1, vertex_2, my_edge{edge_priority::HIGH, 3.3});
+  graph.add_edge(vertex_2, vertex_1, my_edge{edge_priority::HIGH, 5.0});
+  graph.add_edge(vertex_1, vertex_3, my_edge{edge_priority::HIGH, 1.0});
+  graph.add_edge(vertex_3, vertex_4, my_edge{edge_priority::LOW, 2.0});
+  graph.add_edge(vertex_3, vertex_5, my_edge{edge_priority::HIGH, 3.0});
+  graph.add_edge(vertex_2, vertex_5, my_edge{edge_priority::LOW, 42.0});
 
   return graph;
 }
