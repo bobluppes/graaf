@@ -49,7 +49,7 @@ static void bm_add_user_defined_edge(benchmark::State& state) {
   const auto vertices{create_vertices(graph, number_of_vertices)};
 
   for (auto _ : state) {
-    for (size_t i{0}; i < number_of_vertices; ++i) {
+    for (size_t i{0}; i < number_of_edges; ++i) {
       graph.add_edge(vertices[i], vertices[i + 1], edge{});
     }
   }
