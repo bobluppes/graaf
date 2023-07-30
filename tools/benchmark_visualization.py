@@ -1,61 +1,43 @@
-import os
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
+import seaborn as sns
 
 """
-This script can be used to visualize benchmark results. The script assumes multiple benchmark 
-results in csv files under the build directory. These results can be generated with the 
+This script can be used to visualize benchmark results. The script assumes multiple benchmark
+results in csv files under the build directory. These results can be generated with the
 Graaf_perf executable:
 
 build/perf/Graaf_perf --benchmark_out=benchmark_results.csv --benchmark_out_format=csv
 """
 
 
-def plot_benchmarks_from_csv(
-    benchmark_dir=Path("../build"), benchmark_filter="bm_", google_benchmark_skiprows=10
-):
-    plt.figure()
+def read_benchmark_files_into_df(dir=Path("../build"), skiprows=10):
+    df = pd.DataFrame()
+    for file in dir.glob("*.csv"):
+        df_new = pd.read_csv(file, skiprows=skiprows)
+        df_new["filename"] = Path(file).stem
+        df = pd.concat([df, df_new], ignore_index=True)
 
-    for benchmark_results in benchmark_dir.glob("*.csv"):
-        filename = os.path.basename(benchmark_results)
-        benchmarks_df = pd.read_csv(
-            benchmark_results, skiprows=google_benchmark_skiprows
-        )
+    assert not df.empty, "Reading into df failed. Check dir and skiprows parameters!"
 
-        # The benchmark name and variable are recorded as 'bm_name/variable'
-        benchmarks_df[["bm_name", "variable"]] = benchmarks_df["name"].str.split(
-            pat="/", n=1, expand=True
-        )
-        benchmarks_df["variable"] = benchmarks_df["variable"].astype(int)
+    df[["bm_name", "variable"]] = df["name"].str.split(pat="/", n=1, expand=True)
+    df["variable"] = df["variable"].astype(int)
+    df["time (s)"] = df["real_time"].apply(lambda x: x * 1e-9)
+    df["ID"] = df["filename"] + " - " + df["bm_name"]
+    return df
 
-        # Google benchmark records the time in ns
-        benchmarks_df["time (s)"] = benchmarks_df["real_time"].apply(lambda x: x * 1e-9)
 
-        # Filter
-        benchmarks_df = benchmarks_df[
-            benchmarks_df["bm_name"].apply(lambda x: x.find(benchmark_filter) != -1)
-        ]
+def plot_benchmarks_from_df(df, ax=None, save_plot=False):
+    if ax is None:
+        _, ax = plt.subplots(figsize=(7, 5))
+        ax.set(xscale="log", xlabel="No. of Additions", ylabel="Runtime (s)")
 
-        for benchmark_df in [x for _, x in benchmarks_df.groupby("bm_name")]:
-            benchmark_label = "{} - {}".format(
-                os.path.splitext(filename)[0], benchmark_df["bm_name"].iloc[0]
-            )
-
-            plt.plot(
-                benchmark_df["variable"],
-                benchmark_df["time (s)"],
-                label=benchmark_label,
-                marker=".",
-            )
-
-    plt.xlabel("number of additions")
-    plt.ylabel("runtime (s)")
-    plt.xscale("log")
-    plt.legend()
-    plt.show()
+    sns.lineplot(df, x="variable", y="time (s)", hue="ID", legend="full", ax=ax)
+    plt.savefig("plot.png") if save_plot else plt.show()
 
 
 if __name__ == "__main__":
-    plot_benchmarks_from_csv()
+    df = read_benchmark_files_into_df()
+    plot_benchmarks_from_df(df)
