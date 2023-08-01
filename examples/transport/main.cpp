@@ -63,8 +63,8 @@ void print_shortest_path(const graaf::undirected_graph<station, road>& graph,
 
     const auto vertex_writer{
         [](graaf::vertex_id_t vertex_id, station vertex) -> std::string {
-        const auto style{"solid"};
-        return fmt::format("label=\"{}: {}\", style={}, color=black, fontcolor=black",
+        const auto style{"filled"};
+        return fmt::format("label=\"{}\", style={}, color=black, fontcolor=black, fillcolor=mediumspringgreen",
                             vertex.name, style);
     }};
 
@@ -111,10 +111,10 @@ void print_visited_vertices(const graaf::undirected_graph<station, road>& graph,
 
   const auto vertex_writer{
       [](graaf::vertex_id_t vertex_id, station vertex) -> std::string {
-        const auto style{"solid"};
+        const auto style{"filled"};
 
         return fmt::format(
-            "label=\"{}: {}\", style={}, color=gray, fontcolor=black",
+            "label=\"{}\", style={}, color=black, fontcolor=black, fillcolor=mediumspringgreen",
             vertex.name, style);
   }};
 

@@ -17,7 +17,7 @@ foreach (EXAMPLE ${EXAMPLES})
     add_executable(
         ${PROJECT_NAME}_${EXAMPLE_NAME}_example
         ${EXAMPLE}
-     )
+    )
 
     # Include src such that we can #include <graaflib/*> in the sources
     target_include_directories(${PROJECT_NAME}_${EXAMPLE_NAME}_example PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include)
