@@ -180,7 +180,7 @@ class graph {
    * @param  vertex The vertex to be added
    * @return vertices_id_t - The ID of the new vertex
    */
-  vertex_id_t add_vertex(VERTEX_T vertex);
+  vertex_id_t add_vertex(auto&& vertex);
 
   /**
    * Remove a vertex from the graph and update all its neighbors
@@ -196,7 +196,7 @@ class graph {
    * @throws out_of_range - If either of the vertex does not exist in graph
    */
   void add_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs,
-                EDGE_T edge);
+                auto&& edge);
 
   /**
    * Remove the edge between two vertices
