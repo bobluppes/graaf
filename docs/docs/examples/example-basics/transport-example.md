@@ -11,7 +11,7 @@ Using the following graph:
 
 <pre>
 <p align="center">
-    <img src={require("\static\img\examples\example_usage.png").default}></img>
+    <img src={require("/static/img/examples/example_usage.png").default}></img>
 </p>
 </pre>
 
@@ -51,14 +51,14 @@ For shortest path, colouring edges with red to indicate the shortest path for bo
 Result of unweighted shortest path, chosen edges are coloured red
 <pre>
 <p align="center">
-    <img src={require("\static\img\examples\example_shortest_path_unweighted.png").default}></img>
+    <img src={require("/static/img/examples/example_shortest_path_unweighted.png").default}></img>
 </p>
 </pre>
 
 Result of weighted shortest path, chosen edges are coloured red
 <pre>
 <p align="center">
-    <img src={require("\static\img\examples\example_shortest_path_weighted.png").default}></img>
+    <img src={require("/static/img/examples/example_shortest_path_weighted.png").default}></img>
 </p>
 </pre>
 
