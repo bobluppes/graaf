@@ -15,7 +15,7 @@ build/perf/Graaf_perf --benchmark_out=benchmark_results.csv --benchmark_out_form
 
 def read_benchmark_files_into_df(dir=Path("../build"), skiprows=10):
     df = pd.DataFrame()
-    for file in dir.glob("*.csv"):
+    for file in dir.glob("**/*.csv"):
         df_new = pd.read_csv(file, skiprows=skiprows)
         df_new["filename"] = Path(file).stem
         df = pd.concat([df, df_new], ignore_index=True)
