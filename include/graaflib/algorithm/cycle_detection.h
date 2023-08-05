@@ -9,8 +9,8 @@ namespace graaf::algorithm {
  *
  * @param graph The graph to traverse.
  */
-template <typename V, typename E, graph_spec S>
-[[nodiscard]] bool has_cycle(const graph<V, E, S> &graph);
+template <typename V, typename E, graph_type T>
+[[nodiscard]] bool has_cycle(const graph<V, E, T> &graph);
 
 }  // namespace graaf::algorithm
 

@@ -1,7 +1,6 @@
-#include <graaflib/directed_graph.h>
+#include <graaflib/graph.h>
 #include <graaflib/properties/vertex_properties.h>
 #include <graaflib/types.h>
-#include <graaflib/undirected_graph.h>
 #include <gtest/gtest.h>
 
 namespace graaf::properties {

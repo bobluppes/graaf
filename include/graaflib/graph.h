@@ -21,9 +21,9 @@ inline constexpr bool is_primitive_numeric_v =
 
 }  // namespace detail
 
-enum class graph_spec { DIRECTED, UNDIRECTED };
+enum class graph_type { DIRECTED, UNDIRECTED };
 
-template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
+template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
 class graph {
  public:
   using vertex_t = VERTEX_T;
@@ -51,7 +51,7 @@ class graph {
    * @return bool - Return true for directed graphs otherwise false
    */
   [[nodiscard]] constexpr bool is_directed() const {
-    return GRAPH_SPEC_V == graph_spec::DIRECTED;
+    return GRAPH_TYPE_V == graph_type::DIRECTED;
   }
 
   /**
@@ -60,7 +60,7 @@ class graph {
    * @return bool - Returns true for undirected graphs otherwise false
    */
   [[nodiscard]] constexpr bool is_undirected() const {
-    return GRAPH_SPEC_V == graph_spec::UNDIRECTED;
+    return GRAPH_TYPE_V == graph_type::UNDIRECTED;
   }
 
   /**
@@ -213,17 +213,22 @@ class graph {
   edge_id_to_edge_t edges_{};
 
  private:
-  [[nodiscard]] virtual bool do_has_edge(
-      vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const noexcept = 0;
-  [[nodiscard]] virtual const edge_t& do_get_edge(
-      vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const = 0;
-  virtual void do_add_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs,
-                           edge_t edge) = 0;
-  virtual void do_remove_edge(vertex_id_t vertex_id_lhs,
-                              vertex_id_t vertex_id_rhs) = 0;
+  [[nodiscard]] bool do_has_edge(vertex_id_t vertex_id_lhs,
+                                 vertex_id_t vertex_id_rhs) const noexcept;
+  [[nodiscard]] const edge_t& do_get_edge(vertex_id_t vertex_id_lhs,
+                                          vertex_id_t vertex_id_rhs) const;
+  void do_add_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs,
+                   edge_t edge);
+  void do_remove_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs);
 
   size_t vertex_id_supplier_{0};
 };
+
+template <typename VERTEX_T, typename EDGE_T>
+using directed_graph = graph<VERTEX_T, EDGE_T, graph_type::DIRECTED>;
+
+template <typename VERTEX_T, typename EDGE_T>
+using undirected_graph = graph<VERTEX_T, EDGE_T, graph_type::UNDIRECTED>;
 
 }  // namespace graaf
 

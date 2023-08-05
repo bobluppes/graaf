@@ -1,5 +1,4 @@
-#include <graaflib/directed_graph.h>
-#include <graaflib/undirected_graph.h>
+#include <graaflib/graph.h>
 #include <gtest/gtest.h>
 
 #include <type_traits>

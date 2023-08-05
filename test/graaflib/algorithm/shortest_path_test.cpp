@@ -1,7 +1,6 @@
 #include <graaflib/algorithm/shortest_path.h>
-#include <graaflib/directed_graph.h>
+#include <graaflib/graph.h>
 #include <graaflib/types.h>
-#include <graaflib/undirected_graph.h>
 #include <gtest/gtest.h>
 
 namespace graaf::algorithm {

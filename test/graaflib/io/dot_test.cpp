@@ -1,8 +1,7 @@
 #include <fmt/core.h>
-#include <graaflib/directed_graph.h>
+#include <graaflib/graph.h>
 #include <graaflib/io/dot.h>
 #include <graaflib/types.h>
-#include <graaflib/undirected_graph.h>
 #include <gtest/gtest.h>
 
 #include <filesystem>
