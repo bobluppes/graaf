@@ -1,9 +1,9 @@
 #include <fmt/core.h>
 #include <graaflib/algorithm/graph_traversal.h>
 #include <graaflib/algorithm/shortest_path.h>
+#include <graaflib/graph.h>
 #include <graaflib/io/dot.h>
 #include <graaflib/types.h>
-#include <graaflib/graph.h>
 
 struct station {
   std::string name{};
@@ -141,11 +141,13 @@ void print_visited_vertices(const graaf::undirected_graph<station, road>& graph,
 int main() {
   const auto [graph, start, target]{create_graph_with_start_and_target()};
 
-  const auto weighted_shortest_path{graaf::algorithm::dijkstra_shortest_path(graph, start, target)};
+  const auto weighted_shortest_path{
+      graaf::algorithm::dijkstra_shortest_path(graph, start, target)};
   print_shortest_path(graph, weighted_shortest_path,
                       "example_weighted_graph.dot");
 
-  const auto unweighted_shortest_path{graaf::algorithm::bfs_shortest_path(graph, start, target)};
+  const auto unweighted_shortest_path{
+      graaf::algorithm::bfs_shortest_path(graph, start, target)};
   print_shortest_path(graph, unweighted_shortest_path,
                       "example_unwieghted_graph.dot");
 
