@@ -11,9 +11,9 @@ namespace detail {
 
 enum class vertex_color { UNVISITED, VISITED, NO_CYCLE };
 
-template <typename V, typename E, graph_type T>
+template <typename V, typename E>
 bool do_dfs_directed(
-    const graph<V, E, T>& graph,
+    const graph<V, E, graph_type::DIRECTED>& graph,
     std::unordered_map<vertex_id_t, vertex_color>& colored_vertices,
     vertex_id_t current) {
   colored_vertices[current] = vertex_color::VISITED;
@@ -31,9 +31,9 @@ bool do_dfs_directed(
   return false;
 }
 
-template <typename V, typename E, graph_type T>
+template <typename V, typename E>
 bool do_dfs_undirected(
-    const graph<V, E, T>& graph,
+    const graph<V, E, graph_type::UNDIRECTED>& graph,
     std::unordered_map<vertex_id_t, bool>& visited_vertices,
     std::unordered_map<vertex_id_t, vertex_id_t>& parent_vertices,
     vertex_id_t parent_vertex, vertex_id_t current) {
@@ -58,39 +58,37 @@ bool do_dfs_undirected(
 
 }  // namespace detail
 
-template <typename V, typename E, graph_type T>
-bool has_cycle(const graph<V, E, T>& graph) {
-  if (graph.is_directed()) {
-    std::unordered_map<vertex_id_t, detail::vertex_color> colored_vertices{};
+template <typename V, typename E>
+bool dfs_cycle_detection(const graph<V, E, graph_type::DIRECTED>& graph) {
+  std::unordered_map<vertex_id_t, detail::vertex_color> colored_vertices{};
 
-    for (const auto& vertex : graph.get_vertices()) {
-      using enum detail::vertex_color;
-      if (colored_vertices[vertex.first] == UNVISITED &&
-          detail::do_dfs_directed(graph, colored_vertices, vertex.first)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  if (graph.is_undirected()) {
-    // Number of vertices cannot be zero (in case if graph is empty)
-    if (graph.edge_count() >= graph.vertex_count() &&
-        graph.vertex_count() > 0) {
+  for (const auto& vertex : graph.get_vertices()) {
+    using enum detail::vertex_color;
+    if (colored_vertices[vertex.first] == UNVISITED &&
+        detail::do_dfs_directed(graph, colored_vertices, vertex.first)) {
       return true;
     }
+  }
 
-    std::unordered_map<vertex_id_t, bool> visited_vertices{};
-    std::unordered_map<vertex_id_t, vertex_id_t> parent_vertices{};
+  return false;
+}
 
-    for (const auto& vertex : graph.get_vertices()) {
-      if (!visited_vertices.contains(vertex.first) &&
-          detail::do_dfs_undirected(graph, visited_vertices, parent_vertices,
-                                    vertex.first,
-                                    parent_vertices[vertex.first])) {
-        return true;
-      }
+template <typename V, typename E>
+bool dfs_cycle_detection(const graph<V, E, graph_type::UNDIRECTED>& graph) {
+  // Number of vertices cannot be zero (in case if graph is empty)
+  if (graph.edge_count() >= graph.vertex_count() && graph.vertex_count() > 0) {
+    return true;
+  }
+
+  std::unordered_map<vertex_id_t, bool> visited_vertices{};
+  std::unordered_map<vertex_id_t, vertex_id_t> parent_vertices{};
+
+  for (const auto& vertex : graph.get_vertices()) {
+    if (!visited_vertices.contains(vertex.first) &&
+        detail::do_dfs_undirected(graph, visited_vertices, parent_vertices,
+                                  vertex.first,
+                                  parent_vertices[vertex.first])) {
+      return true;
     }
   }
 
