@@ -157,7 +157,7 @@ bool graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::do_has_edge(
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
-const graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::edge_t&
+const typename graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::edge_t&
 graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::do_get_edge(
     graaf::vertex_id_t vertex_id_lhs, graaf::vertex_id_t vertex_id_rhs) const {
   using enum graph_type;
