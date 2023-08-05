@@ -10,11 +10,11 @@
 namespace graaf::algorithm {
 
 template <typename WEIGHT_T>
-struct GraphPath {
+struct graph_path {
   std::list<vertex_id_t> vertices;
   WEIGHT_T total_weight;
 
-  bool operator==(const GraphPath& other) const {
+  bool operator==(const graph_path& other) const {
     return vertices == other.vertices && total_weight == other.total_weight;
   }
 };
@@ -29,7 +29,7 @@ struct GraphPath {
  */
 template <typename V, typename E, graph_type T,
           typename WEIGHT_T = decltype(get_weight(std::declval<E>()))>
-std::optional<GraphPath<WEIGHT_T>> bfs_shortest_path(
+std::optional<graph_path<WEIGHT_T>> bfs_shortest_path(
     const graph<V, E, T>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex);
 
@@ -45,7 +45,7 @@ std::optional<GraphPath<WEIGHT_T>> bfs_shortest_path(
  */
 template <typename V, typename E, graph_type T,
           typename WEIGHT_T = decltype(get_weight(std::declval<E>()))>
-std::optional<GraphPath<WEIGHT_T>> dijkstra_shortest_path(
+std::optional<graph_path<WEIGHT_T>> dijkstra_shortest_path(
     const graph<V, E, T>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex);
 
