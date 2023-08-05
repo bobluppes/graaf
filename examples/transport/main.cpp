@@ -30,8 +30,10 @@ graph_with_start_and_target create_graph_with_start_and_target() {
   const auto station_4{my_stations.add_vertex(station{"GAZilla", 11.3})};
   const auto station_5{my_stations.add_vertex(station{"Station 32", 73.12})};
   const auto station_6{my_stations.add_vertex(station{"Last stop", 0.5})};
-  const auto station_7{my_stations.add_vertex(station{"You won't reach it", 55.5})};
-  const auto station_8{my_stations.add_vertex(station{"Went for lunch break", 66.5})};
+  const auto station_7{
+      my_stations.add_vertex(station{"You won't reach it", 55.5})};
+  const auto station_8{
+      my_stations.add_vertex(station{"Went for lunch break", 66.5})};
 
   my_stations.add_edge(station_1, station_2, road{125});
   my_stations.add_edge(station_2, station_4, road{205});
@@ -46,40 +48,42 @@ graph_with_start_and_target create_graph_with_start_and_target() {
   return {my_stations, station_1, station_3};
 }
 
-void print_shortest_path(const graaf::undirected_graph<station, road>& graph,
-        const std::optional<graaf::algorithm::GraphPath<int>>& path,
-        const std::string& filepath) {
+void print_shortest_path(
+    const graaf::undirected_graph<station, road>& graph,
+    const std::optional<graaf::algorithm::GraphPath<int>>& path,
+    const std::string& filepath) {
+  auto shortest_path{path.value()};
+  std::unordered_set<graaf::edge_id_t, graaf::edge_id_hash>
+      edges_on_shortest_path{};
 
-    auto shortest_path{path.value()};
-    std::unordered_set<graaf::edge_id_t, graaf::edge_id_hash>
-        edges_on_shortest_path{};
+  graaf::vertex_id_t prev{shortest_path.vertices.front()};
+  shortest_path.vertices.pop_front();
+  for (const auto current : shortest_path.vertices) {
+    edges_on_shortest_path.insert(std::make_pair(prev, current));
+    prev = current;
+  }
 
-    graaf::vertex_id_t prev{shortest_path.vertices.front()};
-    shortest_path.vertices.pop_front();
-    for (const auto current : shortest_path.vertices) {
-         edges_on_shortest_path.insert(std::make_pair(prev, current));
-         prev = current;
-    }
-
-    const auto vertex_writer{
-        [](graaf::vertex_id_t vertex_id, station vertex) -> std::string {
+  const auto vertex_writer{
+      [](graaf::vertex_id_t vertex_id, station vertex) -> std::string {
         const auto style{"filled"};
-        return fmt::format("label=\"{}\", style={}, color=black, fontcolor=black, fillcolor=mediumspringgreen",
-                            vertex.name, style);
-    }};
+        return fmt::format(
+            "label=\"{}\", style={}, color=black, fontcolor=black, "
+            "fillcolor=mediumspringgreen",
+            vertex.name, style);
+      }};
 
-    const auto edge_writer{[&edges_on_shortest_path](
-                                const graaf::edge_id_t& edge_id,
-                                const auto& edge) -> std::string {
-        const auto style{"solid"};
-        if (edges_on_shortest_path.contains({edge_id.first, edge_id.second}) ||
-            edges_on_shortest_path.contains({edge_id.second, edge_id.first})) {
-            return fmt::format("label=\"{}\", style={}, color=red, fontcolor=black",
-                                edge->length, style);
-        }
-        return fmt::format("label=\"{}\", style={}, color=black, fontcolor=black",
+  const auto edge_writer{[&edges_on_shortest_path](
+                             const graaf::edge_id_t& edge_id,
+                             const auto& edge) -> std::string {
+    const auto style{"solid"};
+    if (edges_on_shortest_path.contains({edge_id.first, edge_id.second}) ||
+        edges_on_shortest_path.contains({edge_id.second, edge_id.first})) {
+      return fmt::format("label=\"{}\", style={}, color=red, fontcolor=black",
+                         edge->length, style);
+    }
+    return fmt::format("label=\"{}\", style={}, color=black, fontcolor=black",
                        edge->length, style);
-    }};
+  }};
 
   const std::filesystem::path output{filepath};
   graaf::io::to_dot(graph, output, vertex_writer, edge_writer);
@@ -105,8 +109,7 @@ void print_visited_vertices(const graaf::undirected_graph<station, road>& graph,
   for (const auto current : graph.get_edges()) {
     const auto from = current.first.first;
     const auto to = current.first.second;
-    if (seen.contains(from) && seen.contains(to)) 
-        seen_edges.insert({from, to});
+    if (seen.contains(from) && seen.contains(to)) seen_edges.insert({from, to});
   }
 
   const auto vertex_writer{
@@ -114,9 +117,10 @@ void print_visited_vertices(const graaf::undirected_graph<station, road>& graph,
         const auto style{"filled"};
 
         return fmt::format(
-            "label=\"{}\", style={}, color=black, fontcolor=black, fillcolor=mediumspringgreen",
+            "label=\"{}\", style={}, color=black, fontcolor=black, "
+            "fillcolor=mediumspringgreen",
             vertex.name, style);
-  }};
+      }};
 
   const auto edge_writer{[&seen_edges](const graaf::edge_id_t& edge_id,
                                        const auto& edge) -> std::string {
@@ -124,8 +128,8 @@ void print_visited_vertices(const graaf::undirected_graph<station, road>& graph,
 
     if (seen_edges.contains({edge_id.first, edge_id.second}) ||
         seen_edges.contains({edge_id.second, edge_id.first}))
-            return fmt::format("label=\"{}\", style={}, color=red, fontcolor=black",
-                            edge->length, style);
+      return fmt::format("label=\"{}\", style={}, color=red, fontcolor=black",
+                         edge->length, style);
     return fmt::format("label=\"{}\", style={}, color=black, fontcolor=black",
                        edge->length, style);
   }};
@@ -140,15 +144,18 @@ int main() {
   const auto weighted_shortest_path{graaf::algorithm::get_shortest_path<
       graaf::algorithm::edge_strategy::WEIGHTED, station, road,
       graaf::graph_spec::UNDIRECTED, int>(graph, start, target)};
-  print_shortest_path(graph, weighted_shortest_path, "example_weighted_graph.dot");
+  print_shortest_path(graph, weighted_shortest_path,
+                      "example_weighted_graph.dot");
 
   const auto unweighted_shortest_path{graaf::algorithm::get_shortest_path<
       graaf::algorithm::edge_strategy::UNWEIGHTED, station, road,
       graaf::graph_spec::UNDIRECTED, int>(graph, start, target)};
-  print_shortest_path(graph, unweighted_shortest_path, "example_unwieghted_graph.dot");
+  print_shortest_path(graph, unweighted_shortest_path,
+                      "example_unwieghted_graph.dot");
 
   seen_vertices_t seen_vertices{};
   graaf::algorithm::traverse<graaf::algorithm::search_strategy::BFS>(
       graph, start, record_vertex_callback{seen_vertices});
-  print_visited_vertices(graph, seen_vertices, "example_traverse_BFS_graph.dot");
+  print_visited_vertices(graph, seen_vertices,
+                         "example_traverse_BFS_graph.dot");
 }
