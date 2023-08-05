@@ -1,5 +1,5 @@
 #include <benchmark/benchmark.h>
-#include <graaflib/directed_graph.h>
+#include <graaflib/graph.h>
 
 #include <vector>
 

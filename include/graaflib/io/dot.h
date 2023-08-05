@@ -26,7 +26,7 @@ const auto default_vertex_writer{
 const auto default_edge_writer{
     [](const edge_id_t& /*edge_id*/, const auto& edge) -> std::string {
       // TODO(bluppes): replace with std::format once Clang supports it
-      return "label=\"" + std::to_string(edge->get_weight()) + "\"";
+      return "label=\"" + std::to_string(get_weight(edge)) + "\"";
     }};
 }  // namespace detail
 
@@ -44,16 +44,16 @@ const auto default_edge_writer{
  * implementations are provided for primitive numeric types.
  * @param path Path to the output dot file.
  */
-template <typename V, typename E, graph_spec S,
+template <typename V, typename E, graph_type T,
           typename VERTEX_WRITER_T = decltype(detail::default_vertex_writer<V>),
           typename EDGE_WRITER_T = decltype(detail::default_edge_writer)>
   requires std::is_invocable_r_v<std::string, const VERTEX_WRITER_T&,
                                  vertex_id_t, const V&> &&
            std::is_invocable_r_v<std::string, const EDGE_WRITER_T&,
                                  const graaf::edge_id_t&,
-                                 const typename graph<V, E, S>::edge_t&>
+                                 const typename graph<V, E, T>::edge_t&>
 void to_dot(
-    const graph<V, E, S>& graph, const std::filesystem::path& path,
+    const graph<V, E, T>& graph, const std::filesystem::path& path,
     const VERTEX_WRITER_T& vertex_writer = detail::default_vertex_writer<V>,
     const EDGE_WRITER_T& edge_writer = detail::default_edge_writer);
 

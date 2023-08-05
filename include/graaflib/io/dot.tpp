@@ -18,9 +18,9 @@ namespace detail {
  * @param spec The graph specialization
  * @return constexpr const char* String with the correct dot keyword
  */
-constexpr const char* spec_to_string(const graph_spec& spec) {
-  switch (spec) {
-    using enum graph_spec;
+constexpr const char* graph_type_to_string(const graph_type& type) {
+  switch (type) {
+    using enum graph_type;
     case DIRECTED:
       return "digraph";
       break;
@@ -44,9 +44,9 @@ constexpr const char* spec_to_string(const graph_spec& spec) {
  * @param spec The graph specialization
  * @return constexpr const char* String with the correct dot edge specifier
  */
-constexpr const char* spec_to_edge_specifier(const graph_spec& spec) {
-  switch (spec) {
-    using enum graph_spec;
+constexpr const char* graph_type_to_edge_specifier(const graph_type& type) {
+  switch (type) {
+    using enum graph_type;
     case DIRECTED:
       return "->";
       break;
@@ -62,14 +62,14 @@ constexpr const char* spec_to_edge_specifier(const graph_spec& spec) {
 }
 }  // namespace detail
 
-template <typename V, typename E, graph_spec S, typename VERTEX_WRITER_T,
+template <typename V, typename E, graph_type T, typename VERTEX_WRITER_T,
           typename EDGE_WRITER_T>
   requires std::is_invocable_r_v<std::string, const VERTEX_WRITER_T&,
                                  vertex_id_t, const V&> &&
            std::is_invocable_r_v<std::string, const EDGE_WRITER_T&,
                                  const graaf::edge_id_t&,
-                                 const typename graph<V, E, S>::edge_t&>
-void to_dot(const graph<V, E, S>& graph, const std::filesystem::path& path,
+                                 const typename graph<V, E, T>::edge_t&>
+void to_dot(const graph<V, E, T>& graph, const std::filesystem::path& path,
             const VERTEX_WRITER_T& vertex_writer,
             const EDGE_WRITER_T& edge_writer) {
   std::ofstream dot_file{path};
@@ -78,14 +78,14 @@ void to_dot(const graph<V, E, S>& graph, const std::filesystem::path& path,
       [&dot_file](const std::string& line) { dot_file << line << std::endl; }};
 
   // TODO(bluppes): replace with std::format once Clang supports it
-  append_line(std::string(detail::spec_to_string(S)) + " {");
+  append_line(std::string(detail::graph_type_to_string(T)) + " {");
 
   for (const auto& [vertex_id, vertex] : graph.get_vertices()) {
     append_line("\t" + std::to_string(vertex_id) + " [" +
                 vertex_writer(vertex_id, vertex) + "];");
   }
 
-  const auto edge_specifier{detail::spec_to_edge_specifier(S)};
+  const auto edge_specifier{detail::graph_type_to_edge_specifier(T)};
   for (const auto& [edge_id, edge] : graph.get_edges()) {
     const auto [source_id, target_id]{edge_id};
     append_line("\t" + std::to_string(source_id) + " " + edge_specifier + " " +

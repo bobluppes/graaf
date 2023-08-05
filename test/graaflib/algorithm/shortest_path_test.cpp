@@ -1,7 +1,6 @@
 #include <graaflib/algorithm/shortest_path.h>
-#include <graaflib/directed_graph.h>
+#include <graaflib/graph.h>
 #include <graaflib/types.h>
-#include <graaflib/undirected_graph.h>
 #include <gtest/gtest.h>
 
 namespace graaf::algorithm {
@@ -17,7 +16,7 @@ using graph_types =
 TYPED_TEST_SUITE(TypedShortestPathTest, graph_types);
 }  // namespace
 
-TYPED_TEST(TypedShortestPathTest, UnweightedMinimalShortestPath) {
+TYPED_TEST(TypedShortestPathTest, BfsMinimalShortestPath) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   graph_t graph{};
@@ -25,15 +24,14 @@ TYPED_TEST(TypedShortestPathTest, UnweightedMinimalShortestPath) {
   const auto vertex_1{graph.add_vertex(10)};
 
   // WHEN
-  const auto path =
-      get_shortest_path<edge_strategy::UNWEIGHTED>(graph, vertex_1, vertex_1);
+  const auto path = bfs_shortest_path(graph, vertex_1, vertex_1);
 
   // THEN
-  const GraphPath<int> expected_path{{vertex_1}, 1};
+  const graph_path<int> expected_path{{vertex_1}, 1};
   ASSERT_EQ(path, expected_path);
 }
 
-TYPED_TEST(TypedShortestPathTest, UnweightedNoAvailablePath) {
+TYPED_TEST(TypedShortestPathTest, BfsNoAvailablePath) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   graph_t graph{};
@@ -42,14 +40,13 @@ TYPED_TEST(TypedShortestPathTest, UnweightedNoAvailablePath) {
   const auto vertex_2{graph.add_vertex(20)};
 
   // WHEN
-  const auto path =
-      get_shortest_path<edge_strategy::UNWEIGHTED>(graph, vertex_1, vertex_2);
+  const auto path = bfs_shortest_path(graph, vertex_1, vertex_2);
 
   // THEN
   ASSERT_FALSE(path.has_value());
 }
 
-TYPED_TEST(TypedShortestPathTest, UnweightedSimpleShortestPath) {
+TYPED_TEST(TypedShortestPathTest, BfsSimpleShortestPath) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   graph_t graph{};
@@ -62,15 +59,14 @@ TYPED_TEST(TypedShortestPathTest, UnweightedSimpleShortestPath) {
   graph.add_edge(vertex_1, vertex_2, 100);
 
   // WHEN
-  const auto path =
-      get_shortest_path<edge_strategy::UNWEIGHTED>(graph, vertex_1, vertex_2);
+  const auto path = bfs_shortest_path(graph, vertex_1, vertex_2);
 
   // THEN
-  const GraphPath<int> expected_path{{vertex_1, vertex_2}, 2};
+  const graph_path<int> expected_path{{vertex_1, vertex_2}, 2};
   ASSERT_EQ(path, expected_path);
 }
 
-TYPED_TEST(TypedShortestPathTest, UnweightedMoreComplexShortestPath) {
+TYPED_TEST(TypedShortestPathTest, BfsMoreComplexShortestPath) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   graph_t graph{};
@@ -91,15 +87,14 @@ TYPED_TEST(TypedShortestPathTest, UnweightedMoreComplexShortestPath) {
   graph.add_edge(vertex_3, vertex_5, 600);
 
   // WHEN
-  const auto path =
-      get_shortest_path<edge_strategy::UNWEIGHTED>(graph, vertex_1, vertex_5);
+  const auto path = bfs_shortest_path(graph, vertex_1, vertex_5);
 
   // THEN
-  const GraphPath<int> expected_path{{vertex_1, vertex_3, vertex_5}, 3};
+  const graph_path<int> expected_path{{vertex_1, vertex_3, vertex_5}, 3};
   ASSERT_EQ(path, expected_path);
 }
 
-TYPED_TEST(TypedShortestPathTest, UnweightedCyclicShortestPath) {
+TYPED_TEST(TypedShortestPathTest, BfsCyclicShortestPath) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   graph_t graph{};
@@ -119,16 +114,15 @@ TYPED_TEST(TypedShortestPathTest, UnweightedCyclicShortestPath) {
   graph.add_edge(vertex_3, vertex_5, 400);
 
   // WHEN
-  const auto path =
-      get_shortest_path<edge_strategy::UNWEIGHTED>(graph, vertex_1, vertex_5);
+  const auto path = bfs_shortest_path(graph, vertex_1, vertex_5);
 
   // THEN
-  const GraphPath<int> expected_path{{vertex_1, vertex_2, vertex_3, vertex_5},
-                                     4};
+  const graph_path<int> expected_path{{vertex_1, vertex_2, vertex_3, vertex_5},
+                                      4};
   ASSERT_EQ(path, expected_path);
 }
 
-TEST(ShortestPathTest, UnweightedDirectedrWrongDirectionShortestPath) {
+TEST(ShortestPathTest, BfsDirectedrWrongDirectionShortestPath) {
   // GIVEN
   directed_graph<int, int> graph{};
 
@@ -146,11 +140,10 @@ TEST(ShortestPathTest, UnweightedDirectedrWrongDirectionShortestPath) {
   graph.add_edge(vertex_4, vertex_3, 500);
 
   // WHEN
-  const auto path =
-      get_shortest_path<edge_strategy::UNWEIGHTED>(graph, vertex_1, vertex_5);
+  const auto path = bfs_shortest_path(graph, vertex_1, vertex_5);
 
   // THEN
-  const GraphPath<int> expected_path{
+  const graph_path<int> expected_path{
       {vertex_1, vertex_2, vertex_4, vertex_3, vertex_5}, 5};
   ASSERT_EQ(path, expected_path);
 }
@@ -167,7 +160,7 @@ class my_weighted_edge : public weighted_edge<T> {
 };
 
 template <typename T>
-struct WeightedShortestPathTest : public testing::Test {
+struct DijkstraShortestPathTest : public testing::Test {
   using graph_t = typename T::first_type;
   using edge_t = typename T::second_type;
 };
@@ -215,44 +208,29 @@ using weighted_graph_types = testing::Types<
     std::pair<undirected_graph<int, my_weighted_edge<long double>>,
               my_weighted_edge<long double>>>;
 
-TYPED_TEST_SUITE(WeightedShortestPathTest, weighted_graph_types);
+TYPED_TEST_SUITE(DijkstraShortestPathTest, weighted_graph_types);
 
-// Type traits to extract the weight type from both classes and primitives
-template <typename T>
-struct extract_weight {
-  using type = T;
-};
-
-template <typename T>
-  requires requires { typename T::weight_t; }
-struct extract_weight<T> {
-  using type = typename T::weight_t;
-};
-
-TYPED_TEST(WeightedShortestPathTest, WeightedMinimalShortestPath) {
+TYPED_TEST(DijkstraShortestPathTest, DijkstraMinimalShortestPath) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
-  using weight_t = typename extract_weight<edge_t>::type;
+  using weight_t = decltype(get_weight(std::declval<edge_t>()));
 
   graph_t graph{};
 
   const auto vertex_id_1{graph.add_vertex(10)};
 
   // WHEN;
-  const auto path = get_shortest_path<edge_strategy::WEIGHTED>(
-      graph, vertex_id_1, vertex_id_1);
+  const auto path = dijkstra_shortest_path(graph, vertex_id_1, vertex_id_1);
 
   // THEN
-  const GraphPath<weight_t> expected_path{{vertex_id_1}, 0};
+  const graph_path<weight_t> expected_path{{vertex_id_1}, 0};
   ASSERT_EQ(path, expected_path);
 }
 
-TYPED_TEST(WeightedShortestPathTest, WeightedNoAvailablePath) {
+TYPED_TEST(DijkstraShortestPathTest, DijkstraNoAvailablePath) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
-  using edge_t = typename TestFixture::edge_t;
-  using weight_t = typename extract_weight<edge_t>::type;
 
   graph_t graph{};
 
@@ -260,18 +238,17 @@ TYPED_TEST(WeightedShortestPathTest, WeightedNoAvailablePath) {
   const auto vertex_id_2{graph.add_vertex(20)};
 
   // WHEN;
-  const auto path = get_shortest_path<edge_strategy::WEIGHTED>(
-      graph, vertex_id_1, vertex_id_2);
+  const auto path = dijkstra_shortest_path(graph, vertex_id_1, vertex_id_2);
 
   // THEN
   ASSERT_FALSE(path.has_value());
 }
 
-TYPED_TEST(WeightedShortestPathTest, WeightedSimpleShortestPath) {
+TYPED_TEST(DijkstraShortestPathTest, DijkstraSimpleShortestPath) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
-  using weight_t = typename extract_weight<edge_t>::type;
+  using weight_t = decltype(get_weight(std::declval<edge_t>()));
 
   graph_t graph{};
 
@@ -280,19 +257,18 @@ TYPED_TEST(WeightedShortestPathTest, WeightedSimpleShortestPath) {
   graph.add_edge(vertex_id_1, vertex_id_2, edge_t{static_cast<weight_t>(3)});
 
   // WHEN
-  const auto path = get_shortest_path<edge_strategy::WEIGHTED>(
-      graph, vertex_id_1, vertex_id_2);
+  const auto path = dijkstra_shortest_path(graph, vertex_id_1, vertex_id_2);
 
   // THEN
-  const GraphPath<weight_t> expected_path{{vertex_id_1, vertex_id_2}, 3};
+  const graph_path<weight_t> expected_path{{vertex_id_1, vertex_id_2}, 3};
   ASSERT_EQ(path, expected_path);
 }
 
-TYPED_TEST(WeightedShortestPathTest, WeightedMoreComplexShortestPath) {
+TYPED_TEST(DijkstraShortestPathTest, DijkstraMoreComplexShortestPath) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
-  using weight_t = typename extract_weight<edge_t>::type;
+  using weight_t = decltype(get_weight(std::declval<edge_t>()));
 
   graph_t graph{};
 
@@ -310,20 +286,19 @@ TYPED_TEST(WeightedShortestPathTest, WeightedMoreComplexShortestPath) {
   graph.add_edge(vertex_id_3, vertex_id_5, edge_t{static_cast<weight_t>(6)});
 
   // WHEN
-  const auto path = get_shortest_path<edge_strategy::WEIGHTED>(
-      graph, vertex_id_1, vertex_id_5);
+  const auto path = dijkstra_shortest_path(graph, vertex_id_1, vertex_id_5);
 
   // THEN
-  const GraphPath<weight_t> expected_path{
+  const graph_path<weight_t> expected_path{
       {vertex_id_1, vertex_id_3, vertex_id_5}, 9};
   ASSERT_EQ(path, expected_path);
 }
 
-TYPED_TEST(WeightedShortestPathTest, WeightedCyclicShortestPath) {
+TYPED_TEST(DijkstraShortestPathTest, DijkstraCyclicShortestPath) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
-  using weight_t = typename extract_weight<edge_t>::type;
+  using weight_t = decltype(get_weight(std::declval<edge_t>()));
 
   graph_t graph{};
 
@@ -340,11 +315,10 @@ TYPED_TEST(WeightedShortestPathTest, WeightedCyclicShortestPath) {
   graph.add_edge(vertex_id_3, vertex_id_5, edge_t{static_cast<weight_t>(5)});
 
   // WHEN
-  const auto path = get_shortest_path<edge_strategy::WEIGHTED>(
-      graph, vertex_id_1, vertex_id_5);
+  const auto path = dijkstra_shortest_path(graph, vertex_id_1, vertex_id_5);
 
   // THEN
-  const GraphPath<weight_t> expected_path{
+  const graph_path<weight_t> expected_path{
       {vertex_id_1, vertex_id_2, vertex_id_3, vertex_id_5}, 8};
   ASSERT_EQ(path, expected_path);
 }

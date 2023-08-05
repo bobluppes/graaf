@@ -1,8 +1,7 @@
 #include <fmt/core.h>
-#include <graaflib/directed_graph.h>
+#include <graaflib/graph.h>
 #include <graaflib/io/dot.h>
 #include <graaflib/types.h>
-#include <graaflib/undirected_graph.h>
 #include <gtest/gtest.h>
 
 #include <filesystem>
@@ -21,7 +20,7 @@ const auto int_vertex_writer{
 
 const auto int_edge_writer{
     [](const edge_id_t& /*edge_id*/, const auto& edge) -> std::string {
-      return fmt::format("label=\"{}\"", std::to_string(edge->get_weight()));
+      return fmt::format("label=\"{}\"", std::to_string(get_weight(edge)));
     }};
 
 template <typename T>
@@ -211,7 +210,7 @@ TEST(DotTest, UserProvidedVertexAndEdgeClass) {
         return fmt::format("{}, {}", vertex.numeric_data, vertex.string_data);
       }};
   const auto edge_writer{[](const edge_id_t& /*edge_id*/, const auto& edge) {
-    return fmt::format("{}, {}", edge->numeric_data, edge->string_data);
+    return fmt::format("{}, {}", edge.numeric_data, edge.string_data);
   }};
 
   // WHEN

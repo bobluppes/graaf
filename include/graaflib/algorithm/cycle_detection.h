@@ -5,12 +5,22 @@
 namespace graaf::algorithm {
 
 /*
- * @brief Traverses the graph and checks for cycles.
+ * @brief Traverses a directed graph and checks for cycles.
  *
- * @param graph The graph to traverse.
+ * @param graph The directed graph to traverse.
  */
-template <typename V, typename E, graph_spec S>
-[[nodiscard]] bool has_cycle(const graph<V, E, S> &graph);
+template <typename V, typename E>
+[[nodiscard]] bool dfs_cycle_detection(
+    const graph<V, E, graph_type::DIRECTED> &graph);
+
+/*
+ * @brief Traverses an undirected graph and checks for cycles.
+ *
+ * @param graph The undirected graph to traverse.
+ */
+template <typename V, typename E>
+[[nodiscard]] bool dfs_cycle_detection(
+    const graph<V, E, graph_type::UNDIRECTED> &graph);
 
 }  // namespace graaf::algorithm
 
