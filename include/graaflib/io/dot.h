@@ -26,7 +26,7 @@ const auto default_vertex_writer{
 const auto default_edge_writer{
     [](const edge_id_t& /*edge_id*/, const auto& edge) -> std::string {
       // TODO(bluppes): replace with std::format once Clang supports it
-      return "label=\"" + std::to_string(edge->get_weight()) + "\"";
+      return "label=\"" + std::to_string(get_weight(edge)) + "\"";
     }};
 }  // namespace detail
 

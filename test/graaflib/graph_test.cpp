@@ -210,13 +210,12 @@ TYPED_TEST(GraphTest, ConstGetter) {
   const auto vertex_id_2 = graph.add_vertex(2);
   graph.add_edge(vertex_id_1, vertex_id_2, 100);
 
-  const auto test_getters_on_const_graph{
-      [vertex_id_1, vertex_id_2](const graph_t &const_graph) {
-        EXPECT_EQ(const_graph.get_vertex(vertex_id_1), 1);
-        EXPECT_EQ(const_graph.get_vertex(vertex_id_2), 2);
-        EXPECT_EQ(const_graph.get_edge(vertex_id_1, vertex_id_2)->get_weight(),
-                  100);
-      }};
+  const auto test_getters_on_const_graph{[vertex_id_1, vertex_id_2](
+                                             const graph_t &const_graph) {
+    EXPECT_EQ(const_graph.get_vertex(vertex_id_1), 1);
+    EXPECT_EQ(const_graph.get_vertex(vertex_id_2), 2);
+    EXPECT_EQ(get_weight(const_graph.get_edge(vertex_id_1, vertex_id_2)), 100);
+  }};
 
   ASSERT_NO_THROW(test_getters_on_const_graph(graph));
 }

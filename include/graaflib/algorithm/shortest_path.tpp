@@ -96,7 +96,7 @@ std::optional<GraphPath<WEIGHT_T>> get_weighted_shortest_path(
 
     for (const auto& neighbor : graph.get_neighbors(current.id)) {
       WEIGHT_T distance = current.dist_from_start +
-                          graph.get_edge(current.id, neighbor)->get_weight();
+                          get_weight(graph.get_edge(current.id, neighbor));
 
       if (!vertex_info.contains(neighbor) ||
           distance < vertex_info[neighbor].dist_from_start) {

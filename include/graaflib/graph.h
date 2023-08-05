@@ -1,25 +1,13 @@
 #pragma once
 
+#include <graaflib/edge.h>
 #include <graaflib/types.h>
 
 #include <memory>
-#include <type_traits>
 #include <unordered_map>
 #include <unordered_set>
 
 namespace graaf {
-
-namespace detail {
-
-// Type trait to check if the type is a primitive numeric type
-template <typename EDGE_T>
-struct is_primitive_numeric;
-
-template <typename EDGE_T>
-inline constexpr bool is_primitive_numeric_v =
-    is_primitive_numeric<EDGE_T>::value;
-
-}  // namespace detail
 
 enum class graph_type { DIRECTED, UNDIRECTED };
 
@@ -27,18 +15,7 @@ template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
 class graph {
  public:
   using vertex_t = VERTEX_T;
-
-  /**
-   * To provide a common interface for weighted edges, user provided edge
-   * classes can publically derive from weighted edge and optionally override
-   * the get_weight method. If a primitive numeric type is passes as the edge
-   * type, it is internally wrapped in a primitive_numeric_adapter, which
-   * derives from weighted_edge.
-   */
-  using edge_t =
-      std::conditional_t<detail::is_primitive_numeric_v<EDGE_T>,
-                         std::shared_ptr<primitive_numeric_adapter<EDGE_T>>,
-                         std::shared_ptr<EDGE_T>>;
+  using edge_t = EDGE_T;
 
   using vertices_t = std::unordered_set<vertex_id_t>;
 

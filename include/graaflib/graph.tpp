@@ -7,11 +7,6 @@ namespace graaf {
 
 namespace detail {
 
-template <typename T>
-struct is_primitive_numeric
-    : std::integral_constant<bool,
-                             std::is_arithmetic_v<T> && !std::is_class_v<T>> {};
-
 inline std::pair<vertex_id_t, vertex_id_t> make_sorted_pair(
     vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) {
   if (vertex_id_lhs < vertex_id_rhs) {
@@ -136,9 +131,7 @@ void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_edge(vertex_id_t vertex_id_lhs,
         "Vertices with ID [" + std::to_string(vertex_id_lhs) + "] and [" +
         std::to_string(vertex_id_rhs) + "] not found in graph."};
   }
-  do_add_edge(vertex_id_lhs, vertex_id_rhs,
-              std::make_shared<typename edge_t::element_type>(
-                  std::forward<EDGE_T>(edge)));
+  do_add_edge(vertex_id_lhs, vertex_id_rhs, std::forward<EDGE_T>(edge));
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>

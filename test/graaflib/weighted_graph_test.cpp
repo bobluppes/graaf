@@ -28,7 +28,6 @@ using weighted_graph_types = testing::Types<
     /**
      * Primitive edge type directed graph
      */
-    std::pair<directed_graph<int, bool>, bool>,
     std::pair<directed_graph<int, int>, int>,
     std::pair<directed_graph<int, unsigned long>, unsigned long>,
     std::pair<directed_graph<int, float>, float>,
@@ -37,8 +36,6 @@ using weighted_graph_types = testing::Types<
     /**
      * Non primitive weighted edge type directed graph
      */
-    std::pair<directed_graph<int, my_weighted_edge<bool>>,
-              my_weighted_edge<bool>>,
     std::pair<directed_graph<int, my_weighted_edge<int>>,
               my_weighted_edge<int>>,
     std::pair<directed_graph<int, my_weighted_edge<unsigned long>>,
@@ -51,7 +48,6 @@ using weighted_graph_types = testing::Types<
     /**
      * Primitive edge type undirected graph
      */
-    std::pair<undirected_graph<int, bool>, bool>,
     std::pair<undirected_graph<int, int>, int>,
     std::pair<undirected_graph<int, unsigned long>, unsigned long>,
     std::pair<undirected_graph<int, float>, float>,
@@ -60,8 +56,6 @@ using weighted_graph_types = testing::Types<
     /**
      * Non primitive weighted edge type undirected graph
      */
-    std::pair<undirected_graph<int, my_weighted_edge<bool>>,
-              my_weighted_edge<bool>>,
     std::pair<undirected_graph<int, my_weighted_edge<int>>,
               my_weighted_edge<int>>,
     std::pair<undirected_graph<int, my_weighted_edge<unsigned long>>,
@@ -73,23 +67,11 @@ using weighted_graph_types = testing::Types<
 
 TYPED_TEST_SUITE(WeightedGraphTest, weighted_graph_types);
 
-// Type traits to extract the weight type from both classes and primitives
-template <typename T>
-struct extract_weight {
-  using type = T;
-};
-
-template <typename T>
-  requires requires { typename T::weight_t; }
-struct extract_weight<T> {
-  using type = typename T::weight_t;
-};
-
 TYPED_TEST(WeightedGraphTest, AddWeightedEdge) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
-  using weight_t = typename extract_weight<edge_t>::type;
+  using weight_t = decltype(get_weight(std::declval<edge_t>()));
 
   graph_t graph{};
 
@@ -101,16 +83,16 @@ TYPED_TEST(WeightedGraphTest, AddWeightedEdge) {
 
   // THEN
   ASSERT_TRUE(graph.has_edge(vertex_id_1, vertex_id_2));
-  ASSERT_EQ(graph.get_edge(vertex_id_1, vertex_id_2)->get_weight(),
+  ASSERT_EQ(get_weight(graph.get_edge(vertex_id_1, vertex_id_2)),
             static_cast<weight_t>(3));
 }
 
 /**
- * We do not override the virtual get_weight method such that each edge has a
- * unit weight.
+ * We do not inherit from weighted_edge, nor do we use an arithmetic type, such
+ * that each edge has a unit weight.
  */
 template <typename T>
-class my_unit_weighted_edge : public weighted_edge<T> {};
+class my_unit_weighted_edge {};
 
 template <typename T>
 struct UnitWeightedGraphTest : public testing::Test {
@@ -154,7 +136,7 @@ TYPED_TEST(UnitWeightedGraphTest, AddUnitWeightedEdge) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
-  using weight_t = typename extract_weight<edge_t>::type;
+  using weight_t = decltype(get_weight(std::declval<edge_t>()));
 
   graph_t graph{};
 
@@ -168,7 +150,7 @@ TYPED_TEST(UnitWeightedGraphTest, AddUnitWeightedEdge) {
   ASSERT_TRUE(graph.has_edge(vertex_id_1, vertex_id_2));
 
   // By default each edge has a unit weight
-  ASSERT_EQ(graph.get_edge(vertex_id_1, vertex_id_2)->get_weight(),
+  ASSERT_EQ(get_weight(graph.get_edge(vertex_id_1, vertex_id_2)),
             static_cast<weight_t>(1));
 }
 
@@ -193,8 +175,6 @@ using unweighted_graph_types = testing::Types<
     /**
      * Unweighted edge type directed graph
      */
-    std::pair<directed_graph<int, my_unweighted_edge<bool>>,
-              my_unweighted_edge<bool>>,
     std::pair<directed_graph<int, my_unweighted_edge<int>>,
               my_unweighted_edge<int>>,
     std::pair<directed_graph<int, my_unweighted_edge<unsigned long>>,
@@ -207,8 +187,6 @@ using unweighted_graph_types = testing::Types<
     /**
      * Unweighted edge type undirected graph
      */
-    std::pair<undirected_graph<int, my_unweighted_edge<bool>>,
-              my_unweighted_edge<bool>>,
     std::pair<undirected_graph<int, my_unweighted_edge<int>>,
               my_unweighted_edge<int>>,
     std::pair<undirected_graph<int, my_unweighted_edge<unsigned long>>,
@@ -224,7 +202,7 @@ TYPED_TEST(UnweightedGraphTest, AddUnweightedEdge) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
-  using weight_t = typename extract_weight<edge_t>::type;
+  using weight_t = decltype(get_weight(std::declval<edge_t>()));
 
   graph_t graph{};
 
@@ -238,7 +216,7 @@ TYPED_TEST(UnweightedGraphTest, AddUnweightedEdge) {
   ASSERT_TRUE(graph.has_edge(vertex_id_1, vertex_id_2));
 
   // By default each edge has a unit weight
-  ASSERT_EQ(graph.get_edge(vertex_id_1, vertex_id_2)->val,
+  ASSERT_EQ(graph.get_edge(vertex_id_1, vertex_id_2).val,
             static_cast<weight_t>(42));
 }
 

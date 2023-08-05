@@ -216,23 +216,11 @@ using weighted_graph_types = testing::Types<
 
 TYPED_TEST_SUITE(WeightedShortestPathTest, weighted_graph_types);
 
-// Type traits to extract the weight type from both classes and primitives
-template <typename T>
-struct extract_weight {
-  using type = T;
-};
-
-template <typename T>
-  requires requires { typename T::weight_t; }
-struct extract_weight<T> {
-  using type = typename T::weight_t;
-};
-
 TYPED_TEST(WeightedShortestPathTest, WeightedMinimalShortestPath) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
-  using weight_t = typename extract_weight<edge_t>::type;
+  using weight_t = decltype(get_weight(std::declval<edge_t>()));
 
   graph_t graph{};
 
@@ -251,7 +239,6 @@ TYPED_TEST(WeightedShortestPathTest, WeightedNoAvailablePath) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
-  using weight_t = typename extract_weight<edge_t>::type;
 
   graph_t graph{};
 
@@ -270,7 +257,7 @@ TYPED_TEST(WeightedShortestPathTest, WeightedSimpleShortestPath) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
-  using weight_t = typename extract_weight<edge_t>::type;
+  using weight_t = decltype(get_weight(std::declval<edge_t>()));
 
   graph_t graph{};
 
@@ -291,7 +278,7 @@ TYPED_TEST(WeightedShortestPathTest, WeightedMoreComplexShortestPath) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
-  using weight_t = typename extract_weight<edge_t>::type;
+  using weight_t = decltype(get_weight(std::declval<edge_t>()));
 
   graph_t graph{};
 
@@ -322,7 +309,7 @@ TYPED_TEST(WeightedShortestPathTest, WeightedCyclicShortestPath) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
-  using weight_t = typename extract_weight<edge_t>::type;
+  using weight_t = decltype(get_weight(std::declval<edge_t>()));
 
   graph_t graph{};
 
