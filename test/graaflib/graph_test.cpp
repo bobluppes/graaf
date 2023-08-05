@@ -124,7 +124,7 @@ TYPED_TEST(GraphTest, AddEdge) {
         try {
           // Call the add_edge function with a non-existing vertex ID
           graph.add_edge(vertex_id_1, vertex_id_2, 100);
-        } catch (const std::out_of_range &ex) {
+        } catch (const std::invalid_argument &ex) {
           // Verify that the exception message contains the expected error
           // message
           EXPECT_EQ(
@@ -134,7 +134,7 @@ TYPED_TEST(GraphTest, AddEdge) {
           throw;
         }
       },
-      std::out_of_range);
+      std::invalid_argument);
 
   EXPECT_FALSE(graph.has_edge(vertex_id_1, vertex_id_2));
 }
@@ -158,16 +158,17 @@ TYPED_TEST(GraphTest, VertexTests) {
           // Call the get_vertex function for a non-existing vertex
           [[maybe_unused]] const auto vertex{
               graph.get_vertex(nonExistingVertexId)};
-          FAIL() << "Expected std::out_of_range exception, but no exception "
-                    "was thrown.";
-        } catch (const std::out_of_range &ex) {
+          FAIL()
+              << "Expected std::invalid_argument exception, but no exception "
+                 "was thrown.";
+        } catch (const std::invalid_argument &ex) {
           EXPECT_EQ(ex.what(),
                     fmt::format("Vertex with ID [{}] not found in graph.",
                                 nonExistingVertexId));
           throw;
         }
       },
-      std::out_of_range);
+      std::invalid_argument);
   EXPECT_TRUE(graph.has_vertex(vertex_id_1));
   EXPECT_FALSE(graph.has_vertex(nonExistingVertexId));
   EXPECT_TRUE(graph.has_vertex(vertex_id_2));
@@ -188,9 +189,10 @@ TYPED_TEST(GraphTest, GetEdgeNonExistingEdge) {
           [[maybe_unused]] const auto edge{
               graph.get_edge(vertex_id_1, nonExistingVertexId)};
           // If the above line doesn't throw an exception, fail the test
-          FAIL() << "Expected std::out_of_range exception, but no exception "
-                    "was thrown.";
-        } catch (const std::out_of_range &ex) {
+          FAIL()
+              << "Expected std::invalid_argument exception, but no exception "
+                 "was thrown.";
+        } catch (const std::invalid_argument &ex) {
           // Verify that the exception message contains the expected error
           // message
           EXPECT_EQ(ex.what(),
@@ -199,7 +201,7 @@ TYPED_TEST(GraphTest, GetEdgeNonExistingEdge) {
           throw;
         }
       },
-      std::out_of_range);
+      std::invalid_argument);
 }
 
 TYPED_TEST(GraphTest, ConstGetter) {

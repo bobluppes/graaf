@@ -183,20 +183,11 @@ class graph {
    */
   void remove_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs);
 
- protected:
+ private:
   std::unordered_map<vertex_id_t, vertices_t> adjacency_list_{};
 
   vertex_id_to_vertex_t vertices_{};
   edge_id_to_edge_t edges_{};
-
- private:
-  [[nodiscard]] bool do_has_edge(vertex_id_t vertex_id_lhs,
-                                 vertex_id_t vertex_id_rhs) const noexcept;
-  [[nodiscard]] const edge_t& do_get_edge(vertex_id_t vertex_id_lhs,
-                                          vertex_id_t vertex_id_rhs) const;
-  void do_add_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs,
-                   edge_t edge);
-  void do_remove_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs);
 
   size_t vertex_id_supplier_{0};
 };

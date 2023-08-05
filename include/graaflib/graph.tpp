@@ -37,7 +37,16 @@ bool graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::has_vertex(
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
 bool graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::has_edge(
     vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const noexcept {
-  return do_has_edge(vertex_id_lhs, vertex_id_rhs);
+  using enum graph_type;
+  if constexpr (GRAPH_TYPE_V == DIRECTED) {
+    return edges_.contains({vertex_id_lhs, vertex_id_rhs});
+  } else if constexpr (GRAPH_TYPE_V == UNDIRECTED) {
+    return edges_.contains(
+        detail::make_sorted_pair(vertex_id_lhs, vertex_id_rhs));
+  }
+
+  // Should never reach this
+  std::abort();
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
@@ -55,9 +64,8 @@ const VERTEX_T& graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_vertex(
     vertex_id_t vertex_id) const {
   if (!has_vertex(vertex_id)) {
     // TODO(bluppes): replace with std::format once Clang supports it
-    throw std::out_of_range{"Vertex with ID [" + std::to_string(vertex_id) +
-                            "] not found in graph."};
-    // May be more accurate to throw std::invalid_argument.
+    throw std::invalid_argument{"Vertex with ID [" + std::to_string(vertex_id) +
+                                "] not found in graph."};
   }
   return vertices_.at(vertex_id);
 }
@@ -78,11 +86,20 @@ graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_edge(
     vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const {
   if (!has_edge(vertex_id_lhs, vertex_id_rhs)) {
     // TODO(bluppes): replace with std::format once Clang supports it
-    throw std::out_of_range{"No edge found between vertices [" +
-                            std::to_string(vertex_id_lhs) + "] -> [" +
-                            std::to_string(vertex_id_rhs) + "]."};
+    throw std::invalid_argument{"No edge found between vertices [" +
+                                std::to_string(vertex_id_lhs) + "] -> [" +
+                                std::to_string(vertex_id_rhs) + "]."};
   }
-  return do_get_edge(vertex_id_lhs, vertex_id_rhs);
+
+  using enum graph_type;
+  if constexpr (GRAPH_TYPE_V == DIRECTED) {
+    return edges_.at({vertex_id_lhs, vertex_id_rhs});
+  } else if constexpr (GRAPH_TYPE_V == UNDIRECTED) {
+    return edges_.at(detail::make_sorted_pair(vertex_id_lhs, vertex_id_rhs));
+  }
+
+  // Should never reach this
+  std::abort();
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
@@ -127,65 +144,22 @@ void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_edge(vertex_id_t vertex_id_lhs,
                                                      auto&& edge) {
   if (!has_vertex(vertex_id_lhs) || !has_vertex(vertex_id_rhs)) {
     // TODO(bluppes): replace with std::format once Clang supports it
-    throw std::out_of_range{
+    throw std::invalid_argument{
         "Vertices with ID [" + std::to_string(vertex_id_lhs) + "] and [" +
         std::to_string(vertex_id_rhs) + "] not found in graph."};
   }
-  do_add_edge(vertex_id_lhs, vertex_id_rhs, std::forward<EDGE_T>(edge));
-}
 
-template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
-void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::remove_edge(
-    vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) {
-  do_remove_edge(vertex_id_lhs, vertex_id_rhs);
-}
-
-template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
-bool graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::do_has_edge(
-    graaf::vertex_id_t vertex_id_lhs,
-    graaf::vertex_id_t vertex_id_rhs) const noexcept {
-  using enum graph_type;
-  if constexpr (GRAPH_TYPE_V == DIRECTED) {
-    return edges_.contains({vertex_id_lhs, vertex_id_rhs});
-  } else if constexpr (GRAPH_TYPE_V == UNDIRECTED) {
-    return edges_.contains(
-        detail::make_sorted_pair(vertex_id_lhs, vertex_id_rhs));
-  }
-
-  // Should never reach this
-  std::abort();
-}
-
-template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
-const typename graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::edge_t&
-graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::do_get_edge(
-    graaf::vertex_id_t vertex_id_lhs, graaf::vertex_id_t vertex_id_rhs) const {
-  using enum graph_type;
-  if constexpr (GRAPH_TYPE_V == DIRECTED) {
-    return edges_.at({vertex_id_lhs, vertex_id_rhs});
-  } else if constexpr (GRAPH_TYPE_V == UNDIRECTED) {
-    return edges_.at(detail::make_sorted_pair(vertex_id_lhs, vertex_id_rhs));
-  }
-
-  // Should never reach this
-  std::abort();
-}
-
-template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
-void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::do_add_edge(
-    graaf::vertex_id_t vertex_id_lhs, graaf::vertex_id_t vertex_id_rhs,
-    edge_t edge) {
   using enum graph_type;
   if constexpr (GRAPH_TYPE_V == DIRECTED) {
     adjacency_list_[vertex_id_lhs].insert(vertex_id_rhs);
     edges_.emplace(std::make_pair(vertex_id_lhs, vertex_id_rhs),
-                   std::move(edge));
+                   std::forward<EDGE_T>(edge));
     return;
   } else if constexpr (GRAPH_TYPE_V == UNDIRECTED) {
     adjacency_list_[vertex_id_lhs].insert(vertex_id_rhs);
     adjacency_list_[vertex_id_rhs].insert(vertex_id_lhs);
     edges_.emplace(detail::make_sorted_pair(vertex_id_lhs, vertex_id_rhs),
-                   std::move(edge));
+                   std::forward<EDGE_T>(edge));
     return;
   }
 
@@ -194,8 +168,8 @@ void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::do_add_edge(
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
-void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::do_remove_edge(
-    graaf::vertex_id_t vertex_id_lhs, graaf::vertex_id_t vertex_id_rhs) {
+void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::remove_edge(
+    vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) {
   using enum graph_type;
   if constexpr (GRAPH_TYPE_V == DIRECTED) {
     adjacency_list_.at(vertex_id_lhs).erase(vertex_id_rhs);
