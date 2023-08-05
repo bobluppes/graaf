@@ -1,44 +1,21 @@
 #pragma once
 
+#include <graaflib/edge.h>
 #include <graaflib/types.h>
 
 #include <memory>
-#include <type_traits>
 #include <unordered_map>
 #include <unordered_set>
 
 namespace graaf {
 
-namespace detail {
+enum class graph_type { DIRECTED, UNDIRECTED };
 
-// Type trait to check if the type is a primitive numeric type
-template <typename EDGE_T>
-struct is_primitive_numeric;
-
-template <typename EDGE_T>
-inline constexpr bool is_primitive_numeric_v =
-    is_primitive_numeric<EDGE_T>::value;
-
-}  // namespace detail
-
-enum class graph_spec { DIRECTED, UNDIRECTED };
-
-template <typename VERTEX_T, typename EDGE_T, graph_spec GRAPH_SPEC_V>
+template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
 class graph {
  public:
   using vertex_t = VERTEX_T;
-
-  /**
-   * To provide a common interface for weighted edges, user provided edge
-   * classes can publically derive from weighted edge and optionally override
-   * the get_weight method. If a primitive numeric type is passes as the edge
-   * type, it is internally wrapped in a primitive_numeric_adapter, which
-   * derives from weighted_edge.
-   */
-  using edge_t =
-      std::conditional_t<detail::is_primitive_numeric_v<EDGE_T>,
-                         std::shared_ptr<primitive_numeric_adapter<EDGE_T>>,
-                         std::shared_ptr<EDGE_T>>;
+  using edge_t = EDGE_T;
 
   using vertices_t = std::unordered_set<vertex_id_t>;
 
@@ -51,7 +28,7 @@ class graph {
    * @return bool - Return true for directed graphs otherwise false
    */
   [[nodiscard]] constexpr bool is_directed() const {
-    return GRAPH_SPEC_V == graph_spec::DIRECTED;
+    return GRAPH_TYPE_V == graph_type::DIRECTED;
   }
 
   /**
@@ -60,7 +37,7 @@ class graph {
    * @return bool - Returns true for undirected graphs otherwise false
    */
   [[nodiscard]] constexpr bool is_undirected() const {
-    return GRAPH_SPEC_V == graph_spec::UNDIRECTED;
+    return GRAPH_TYPE_V == graph_type::UNDIRECTED;
   }
 
   /**
@@ -206,24 +183,20 @@ class graph {
    */
   void remove_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs);
 
- protected:
+ private:
   std::unordered_map<vertex_id_t, vertices_t> adjacency_list_{};
 
   vertex_id_to_vertex_t vertices_{};
   edge_id_to_edge_t edges_{};
 
- private:
-  [[nodiscard]] virtual bool do_has_edge(
-      vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const noexcept = 0;
-  [[nodiscard]] virtual const edge_t& do_get_edge(
-      vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) const = 0;
-  virtual void do_add_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs,
-                           edge_t edge) = 0;
-  virtual void do_remove_edge(vertex_id_t vertex_id_lhs,
-                              vertex_id_t vertex_id_rhs) = 0;
-
   size_t vertex_id_supplier_{0};
 };
+
+template <typename VERTEX_T, typename EDGE_T>
+using directed_graph = graph<VERTEX_T, EDGE_T, graph_type::DIRECTED>;
+
+template <typename VERTEX_T, typename EDGE_T>
+using undirected_graph = graph<VERTEX_T, EDGE_T, graph_type::UNDIRECTED>;
 
 }  // namespace graaf
 

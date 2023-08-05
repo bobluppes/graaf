@@ -42,9 +42,9 @@ std::optional<GraphPath<WEIGHT_T>> reconstruct_path(
   return path;
 }
 
-template <typename V, typename E, graph_spec S, typename WEIGHT_T>
+template <typename V, typename E, graph_type T, typename WEIGHT_T>
 std::optional<GraphPath<WEIGHT_T>> get_unweighted_shortest_path(
-    const graph<V, E, S>& graph, vertex_id_t start_vertex,
+    const graph<V, E, T>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex) {
   std::unordered_map<vertex_id_t, PathVertex<WEIGHT_T>> vertex_info;
   std::queue<vertex_id_t> to_explore{};
@@ -72,9 +72,9 @@ std::optional<GraphPath<WEIGHT_T>> get_unweighted_shortest_path(
   return reconstruct_path(start_vertex, end_vertex, vertex_info);
 }
 
-template <typename V, typename E, graph_spec S, typename WEIGHT_T>
+template <typename V, typename E, graph_type T, typename WEIGHT_T>
 std::optional<GraphPath<WEIGHT_T>> get_weighted_shortest_path(
-    const graph<V, E, S>& graph, vertex_id_t start_vertex,
+    const graph<V, E, T>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex) {
   std::unordered_map<vertex_id_t, PathVertex<WEIGHT_T>> vertex_info;
 
@@ -96,7 +96,7 @@ std::optional<GraphPath<WEIGHT_T>> get_weighted_shortest_path(
 
     for (const auto& neighbor : graph.get_neighbors(current.id)) {
       WEIGHT_T distance = current.dist_from_start +
-                          graph.get_edge(current.id, neighbor)->get_weight();
+                          get_weight(graph.get_edge(current.id, neighbor));
 
       if (!vertex_info.contains(neighbor) ||
           distance < vertex_info[neighbor].dist_from_start) {
@@ -111,19 +111,19 @@ std::optional<GraphPath<WEIGHT_T>> get_weighted_shortest_path(
 
 }  // namespace detail
 
-template <edge_strategy EDGE_STRATEGY, typename V, typename E, graph_spec S,
+template <edge_strategy EDGE_STRATEGY, typename V, typename E, graph_type T,
           typename WEIGHT_T>
 std::optional<GraphPath<WEIGHT_T>> get_shortest_path(
-    const graph<V, E, S>& graph, vertex_id_t start_vertex,
+    const graph<V, E, T>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex) {
   using enum edge_strategy;
   if constexpr (EDGE_STRATEGY == UNWEIGHTED) {
-    return detail::get_unweighted_shortest_path<V, E, S, WEIGHT_T>(
+    return detail::get_unweighted_shortest_path<V, E, T, WEIGHT_T>(
         graph, start_vertex, end_vertex);
   }
 
   if constexpr (EDGE_STRATEGY == WEIGHTED) {
-    return detail::get_weighted_shortest_path<V, E, S, WEIGHT_T>(
+    return detail::get_weighted_shortest_path<V, E, T, WEIGHT_T>(
         graph, start_vertex, end_vertex);
   }
 }

@@ -19,43 +19,4 @@ struct edge_id_hash {
   }
 };
 
-/**
- * @brief Interface for a weighted edge.
- *
- * This is what is stored internally and returned from a weighted graph in
- * order to make sure each edge in a weighted graph has a common interface to
- * extract the weight.
- *
- * @tparam WEIGHT_T The type of the weight.
- */
-template <typename WEIGHT_T = int>
-class weighted_edge {
- public:
-  using weight_t = WEIGHT_T;
-  /**
-   * By default an edge has a unit weight.
-   */
-  [[nodiscard]] virtual WEIGHT_T get_weight() const noexcept { return 1; };
-};
-
-/**
- * @brief Adapter for a weighted edge which wraps a primitive type.
- *
- * Weighted graphs support having primitive numeric types for the edges.
- * In this case, the edges are internally wrapped in this adapter to provide a
- * common interface for weighted edges.
- *
- * @tparam WEIGHT_T The type of the weight.
- */
-template <typename WEIGHT_T>
-class primitive_numeric_adapter final : public weighted_edge<WEIGHT_T> {
- public:
-  explicit primitive_numeric_adapter(WEIGHT_T value) : value_{value} {}
-
-  [[nodiscard]] WEIGHT_T get_weight() const noexcept override { return value_; }
-
- private:
-  WEIGHT_T value_{};
-};
-
 }  // namespace graaf

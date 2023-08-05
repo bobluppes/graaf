@@ -32,11 +32,10 @@ struct GraphPath {
  * @param start_vertex Vertex id where the shortest path should start.
  * @param end_vertex Vertex id where the shortest path should end.
  */
-template <
-    edge_strategy EDGE_STRATEGY, typename V, typename E, graph_spec S,
-    typename WEIGHT_T = typename graph<V, E, S>::edge_t::element_type::weight_t>
+template <edge_strategy EDGE_STRATEGY, typename V, typename E, graph_type T,
+          typename WEIGHT_T = decltype(get_weight(std::declval<E>()))>
 std::optional<GraphPath<WEIGHT_T>> get_shortest_path(
-    const graph<V, E, S>& graph, vertex_id_t start_vertex,
+    const graph<V, E, T>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex);
 
 }  // namespace graaf::algorithm

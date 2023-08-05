@@ -1,7 +1,6 @@
 #include <graaflib/algorithm/graph_traversal.h>
-#include <graaflib/directed_graph.h>
+#include <graaflib/graph.h>
 #include <graaflib/types.h>
-#include <graaflib/undirected_graph.h>
 #include <gtest/gtest.h>
 
 #include <unordered_map>
