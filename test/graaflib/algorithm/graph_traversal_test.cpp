@@ -54,8 +54,8 @@ TYPED_TEST(TypedGraphTraversalTest, MinimalGraphDFS) {
   vertex_order_t vertex_order{};
 
   // WHEN
-  traverse<search_strategy::DFS>(
-      graph, vertex_1, record_vertex_callback{seen_vertices, vertex_order});
+  depth_first_traverse(graph, vertex_1,
+                       record_vertex_callback{seen_vertices, vertex_order});
 
   // THEN
   const seen_vertices_t expected_vertices{vertex_1};
@@ -73,8 +73,8 @@ TYPED_TEST(TypedGraphTraversalTest, MinimalGraphBFS) {
   vertex_order_t vertex_order{};
 
   // WHEN
-  traverse<search_strategy::BFS>(
-      graph, vertex_1, record_vertex_callback{seen_vertices, vertex_order});
+  breadth_first_traverse(graph, vertex_1,
+                         record_vertex_callback{seen_vertices, vertex_order});
 
   // THEN
   const seen_vertices_t expected_vertices{vertex_1};
@@ -97,8 +97,8 @@ TYPED_TEST(TypedGraphTraversalTest, SimpleGraphDFS) {
   vertex_order_t vertex_order{};
 
   // WHEN
-  traverse<search_strategy::DFS>(
-      graph, vertex_1, record_vertex_callback{seen_vertices, vertex_order});
+  depth_first_traverse(graph, vertex_1,
+                       record_vertex_callback{seen_vertices, vertex_order});
 
   // THEN - The order of traversal between neighbors is undefined
   const seen_vertices_t expected_vertices{vertex_1, vertex_2};
@@ -121,8 +121,8 @@ TYPED_TEST(TypedGraphTraversalTest, SimpleGraphBFS) {
   vertex_order_t vertex_order{};
 
   // WHEN
-  traverse<search_strategy::BFS>(
-      graph, vertex_1, record_vertex_callback{seen_vertices, vertex_order});
+  breadth_first_traverse(graph, vertex_1,
+                         record_vertex_callback{seen_vertices, vertex_order});
 
   // THEN - The order of traversal between neighbors is undefined
   const seen_vertices_t expected_vertices{vertex_1, vertex_2};
@@ -142,8 +142,8 @@ TEST(GraphTraversalTest, DirectedGraphEdgeWrongDirectionDFS) {
   vertex_order_t vertex_order{};
 
   // WHEN - here vertex 1 has no neighbors due to the edge direction
-  traverse<search_strategy::DFS>(
-      graph, vertex_1, record_vertex_callback{seen_vertices, vertex_order});
+  depth_first_traverse(graph, vertex_1,
+                       record_vertex_callback{seen_vertices, vertex_order});
 
   // THEN
   const seen_vertices_t expected_vertices{vertex_1};
@@ -163,8 +163,8 @@ TEST(GraphTraversalTest, DirectedGraphEdgeWrongDirectionBFS) {
   vertex_order_t vertex_order{};
 
   // WHEN - here vertex 1 has no neighbors due to the edge direction
-  traverse<search_strategy::BFS>(
-      graph, vertex_1, record_vertex_callback{seen_vertices, vertex_order});
+  breadth_first_traverse(graph, vertex_1,
+                         record_vertex_callback{seen_vertices, vertex_order});
 
   // THEN
   const seen_vertices_t expected_vertices{vertex_1};
@@ -193,8 +193,8 @@ TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphDFS) {
   vertex_order_t vertex_order{};
 
   // WHEN
-  traverse<search_strategy::DFS>(
-      graph, vertex_1, record_vertex_callback{seen_vertices, vertex_order});
+  depth_first_traverse(graph, vertex_1,
+                       record_vertex_callback{seen_vertices, vertex_order});
 
   // THEN
   const seen_vertices_t expected_vertices{vertex_1, vertex_2, vertex_3,
@@ -231,8 +231,8 @@ TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphBFS) {
   vertex_order_t vertex_order{};
 
   // WHEN
-  traverse<search_strategy::BFS>(
-      graph, vertex_1, record_vertex_callback{seen_vertices, vertex_order});
+  breadth_first_traverse(graph, vertex_1,
+                         record_vertex_callback{seen_vertices, vertex_order});
 
   // THEN
   const seen_vertices_t expected_vertices{vertex_1, vertex_2, vertex_3,
@@ -268,8 +268,8 @@ TEST(GraphTraversalTest, MoreComplexDirectedGraphEdgeWrongDirectionDFS) {
   vertex_order_t vertex_order{};
 
   // WHEN
-  traverse<search_strategy::DFS>(
-      graph, vertex_1, record_vertex_callback{seen_vertices, vertex_order});
+  depth_first_traverse(graph, vertex_1,
+                       record_vertex_callback{seen_vertices, vertex_order});
 
   // THEN
   const seen_vertices_t expected_vertices{vertex_1, vertex_2, vertex_3,
@@ -298,8 +298,8 @@ TEST(GraphTraversalTest, MoreComplexDirectedGraphEdgeWrongDirectionBFS) {
   vertex_order_t vertex_order{};
 
   // WHEN
-  traverse<search_strategy::BFS>(
-      graph, vertex_1, record_vertex_callback{seen_vertices, vertex_order});
+  breadth_first_traverse(graph, vertex_1,
+                         record_vertex_callback{seen_vertices, vertex_order});
 
   // THEN
   const seen_vertices_t expected_vertices{vertex_1, vertex_2, vertex_3,

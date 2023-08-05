@@ -3,7 +3,9 @@ sidebar_position: 2
 ---
 
 # Shortest Path Example
-The shortest path algorithm implemented in `graaf::algorithm::get_shortest_path` can be used to compute the shortest path between any two vertices in a graph.
+
+The shortest path algorithm implemented in `graaf::algorithm::get_shortest_path` can be used to compute the shortest
+path between any two vertices in a graph.
 
 Consider the following graph:
 
@@ -16,7 +18,7 @@ Consider the following graph:
 In order to compute the shortest path between *vertex 0* and *vertex 2*, we call:
 
 ```c++
-const auto maybe_shortest_path{get_shortest_path<edge_strategy::UNWEIGHTED>(graph, start, target)};
+const auto maybe_shortest_path{bfs_shortest_path(graph, start, target)};
 
 // Assert that we found a path at all
 assert(maybe_shortest_path.has_value());
@@ -24,7 +26,9 @@ auto shortest_path{maybe_shortest_path.value()};
 ```
 
 ## Visualizing the shortest path
-If we want to visualize the shortest path on the graph, we can create our own vertex and edge writers. These writers then determine the vertex and edge attributes based on whether the vertex or edge is contained in the shortest path.
+
+If we want to visualize the shortest path on the graph, we can create our own vertex and edge writers. These writers
+then determine the vertex and edge attributes based on whether the vertex or edge is contained in the shortest path.
 
 First, we create a datastructure of all edges on the shortest path such that we can query it in the edge writer:
 
@@ -62,6 +66,7 @@ const auto edge_writer{
   return "label=\"\", color=gray, style=dashed";
 }};
 ```
+
 This yields us the following visualization:
 
 <pre>
