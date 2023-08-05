@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # Network Example
 The undirected_graph implemented in `graaf::undirected_graph`
-The shortest path algorithm implemented in `graaf::algorithm::get_shortest_path`
+The shortest path algorithms implemented in `graaf::algorithm::bfs_shortest_path` and `graaf::algorithm::dijkstra_shortest_path`
 The graph traversal implemented in `graaf::algorithm::graph_traversal`
 
 Using the following graph:
@@ -65,7 +65,7 @@ Result of weighted shortest path, chosen edges are coloured red
 
 ```c++
 void print_shortest_path(const graaf::undirected_graph<station, road>& graph,
-                const std::optional<graaf::algorithm::GraphPath<int>>& path, const std::string & filepath) {
+                const std::optional<graaf::algorithm::graph_path<int>>& path, const std::string & filepath) {
 ...
 }
 
@@ -101,18 +101,14 @@ The last one is traversing the graph from a given vertex and printing the result
 ```c++
  const auto [graph, start, target]{create_graph_with_start_and_target()};
 
-    const auto weighted_shortest_path{graaf::algorithm::get_shortest_path<
-            graaf::algorithm::edge_strategy::WEIGHTED, station, road,
-            graaf::graph_spec::UNDIRECTED, int>(graph, start, target)};
+    const auto weighted_shortest_path{graaf::algorithm::dijkstra_shortest_path(graph, start, target)};
     print_shortest_path(graph, weighted_shortest_path, "example_weighted_graph.dot");
 
-    const auto unweighted_shortest_path{graaf::algorithm::get_shortest_path<
-        graaf::algorithm::edge_strategy::UNWEIGHTED, station, road,
-        graaf::graph_spec::UNDIRECTED, int>(graph, start, target)};
+    const auto unweighted_shortest_path{graaf::algorithm::bfs_shortest_path(graph, start, target)};
     print_shortest_path(graph, unweighted_shortest_path, "example_unwieghted_graph.dot");
 
     seen_vertices_t seen_vertices{};
-    graaf::algorithm::traverse<graaf::algorithm::search_strategy::BFS>(
+    graaf::algorithm::breadth_first_traverse(
         graph, start, record_vertex_callback{seen_vertices});
     print_visited_vertices(graph, seen_vertices, "example_traverse_BFS_graph.dot");
 ```
