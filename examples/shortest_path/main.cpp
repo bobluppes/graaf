@@ -39,8 +39,8 @@ graph_with_start_and_target create_graph_with_start_and_target() {
 int main() {
   const auto [graph, start, target]{create_graph_with_start_and_target()};
 
-  const auto maybe_shortest_path{graaf::algorithm::get_shortest_path<
-      graaf::algorithm::edge_strategy::UNWEIGHTED>(graph, start, target)};
+  const auto maybe_shortest_path{
+      graaf::algorithm::bfs_shortest_path(graph, start, target)};
   assert(maybe_shortest_path.has_value());
   auto shortest_path{maybe_shortest_path.value()};
 
