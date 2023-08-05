@@ -42,11 +42,13 @@ std::optional<GraphPath<WEIGHT_T>> reconstruct_path(
   return path;
 }
 
+}  // namespace detail
+
 template <typename V, typename E, graph_type T, typename WEIGHT_T>
-std::optional<GraphPath<WEIGHT_T>> get_unweighted_shortest_path(
+std::optional<GraphPath<WEIGHT_T>> bfs_shortest_path(
     const graph<V, E, T>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex) {
-  std::unordered_map<vertex_id_t, PathVertex<WEIGHT_T>> vertex_info;
+  std::unordered_map<vertex_id_t, detail::PathVertex<WEIGHT_T>> vertex_info;
   std::queue<vertex_id_t> to_explore{};
 
   vertex_info[start_vertex] = {start_vertex, 1, start_vertex};
@@ -73,12 +75,12 @@ std::optional<GraphPath<WEIGHT_T>> get_unweighted_shortest_path(
 }
 
 template <typename V, typename E, graph_type T, typename WEIGHT_T>
-std::optional<GraphPath<WEIGHT_T>> get_weighted_shortest_path(
+std::optional<GraphPath<WEIGHT_T>> dijkstra_shortest_path(
     const graph<V, E, T>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex) {
-  std::unordered_map<vertex_id_t, PathVertex<WEIGHT_T>> vertex_info;
+  std::unordered_map<vertex_id_t, detail::PathVertex<WEIGHT_T>> vertex_info;
 
-  using weighted_path_item = PathVertex<WEIGHT_T>;
+  using weighted_path_item = detail::PathVertex<WEIGHT_T>;
   std::priority_queue<weighted_path_item, std::vector<weighted_path_item>,
                       std::greater<>>
       to_explore{};
@@ -107,25 +109,6 @@ std::optional<GraphPath<WEIGHT_T>> get_weighted_shortest_path(
   }
 
   return reconstruct_path(start_vertex, end_vertex, vertex_info);
-}
-
-}  // namespace detail
-
-template <edge_strategy EDGE_STRATEGY, typename V, typename E, graph_type T,
-          typename WEIGHT_T>
-std::optional<GraphPath<WEIGHT_T>> get_shortest_path(
-    const graph<V, E, T>& graph, vertex_id_t start_vertex,
-    vertex_id_t end_vertex) {
-  using enum edge_strategy;
-  if constexpr (EDGE_STRATEGY == UNWEIGHTED) {
-    return detail::get_unweighted_shortest_path<V, E, T, WEIGHT_T>(
-        graph, start_vertex, end_vertex);
-  }
-
-  if constexpr (EDGE_STRATEGY == WEIGHTED) {
-    return detail::get_weighted_shortest_path<V, E, T, WEIGHT_T>(
-        graph, start_vertex, end_vertex);
-  }
 }
 
 }  // namespace graaf::algorithm

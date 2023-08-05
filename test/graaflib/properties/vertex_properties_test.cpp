@@ -20,10 +20,10 @@ TEST(DirectedGraphPropertiesTest, VertexOutDegree) {
   graph.add_edge(vertex_id_2, vertex_id_4, 300);
 
   // THEN
-  ASSERT_EQ(get_vertex_outdegree(graph, vertex_id_1), 1);
-  ASSERT_EQ(get_vertex_outdegree(graph, vertex_id_2), 2);
-  ASSERT_EQ(get_vertex_outdegree(graph, vertex_id_3), 0);
-  ASSERT_EQ(get_vertex_outdegree(graph, vertex_id_4), 0);
+  ASSERT_EQ(vertex_outdegree(graph, vertex_id_1), 1);
+  ASSERT_EQ(vertex_outdegree(graph, vertex_id_2), 2);
+  ASSERT_EQ(vertex_outdegree(graph, vertex_id_3), 0);
+  ASSERT_EQ(vertex_outdegree(graph, vertex_id_4), 0);
 }
 
 TEST(DirectedGraphPropertiesTest, VertexInDegree) {
@@ -42,10 +42,10 @@ TEST(DirectedGraphPropertiesTest, VertexInDegree) {
   graph.add_edge(vertex_id_2, vertex_id_4, 400);
 
   // THEN
-  ASSERT_EQ(get_vertex_indegree(graph, vertex_id_1), 0);
-  ASSERT_EQ(get_vertex_indegree(graph, vertex_id_2), 1);
-  ASSERT_EQ(get_vertex_indegree(graph, vertex_id_3), 1);
-  ASSERT_EQ(get_vertex_indegree(graph, vertex_id_4), 2);
+  ASSERT_EQ(vertex_indegree(graph, vertex_id_1), 0);
+  ASSERT_EQ(vertex_indegree(graph, vertex_id_2), 1);
+  ASSERT_EQ(vertex_indegree(graph, vertex_id_3), 1);
+  ASSERT_EQ(vertex_indegree(graph, vertex_id_4), 2);
 }
 
 TEST(DirectedGraphPropertiesTest, VertexDegree) {
@@ -64,10 +64,10 @@ TEST(DirectedGraphPropertiesTest, VertexDegree) {
   graph.add_edge(vertex_id_2, vertex_id_4, 400);
 
   // THEN
-  ASSERT_EQ(get_vertex_degree(graph, vertex_id_1), 2);
-  ASSERT_EQ(get_vertex_degree(graph, vertex_id_2), 2);
-  ASSERT_EQ(get_vertex_degree(graph, vertex_id_3), 2);
-  ASSERT_EQ(get_vertex_degree(graph, vertex_id_4), 2);
+  ASSERT_EQ(vertex_degree(graph, vertex_id_1), 2);
+  ASSERT_EQ(vertex_degree(graph, vertex_id_2), 2);
+  ASSERT_EQ(vertex_degree(graph, vertex_id_3), 2);
+  ASSERT_EQ(vertex_degree(graph, vertex_id_4), 2);
 }
 
 TEST(UndirectedGraphPropertiesTest, VertexOutDegree) {
@@ -85,10 +85,10 @@ TEST(UndirectedGraphPropertiesTest, VertexOutDegree) {
   graph.add_edge(vertex_id_2, vertex_id_4, 300);
 
   // THEN
-  ASSERT_EQ(get_vertex_outdegree(graph, vertex_id_1), 1);
-  ASSERT_EQ(get_vertex_outdegree(graph, vertex_id_2), 3);
-  ASSERT_EQ(get_vertex_outdegree(graph, vertex_id_3), 1);
-  ASSERT_EQ(get_vertex_outdegree(graph, vertex_id_4), 1);
+  ASSERT_EQ(vertex_outdegree(graph, vertex_id_1), 1);
+  ASSERT_EQ(vertex_outdegree(graph, vertex_id_2), 3);
+  ASSERT_EQ(vertex_outdegree(graph, vertex_id_3), 1);
+  ASSERT_EQ(vertex_outdegree(graph, vertex_id_4), 1);
 }
 
 TEST(UndirectedGraphPropertiesTest, VertexInDegree) {
@@ -106,10 +106,10 @@ TEST(UndirectedGraphPropertiesTest, VertexInDegree) {
   graph.add_edge(vertex_id_2, vertex_id_4, 300);
 
   // THEN
-  ASSERT_EQ(get_vertex_indegree(graph, vertex_id_1), 1);
-  ASSERT_EQ(get_vertex_indegree(graph, vertex_id_2), 3);
-  ASSERT_EQ(get_vertex_indegree(graph, vertex_id_3), 1);
-  ASSERT_EQ(get_vertex_indegree(graph, vertex_id_4), 1);
+  ASSERT_EQ(vertex_indegree(graph, vertex_id_1), 1);
+  ASSERT_EQ(vertex_indegree(graph, vertex_id_2), 3);
+  ASSERT_EQ(vertex_indegree(graph, vertex_id_3), 1);
+  ASSERT_EQ(vertex_indegree(graph, vertex_id_4), 1);
 }
 
 TEST(UndirectedGraphPropertiesTest, VertexDegree) {
@@ -127,10 +127,10 @@ TEST(UndirectedGraphPropertiesTest, VertexDegree) {
   graph.add_edge(vertex_id_2, vertex_id_4, 300);
 
   // THEN
-  ASSERT_EQ(get_vertex_degree(graph, vertex_id_1), 1);
-  ASSERT_EQ(get_vertex_degree(graph, vertex_id_2), 3);
-  ASSERT_EQ(get_vertex_degree(graph, vertex_id_3), 1);
-  ASSERT_EQ(get_vertex_degree(graph, vertex_id_4), 1);
+  ASSERT_EQ(vertex_degree(graph, vertex_id_1), 1);
+  ASSERT_EQ(vertex_degree(graph, vertex_id_2), 3);
+  ASSERT_EQ(vertex_degree(graph, vertex_id_3), 1);
+  ASSERT_EQ(vertex_degree(graph, vertex_id_4), 1);
 }
 
 }  // namespace graaf::properties

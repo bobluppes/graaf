@@ -37,7 +37,7 @@ TYPED_TEST(GraphCycleTest, DirectedGraphWithCycle) {
   graph.add_edge(vertex_3, vertex_1, 300);
 
   // checking if graph contains cycles
-  bool cycle = has_cycle(graph);
+  bool cycle = dfs_cycle_detection(graph);
   ASSERT_TRUE(cycle);
 }
 
@@ -56,7 +56,7 @@ TYPED_TEST(GraphCycleTest, DirectedGraphWithCycleMiddle) {
   graph.add_edge(vertex_2, vertex_1, 300);
 
   // checking if graph contains cycle
-  bool cycle = has_cycle(graph);
+  bool cycle = dfs_cycle_detection(graph);
   ASSERT_TRUE(cycle);
 }
 
@@ -74,7 +74,7 @@ TYPED_TEST(GraphCycleTest, DirectedGraphWithoutCycle) {
   graph.add_edge(vertex_2, vertex_3, 300);
 
   // checking if graph contains cycle
-  bool cycle = has_cycle(graph);
+  bool cycle = dfs_cycle_detection(graph);
   ASSERT_FALSE(cycle);
 }
 
@@ -92,7 +92,7 @@ TYPED_TEST(GraphCycleTest, UndirectedGraphWithoutCycle) {
   graph.add_edge(vertex_2, vertex_3, 300);
 
   // checking if graph contains cycle
-  bool cycle = has_cycle(graph);
+  bool cycle = dfs_cycle_detection(graph);
   ASSERT_FALSE(cycle);
 }
 
@@ -111,7 +111,7 @@ TYPED_TEST(GraphCycleTest, UndirectedGraphWithCycle) {
   graph.add_edge(vertex_3, vertex_1, 400);
 
   // checking if graph contains cycle
-  bool cycle = has_cycle(graph);
+  bool cycle = dfs_cycle_detection(graph);
   ASSERT_TRUE(cycle);
 }
 
@@ -121,11 +121,11 @@ TYPED_TEST(GraphCycleTest, EmptyGraphs) {
   undirected_graph<int, int> undirected_graph{};
 
   // checking if graph contains cycles
-  bool cycle = has_cycle(directed_graph);
+  bool cycle = dfs_cycle_detection(directed_graph);
   ASSERT_FALSE(cycle);
 
   // checking  if graph contains cycles
-  cycle = has_cycle(undirected_graph);
+  cycle = dfs_cycle_detection(undirected_graph);
   ASSERT_FALSE(cycle);
 }
 
@@ -145,7 +145,7 @@ TYPED_TEST(GraphCycleTest, DefaultGraphWithCycle) {
   graph.add_edge(vertex_3, vertex_1, 400);
 
   // checking  if graph contains cycle
-  bool cycle = has_cycle(graph);
+  bool cycle = dfs_cycle_detection(graph);
   ASSERT_TRUE(cycle);
 }
 
@@ -164,7 +164,7 @@ TYPED_TEST(GraphCycleTest, DefaultGraphWithoutCycle) {
   graph.add_edge(vertex_2, vertex_3, 300);
 
   // checking if graph contains cycle
-  bool cycle = has_cycle(graph);
+  bool cycle = dfs_cycle_detection(graph);
   ASSERT_FALSE(cycle);
 }
 
