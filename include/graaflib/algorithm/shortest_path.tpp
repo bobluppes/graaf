@@ -11,25 +11,25 @@ namespace graaf::algorithm {
 namespace detail {
 
 template <typename WEIGHT_T>
-struct PathVertex {
+struct path_vertex {
   vertex_id_t id;
   WEIGHT_T dist_from_start;
   vertex_id_t prev_id;
 
-  [[nodiscard]] bool operator>(const PathVertex<WEIGHT_T>& other) {
+  [[nodiscard]] bool operator>(const path_vertex<WEIGHT_T>& other) {
     return dist_from_start > other.dist_from_start;
   }
 };
 
 template <typename WEIGHT_T>
-std::optional<GraphPath<WEIGHT_T>> reconstruct_path(
+std::optional<graph_path<WEIGHT_T>> reconstruct_path(
     vertex_id_t start_vertex, vertex_id_t end_vertex,
-    std::unordered_map<vertex_id_t, PathVertex<WEIGHT_T>>& vertex_info) {
+    std::unordered_map<vertex_id_t, path_vertex<WEIGHT_T>>& vertex_info) {
   if (!vertex_info.contains(end_vertex)) {
     return std::nullopt;
   }
 
-  GraphPath<WEIGHT_T> path;
+  graph_path<WEIGHT_T> path;
   auto current = end_vertex;
 
   while (current != start_vertex) {
@@ -45,10 +45,10 @@ std::optional<GraphPath<WEIGHT_T>> reconstruct_path(
 }  // namespace detail
 
 template <typename V, typename E, graph_type T, typename WEIGHT_T>
-std::optional<GraphPath<WEIGHT_T>> bfs_shortest_path(
+std::optional<graph_path<WEIGHT_T>> bfs_shortest_path(
     const graph<V, E, T>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex) {
-  std::unordered_map<vertex_id_t, detail::PathVertex<WEIGHT_T>> vertex_info;
+  std::unordered_map<vertex_id_t, detail::path_vertex<WEIGHT_T>> vertex_info;
   std::queue<vertex_id_t> to_explore{};
 
   vertex_info[start_vertex] = {start_vertex, 1, start_vertex};
@@ -75,12 +75,12 @@ std::optional<GraphPath<WEIGHT_T>> bfs_shortest_path(
 }
 
 template <typename V, typename E, graph_type T, typename WEIGHT_T>
-std::optional<GraphPath<WEIGHT_T>> dijkstra_shortest_path(
+std::optional<graph_path<WEIGHT_T>> dijkstra_shortest_path(
     const graph<V, E, T>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex) {
-  std::unordered_map<vertex_id_t, detail::PathVertex<WEIGHT_T>> vertex_info;
+  std::unordered_map<vertex_id_t, detail::path_vertex<WEIGHT_T>> vertex_info;
 
-  using weighted_path_item = detail::PathVertex<WEIGHT_T>;
+  using weighted_path_item = detail::path_vertex<WEIGHT_T>;
   std::priority_queue<weighted_path_item, std::vector<weighted_path_item>,
                       std::greater<>>
       to_explore{};

@@ -27,7 +27,7 @@ TYPED_TEST(TypedShortestPathTest, BfsMinimalShortestPath) {
   const auto path = bfs_shortest_path(graph, vertex_1, vertex_1);
 
   // THEN
-  const GraphPath<int> expected_path{{vertex_1}, 1};
+  const graph_path<int> expected_path{{vertex_1}, 1};
   ASSERT_EQ(path, expected_path);
 }
 
@@ -62,7 +62,7 @@ TYPED_TEST(TypedShortestPathTest, BfsSimpleShortestPath) {
   const auto path = bfs_shortest_path(graph, vertex_1, vertex_2);
 
   // THEN
-  const GraphPath<int> expected_path{{vertex_1, vertex_2}, 2};
+  const graph_path<int> expected_path{{vertex_1, vertex_2}, 2};
   ASSERT_EQ(path, expected_path);
 }
 
@@ -90,7 +90,7 @@ TYPED_TEST(TypedShortestPathTest, BfsMoreComplexShortestPath) {
   const auto path = bfs_shortest_path(graph, vertex_1, vertex_5);
 
   // THEN
-  const GraphPath<int> expected_path{{vertex_1, vertex_3, vertex_5}, 3};
+  const graph_path<int> expected_path{{vertex_1, vertex_3, vertex_5}, 3};
   ASSERT_EQ(path, expected_path);
 }
 
@@ -117,8 +117,8 @@ TYPED_TEST(TypedShortestPathTest, BfsCyclicShortestPath) {
   const auto path = bfs_shortest_path(graph, vertex_1, vertex_5);
 
   // THEN
-  const GraphPath<int> expected_path{{vertex_1, vertex_2, vertex_3, vertex_5},
-                                     4};
+  const graph_path<int> expected_path{{vertex_1, vertex_2, vertex_3, vertex_5},
+                                      4};
   ASSERT_EQ(path, expected_path);
 }
 
@@ -143,7 +143,7 @@ TEST(ShortestPathTest, BfsDirectedrWrongDirectionShortestPath) {
   const auto path = bfs_shortest_path(graph, vertex_1, vertex_5);
 
   // THEN
-  const GraphPath<int> expected_path{
+  const graph_path<int> expected_path{
       {vertex_1, vertex_2, vertex_4, vertex_3, vertex_5}, 5};
   ASSERT_EQ(path, expected_path);
 }
@@ -224,7 +224,7 @@ TYPED_TEST(DijkstraShortestPathTest, DijkstraMinimalShortestPath) {
   const auto path = dijkstra_shortest_path(graph, vertex_id_1, vertex_id_1);
 
   // THEN
-  const GraphPath<weight_t> expected_path{{vertex_id_1}, 0};
+  const graph_path<weight_t> expected_path{{vertex_id_1}, 0};
   ASSERT_EQ(path, expected_path);
 }
 
@@ -260,7 +260,7 @@ TYPED_TEST(DijkstraShortestPathTest, DijkstraSimpleShortestPath) {
   const auto path = dijkstra_shortest_path(graph, vertex_id_1, vertex_id_2);
 
   // THEN
-  const GraphPath<weight_t> expected_path{{vertex_id_1, vertex_id_2}, 3};
+  const graph_path<weight_t> expected_path{{vertex_id_1, vertex_id_2}, 3};
   ASSERT_EQ(path, expected_path);
 }
 
@@ -289,7 +289,7 @@ TYPED_TEST(DijkstraShortestPathTest, DijkstraMoreComplexShortestPath) {
   const auto path = dijkstra_shortest_path(graph, vertex_id_1, vertex_id_5);
 
   // THEN
-  const GraphPath<weight_t> expected_path{
+  const graph_path<weight_t> expected_path{
       {vertex_id_1, vertex_id_3, vertex_id_5}, 9};
   ASSERT_EQ(path, expected_path);
 }
@@ -318,7 +318,7 @@ TYPED_TEST(DijkstraShortestPathTest, DijkstraCyclicShortestPath) {
   const auto path = dijkstra_shortest_path(graph, vertex_id_1, vertex_id_5);
 
   // THEN
-  const GraphPath<weight_t> expected_path{
+  const graph_path<weight_t> expected_path{
       {vertex_id_1, vertex_id_2, vertex_id_3, vertex_id_5}, 8};
   ASSERT_EQ(path, expected_path);
 }
