@@ -1,7 +1,9 @@
 build/
 
+venv
 
 # IDE
 .vscode/
 .cache/
 .vs/
+.idea
