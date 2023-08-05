@@ -57,13 +57,12 @@ int main() {
                        vertex_id, vertex.name, color);
   }};
 
-  const auto edge_writer{
-      [](const graaf::edge_id_t& /*edge_id*/, const auto& edge) -> std::string {
-        const auto style{edge->priority == edge_priority::HIGH ? "solid"
-                                                               : "dashed"};
-        return fmt::format("label=\"{}\", style={}, color=gray, fontcolor=gray",
-                           edge->weight, style);
-      }};
+  const auto edge_writer{[](const graaf::edge_id_t& /*edge_id*/,
+                            const auto& edge) -> std::string {
+    const auto style{edge.priority == edge_priority::HIGH ? "solid" : "dashed"};
+    return fmt::format("label=\"{}\", style={}, color=gray, fontcolor=gray",
+                       edge.weight, style);
+  }};
 
   const std::filesystem::path dof_file_path{"./dot_example.dot"};
   graaf::io::to_dot(my_graph, dof_file_path, vertex_writer, edge_writer);
