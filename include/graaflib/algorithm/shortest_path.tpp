@@ -62,7 +62,7 @@ std::optional<graph_path<WEIGHT_T>> bfs_shortest_path(
       break;
     }
 
-    for (const auto& neighbor : graph.get_neighbors(current)) {
+    for (const auto neighbor : graph.get_neighbors(current)) {
       if (!vertex_info.contains(neighbor)) {
         vertex_info[neighbor] = {
             neighbor, vertex_info[current].dist_from_start + 1, current};
@@ -81,9 +81,10 @@ std::optional<graph_path<WEIGHT_T>> dijkstra_shortest_path(
   std::unordered_map<vertex_id_t, detail::path_vertex<WEIGHT_T>> vertex_info;
 
   using weighted_path_item = detail::path_vertex<WEIGHT_T>;
-  std::priority_queue<weighted_path_item, std::vector<weighted_path_item>,
-                      std::greater<>>
-      to_explore{};
+  using dijkstra_queue_t =
+      std::priority_queue<weighted_path_item, std::vector<weighted_path_item>,
+                          std::greater<>>;
+  dijkstra_queue_t to_explore{};
 
   vertex_info[start_vertex] = {start_vertex, 0, start_vertex};
   to_explore.push(vertex_info[start_vertex]);
@@ -131,16 +132,16 @@ dijkstra_shortest_paths(const graph<V, E, T>& graph,
     vertex_id_t curr_vertex_id = to_explore.top().second;
     to_explore.pop();
 
-    if (shortest_paths.find(curr_vertex_id) != shortest_paths.end() &&
+    if (shortest_paths.contains(curr_vertex_id) &&
         curr_distance > shortest_paths[curr_vertex_id].total_weight) {
       continue;
     }
 
-    for (const auto& neighbor : graph.get_neighbors(curr_vertex_id)) {
+    for (const auto neighbor : graph.get_neighbors(curr_vertex_id)) {
       WEIGHT_T distance =
           curr_distance + get_weight(graph.get_edge(curr_vertex_id, neighbor));
 
-      if (shortest_paths.find(neighbor) == shortest_paths.end() ||
+      if (!shortest_paths.contains(neighbor) ||
           distance < shortest_paths[neighbor].total_weight) {
         shortest_paths[neighbor].total_weight = distance;
         shortest_paths[neighbor].vertices =

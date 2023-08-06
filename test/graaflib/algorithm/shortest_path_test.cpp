@@ -323,15 +323,7 @@ TYPED_TEST(DijkstraShortestPathTest, DijkstraCyclicShortestPath) {
   ASSERT_EQ(path, expected_path);
 }
 
-template <typename T>
-struct DijkstraShortestPathTreeTest : public testing::Test {
-  using graph_t = typename T::first_type;
-  using edge_t = typename T::second_type;
-};
-
-TYPED_TEST_SUITE(DijkstraShortestPathTreeTest, weighted_graph_types);
-
-TYPED_TEST(DijkstraShortestPathTreeTest, DijkstraMinimalShortestPathTree) {
+TYPED_TEST(DijkstraShortestPathTest, DijkstraMinimalShortestPathTree) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
@@ -351,7 +343,7 @@ TYPED_TEST(DijkstraShortestPathTreeTest, DijkstraMinimalShortestPathTree) {
   ASSERT_EQ(path_map, expected_path_map);
 }
 
-TYPED_TEST(DijkstraShortestPathTreeTest, DijkstraSimpleShortestPathTree) {
+TYPED_TEST(DijkstraShortestPathTest, DijkstraSimpleShortestPathTree) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
@@ -376,7 +368,7 @@ TYPED_TEST(DijkstraShortestPathTreeTest, DijkstraSimpleShortestPathTree) {
   ASSERT_EQ(path_map, expected_path_map);
 }
 
-TYPED_TEST(DijkstraShortestPathTreeTest, DijkstraMoreComplexShortestPathTree) {
+TYPED_TEST(DijkstraShortestPathTest, DijkstraMoreComplexShortestPathTree) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
