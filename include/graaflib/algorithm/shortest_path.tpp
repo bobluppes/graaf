@@ -111,8 +111,7 @@ std::optional<graph_path<WEIGHT_T>> dijkstra_shortest_path(
   return reconstruct_path(start_vertex, end_vertex, vertex_info);
 }
 
-template <typename V, typename E, graph_type T,
-          typename WEIGHT_T = decltype(get_weight(std::declval<E>()))>
+template <typename V, typename E, graph_type T, typename WEIGHT_T>
 [[nodiscard]] std::unordered_map<vertex_id_t, graph_path<WEIGHT_T>>
 dijkstra_shortest_paths(const graph<V, E, T>& graph,
                         vertex_id_t source_vertex) {
