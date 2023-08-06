@@ -78,13 +78,12 @@ template <typename V, typename E, graph_type T, typename WEIGHT_T>
 std::optional<graph_path<WEIGHT_T>> dijkstra_shortest_path(
     const graph<V, E, T>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex) {
-  std::unordered_map<vertex_id_t, detail::path_vertex<WEIGHT_T>> vertex_info;
-
   using weighted_path_item = detail::path_vertex<WEIGHT_T>;
   using dijkstra_queue_t =
       std::priority_queue<weighted_path_item, std::vector<weighted_path_item>,
                           std::greater<>>;
   dijkstra_queue_t to_explore{};
+  std::unordered_map<vertex_id_t, weighted_path_item> vertex_info;
 
   vertex_info[start_vertex] = {start_vertex, 0, start_vertex};
   to_explore.push(vertex_info[start_vertex]);
@@ -118,36 +117,35 @@ dijkstra_shortest_paths(const graph<V, E, T>& graph,
                         vertex_id_t source_vertex) {
   std::unordered_map<vertex_id_t, graph_path<WEIGHT_T>> shortest_paths;
 
-  std::priority_queue<std::pair<WEIGHT_T, vertex_id_t>,
-                      std::vector<std::pair<WEIGHT_T, vertex_id_t>>,
-                      std::greater<>>
-      to_explore;
+  using weighted_path_item = detail::path_vertex<WEIGHT_T>;
+  using dijkstra_queue_t =
+      std::priority_queue<weighted_path_item, std::vector<weighted_path_item>,
+                          std::greater<>>;
+  dijkstra_queue_t to_explore{};
 
   shortest_paths[source_vertex].total_weight = 0;
   shortest_paths[source_vertex].vertices.push_back(source_vertex);
-  to_explore.emplace(0, source_vertex);
+  to_explore.push(weighted_path_item{source_vertex, 0});
 
   while (!to_explore.empty()) {
-    WEIGHT_T curr_distance = to_explore.top().first;
-    vertex_id_t curr_vertex_id = to_explore.top().second;
+    auto current{to_explore.top()};
     to_explore.pop();
 
-    if (shortest_paths.contains(curr_vertex_id) &&
-        curr_distance > shortest_paths[curr_vertex_id].total_weight) {
+    if (shortest_paths.contains(current.id) &&
+        current.dist_from_start > shortest_paths[current.id].total_weight) {
       continue;
     }
 
-    for (const auto neighbor : graph.get_neighbors(curr_vertex_id)) {
-      WEIGHT_T distance =
-          curr_distance + get_weight(graph.get_edge(curr_vertex_id, neighbor));
+    for (const auto neighbor : graph.get_neighbors(current.id)) {
+      WEIGHT_T distance = current.dist_from_start +
+                          get_weight(graph.get_edge(current.id, neighbor));
 
       if (!shortest_paths.contains(neighbor) ||
           distance < shortest_paths[neighbor].total_weight) {
         shortest_paths[neighbor].total_weight = distance;
-        shortest_paths[neighbor].vertices =
-            shortest_paths[curr_vertex_id].vertices;
+        shortest_paths[neighbor].vertices = shortest_paths[current.id].vertices;
         shortest_paths[neighbor].vertices.push_back(neighbor);
-        to_explore.emplace(distance, neighbor);
+        to_explore.push(weighted_path_item{neighbor, distance});
       }
     }
   }
