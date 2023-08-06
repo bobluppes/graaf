@@ -111,4 +111,48 @@ std::optional<graph_path<WEIGHT_T>> dijkstra_shortest_path(
   return reconstruct_path(start_vertex, end_vertex, vertex_info);
 }
 
+template <typename V, typename E, graph_type T,
+          typename WEIGHT_T = decltype(get_weight(std::declval<E>()))>
+[[nodiscard]] std::unordered_map<vertex_id_t, graph_path<WEIGHT_T>>
+dijkstra_shortest_paths(const graph<V, E, T>& graph,
+                        vertex_id_t source_vertex) {
+  std::unordered_map<vertex_id_t, graph_path<WEIGHT_T>> shortest_paths;
+
+  std::priority_queue<std::pair<WEIGHT_T, vertex_id_t>,
+                      std::vector<std::pair<WEIGHT_T, vertex_id_t>>,
+                      std::greater<>>
+      to_explore;
+
+  shortest_paths[source_vertex].total_weight = 0;
+  shortest_paths[source_vertex].vertices.push_back(source_vertex);
+  to_explore.emplace(0, source_vertex);
+
+  while (!to_explore.empty()) {
+    WEIGHT_T curr_distance = to_explore.top().first;
+    vertex_id_t curr_vertex_id = to_explore.top().second;
+    to_explore.pop();
+
+    if (shortest_paths.find(curr_vertex_id) != shortest_paths.end() &&
+        curr_distance > shortest_paths[curr_vertex_id].total_weight) {
+      continue;
+    }
+
+    for (const auto& neighbor : graph.get_neighbors(curr_vertex_id)) {
+      WEIGHT_T distance =
+          curr_distance + get_weight(graph.get_edge(curr_vertex_id, neighbor));
+
+      if (shortest_paths.find(neighbor) == shortest_paths.end() ||
+          distance < shortest_paths[neighbor].total_weight) {
+        shortest_paths[neighbor].total_weight = distance;
+        shortest_paths[neighbor].vertices =
+            shortest_paths[curr_vertex_id].vertices;
+        shortest_paths[neighbor].vertices.push_back(neighbor);
+        to_explore.emplace(distance, neighbor);
+      }
+    }
+  }
+
+  return shortest_paths;
+}
+
 }  // namespace graaf::algorithm
