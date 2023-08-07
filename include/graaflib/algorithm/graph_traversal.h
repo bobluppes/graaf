@@ -13,11 +13,11 @@ namespace graaf::algorithm {
  *
  * @param graph The graph to traverse.
  * @param start_vertex Vertex id where the traversal should be started.
- * @param callback A callback which is called for each traversed vertex. Should
- * be invocable with a vertex_id_t.
+ * @param callback A callback which is called for each traversed edge. Should
+ * be invocable with an edge_id_t.
  */
 template <typename V, typename E, graph_type T, typename CALLBACK_T>
-  requires std::invocable<const CALLBACK_T &, vertex_id_t>
+  requires std::invocable<CALLBACK_T &, edge_id_t &>
 void breadth_first_traverse(const graph<V, E, T> &graph,
                             vertex_id_t start_vertex,
                             const CALLBACK_T &callback);
@@ -28,11 +28,11 @@ void breadth_first_traverse(const graph<V, E, T> &graph,
  *
  * @param graph The graph to traverse.
  * @param start_vertex Vertex id where the traversal should be started.
- * @param callback A callback which is called for each traversed vertex. Should
- * be invocable with a vertex_id_t.
+ * @param callback A callback which is called for each traversed edge. Should
+ * be invocable with an edge_id_t.
  */
 template <typename V, typename E, graph_type T, typename CALLBACK_T>
-  requires std::invocable<const CALLBACK_T &, vertex_id_t>
+  requires std::invocable<CALLBACK_T &, edge_id_t &>
 void depth_first_traverse(const graph<V, E, T> &graph, vertex_id_t start_vertex,
                           const CALLBACK_T &callback);
 

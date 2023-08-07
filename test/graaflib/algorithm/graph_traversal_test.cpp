@@ -20,24 +20,23 @@ using graph_types =
     testing::Types<directed_graph<int, int>, undirected_graph<int, int>>;
 TYPED_TEST_SUITE(TypedGraphTraversalTest, graph_types);
 
-using seen_vertices_t = std::unordered_multiset<vertex_id_t>;
-using vertex_order_t = std::unordered_map<vertex_id_t, std::size_t>;
+using seen_edges_t = std::unordered_multiset<edge_id_t, edge_id_hash>;
+using edge_order_t = std::unordered_map<edge_id_t, std::size_t, edge_id_hash>;
 
 /**
- * @brief Callback to record the traversed vertex ids and their order.
+ * @brief Callback to record the traversed edges and their order.
  */
-struct record_vertex_callback {
-  seen_vertices_t& seen_vertices;
-  vertex_order_t& vertex_order;
-  mutable std::size_t vertex_order_supplier{0};
+struct record_edge_callback {
+  seen_edges_t& seen_edges;
+  edge_order_t& edge_order;
+  mutable std::size_t edge_order_supplier{0};
 
-  record_vertex_callback(seen_vertices_t& seen_vertices,
-                         vertex_order_t& vertex_order)
-      : seen_vertices{seen_vertices}, vertex_order{vertex_order} {}
+  record_edge_callback(seen_edges_t& seen_edges, edge_order_t& edge_order)
+      : seen_edges{seen_edges}, edge_order{edge_order} {}
 
-  void operator()(const vertex_id_t vertex) const {
-    seen_vertices.insert(vertex);
-    vertex_order[vertex] = vertex_order_supplier++;
+  void operator()(const edge_id_t& edge) const {
+    seen_edges.insert(edge);
+    edge_order[edge] = edge_order_supplier++;
   }
 };
 
@@ -50,16 +49,16 @@ TYPED_TEST(TypedGraphTraversalTest, MinimalGraphDFS) {
 
   const auto vertex_1{graph.add_vertex(10)};
 
-  seen_vertices_t seen_vertices{};
-  vertex_order_t vertex_order{};
+  seen_edges_t seen_edges{};
+  edge_order_t edge_order{};
 
   // WHEN
   depth_first_traverse(graph, vertex_1,
-                       record_vertex_callback{seen_vertices, vertex_order});
+                       record_edge_callback{seen_edges, edge_order});
 
   // THEN
-  const seen_vertices_t expected_vertices{vertex_1};
-  ASSERT_EQ(seen_vertices, expected_vertices);
+  const seen_edges_t expected_edges{};
+  ASSERT_EQ(seen_edges, expected_edges);
 }
 
 TYPED_TEST(TypedGraphTraversalTest, MinimalGraphBFS) {
@@ -69,16 +68,16 @@ TYPED_TEST(TypedGraphTraversalTest, MinimalGraphBFS) {
 
   const auto vertex_1{graph.add_vertex(10)};
 
-  seen_vertices_t seen_vertices{};
-  vertex_order_t vertex_order{};
+  seen_edges_t seen_edges{};
+  edge_order_t edge_order{};
 
   // WHEN
   breadth_first_traverse(graph, vertex_1,
-                         record_vertex_callback{seen_vertices, vertex_order});
+                         record_edge_callback{seen_edges, edge_order});
 
   // THEN
-  const seen_vertices_t expected_vertices{vertex_1};
-  ASSERT_EQ(seen_vertices, expected_vertices);
+  const seen_edges_t expected_edges{};
+  ASSERT_EQ(seen_edges, expected_edges);
 }
 
 TYPED_TEST(TypedGraphTraversalTest, SimpleGraphDFS) {
@@ -93,16 +92,16 @@ TYPED_TEST(TypedGraphTraversalTest, SimpleGraphDFS) {
   // so it does not matter whether this is a directed or undirected graph
   graph.add_edge(vertex_1, vertex_2, 100);
 
-  seen_vertices_t seen_vertices{};
-  vertex_order_t vertex_order{};
+  seen_edges_t seen_edges{};
+  edge_order_t edge_order{};
 
   // WHEN
   depth_first_traverse(graph, vertex_1,
-                       record_vertex_callback{seen_vertices, vertex_order});
+                       record_edge_callback{seen_edges, edge_order});
 
-  // THEN - The order of traversal between neighbors is undefined
-  const seen_vertices_t expected_vertices{vertex_1, vertex_2};
-  ASSERT_EQ(seen_vertices, expected_vertices);
+  // THEN
+  const seen_edges_t expected_edges{{vertex_1, vertex_2}};
+  ASSERT_EQ(seen_edges, expected_edges);
 }
 
 TYPED_TEST(TypedGraphTraversalTest, SimpleGraphBFS) {
@@ -117,16 +116,15 @@ TYPED_TEST(TypedGraphTraversalTest, SimpleGraphBFS) {
   // so it does not matter whether this is a directed or undirected graph
   graph.add_edge(vertex_1, vertex_2, 100);
 
-  seen_vertices_t seen_vertices{};
-  vertex_order_t vertex_order{};
+  seen_edges_t seen_edges{};
+  edge_order_t edge_order{};
 
   // WHEN
   breadth_first_traverse(graph, vertex_1,
-                         record_vertex_callback{seen_vertices, vertex_order});
+                         record_edge_callback{seen_edges, edge_order});
 
-  // THEN - The order of traversal between neighbors is undefined
-  const seen_vertices_t expected_vertices{vertex_1, vertex_2};
-  ASSERT_EQ(seen_vertices, expected_vertices);
+  const seen_edges_t expected_edges{{vertex_1, vertex_2}};
+  ASSERT_EQ(seen_edges, expected_edges);
 }
 
 TEST(GraphTraversalTest, DirectedGraphEdgeWrongDirectionDFS) {
@@ -138,16 +136,16 @@ TEST(GraphTraversalTest, DirectedGraphEdgeWrongDirectionDFS) {
   // The direction of the edge is from 2 -> 1
   graph.add_edge(vertex_2, vertex_1, 100);
 
-  seen_vertices_t seen_vertices{};
-  vertex_order_t vertex_order{};
+  seen_edges_t seen_edges{};
+  edge_order_t edge_order{};
 
   // WHEN - here vertex 1 has no neighbors due to the edge direction
   depth_first_traverse(graph, vertex_1,
-                       record_vertex_callback{seen_vertices, vertex_order});
+                       record_edge_callback{seen_edges, edge_order});
 
-  // THEN
-  const seen_vertices_t expected_vertices{vertex_1};
-  ASSERT_EQ(seen_vertices, expected_vertices);
+  // THEN - there was no edge to traverse
+  const seen_edges_t expected_edges{};
+  ASSERT_EQ(seen_edges, expected_edges);
 }
 
 TEST(GraphTraversalTest, DirectedGraphEdgeWrongDirectionBFS) {
@@ -159,16 +157,16 @@ TEST(GraphTraversalTest, DirectedGraphEdgeWrongDirectionBFS) {
   // The direction of the edge is from 2 -> 1
   graph.add_edge(vertex_2, vertex_1, 100);
 
-  seen_vertices_t seen_vertices{};
-  vertex_order_t vertex_order{};
+  seen_edges_t seen_edges{};
+  edge_order_t edge_order{};
 
   // WHEN - here vertex 1 has no neighbors due to the edge direction
   breadth_first_traverse(graph, vertex_1,
-                         record_vertex_callback{seen_vertices, vertex_order});
+                         record_edge_callback{seen_edges, edge_order});
 
-  // THEN
-  const seen_vertices_t expected_vertices{vertex_1};
-  ASSERT_EQ(seen_vertices, expected_vertices);
+  // THEN - there was no edge to traverse
+  const seen_edges_t expected_edges{};
+  ASSERT_EQ(seen_edges, expected_edges);
 }
 
 TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphDFS) {
@@ -189,24 +187,26 @@ TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphDFS) {
   graph.add_edge(vertex_3, vertex_4, 300);
   graph.add_edge(vertex_3, vertex_5, 400);
 
-  seen_vertices_t seen_vertices{};
-  vertex_order_t vertex_order{};
+  seen_edges_t seen_edges{};
+  edge_order_t edge_order{};
 
   // WHEN
   depth_first_traverse(graph, vertex_1,
-                       record_vertex_callback{seen_vertices, vertex_order});
+                       record_edge_callback{seen_edges, edge_order});
 
   // THEN
-  const seen_vertices_t expected_vertices{vertex_1, vertex_2, vertex_3,
-                                          vertex_4, vertex_5};
-  ASSERT_EQ(seen_vertices, expected_vertices);
+  const seen_edges_t expected_edges{{vertex_1, vertex_2},
+                                    {vertex_1, vertex_3},
+                                    {vertex_3, vertex_4},
+                                    {vertex_3, vertex_5}};
+  ASSERT_EQ(seen_edges, expected_edges);
 
   // We do DFS, so while the ordering between neighbors is undefined,
   // the order within one branch should be preserved
-  ASSERT_TRUE(vertex_order.at(vertex_2) > vertex_order.at(vertex_1));
-  ASSERT_TRUE(vertex_order.at(vertex_3) > vertex_order.at(vertex_1));
-  ASSERT_TRUE(vertex_order.at(vertex_4) > vertex_order.at(vertex_3));
-  ASSERT_TRUE(vertex_order.at(vertex_5) > vertex_order.at(vertex_3));
+  ASSERT_TRUE(edge_order.at({vertex_3, vertex_4}) >
+              edge_order.at({vertex_1, vertex_3}));
+  ASSERT_TRUE(edge_order.at({vertex_3, vertex_5}) >
+              edge_order.at({vertex_1, vertex_3}));
 }
 
 TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphBFS) {
@@ -227,24 +227,30 @@ TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphBFS) {
   graph.add_edge(vertex_3, vertex_4, 300);
   graph.add_edge(vertex_3, vertex_5, 400);
 
-  seen_vertices_t seen_vertices{};
-  vertex_order_t vertex_order{};
+  seen_edges_t seen_edges{};
+  edge_order_t edge_order{};
 
   // WHEN
   breadth_first_traverse(graph, vertex_1,
-                         record_vertex_callback{seen_vertices, vertex_order});
+                         record_edge_callback{seen_edges, edge_order});
 
   // THEN
-  const seen_vertices_t expected_vertices{vertex_1, vertex_2, vertex_3,
-                                          vertex_4, vertex_5};
-  ASSERT_EQ(seen_vertices, expected_vertices);
+  const seen_edges_t expected_edges{{vertex_1, vertex_2},
+                                    {vertex_1, vertex_3},
+                                    {vertex_3, vertex_4},
+                                    {vertex_3, vertex_5}};
+  ASSERT_EQ(seen_edges, expected_edges);
 
   // We do BFS, so all immediate neighbors must be traversed first before going
   // deeper in the graph
-  ASSERT_TRUE(vertex_order.at(vertex_2) < vertex_order.at(vertex_4) &&
-              vertex_order.at(vertex_3) < vertex_order.at(vertex_4));
-  ASSERT_TRUE(vertex_order.at(vertex_2) < vertex_order.at(vertex_5) &&
-              vertex_order.at(vertex_3) < vertex_order.at(vertex_5));
+  ASSERT_TRUE(edge_order.at({vertex_1, vertex_2}) <
+                  edge_order.at({vertex_3, vertex_4}) &&
+              edge_order.at({vertex_1, vertex_2}) <
+                  edge_order.at({vertex_3, vertex_5}));
+  ASSERT_TRUE(edge_order.at({vertex_1, vertex_3}) <
+                  edge_order.at({vertex_3, vertex_4}) &&
+              edge_order.at({vertex_1, vertex_3}) <
+                  edge_order.at({vertex_3, vertex_5}));
 }
 
 TEST(GraphTraversalTest, MoreComplexDirectedGraphEdgeWrongDirectionDFS) {
@@ -264,17 +270,17 @@ TEST(GraphTraversalTest, MoreComplexDirectedGraphEdgeWrongDirectionDFS) {
   graph.add_edge(vertex_3, vertex_4, 300);
   graph.add_edge(vertex_5, vertex_3, 400);  // The direction here is from 5 -> 3
 
-  seen_vertices_t seen_vertices{};
-  vertex_order_t vertex_order{};
+  seen_edges_t seen_edges{};
+  edge_order_t edge_order{};
 
   // WHEN
   depth_first_traverse(graph, vertex_1,
-                       record_vertex_callback{seen_vertices, vertex_order});
+                       record_edge_callback{seen_edges, edge_order});
 
   // THEN
-  const seen_vertices_t expected_vertices{vertex_1, vertex_2, vertex_3,
-                                          vertex_4};
-  ASSERT_EQ(seen_vertices, expected_vertices);
+  const seen_edges_t expected_edges{
+      {vertex_1, vertex_2}, {vertex_1, vertex_3}, {vertex_3, vertex_4}};
+  ASSERT_EQ(seen_edges, expected_edges);
 }
 
 TEST(GraphTraversalTest, MoreComplexDirectedGraphEdgeWrongDirectionBFS) {
@@ -294,17 +300,17 @@ TEST(GraphTraversalTest, MoreComplexDirectedGraphEdgeWrongDirectionBFS) {
   graph.add_edge(vertex_3, vertex_4, 300);
   graph.add_edge(vertex_5, vertex_3, 400);  // The direction here is from 5 -> 3
 
-  seen_vertices_t seen_vertices{};
-  vertex_order_t vertex_order{};
+  seen_edges_t seen_edges{};
+  edge_order_t edge_order{};
 
   // WHEN
   breadth_first_traverse(graph, vertex_1,
-                         record_vertex_callback{seen_vertices, vertex_order});
+                         record_edge_callback{seen_edges, edge_order});
 
   // THEN
-  const seen_vertices_t expected_vertices{vertex_1, vertex_2, vertex_3,
-                                          vertex_4};
-  ASSERT_EQ(seen_vertices, expected_vertices);
+  const seen_edges_t expected_edges{
+      {vertex_1, vertex_2}, {vertex_1, vertex_3}, {vertex_3, vertex_4}};
+  ASSERT_EQ(seen_edges, expected_edges);
 }
 
 }  // namespace graaf::algorithm
