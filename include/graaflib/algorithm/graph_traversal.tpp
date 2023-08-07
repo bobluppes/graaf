@@ -16,21 +16,16 @@ void do_bfs(const graph<V, E, T>& graph,
 
   to_explore.push(start_vertex);
 
-  const auto enqueue_neighbors{[&graph, &to_explore](const vertex_id_t vertex) {
-    std::ranges::for_each(graph.get_neighbors(vertex),
-                          [&to_explore](const vertex_id_t neighbor) {
-                            to_explore.push(neighbor);
-                          });
-  }};
-
   while (!to_explore.empty()) {
     const auto current{to_explore.front()};
     to_explore.pop();
 
-    if (!seen_vertices.contains(current)) {
-      callback(current);
-      enqueue_neighbors(current);
-      seen_vertices.insert(current);
+    seen_vertices.insert(current);
+    for (const auto neighbor_vertex : graph.get_neighbors(current)) {
+      if (!seen_vertices.contains(neighbor_vertex)) {
+        callback(edge_id_t{current, neighbor_vertex});
+        to_explore.push(neighbor_vertex);
+      }
     }
   }
 }
@@ -39,11 +34,11 @@ template <typename V, typename E, graph_type T, typename CALLBACK_T>
 void do_dfs(const graph<V, E, T>& graph,
             std::unordered_set<vertex_id_t>& seen_vertices, vertex_id_t current,
             const CALLBACK_T& callback) {
-  callback(current);
   seen_vertices.insert(current);
 
   for (auto neighbor_vertex : graph.get_neighbors(current)) {
     if (!seen_vertices.contains(neighbor_vertex)) {
+      callback(edge_id_t{current, neighbor_vertex});
       do_dfs(graph, seen_vertices, neighbor_vertex, callback);
     }
   }
@@ -52,7 +47,7 @@ void do_dfs(const graph<V, E, T>& graph,
 }  // namespace detail
 
 template <typename V, typename E, graph_type T, typename CALLBACK_T>
-  requires std::invocable<const CALLBACK_T&, vertex_id_t>
+  requires std::invocable<CALLBACK_T&, edge_id_t&>
 void breadth_first_traverse(const graph<V, E, T>& graph,
                             vertex_id_t start_vertex,
                             const CALLBACK_T& callback) {
@@ -61,7 +56,7 @@ void breadth_first_traverse(const graph<V, E, T>& graph,
 }
 
 template <typename V, typename E, graph_type T, typename CALLBACK_T>
-  requires std::invocable<const CALLBACK_T&, vertex_id_t>
+  requires std::invocable<CALLBACK_T&, edge_id_t&>
 void depth_first_traverse(const graph<V, E, T>& graph, vertex_id_t start_vertex,
                           const CALLBACK_T& callback) {
   std::unordered_set<vertex_id_t> seen_vertices{};
