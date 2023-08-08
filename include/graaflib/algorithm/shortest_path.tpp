@@ -1,5 +1,7 @@
 #pragma once
 
+#include <graaflib/algorithm/graph_traversal.h>
+
 #include <algorithm>
 #include <optional>
 #include <queue>
@@ -48,28 +50,26 @@ template <typename V, typename E, graph_type T, typename WEIGHT_T>
 std::optional<graph_path<WEIGHT_T>> bfs_shortest_path(
     const graph<V, E, T>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex) {
-  std::unordered_map<vertex_id_t, detail::path_vertex<WEIGHT_T>> vertex_info;
-  std::queue<vertex_id_t> to_explore{};
+  std::unordered_map<vertex_id_t, detail::path_vertex<WEIGHT_T>> vertex_info{
+      {start_vertex, {start_vertex, 0, start_vertex}}};
 
-  vertex_info[start_vertex] = {start_vertex, 1, start_vertex};
-  to_explore.push(start_vertex);
+  const auto callback{[&vertex_info](const edge_id_t& edge) {
+    const auto [source, target]{edge};
 
-  while (!to_explore.empty()) {
-    auto current{to_explore.front()};
-    to_explore.pop();
-
-    if (current == end_vertex) {
-      break;
+    if (!vertex_info.contains(target)) {
+      vertex_info[target] = {target, vertex_info[source].dist_from_start + 1,
+                             source};
     }
+  }};
 
-    for (const auto neighbor : graph.get_neighbors(current)) {
-      if (!vertex_info.contains(neighbor)) {
-        vertex_info[neighbor] = {
-            neighbor, vertex_info[current].dist_from_start + 1, current};
-        to_explore.push(neighbor);
-      }
-    }
-  }
+  // We keep searching until we have reached the target vertex
+  const auto search_termination_strategy{
+      [end_vertex](const vertex_id_t vertex_id) {
+        return vertex_id == end_vertex;
+      }};
+
+  breadth_first_traverse(graph, start_vertex, callback,
+                         search_termination_strategy);
 
   return reconstruct_path(start_vertex, end_vertex, vertex_info);
 }
