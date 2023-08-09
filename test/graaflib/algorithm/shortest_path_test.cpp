@@ -27,7 +27,7 @@ TYPED_TEST(TypedShortestPathTest, BfsMinimalShortestPath) {
   const auto path = bfs_shortest_path(graph, vertex_1, vertex_1);
 
   // THEN
-  const graph_path<int> expected_path{{vertex_1}, 1};
+  const graph_path<int> expected_path{{vertex_1}, 0};
   ASSERT_EQ(path, expected_path);
 }
 
@@ -62,7 +62,7 @@ TYPED_TEST(TypedShortestPathTest, BfsSimpleShortestPath) {
   const auto path = bfs_shortest_path(graph, vertex_1, vertex_2);
 
   // THEN
-  const graph_path<int> expected_path{{vertex_1, vertex_2}, 2};
+  const graph_path<int> expected_path{{vertex_1, vertex_2}, 1};
   ASSERT_EQ(path, expected_path);
 }
 
@@ -90,7 +90,7 @@ TYPED_TEST(TypedShortestPathTest, BfsMoreComplexShortestPath) {
   const auto path = bfs_shortest_path(graph, vertex_1, vertex_5);
 
   // THEN
-  const graph_path<int> expected_path{{vertex_1, vertex_3, vertex_5}, 3};
+  const graph_path<int> expected_path{{vertex_1, vertex_3, vertex_5}, 2};
   ASSERT_EQ(path, expected_path);
 }
 
@@ -118,7 +118,7 @@ TYPED_TEST(TypedShortestPathTest, BfsCyclicShortestPath) {
 
   // THEN
   const graph_path<int> expected_path{{vertex_1, vertex_2, vertex_3, vertex_5},
-                                      4};
+                                      3};
   ASSERT_EQ(path, expected_path);
 }
 
@@ -144,7 +144,7 @@ TEST(ShortestPathTest, BfsDirectedrWrongDirectionShortestPath) {
 
   // THEN
   const graph_path<int> expected_path{
-      {vertex_1, vertex_2, vertex_4, vertex_3, vertex_5}, 5};
+      {vertex_1, vertex_2, vertex_4, vertex_3, vertex_5}, 4};
   ASSERT_EQ(path, expected_path);
 }
 
