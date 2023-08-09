@@ -332,6 +332,34 @@ TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphDFSTermination) {
               seen_edges == expected_edges_option_2);
 }
 
+TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphDFSLaterTermination) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  const auto [graph, vertex_ids]{create_complex_scenario<graph_t>()};
+
+  seen_edges_t seen_edges{};
+  edge_order_t edge_order{};
+
+  // Here we terminate deeper in the tree
+  const auto termination_strategy{
+      [target = vertex_ids[3]](const vertex_id_t& vertex) {
+        return vertex == target;
+      }};
+
+  // WHEN
+  breadth_first_traverse(graph, vertex_ids[0],
+                         record_edge_callback{seen_edges, edge_order},
+                         termination_strategy);
+
+  // THEN - Since there is no clear iteration order between the neighbors of the
+  // 0-th vertex, but we must have AT_LEAST seen the following edges
+  const seen_edges_t expected_edges{{vertex_ids[0], vertex_ids[2]},
+                                    {vertex_ids[2], vertex_ids[3]}};
+  for (const auto& expected_edge : expected_edges) {
+    ASSERT_TRUE(seen_edges.contains(expected_edge));
+  }
+}
+
 TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphBFSTermination) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
