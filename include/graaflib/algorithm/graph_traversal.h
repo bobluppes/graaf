@@ -27,21 +27,21 @@ struct exhaustive_search_strategy {
  *
  * @param graph The graph to traverse.
  * @param start_vertex Vertex id where the traversal should be started.
- * @param callback A callback which is called for each traversed edge. Should
- * be invocable with an edge_id_t.
+ * @param edge_callback A callback which is called for each traversed edge.
+ * Should be invocable with an edge_id_t.
  * @param search_termination_strategy A unary predicate to indicate whether we
  * should continue the traversal or not. Traversal continues while this
  * predicate returns false.
  */
 template <
-    typename V, typename E, graph_type T, typename CALLBACK_T,
+    typename V, typename E, graph_type T, typename EDGE_CALLBACK_T,
     typename SEARCH_TERMINATION_STRATEGY_T = detail::exhaustive_search_strategy>
-  requires std::invocable<CALLBACK_T &, edge_id_t &> &&
+  requires std::invocable<EDGE_CALLBACK_T &, edge_id_t &> &&
            std::is_invocable_r_v<bool, SEARCH_TERMINATION_STRATEGY_T &,
                                  vertex_id_t>
 void breadth_first_traverse(
     const graph<V, E, T> &graph, vertex_id_t start_vertex,
-    const CALLBACK_T &callback,
+    const EDGE_CALLBACK_T &edge_callback,
     const SEARCH_TERMINATION_STRATEGY_T &search_termination_strategy =
         SEARCH_TERMINATION_STRATEGY_T{});
 
@@ -51,21 +51,21 @@ void breadth_first_traverse(
  *
  * @param graph The graph to traverse.
  * @param start_vertex Vertex id where the traversal should be started.
- * @param callback A callback which is called for each traversed edge. Should
- * be invocable with an edge_id_t.
+ * @param edge_callback A callback which is called for each traversed edge.
+ * Should be invocable with an edge_id_t.
  * @param search_termination_strategy A unary predicate to indicate whether we
  * should continue the traversal or not. Traversal continues while this
  * predicate returns false.
  */
 template <
-    typename V, typename E, graph_type T, typename CALLBACK_T,
+    typename V, typename E, graph_type T, typename EDGE_CALLBACK_T,
     typename SEARCH_TERMINATION_STRATEGY_T = detail::exhaustive_search_strategy>
-  requires std::invocable<CALLBACK_T &, edge_id_t &> &&
+  requires std::invocable<EDGE_CALLBACK_T &, edge_id_t &> &&
            std::is_invocable_r_v<bool, SEARCH_TERMINATION_STRATEGY_T &,
                                  vertex_id_t>
 void depth_first_traverse(
     const graph<V, E, T> &graph, vertex_id_t start_vertex,
-    const CALLBACK_T &callback,
+    const EDGE_CALLBACK_T &edge_callback,
     const SEARCH_TERMINATION_STRATEGY_T &search_termination_strategy =
         SEARCH_TERMINATION_STRATEGY_T{});
 
