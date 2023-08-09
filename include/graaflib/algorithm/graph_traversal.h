@@ -9,6 +9,13 @@ namespace graaf::algorithm {
 
 namespace detail {
 
+/**
+ * An edge callback which does nothing.
+ */
+struct noop_callback {
+  void operator()(const edge_id_t & /*edge*/) const {}
+};
+
 /*
  * A unary predicate which always returns false, effectively resulting in an
  * exhaustive search.
@@ -34,7 +41,8 @@ struct exhaustive_search_strategy {
  * predicate returns false.
  */
 template <
-    typename V, typename E, graph_type T, typename EDGE_CALLBACK_T,
+    typename V, typename E, graph_type T,
+    typename EDGE_CALLBACK_T = detail::noop_callback,
     typename SEARCH_TERMINATION_STRATEGY_T = detail::exhaustive_search_strategy>
   requires std::invocable<EDGE_CALLBACK_T &, edge_id_t &> &&
            std::is_invocable_r_v<bool, SEARCH_TERMINATION_STRATEGY_T &,
@@ -58,7 +66,8 @@ void breadth_first_traverse(
  * predicate returns false.
  */
 template <
-    typename V, typename E, graph_type T, typename EDGE_CALLBACK_T,
+    typename V, typename E, graph_type T,
+    typename EDGE_CALLBACK_T = detail::noop_callback,
     typename SEARCH_TERMINATION_STRATEGY_T = detail::exhaustive_search_strategy>
   requires std::invocable<EDGE_CALLBACK_T &, edge_id_t &> &&
            std::is_invocable_r_v<bool, SEARCH_TERMINATION_STRATEGY_T &,
