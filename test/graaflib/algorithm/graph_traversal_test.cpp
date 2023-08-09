@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
+#include <vector>
 
 namespace graaf::algorithm {
 
@@ -39,6 +40,39 @@ struct record_edge_callback {
     edge_order[edge] = edge_order_supplier++;
   }
 };
+
+template <typename GRAPH_T>
+struct scenario {
+  GRAPH_T graph{};
+
+  // This vector decouples the test scenario from the graphs internal id
+  // generation logic. The first element in this vector is the first vertex and
+  // so on...
+  std::vector<vertex_id_t> vertex_ids{};
+};
+
+template <typename GRAPH_T>
+[[nodiscard]] scenario<GRAPH_T> create_complex_scenario() {
+  std::vector<vertex_id_t> vertex_ids{};
+  vertex_ids.reserve(5);
+
+  GRAPH_T graph{};
+
+  vertex_ids.push_back(graph.add_vertex(10));
+  vertex_ids.push_back(graph.add_vertex(20));
+  vertex_ids.push_back(graph.add_vertex(30));
+  vertex_ids.push_back(graph.add_vertex(40));
+  vertex_ids.push_back(graph.add_vertex(50));
+
+  // All edges are in the search direction, so the graph specialization does not
+  // matter
+  graph.add_edge(vertex_ids[0], vertex_ids[1], 100);
+  graph.add_edge(vertex_ids[0], vertex_ids[2], 200);
+  graph.add_edge(vertex_ids[2], vertex_ids[3], 300);
+  graph.add_edge(vertex_ids[2], vertex_ids[4], 400);
+
+  return {std::move(graph), std::move(vertex_ids)};
+}
 
 }  // namespace
 
@@ -172,85 +206,59 @@ TEST(GraphTraversalTest, DirectedGraphEdgeWrongDirectionBFS) {
 TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphDFS) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
-  graph_t graph{};
-
-  const auto vertex_1{graph.add_vertex(10)};
-  const auto vertex_2{graph.add_vertex(20)};
-  const auto vertex_3{graph.add_vertex(30)};
-  const auto vertex_4{graph.add_vertex(40)};
-  const auto vertex_5{graph.add_vertex(50)};
-
-  // All edges are in the search direction, so the graph specialization does not
-  // matter
-  graph.add_edge(vertex_1, vertex_2, 100);
-  graph.add_edge(vertex_1, vertex_3, 200);
-  graph.add_edge(vertex_3, vertex_4, 300);
-  graph.add_edge(vertex_3, vertex_5, 400);
+  const auto [graph, vertex_ids]{create_complex_scenario<graph_t>()};
 
   seen_edges_t seen_edges{};
   edge_order_t edge_order{};
 
   // WHEN
-  depth_first_traverse(graph, vertex_1,
+  depth_first_traverse(graph, vertex_ids[0],
                        record_edge_callback{seen_edges, edge_order});
 
   // THEN
-  const seen_edges_t expected_edges{{vertex_1, vertex_2},
-                                    {vertex_1, vertex_3},
-                                    {vertex_3, vertex_4},
-                                    {vertex_3, vertex_5}};
+  const seen_edges_t expected_edges{{vertex_ids[0], vertex_ids[1]},
+                                    {vertex_ids[0], vertex_ids[2]},
+                                    {vertex_ids[2], vertex_ids[3]},
+                                    {vertex_ids[2], vertex_ids[4]}};
   ASSERT_EQ(seen_edges, expected_edges);
 
   // We do DFS, so while the ordering between neighbors is undefined,
   // the order within one branch should be preserved
-  ASSERT_TRUE(edge_order.at({vertex_3, vertex_4}) >
-              edge_order.at({vertex_1, vertex_3}));
-  ASSERT_TRUE(edge_order.at({vertex_3, vertex_5}) >
-              edge_order.at({vertex_1, vertex_3}));
+  ASSERT_TRUE(edge_order.at({vertex_ids[2], vertex_ids[3]}) >
+              edge_order.at({vertex_ids[0], vertex_ids[2]}));
+  ASSERT_TRUE(edge_order.at({vertex_ids[2], vertex_ids[4]}) >
+              edge_order.at({vertex_ids[0], vertex_ids[2]}));
 }
 
 TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphBFS) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
-  graph_t graph{};
-
-  const auto vertex_1{graph.add_vertex(10)};
-  const auto vertex_2{graph.add_vertex(20)};
-  const auto vertex_3{graph.add_vertex(30)};
-  const auto vertex_4{graph.add_vertex(40)};
-  const auto vertex_5{graph.add_vertex(50)};
-
-  // All edges are in the search direction, so the graph specialization does not
-  // matter
-  graph.add_edge(vertex_1, vertex_2, 100);
-  graph.add_edge(vertex_1, vertex_3, 200);
-  graph.add_edge(vertex_3, vertex_4, 300);
-  graph.add_edge(vertex_3, vertex_5, 400);
+  const auto [graph, vertex_ids]{create_complex_scenario<graph_t>()};
 
   seen_edges_t seen_edges{};
   edge_order_t edge_order{};
 
   // WHEN
-  breadth_first_traverse(graph, vertex_1,
+  breadth_first_traverse(graph, vertex_ids[0],
                          record_edge_callback{seen_edges, edge_order});
 
   // THEN
-  const seen_edges_t expected_edges{{vertex_1, vertex_2},
-                                    {vertex_1, vertex_3},
-                                    {vertex_3, vertex_4},
-                                    {vertex_3, vertex_5}};
+  const seen_edges_t expected_edges{{vertex_ids[0], vertex_ids[1]},
+                                    {vertex_ids[0], vertex_ids[2]},
+                                    {vertex_ids[2], vertex_ids[3]},
+                                    {vertex_ids[2], vertex_ids[4]}};
   ASSERT_EQ(seen_edges, expected_edges);
 
   // We do BFS, so all immediate neighbors must be traversed first before going
   // deeper in the graph
-  ASSERT_TRUE(edge_order.at({vertex_1, vertex_2}) <
-                  edge_order.at({vertex_3, vertex_4}) &&
-              edge_order.at({vertex_1, vertex_2}) <
-                  edge_order.at({vertex_3, vertex_5}));
-  ASSERT_TRUE(edge_order.at({vertex_1, vertex_3}) <
-                  edge_order.at({vertex_3, vertex_4}) &&
-              edge_order.at({vertex_1, vertex_3}) <
-                  edge_order.at({vertex_3, vertex_5}));
+  ASSERT_TRUE(edge_order.at({vertex_ids[0], vertex_ids[1]}) <
+                  edge_order.at({vertex_ids[2], vertex_ids[3]}) &&
+              edge_order.at({vertex_ids[0], vertex_ids[1]}) <
+                  edge_order.at({vertex_ids[2], vertex_ids[4]}));
+  ASSERT_TRUE(edge_order.at({vertex_ids[0], vertex_ids[2]}) <
+                  edge_order.at({vertex_ids[2], vertex_ids[3]}) &&
+              edge_order.at({vertex_ids[0], vertex_ids[2]}) <
+                  edge_order.at({vertex_ids[2], vertex_ids[4]}));
 }
 
 TEST(GraphTraversalTest, MoreComplexDirectedGraphEdgeWrongDirectionDFS) {
