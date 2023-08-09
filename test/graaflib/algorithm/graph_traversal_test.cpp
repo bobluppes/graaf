@@ -261,6 +261,104 @@ TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphBFS) {
                   edge_order.at({vertex_ids[2], vertex_ids[4]}));
 }
 
+TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphDFSImmediateTermination) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  const auto [graph, vertex_ids]{create_complex_scenario<graph_t>()};
+
+  seen_edges_t seen_edges{};
+  edge_order_t edge_order{};
+
+  // Always returns true such that the search immediately terminates
+  const auto immediate_termination_strategy{
+      [](const vertex_id_t& /*vertex*/) { return true; }};
+
+  // WHEN
+  depth_first_traverse(graph, vertex_ids[0],
+                       record_edge_callback{seen_edges, edge_order},
+                       immediate_termination_strategy);
+
+  // THEN
+  const seen_edges_t expected_edges{};
+  ASSERT_EQ(seen_edges, expected_edges);
+}
+
+TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphBFSImmediateTermination) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  const auto [graph, vertex_ids]{create_complex_scenario<graph_t>()};
+
+  seen_edges_t seen_edges{};
+  edge_order_t edge_order{};
+
+  // Always returns true such that the search immediately terminates
+  const auto immediate_termination_strategy{
+      [](const vertex_id_t& /*vertex*/) { return true; }};
+
+  // WHEN
+  breadth_first_traverse(graph, vertex_ids[0],
+                         record_edge_callback{seen_edges, edge_order},
+                         immediate_termination_strategy);
+
+  // THEN
+  const seen_edges_t expected_edges{};
+  ASSERT_EQ(seen_edges, expected_edges);
+}
+
+TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphDFSTermination) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  const auto [graph, vertex_ids]{create_complex_scenario<graph_t>()};
+
+  seen_edges_t seen_edges{};
+  edge_order_t edge_order{};
+
+  const auto termination_strategy{
+      [target = vertex_ids[2]](const vertex_id_t& vertex) {
+        return vertex == target;
+      }};
+
+  // WHEN
+  breadth_first_traverse(graph, vertex_ids[0],
+                         record_edge_callback{seen_edges, edge_order},
+                         termination_strategy);
+
+  // THEN - Since there is no clear iteration order between the neighbors of the
+  // 0-th vertex, there are two options for which edges we traversed
+  const seen_edges_t expected_edges_option_1{{vertex_ids[0], vertex_ids[1]},
+                                             {vertex_ids[0], vertex_ids[2]}};
+  const seen_edges_t expected_edges_option_2{{vertex_ids[0], vertex_ids[2]}};
+  ASSERT_TRUE(seen_edges == expected_edges_option_1 ||
+              seen_edges == expected_edges_option_2);
+}
+
+TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphBFSTermination) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  const auto [graph, vertex_ids]{create_complex_scenario<graph_t>()};
+
+  seen_edges_t seen_edges{};
+  edge_order_t edge_order{};
+
+  const auto termination_strategy{
+      [target = vertex_ids[2]](const vertex_id_t& vertex) {
+        return vertex == target;
+      }};
+
+  // WHEN
+  breadth_first_traverse(graph, vertex_ids[0],
+                         record_edge_callback{seen_edges, edge_order},
+                         termination_strategy);
+
+  // THEN - Since there is no clear iteration order between the neighbors of the
+  // 0-th vertex, there are two options for which edges we traversed
+  const seen_edges_t expected_edges_option_1{{vertex_ids[0], vertex_ids[1]},
+                                             {vertex_ids[0], vertex_ids[2]}};
+  const seen_edges_t expected_edges_option_2{{vertex_ids[0], vertex_ids[2]}};
+  ASSERT_TRUE(seen_edges == expected_edges_option_1 ||
+              seen_edges == expected_edges_option_2);
+}
+
 TEST(GraphTraversalTest, MoreComplexDirectedGraphEdgeWrongDirectionDFS) {
   // GIVEN
   directed_graph<int, int> graph{};
