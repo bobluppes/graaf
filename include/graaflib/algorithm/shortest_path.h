@@ -42,6 +42,7 @@ std::optional<graph_path<WEIGHT_T>> bfs_shortest_path(
  * @param graph The graph to extract shortest path from.
  * @param start_vertex Vertex id where the shortest path should start.
  * @param end_vertex Vertex id where the shortest path should end.
+ * @return An optional with the shortest path (list of vertices) if found.
  */
 template <typename V, typename E, graph_type T,
           typename WEIGHT_T = decltype(get_weight(std::declval<E>()))>
