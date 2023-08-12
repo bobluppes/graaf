@@ -7,50 +7,72 @@
 
 struct station {
   std::string name{};
-  double gaz_capacity{};
 };
 
-struct road {
-  int length{};
-  int get_weight() { return length; }
+struct railroad : public graaf::weighted_edge<double> {
+  double kilometers{};
+  [[nodiscard]] double get_weight() const noexcept override { return kilometers; }
+  railroad(double distance) : kilometers(distance) {}
 };
 
 struct graph_with_start_and_target {
-  graaf::undirected_graph<station, road> graph{};
+  graaf::undirected_graph<station, railroad> graph{};
   graaf::vertex_id_t start{};
   graaf::vertex_id_t target{};
 };
 
 graph_with_start_and_target create_graph_with_start_and_target() {
-  graaf::undirected_graph<station, road> my_stations{};
+  graaf::undirected_graph<station, railroad> my_stations{};
 
-  const auto station_1{my_stations.add_vertex(station{"Road 66", 13.5})};
-  const auto station_2{my_stations.add_vertex(station{"Long road", 7.3})};
-  const auto station_3{my_stations.add_vertex(station{"Stop & Buy", 25.4})};
-  const auto station_4{my_stations.add_vertex(station{"GAZilla", 11.3})};
-  const auto station_5{my_stations.add_vertex(station{"Station 32", 73.12})};
-  const auto station_6{my_stations.add_vertex(station{"Last stop", 0.5})};
-  const auto station_7{
-      my_stations.add_vertex(station{"You won't reach it", 55.5})};
-  const auto station_8{
-      my_stations.add_vertex(station{"Went for lunch break", 66.5})};
+  // Germany
+  const auto station_13{my_stations.add_vertex(station{"Hamburg"})};
+  const auto station_12{my_stations.add_vertex(station{"Bremen"})};
+  const auto station_3{my_stations.add_vertex(station{"Berlin Central Station"})};
+  const auto station_4{my_stations.add_vertex(station{"Hannover Hauptbahnhof"})};
+  const auto station_11{my_stations.add_vertex(station{"Dortmund"})};
+  const auto station_5{my_stations.add_vertex(station{"Kassel Hbf"})};
+  const auto station_2{my_stations.add_vertex(station{"Leipzig Central Station"})}; 
+  const auto station_1{my_stations.add_vertex(station{"Dresden Central Station"})};
+  const auto station_10{my_stations.add_vertex(station{"Cologne Hauptbahnhof"})};
+  const auto station_9{my_stations.add_vertex(station{"Frankfurt Hauptbahnhof"})};
+  const auto station_6{my_stations.add_vertex(station{"Nurnberg Central Station"})};
+  const auto station_8{my_stations.add_vertex(station{"Stuttgart Central Station"})};
+  const auto station_7{my_stations.add_vertex(station{"Munchen Hbf"})};
+  
+  // Canada
+  const auto station_14{my_stations.add_vertex(station{"Edmonton central station"})};
+  const auto station_15{my_stations.add_vertex(station{"Toronto Union Station"})};
 
-  my_stations.add_edge(station_1, station_2, road{125});
-  my_stations.add_edge(station_2, station_4, road{205});
-  my_stations.add_edge(station_4, station_5, road{325});
-  my_stations.add_edge(station_5, station_3, road{1725});
-  my_stations.add_edge(station_6, station_3, road{88});
-  my_stations.add_edge(station_1, station_5, road{77});
-  my_stations.add_edge(station_5, station_2, road{93});
-  my_stations.add_edge(station_5, station_6, road{193});
-  my_stations.add_edge(station_7, station_8, road{5});
+  my_stations.add_edge(station_1, station_2, railroad{357.3});
+  my_stations.add_edge(station_1, station_3, railroad{730.67});
+  my_stations.add_edge(station_3, station_4, railroad{533.3});
+  my_stations.add_edge(station_2, station_5, railroad{693.3});
+  my_stations.add_edge(station_2, station_4, railroad{1152});
+  my_stations.add_edge(station_4, station_5, railroad{288});
+  my_stations.add_edge(station_2, station_6, railroad{741.3});
+  my_stations.add_edge(station_5, station_6, railroad{1464});
+  my_stations.add_edge(station_7, station_6, railroad{432});
+  my_stations.add_edge(station_7, station_8, railroad{930});
+  my_stations.add_edge(station_8, station_6, railroad{1236});
+  my_stations.add_edge(station_9, station_6, railroad{840});
+  my_stations.add_edge(station_9, station_10, railroad{498});
+  my_stations.add_edge(station_10, station_11, railroad{462});
+  my_stations.add_edge(station_13, station_4, railroad{480});
+  my_stations.add_edge(station_11, station_5, railroad{822});
+  my_stations.add_edge(station_11, station_4, railroad{582});
+  my_stations.add_edge(station_11, station_12, railroad{720});
+  my_stations.add_edge(station_12, station_13, railroad{330});
+  my_stations.add_edge(station_12, station_4, railroad{486});
+  my_stations.add_edge(station_13, station_3, railroad{732});
 
-  return {my_stations, station_1, station_3};
+  my_stations.add_edge(station_14, station_15, railroad{9920});
+
+  return {my_stations, station_13, station_6};
 }
 
 void print_shortest_path(
-    const graaf::undirected_graph<station, road>& graph,
-    const std::optional<graaf::algorithm::graph_path<int>>& path,
+    const graaf::undirected_graph<station, railroad>& graph,
+    const std::optional<graaf::algorithm::graph_path<double>>& path,
     const std::string& filepath) {
   auto shortest_path{path.value()};
   std::unordered_set<graaf::edge_id_t, graaf::edge_id_hash>
@@ -67,7 +89,7 @@ void print_shortest_path(
       [](graaf::vertex_id_t vertex_id, station vertex) -> std::string {
         const auto style{"filled"};
         return fmt::format(
-            "label=\"{}\", style={}, color=black, fontcolor=black, "
+            "label=\"{}\", style={}, color=black, fontcolor=black, shape=rectangle,"
             "fillcolor=mediumspringgreen",
             vertex.name, style);
       }};
@@ -79,10 +101,10 @@ void print_shortest_path(
     if (edges_on_shortest_path.contains({edge_id.first, edge_id.second}) ||
         edges_on_shortest_path.contains({edge_id.second, edge_id.first})) {
       return fmt::format("label=\"{}\", style={}, color=red, fontcolor=black",
-                         edge.length, style);
+                         edge.kilometers, style);
     }
     return fmt::format("label=\"{}\", style={}, color=black, fontcolor=black",
-                       edge.length, style);
+                       edge.kilometers, style);
   }};
 
   const std::filesystem::path output{filepath};
@@ -101,7 +123,8 @@ struct record_vertex_callback {
   }
 };
 
-void print_visited_vertices(const graaf::undirected_graph<station, road>& graph,
+void print_visited_vertices(
+    const graaf::undirected_graph<station, railroad>& graph,
                             seen_vertices_t& seen,
                             const std::string& filepath) {
   std::unordered_set<graaf::edge_id_t, graaf::edge_id_hash> seen_edges{};
@@ -117,7 +140,7 @@ void print_visited_vertices(const graaf::undirected_graph<station, road>& graph,
         const auto style{"filled"};
 
         return fmt::format(
-            "label=\"{}\", style={}, color=black, fontcolor=black, "
+            "label=\"{}\", style={}, color=black, fontcolor=black, shape=rectangle,"
             "fillcolor=mediumspringgreen",
             vertex.name, style);
       }};
@@ -129,9 +152,9 @@ void print_visited_vertices(const graaf::undirected_graph<station, road>& graph,
     if (seen_edges.contains({edge_id.first, edge_id.second}) ||
         seen_edges.contains({edge_id.second, edge_id.first}))
       return fmt::format("label=\"{}\", style={}, color=red, fontcolor=black",
-                         edge.length, style);
+                         edge.kilometers, style);
     return fmt::format("label=\"{}\", style={}, color=black, fontcolor=black",
-                       edge.length, style);
+                       edge.kilometers, style);
   }};
 
   const std::filesystem::path output{filepath};

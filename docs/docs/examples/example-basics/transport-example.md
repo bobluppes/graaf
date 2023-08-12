@@ -1,11 +1,12 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # Network Example
-The undirected_graph implemented in `graaf::undirected_graph`
-The shortest path algorithms implemented in `graaf::algorithm::bfs_shortest_path` and `graaf::algorithm::dijkstra_shortest_path`
-The graph traversal implemented in `graaf::algorithm::graph_traversal`
+This example showcases graph traversal and shortest path algorithms in an undirected graph network. As such, it demonstrates the usage of the following classes and algorithms:
+- The undirected_graph implemented in `graaf::undirected_graph`
+- The shortest path algorithm implemented in `graaf::algorithm::get_shortest_path`
+- The graph traversal implemented in `graaf::algorithm::graph_traversal`
 
 Using the following graph:
 
@@ -47,6 +48,7 @@ graph_with_start_and_target create_graph_with_start_and_target() {
 
 ## Visualizing graph traversal result
 For shortest path, colouring edges with red to indicate the shortest path for both weighted and unweighted graph
+We need to specify the start and end vertices in order to find the shortest path between the start and end vertices.
 
 Result of unweighted shortest path, chosen edges are coloured red
 <pre>
@@ -62,7 +64,6 @@ Result of weighted shortest path, chosen edges are coloured red
 </p>
 </pre>
 
-
 ```c++
 void print_shortest_path(const graaf::undirected_graph<station, road>& graph,
                 const std::optional<graaf::algorithm::graph_path<int>>& path, const std::string & filepath) {
@@ -77,7 +78,7 @@ void print_visited_vertices(const graaf::undirected_graph<station, road>& graph,
 ```
 
 Creating a vertex callback structure that will be passed as an argument in the graph traverse function
-The function is needed in order to be called inside the traverse function; see graph.tpp file lines 15 and 45 for context.
+The function is needed in order to be called inside the traverse function; see graph.tpp for context.
 
 ```c++
 using seen_vertices_t = std::unordered_multiset<graaf::vertex_id_t>;
@@ -92,6 +93,13 @@ struct record_vertex_callback {
     }
 };
 ```
+
+Result of shortest path BFS, visited edges are coloured red
+<pre>
+<p align="center">
+    <img src={require("/static/img/examples/example_traversed_graph_BFS.png").default}></img>
+</p>
+</pre>
 
 ### Graph example usage
 First code block: traversing a weighted graph for the shortest path (Dijkstra) and printing the result to *.dot file.
