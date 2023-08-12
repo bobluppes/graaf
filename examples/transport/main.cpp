@@ -13,6 +13,7 @@ struct railroad : public graaf::weighted_edge<double> {
   double kilometers{};
   [[nodiscard]] double get_weight() const noexcept override { return kilometers; }
   railroad(double distance) : kilometers(distance) {}
+  ~railroad() {}
 };
 
 struct graph_with_start_and_target {
@@ -24,7 +25,7 @@ struct graph_with_start_and_target {
 graph_with_start_and_target create_graph_with_start_and_target() {
   graaf::undirected_graph<station, railroad> my_stations{};
 
-  // Germany
+  // Germany railway stations
   const auto station_13{my_stations.add_vertex(station{"Hamburg"})};
   const auto station_12{my_stations.add_vertex(station{"Bremen"})};
   const auto station_3{my_stations.add_vertex(station{"Berlin Central Station"})};
@@ -39,7 +40,7 @@ graph_with_start_and_target create_graph_with_start_and_target() {
   const auto station_8{my_stations.add_vertex(station{"Stuttgart Central Station"})};
   const auto station_7{my_stations.add_vertex(station{"Munchen Hbf"})};
   
-  // Canada
+  // Canada stations
   const auto station_14{my_stations.add_vertex(station{"Edmonton central station"})};
   const auto station_15{my_stations.add_vertex(station{"Toronto Union Station"})};
 
