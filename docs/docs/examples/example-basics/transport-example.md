@@ -20,14 +20,16 @@ Custom vertex and edge. In order to use Dijkstra, we should provide the get_weig
 
 ```c++
 struct station {
-    int id{};
-	std::string name{};
-    double gaz_capacity{};
+  std::string name{};
 };
 
-struct road {
-	int length{};
-    int get_weight() { return length; }
+struct railroad : public graaf::weighted_edge<double> {
+  double kilometers{};
+  [[nodiscard]] double get_weight() const noexcept override {
+    return kilometers;
+  }
+  railroad(double distance) : kilometers(distance) {}
+  ~railroad() {}
 };
 ```
 
@@ -107,16 +109,21 @@ Second code block: traversing an unweighted graph for the shortest path and prin
 The last one is traversing the graph from a given vertex and printing the result to *.dot file.
 
 ```c++
- const auto [graph, start, target]{create_graph_with_start_and_target()};
+  const auto [graph, start, target]{create_graph_with_start_and_target()};
 
-    const auto weighted_shortest_path{graaf::algorithm::dijkstra_shortest_path(graph, start, target)};
-    print_shortest_path(graph, weighted_shortest_path, "example_weighted_graph.dot");
+  const auto weighted_shortest_path{
+      graaf::algorithm::dijkstra_shortest_path(graph, start, target)};
+  print_shortest_path(graph, weighted_shortest_path,
+                      "example_weighted_graph.dot");
 
-    const auto unweighted_shortest_path{graaf::algorithm::bfs_shortest_path(graph, start, target)};
-    print_shortest_path(graph, unweighted_shortest_path, "example_unwieghted_graph.dot");
+  const auto unweighted_shortest_path{
+      graaf::algorithm::bfs_shortest_path(graph, start, target)};
+  print_shortest_path(graph, unweighted_shortest_path,
+                      "example_unwieghted_graph.dot");
 
-    seen_vertices_t seen_vertices{};
-    graaf::algorithm::breadth_first_traverse(
-        graph, start, record_vertex_callback{seen_vertices});
-    print_visited_vertices(graph, seen_vertices, "example_traverse_BFS_graph.dot");
+  seen_vertices_t seen_vertices{};
+  graaf::algorithm::breadth_first_traverse(
+      graph, start, record_vertex_callback{seen_vertices});
+  print_visited_vertices(graph, seen_vertices,
+                         "example_traverse_BFS_graph.dot");
 ```
