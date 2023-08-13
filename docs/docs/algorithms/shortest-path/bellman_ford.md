@@ -1,10 +1,10 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # Bellman-Ford Shortest Path
 
-Bellman-Ford's algorithm computes shortest paths from a single source vertex to all of the other vertices in weighted graph and unweighted graphs. In weighted graphs, edge weights are allowed to be non-negative. Bellman-Ford's algorithm runs in `O(|E||V|)` for connected graphs, where `|E|` is the number of edges and `|V|` the number of vertices in the
+Bellman-Ford's algorithm computes shortest paths from a single source vertex to all of the other vertices in weighted graph and unweighted graphs. In weighted graphs, edge weights are allowed to be negative. Bellman-Ford's algorithm runs in `O(|E||V|)` for connected graphs, where `|E|` is the number of edges and `|V|` the number of vertices in the
 graph.
 
 A limitation is that this implementation doesn't check for negative-weight cycles.

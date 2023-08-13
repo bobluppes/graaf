@@ -160,9 +160,9 @@ bellman_ford_shortest_paths(const graph<V, E, T>& graph, vertex_id_t start_verte
   std::unordered_map<vertex_id_t, graph_path<WEIGHT_T>> shortest_paths;
 
   // Initialize the shortest path distances from the starting vertex to "infinity" for all vertices
-  for (const auto& vertex : graph.get_vertices()) {
-    shortest_paths[vertex.first] = {
-      {vertex.first},
+  for (const auto& [vertex_id, _] : graph.get_vertices()) {
+    shortest_paths[vertex_id] = {
+      {vertex_id},
       std::numeric_limits<WEIGHT_T>::max()
     };
   }
@@ -175,8 +175,8 @@ bellman_ford_shortest_paths(const graph<V, E, T>& graph, vertex_id_t start_verte
 
   // Relax edges for |V| - 1 iterations
   for (std::size_t i = 1; i < graph.vertex_count(); ++i) {
-    for (const auto& edge : graph.get_edges()) {
-      const auto [u, v]{edge.first};
+    for (const auto& [edge_id, edge] : graph.get_edges()) {
+      const auto [u, v]{edge_id};
       WEIGHT_T weight = get_weight(edge);
 
       if (shortest_paths[u].total_weight != std::numeric_limits<WEIGHT_T>::max() &&
