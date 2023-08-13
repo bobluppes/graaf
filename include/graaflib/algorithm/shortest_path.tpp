@@ -1,5 +1,7 @@
 #pragma once
 
+#include <graaflib/algorithm/graph_traversal.h>
+
 #include <algorithm>
 #include <optional>
 #include <queue>
@@ -48,28 +50,26 @@ template <typename V, typename E, graph_type T, typename WEIGHT_T>
 std::optional<graph_path<WEIGHT_T>> bfs_shortest_path(
     const graph<V, E, T>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex) {
-  std::unordered_map<vertex_id_t, detail::path_vertex<WEIGHT_T>> vertex_info;
-  std::queue<vertex_id_t> to_explore{};
+  std::unordered_map<vertex_id_t, detail::path_vertex<WEIGHT_T>> vertex_info{
+      {start_vertex, {start_vertex, 0, start_vertex}}};
 
-  vertex_info[start_vertex] = {start_vertex, 1, start_vertex};
-  to_explore.push(start_vertex);
+  const auto callback{[&vertex_info](const edge_id_t& edge) {
+    const auto [source, target]{edge};
 
-  while (!to_explore.empty()) {
-    auto current{to_explore.front()};
-    to_explore.pop();
-
-    if (current == end_vertex) {
-      break;
+    if (!vertex_info.contains(target)) {
+      vertex_info[target] = {target, vertex_info[source].dist_from_start + 1,
+                             source};
     }
+  }};
 
-    for (const auto& neighbor : graph.get_neighbors(current)) {
-      if (!vertex_info.contains(neighbor)) {
-        vertex_info[neighbor] = {
-            neighbor, vertex_info[current].dist_from_start + 1, current};
-        to_explore.push(neighbor);
-      }
-    }
-  }
+  // We keep searching until we have reached the target vertex
+  const auto search_termination_strategy{
+      [end_vertex](const vertex_id_t vertex_id) {
+        return vertex_id == end_vertex;
+      }};
+
+  breadth_first_traverse(graph, start_vertex, callback,
+                         search_termination_strategy);
 
   return reconstruct_path(start_vertex, end_vertex, vertex_info);
 }
@@ -78,12 +78,12 @@ template <typename V, typename E, graph_type T, typename WEIGHT_T>
 std::optional<graph_path<WEIGHT_T>> dijkstra_shortest_path(
     const graph<V, E, T>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex) {
-  std::unordered_map<vertex_id_t, detail::path_vertex<WEIGHT_T>> vertex_info;
-
   using weighted_path_item = detail::path_vertex<WEIGHT_T>;
-  std::priority_queue<weighted_path_item, std::vector<weighted_path_item>,
-                      std::greater<>>
-      to_explore{};
+  using dijkstra_queue_t =
+      std::priority_queue<weighted_path_item, std::vector<weighted_path_item>,
+                          std::greater<>>;
+  dijkstra_queue_t to_explore{};
+  std::unordered_map<vertex_id_t, weighted_path_item> vertex_info;
 
   vertex_info[start_vertex] = {start_vertex, 0, start_vertex};
   to_explore.push(vertex_info[start_vertex]);
@@ -97,8 +97,15 @@ std::optional<graph_path<WEIGHT_T>> dijkstra_shortest_path(
     }
 
     for (const auto& neighbor : graph.get_neighbors(current.id)) {
-      WEIGHT_T distance = current.dist_from_start +
-                          get_weight(graph.get_edge(current.id, neighbor));
+      WEIGHT_T edge_weight = get_weight(graph.get_edge(current.id, neighbor));
+
+      if (edge_weight < 0) {
+        throw std::invalid_argument{fmt::format(
+            "Negative edge weight [{}] between vertices [{}] -> [{}].",
+            edge_weight, current.id, neighbor)};
+      }
+
+      WEIGHT_T distance = current.dist_from_start + edge_weight;
 
       if (!vertex_info.contains(neighbor) ||
           distance < vertex_info[neighbor].dist_from_start) {
@@ -109,6 +116,48 @@ std::optional<graph_path<WEIGHT_T>> dijkstra_shortest_path(
   }
 
   return reconstruct_path(start_vertex, end_vertex, vertex_info);
+}
+
+template <typename V, typename E, graph_type T, typename WEIGHT_T>
+[[nodiscard]] std::unordered_map<vertex_id_t, graph_path<WEIGHT_T>>
+dijkstra_shortest_paths(const graph<V, E, T>& graph,
+                        vertex_id_t source_vertex) {
+  std::unordered_map<vertex_id_t, graph_path<WEIGHT_T>> shortest_paths;
+
+  using weighted_path_item = detail::path_vertex<WEIGHT_T>;
+  using dijkstra_queue_t =
+      std::priority_queue<weighted_path_item, std::vector<weighted_path_item>,
+                          std::greater<>>;
+  dijkstra_queue_t to_explore{};
+
+  shortest_paths[source_vertex].total_weight = 0;
+  shortest_paths[source_vertex].vertices.push_back(source_vertex);
+  to_explore.push(weighted_path_item{source_vertex, 0});
+
+  while (!to_explore.empty()) {
+    auto current{to_explore.top()};
+    to_explore.pop();
+
+    if (shortest_paths.contains(current.id) &&
+        current.dist_from_start > shortest_paths[current.id].total_weight) {
+      continue;
+    }
+
+    for (const auto neighbor : graph.get_neighbors(current.id)) {
+      WEIGHT_T distance = current.dist_from_start +
+                          get_weight(graph.get_edge(current.id, neighbor));
+
+      if (!shortest_paths.contains(neighbor) ||
+          distance < shortest_paths[neighbor].total_weight) {
+        shortest_paths[neighbor].total_weight = distance;
+        shortest_paths[neighbor].vertices = shortest_paths[current.id].vertices;
+        shortest_paths[neighbor].vertices.push_back(neighbor);
+        to_explore.push(weighted_path_item{neighbor, distance});
+      }
+    }
+  }
+
+  return shortest_paths;
 }
 
 }  // namespace graaf::algorithm

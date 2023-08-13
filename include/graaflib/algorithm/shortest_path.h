@@ -42,12 +42,34 @@ std::optional<graph_path<WEIGHT_T>> bfs_shortest_path(
  * @param graph The graph to extract shortest path from.
  * @param start_vertex Vertex id where the shortest path should start.
  * @param end_vertex Vertex id where the shortest path should end.
+ * @return An optional with the shortest path (list of vertices) if found.
  */
 template <typename V, typename E, graph_type T,
           typename WEIGHT_T = decltype(get_weight(std::declval<E>()))>
 std::optional<graph_path<WEIGHT_T>> dijkstra_shortest_path(
     const graph<V, E, T>& graph, vertex_id_t start_vertex,
     vertex_id_t end_vertex);
+
+/**
+ * Find the shortest paths from a source vertex to all other vertices in the
+ * graph using Dijkstra's algorithm.
+ *
+ * @tparam V The vertex type of the graph.
+ * @tparam E The edge type of the graph.
+ * @tparam T The graph type (directed or undirected).
+ * @tparam WEIGHT_T The type of edge weights.
+ * @param graph The graph we want to search.
+ * @param source_vertex The source vertex from which to compute shortest paths.
+ * @return A map containing the shortest paths from the source vertex to all
+ * other vertices. The map keys are target vertex IDs, and the values are
+ * instances of graph_path, representing the shortest distance and the path
+ * (list of vertex IDs) from the source to the target. If a vertex is not
+ * reachable from the source, its entry will be absent from the map.
+ */
+template <typename V, typename E, graph_type T,
+          typename WEIGHT_T = decltype(get_weight(std::declval<E>()))>
+[[nodiscard]] std::unordered_map<vertex_id_t, graph_path<WEIGHT_T>>
+dijkstra_shortest_paths(const graph<V, E, T>& graph, vertex_id_t source_vertex);
 
 }  // namespace graaf::algorithm
 
