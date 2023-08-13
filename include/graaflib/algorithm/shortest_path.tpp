@@ -97,8 +97,15 @@ std::optional<graph_path<WEIGHT_T>> dijkstra_shortest_path(
     }
 
     for (const auto& neighbor : graph.get_neighbors(current.id)) {
-      WEIGHT_T distance = current.dist_from_start +
-                          get_weight(graph.get_edge(current.id, neighbor));
+      WEIGHT_T edge_weight = get_weight(graph.get_edge(current.id, neighbor));
+
+      if (edge_weight < 0) {
+        throw std::invalid_argument{fmt::format(
+            "Negative edge weight [{}] between vertices [{}] -> [{}].",
+            edge_weight, current.id, neighbor)};
+      }
+
+      WEIGHT_T distance = current.dist_from_start + edge_weight;
 
       if (!vertex_info.contains(neighbor) ||
           distance < vertex_info[neighbor].dist_from_start) {
