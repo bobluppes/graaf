@@ -4,6 +4,7 @@
 #include <graaflib/graph.h>
 #include <graaflib/io/dot.h>
 #include <graaflib/types.h>
+
 #include <unordered_set>
 
 struct station {
@@ -129,8 +130,7 @@ using seen_edges_t = std::unordered_set<graaf::edge_id_t, graaf::edge_id_hash>;
 struct record_edges_callback {
   seen_edges_t& seen_edges;
 
-  record_edges_callback(seen_edges_t& seen_edges)
-      : seen_edges{seen_edges} {}
+  record_edges_callback(seen_edges_t& seen_edges) : seen_edges{seen_edges} {}
 
   void operator()(const graaf::edge_id_t& edge) const {
     seen_edges.insert(edge);
@@ -140,7 +140,6 @@ struct record_edges_callback {
 void print_visited_vertices(
     const graaf::undirected_graph<station, railroad>& graph,
     seen_edges_t& seen_edges, const std::string& filepath) {
-
   const auto vertex_writer{[](graaf::vertex_id_t vertex_id,
                               station vertex) -> std::string {
     const auto style{"filled"};
@@ -181,8 +180,7 @@ int main() {
                       "example_unwieghted_graph.dot");
 
   seen_edges_t seen_edges{};
-  graaf::algorithm::breadth_first_traverse(
-      graph, start, record_edges_callback{seen_edges});
-  print_visited_vertices(graph, seen_edges,
-                         "example_traverse_BFS_graph.dot");
+  graaf::algorithm::breadth_first_traverse(graph, start,
+                                           record_edges_callback{seen_edges});
+  print_visited_vertices(graph, seen_edges, "example_traverse_BFS_graph.dot");
 }
