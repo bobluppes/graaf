@@ -3,6 +3,7 @@
 #include <graaflib/algorithm/graph_traversal.h>
 
 #include <algorithm>
+#include <format>
 #include <optional>
 #include <queue>
 #include <unordered_map>
@@ -100,7 +101,7 @@ std::optional<graph_path<WEIGHT_T>> dijkstra_shortest_path(
       WEIGHT_T edge_weight = get_weight(graph.get_edge(current.id, neighbor));
 
       if (edge_weight < 0) {
-        throw std::invalid_argument{fmt::format(
+        throw std::invalid_argument{std::format(
             "Negative edge weight [{}] between vertices [{}] -> [{}].",
             edge_weight, current.id, neighbor)};
       }
@@ -147,7 +148,7 @@ dijkstra_shortest_paths(const graph<V, E, T>& graph,
       WEIGHT_T edge_weight = get_weight(graph.get_edge(current.id, neighbor));
 
       if (edge_weight < 0) {
-        throw std::invalid_argument{fmt::format(
+        throw std::invalid_argument{std::format(
             "Negative edge weight [{}] between vertices [{}] -> [{}].",
             edge_weight, current.id, neighbor)};
       }
