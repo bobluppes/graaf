@@ -79,20 +79,20 @@ void print_visited_vertices(const graaf::undirected_graph<station, road>& graph,
 }
 ```
 
-Creating a vertex callback structure that will be passed as an argument in the graph traverse function
+Creating an edge callback structure that will be passed as an argument in the graph traverse function
 The function is needed in order to be called inside the traverse function; see graph.tpp for context.
 
 ```c++
-using seen_vertices_t = std::unordered_multiset<graaf::vertex_id_t>;
-struct record_vertex_callback {
-    seen_vertices_t& seen_vertices;
+using seen_edges_t = std::unordered_set<graaf::edge_id_t, graaf::edge_id_hash>;
+struct record_edges_callback {
+  seen_edges_t& seen_edges;
 
-    record_vertex_callback(seen_vertices_t& seen_vertices)
-        : seen_vertices{seen_vertices} {}
+  record_edges_callback(seen_edges_t& seen_edges)
+      : seen_edges{seen_edges} {}
 
-    void operator()(const graaf::vertex_id_t vertex) const {
-        seen_vertices.insert(vertex);
-    }
+  void operator()(const graaf::edge_id_t& edge) const {
+    seen_edges.insert(edge);
+  }
 };
 ```
 
@@ -121,9 +121,9 @@ The last one is traversing the graph from a given vertex and printing the result
   print_shortest_path(graph, unweighted_shortest_path,
                       "example_unwieghted_graph.dot");
 
-  seen_vertices_t seen_vertices{};
+  seen_edges_t seen_edges{};
   graaf::algorithm::breadth_first_traverse(
-      graph, start, record_vertex_callback{seen_vertices});
-  print_visited_vertices(graph, seen_vertices,
+      graph, start, record_edges_callback{seen_edges});
+  print_visited_vertices(graph, seen_edges,
                          "example_traverse_BFS_graph.dot");
 ```
