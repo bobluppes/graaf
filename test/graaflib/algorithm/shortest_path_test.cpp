@@ -493,4 +493,41 @@ TYPED_TEST(DijkstraShortestPathSignedTypesTest, DijkstraNegativeWeight) {
       },
       std::invalid_argument);
 }
+
+TYPED_TEST(DijkstraShortestPathSignedTypesTest, DijkstraNegativeWeightTree) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  using edge_t = typename TestFixture::edge_t;
+  using weight_t = decltype(get_weight(std::declval<edge_t>()));
+
+  graph_t graph{};
+
+  const auto vertex_id_1{graph.add_vertex(10)};
+  const auto vertex_id_2{graph.add_vertex(20)};
+  graph.add_edge(vertex_id_1, vertex_id_2, edge_t{static_cast<weight_t>(-1)});
+
+  //  THEN
+  ASSERT_THROW(
+      {
+        try {
+          // Call the get_edge function for non-existing vertices
+          [[maybe_unused]] const auto path{
+              dijkstra_shortest_paths(graph, vertex_id_1)};
+          // If the above line doesn't throw an exception, fail the test
+          FAIL()
+              << "Expected std::invalid_argument exception, but no exception "
+                 "was thrown.";
+        } catch (const std::invalid_argument &ex) {
+          // Verify that the exception message contains the expected error
+          // message
+          EXPECT_EQ(
+              ex.what(),
+              fmt::format(
+                  "Negative edge weight [{}] between vertices [{}] -> [{}].",
+                  -1, vertex_id_1, vertex_id_2));
+          throw;
+        }
+      },
+      std::invalid_argument);
+}
 }  // namespace graaf::algorithm
