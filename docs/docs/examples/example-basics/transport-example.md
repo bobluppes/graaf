@@ -18,7 +18,7 @@ Using the following graph:
 
 Custom vertex and edge. In order to use Dijkstra, we should provide the get_weight() function for the edge.
 
-```c++
+```cpp
 struct station {
   std::string name{};
 };
@@ -36,7 +36,7 @@ struct railroad : public graaf::weighted_edge<double> {
 # Initializing graph, start and end vertecies
 First, we create data structure and initializing graph with vertices and edges
 
-```c++
+```cpp
 struct graph_with_start_and_target {
     graaf::undirected_graph<station, road> graph{};
     graaf::vertex_id_t start{};
@@ -66,7 +66,7 @@ Result of weighted shortest path, chosen edges are coloured red
 </p>
 </pre>
 
-```c++
+```cpp
 void print_shortest_path(const graaf::undirected_graph<station, road>& graph,
                 const std::optional<graaf::algorithm::graph_path<int>>& path, const std::string & filepath) {
 ...
@@ -82,7 +82,7 @@ void print_visited_vertices(const graaf::undirected_graph<station, road>& graph,
 Creating an edge callback structure that will be passed as an argument in the graph traverse function
 The function is needed in order to be called inside the traverse function; see graph.tpp for context.
 
-```c++
+```cpp
 using seen_edges_t = std::unordered_set<graaf::edge_id_t, graaf::edge_id_hash>;
 struct record_edges_callback {
   seen_edges_t& seen_edges;
@@ -108,7 +108,7 @@ First code block: traversing a weighted graph for the shortest path (Dijkstra) a
 Second code block: traversing an unweighted graph for the shortest path and printing the result to *.dot file.
 The last one is traversing the graph from a given vertex and printing the result to *.dot file.
 
-```c++
+```cpp
   const auto [graph, start, target]{create_graph_with_start_and_target()};
 
   const auto weighted_shortest_path{
