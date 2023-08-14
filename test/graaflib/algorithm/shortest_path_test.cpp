@@ -1,3 +1,4 @@
+#include <fmt/core.h>
 #include <graaflib/algorithm/shortest_path.h>
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
@@ -408,6 +409,126 @@ TYPED_TEST(DijkstraShortestPathTest, DijkstraMoreComplexShortestPathTree) {
   expected_path_map[vertex_id_4] = path4;
   expected_path_map[vertex_id_5] = path5;
   ASSERT_EQ(path_map, expected_path_map);
+}
+
+template <typename T>
+struct DijkstraShortestPathSignedTypesTest : public testing::Test {
+  using graph_t = typename T::first_type;
+  using edge_t = typename T::second_type;
+};
+
+using weighted_graph_signed_types = testing::Types<
+
+    /**
+     * Primitive edge type directed graph
+     */
+    std::pair<directed_graph<int, int>, int>,
+    std::pair<directed_graph<int, float>, float>,
+    std::pair<directed_graph<int, long double>, long double>,
+
+    /**
+     * Non primitive weighted edge type directed graph
+     */
+
+    std::pair<directed_graph<int, my_weighted_edge<int>>,
+              my_weighted_edge<int>>,
+    std::pair<directed_graph<int, my_weighted_edge<float>>,
+              my_weighted_edge<float>>,
+    std::pair<directed_graph<int, my_weighted_edge<long double>>,
+              my_weighted_edge<long double>>,
+
+    /**
+     * Primitive edge type undirected graph
+     */
+    std::pair<undirected_graph<int, int>, int>,
+    std::pair<undirected_graph<int, float>, float>,
+    std::pair<undirected_graph<int, long double>, long double>,
+
+    /**
+     * Non primitive weighted edge type undirected graph
+     */
+    std::pair<undirected_graph<int, my_weighted_edge<int>>,
+              my_weighted_edge<int>>,
+    std::pair<undirected_graph<int, my_weighted_edge<float>>,
+              my_weighted_edge<float>>,
+    std::pair<undirected_graph<int, my_weighted_edge<long double>>,
+              my_weighted_edge<long double>>>;
+
+TYPED_TEST_SUITE(DijkstraShortestPathSignedTypesTest,
+                 weighted_graph_signed_types);
+
+TYPED_TEST(DijkstraShortestPathSignedTypesTest, DijkstraNegativeWeight) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  using edge_t = typename TestFixture::edge_t;
+  using weight_t = decltype(get_weight(std::declval<edge_t>()));
+
+  graph_t graph{};
+
+  const auto vertex_id_1{graph.add_vertex(10)};
+  const auto vertex_id_2{graph.add_vertex(20)};
+  graph.add_edge(vertex_id_1, vertex_id_2, edge_t{static_cast<weight_t>(-1)});
+
+  //  THEN
+  ASSERT_THROW(
+      {
+        try {
+          // Call the get_edge function for non-existing vertices
+          [[maybe_unused]] const auto path{
+              dijkstra_shortest_path(graph, vertex_id_1, vertex_id_2)};
+          // If the above line doesn't throw an exception, fail the test
+          FAIL()
+              << "Expected std::invalid_argument exception, but no exception "
+                 "was thrown.";
+        } catch (const std::invalid_argument &ex) {
+          // Verify that the exception message contains the expected error
+          // message
+          EXPECT_EQ(
+              ex.what(),
+              fmt::format(
+                  "Negative edge weight [{}] between vertices [{}] -> [{}].",
+                  -1, vertex_id_1, vertex_id_2));
+          throw;
+        }
+      },
+      std::invalid_argument);
+}
+
+TYPED_TEST(DijkstraShortestPathSignedTypesTest, DijkstraNegativeWeightTree) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  using edge_t = typename TestFixture::edge_t;
+  using weight_t = decltype(get_weight(std::declval<edge_t>()));
+
+  graph_t graph{};
+
+  const auto vertex_id_1{graph.add_vertex(10)};
+  const auto vertex_id_2{graph.add_vertex(20)};
+  graph.add_edge(vertex_id_1, vertex_id_2, edge_t{static_cast<weight_t>(-1)});
+
+  //  THEN
+  ASSERT_THROW(
+      {
+        try {
+          // Call the get_edge function for non-existing vertices
+          [[maybe_unused]] const auto path{
+              dijkstra_shortest_paths(graph, vertex_id_1)};
+          // If the above line doesn't throw an exception, fail the test
+          FAIL()
+              << "Expected std::invalid_argument exception, but no exception "
+                 "was thrown.";
+        } catch (const std::invalid_argument &ex) {
+          // Verify that the exception message contains the expected error
+          // message
+          EXPECT_EQ(
+              ex.what(),
+              fmt::format(
+                  "Negative edge weight [{}] between vertices [{}] -> [{}].",
+                  -1, vertex_id_1, vertex_id_2));
+          throw;
+        }
+      },
+      std::invalid_argument);
 }
 
 template <typename T>
