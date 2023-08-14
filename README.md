@@ -80,6 +80,7 @@ Algorithms implemented in the Graaf library include the following. For more info
 2. [**Shortest Path Algorithms**](https://bobluppes.github.io/graaf/docs/category/shortest-path-algorithms):
     - BFS-Based Shortest Path
     - Dijkstra
+    - Bellman-Ford
 3. [**Cycle Detection Algorithms**](https://bobluppes.github.io/graaf/docs/category/cycle-detection-algorithms):
     - DFS-Based Cycle Detection
 
