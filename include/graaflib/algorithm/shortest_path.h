@@ -87,10 +87,11 @@ dijkstra_shortest_paths(const graph<V, E, T>& graph, vertex_id_t source_vertex);
  *         If a vertex is unreachable from the source, its entry will be
  *         absent from the map.
  */
-template <typename V, typename E, graph_type T, 
+template <typename V, typename E, graph_type T,
           typename WEIGHT_T = decltype(get_weight(std::declval<E>()))>
 std::unordered_map<vertex_id_t, graph_path<WEIGHT_T>>
-bellman_ford_shortest_paths(const graph<V, E, T>& graph, vertex_id_t start_vertex);
+bellman_ford_shortest_paths(const graph<V, E, T>& graph,
+                            vertex_id_t start_vertex);
 
 }  // namespace graaf::algorithm
 

@@ -438,7 +438,6 @@ TYPED_TEST(BellmanFordShortestPathsTest, BellmanFordMinimalShortestPathsTree) {
   ASSERT_EQ(path_map, expected_path_map);
 }
 
-
 TYPED_TEST(BellmanFordShortestPathsTest, BellmanFordShortestPathsTree) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
@@ -464,7 +463,8 @@ TYPED_TEST(BellmanFordShortestPathsTest, BellmanFordShortestPathsTree) {
   ASSERT_EQ(path_map, expected_path_map);
 }
 
-TYPED_TEST(BellmanFordShortestPathsTest, BellmanFordMoreComplexShortestPathTree) {
+TYPED_TEST(BellmanFordShortestPathsTest,
+           BellmanFordMoreComplexShortestPathTree) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   using edge_t = typename TestFixture::edge_t;
