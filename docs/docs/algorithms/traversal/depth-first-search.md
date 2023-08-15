@@ -6,20 +6,21 @@ sidebar_position: 2
 
 ## Depth First Search (DFS) Algorithm
 
-Depth First Search (DFS) is a fundamental graph traversal algorithm used to explore and analyze graphs, whether they are directed or undirected. It operates on the principle of systematically exploring as far as possible along a branch before backtracking. DFS traverses deeper into the graph before backtracking to explore other branches.
+Depth First Search (DFS) is a fundamental graph traversal algorithm used to explore and analyze graphs, whether they are directed or undirected. 
+DFS traverses deeper into the graph before backtracking to explore other branches.
 
 The DFS algorithm can be succinctly described using the following steps:
 
 1. Begin by selecting a source node as the starting point of the traversal and push it onto a stack data structure.
 
 2. While the stack is not empty, repeat the following steps:
-   a. Pop a node from the top of the stack.
-   b. Process the popped node, which may involve examining its attributes, marking it as visited, or performing other relevant operations.
-   c. Push all unvisited neighbors of the popped node onto the stack.
+   * a. Pop a node from the top of the stack.
+   * b. Process the popped node, which may involve examining its attributes, marking it as visited, or performing other relevant operations.
+   * c. Push all unvisited neighbors of the popped node onto the stack.
 
 3. Continue this process until the stack becomes empty, indicating that all reachable nodes have been visited.
 
-DFS explores a single branch of the graph as deeply as possible before backtracking to explore other branches. This process continues until all reachable nodes have been visited, forming a depth-first exploration of the graph.
+The main difference to the BFS is the use of a stack instead of a queue.
 
 ### DFS is particularly useful for:
 
@@ -42,7 +43,7 @@ DFS explores a single branch of the graph as deeply as possible before backtrack
 
 3. **Performance on Dense Graphs:** In dense graphs, DFS might explore many nodes before reaching a solution, making it less efficient compared to other algorithms.
 
-4. **No Guarantee of Optimality:** Like DFS, DFS may not always find the optimal solution, especially in cases where the graph has weighted edges or other complexities.
+4. **No Guarantee of Optimality:** Like BFS, DFS may not always find the optimal solution, especially in cases where the graph has weighted edges or other complexities.
 
 5. **Memory Usage:** DFS on deep graphs may lead to excessive recursion and memory consumption due to the call stack.
 
@@ -50,7 +51,7 @@ DFS explores a single branch of the graph as deeply as possible before backtrack
 
 
 ### Complexity and Performance:
-The DFS algorithm is implemented with a priority queue and runs in `O(|V| + |E|)` time complexity for connected graphs, where `|E|` is the number of edges and `|V|` the number of vertices in the graph.
+The DFS algorithm is implemented with a stack and runs in `O(|V| + |E|)` time complexity for connected graphs, where `|E|` is the number of edges and `|V|` the number of vertices in the graph.
 
 In summary, Depth First Search is a powerful and versatile algorithm for exploring graphs, but its limitations in handling weighted graphs and negative edge weights should be considered. It provides a straightforward way to explore a graph layer by layer and is particularly useful for unweighted graph scenarios and connectivity analysis.
 
