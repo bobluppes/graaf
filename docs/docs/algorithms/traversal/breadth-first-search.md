@@ -13,9 +13,9 @@ The BFS algorithm can be succinctly described using the following steps:
 1. Begin by selecting a source node as the starting point of the traversal and enqueue it in a queue data structure.
 
 2. While the queue is not empty, repeat the following steps:
-   a. Dequeue a node from the front of the queue.
-   b. Process the dequeued node, which may involve examining its attributes, marking it as visited, or performing other relevant operations.
-   c. Enqueue all unvisited neighbors of the dequeued node into the queue.
+   * a. Dequeue a node from the front of the queue.
+   * b. Process the dequeued node, which may involve examining its attributes, marking it as visited, or performing other relevant operations.
+   * c. Enqueue all unvisited neighbors of the dequeued node into the queue.
 
 3. Continue this process until the queue becomes empty, indicating that all reachable nodes have been visited.
 
