@@ -63,37 +63,24 @@ In summary, Breadth First Search is a powerful and versatile algorithm for explo
 The bfs_termination_strategy returns true when a certain condition is met, causing to terminate. The bfs_edge_callback is a function that is used as a callback during the BFS traversal to perform some action whenever an edge is traversed.
 
 ```cpp
-template <typename V, typename E, graph_type T, typename EDGE_CALLBACK_T,typename SEARCH_TERMINATION_STRATEGY_T>
-requires std::invocable<EDGE_CALLBACK_T&, edge_id_t&> &&
-           std::is_invocable_r_v<bool, SEARCH_TERMINATION_STRATEGY_T&,
+template <
+    typename V, typename E, graph_type T,
+    typename EDGE_CALLBACK_T = detail::noop_callback,
+    typename SEARCH_TERMINATION_STRATEGY_T = detail::exhaustive_search_strategy>
+  requires std::invocable<EDGE_CALLBACK_T &, edge_id_t &> &&
+           std::is_invocable_r_v<bool, SEARCH_TERMINATION_STRATEGY_T &,
                                  vertex_id_t>
-
-// Callback for breadth-first traversal
-struct bfs_edge_callback {
-    void operator()(typename graph<int, int>::edge_id_t edge) const {
-        std::cout << "Traversed edge: " << edge.source << " -> " << edge.target << std::endl;
-    }
-};
-
-// Example search termination strategy
-struct bfs_termination_strategy {
-    bool operator()(typename graph<int, int>::vertex_id_t vertex) const {
-        return vertex > 3; // Terminate traversal after visiting vertex 4
-    }
-};
-
-breadth_first_traverse(graph, start_vertex, bfs_edge_callback{}, bfs_termination_strategy{});
+void breadth_first_traverse(
+    const graph<V, E, T> &graph, vertex_id_t start_vertex,
+    const EDGE_CALLBACK_T &edge_callback,
+    const SEARCH_TERMINATION_STRATEGY_T &search_termination_strategy =
+        SEARCH_TERMINATION_STRATEGY_T{});
 ```
 
 ### Explanation of Parameters:
 
-- `graph`: The graph to traverse. This parameter represents the graph data structure on which the traversal will be performed.
-```graph<int, int> sample_graph; ```
-
-- `start_vertex`: Vertex id where the traversal should be started. This parameter specifies the initial vertex from which the traversal begins.
-
-- `edge_callback`: A callback function that is called for each traversed edge. It should be invocable with an `edge_id_t` object, representing an edge in the graph.
-
-- `search_termination_strategy`: A unary predicate that indicates whether the traversal should continue or not. The traversal continues while this predicate returns `false`. This parameter is optional and defaults to a predefined search termination strategy.
-
-- Return Type: The provided code does not explicitly return a value. The traversal is performed by visiting vertices and edges in the graph based on the specified parameters.
+- **graph**: The graph to traverse. This parameter represents the graph data structure on which the traversal will be performed.
+- **start_vertex**: Vertex id where the traversal should be started. This parameter specifies the initial vertex from which the traversal begins.
+- **edge_callback**: A callback function that is called for each traversed edge. It should be invocable with an `edge_id_t` object, representing an edge in the graph.
+- **search_termination_strategy**: A unary predicate that indicates whether the traversal should continue or not. The traversal continues while this predicate returns `false`. This parameter is optional and defaults to a predefined search termination strategy, which traverses the graph exhaustively.
+- **return**: The provided code does not explicitly return a value. The traversal is performed by visiting vertices and edges in the graph based on the specified parameters.
