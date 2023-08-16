@@ -21,7 +21,7 @@ COPY . .
 
 # Build the project using CMake and Clang
 RUN mkdir build && cd build && \
-    cmake .. && \
+    cmake  -DBUILD_TESTS=True -DBUILD_EXAMPLES=True -DBUILD_BENCHMARKS=True .. && \
     cmake --build .
 
 CMD ["/bin/bash"]
