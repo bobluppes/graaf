@@ -3,6 +3,7 @@
 #include <graaflib/algorithm/graph_traversal.h>
 
 #include <algorithm>
+#include <string>
 #include <optional>
 #include <queue>
 #include <unordered_map>
