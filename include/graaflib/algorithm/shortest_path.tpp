@@ -100,9 +100,8 @@ std::optional<graph_path<WEIGHT_T>> dijkstra_shortest_path(
       WEIGHT_T edge_weight = get_weight(graph.get_edge(current.id, neighbor));
 
       if (edge_weight < 0) {
-        throw std::invalid_argument{fmt::format(
-            "Negative edge weight [{}] between vertices [{}] -> [{}].",
-            edge_weight, current.id, neighbor)};
+        throw std::invalid_argument{
+          ("Negative edge weight [" + std::to_string(edge_weight) + "] between vertices [" + std::to_string(current.id) + "] -> [" + std::to_string(neighbor) + "].")};
       }
 
       WEIGHT_T distance = current.dist_from_start + edge_weight;
@@ -147,9 +146,8 @@ dijkstra_shortest_paths(const graph<V, E, T>& graph,
       WEIGHT_T edge_weight = get_weight(graph.get_edge(current.id, neighbor));
 
       if (edge_weight < 0) {
-        throw std::invalid_argument{fmt::format(
-            "Negative edge weight [{}] between vertices [{}] -> [{}].",
-            edge_weight, current.id, neighbor)};
+        throw std::invalid_argument{
+          ("Negative edge weight [" + std::to_string(edge_weight) + "] between vertices [" + std::to_string(current.id) + "] -> [" + std::to_string(neighbor) + "].")};
       }
 
       WEIGHT_T distance = current.dist_from_start + edge_weight;
