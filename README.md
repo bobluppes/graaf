@@ -81,6 +81,7 @@ Algorithms implemented in the Graaf library include the following. For more info
     - BFS-Based Shortest Path
     - Dijkstra
     - Bellman-Ford
+    - Minimum spanning tree (MST)
 3. [**Cycle Detection Algorithms**](https://bobluppes.github.io/graaf/docs/category/cycle-detection-algorithms):
     - DFS-Based Cycle Detection
 
