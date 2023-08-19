@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 1
 ---
 
 # Tarjan's Strongly Connected Components
@@ -8,7 +8,7 @@ Tarjan's algorithm computes the Strongly Connected Components (SCCs) of a direct
 
 Tarjan's algorithm runs in `O(|V| + |E|)` for directed graphs, where `|V|` the number of vertices and `|E|` is the number of edges in the graph. So it runs in linear time.
 
-[wikipedia](Tarjan's Strongly Connected Components)
+[wikipedia](https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm)
 
 ## Syntax
 

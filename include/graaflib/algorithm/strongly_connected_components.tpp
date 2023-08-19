@@ -28,9 +28,7 @@ tarjans_strongly_connected_components(
   size_t index_counter = 0;
 
   // Lambda function for the strong connect traversal
-  std::function<void(vertex_id_t)> strong_connect;
-
-  strong_connect = [&](vertex_id_t vertex) {
+  const auto strong_connect = [&](vertex_id_t vertex) {
     // Set indices and low-link values for the current vertex
     indices[vertex] = index_counter;
     low_links[vertex] = index_counter;
