@@ -83,6 +83,8 @@ Algorithms implemented in the Graaf library include the following. For more info
     - Bellman-Ford
 3. [**Cycle Detection Algorithms**](https://bobluppes.github.io/graaf/docs/category/cycle-detection-algorithms):
     - DFS-Based Cycle Detection
+4. [**Strongly Connected Components Algorithms**](https://bobluppes.github.io/graaf/docs/category/strongly-connected-components):
+    - Tarjan's Strongly Connected Components 
 
 # Contributing
 The Graaf library welcomes contributions 🎊 
