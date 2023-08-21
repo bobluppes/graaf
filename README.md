@@ -78,6 +78,7 @@ Algorithms implemented in the Graaf library include the following. For more info
     - Breadth-First Search (BFS)
     - Depth-First Search (DFS)
 2. [**Shortest Path Algorithms**](https://bobluppes.github.io/graaf/docs/category/shortest-path-algorithms):
+    - A\* search
     - BFS-Based Shortest Path
     - Dijkstra
     - Bellman-Ford
