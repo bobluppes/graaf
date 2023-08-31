@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# Minimum spanning tree (MST) or minimum spanning forest
+# Kruskal's Algorithm
 Kruskal's algorithm finds the minimum spanning forest of an undirected edge-weighted graph. If the graph is connected, it finds a minimum spanning tree.
 The algorithm is implemented with disjoint set union and finding minimum weighted edges.
 Worst-case performance is `O(|E|log|V|)`, where `|E|` is the number of edges and `|V|` is the number of vertices in the
