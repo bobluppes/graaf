@@ -85,6 +85,8 @@ Algorithms implemented in the Graaf library include the following. For more info
     - DFS-Based Cycle Detection
 4. **Minimum Spanning Tree (MST) Algorithms**
     - Kruskal's Algorithm
+5. [**Strongly Connected Components Algorithms**](https://bobluppes.github.io/graaf/docs/category/strongly-connected-components):
+    - Tarjan's Strongly Connected Components 
 
 # Contributing
 The Graaf library welcomes contributions 🎊 
