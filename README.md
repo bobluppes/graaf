@@ -96,5 +96,16 @@ If you're interested in improving, fixing bugs, or adding features, please refer
 
 Feel free to join our [Discord](https://discord.gg/cGczwRHJ9K) for assistance and a smooth contribution experience.
 
+# Acknowledgements
+
+<p align="left">
+  <a href="https://www.jetbrains.com">
+    <img src="docs/static/img/jetbrains-logo.svg" width="60" alt="JetBrains Logo">
+  </a>
+</p>
+
+Special thanks to [JetBrains](https://www.jetbrains.com/community/opensource/) for providing development tools for this
+project.
+
 # License
 This project is licensed under the [MIT license](LICENSE.md).
