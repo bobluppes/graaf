@@ -21,17 +21,25 @@
 </p>
 
 <p align="center">
-  
+
 </p>
 
+> <img src="docs/static/img/hacktoberfest-logo.png" width="50" align="center">**Hacktoberfest**<br>
+> The Graaf project participates in [Hacktoberfest 2023](https://hacktoberfest.com/). For a step-by-step guide on how
+> to contribute, please take a look at our [wiki](https://github.com/bobluppes/graaf/wiki). Also, feel free to join
+> out [Discord](https://discord.gg/cGczwRHJ9K) in case of any problems, or simply to hang out with other contributors.
+
 # About
-Using the Graaf library is easy! Specializations are provided for a `directed_graph` as well as for `undirected_graph`. To create your first graph: 
+
+Using the Graaf library is easy! Specializations are provided for a `directed_graph` as well as for `undirected_graph`.
+To create your first graph:
 
 ```c++
 undirected_graph<int, float> my_graph{};
 ```
 
-This creates an undirected graph with `int`eger values on the vertices and `float` weights on the edges. Graaf is designed with generality in mind. As such, it can be used to store any user-defined vertex and edge class:
+This creates an undirected graph with `int`eger values on the vertices and `float` weights on the edges. Graaf is
+designed with generality in mind. As such, it can be used to store any user-defined vertex and edge class:
 
 ```c++
 struct User {
@@ -48,7 +56,8 @@ struct Connection : public weighted_edge<float> {
 undirected_graph<User, Connection> my_graph{};
 ```
 
-Implementations for common [graph algorithms](#algorithms) are provided under the `algorithm` namespace. Combining this with built-in `dot` format support allows us to do things like visualizing the shortest path between two vertices:
+Implementations for common [graph algorithms](#algorithms) are provided under the `algorithm` namespace. Combining this
+with built-in `dot` format support allows us to do things like visualizing the shortest path between two vertices:
 
 <p align="center">
 <img src="docs/static/img/graph_example.png">
@@ -57,22 +66,30 @@ Implementations for common [graph algorithms](#algorithms) are provided under th
 To get started, take a look at our [quickstart guide](https://bobluppes.github.io/graaf/docs/quickstart/intro).
 
 # Installation
-The most straightforward way to use the Graaf in your project is to include it as a header-only library. Please take a look at the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/installation) for alternative installation methods.
+
+The most straightforward way to use the Graaf in your project is to include it as a header-only library. Please take a
+look at the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/installation) for alternative
+installation methods.
 
 ## Header-Only Library
+
 The Graaf libary can be included as a header-only library. All it requires is a compiler with C++ 20 support.
 
-Download the `header-only` library from our [release page](https://github.com/bobluppes/graaf/releases) and add the `include/graaflib` directory to your include path. You can now use Graaf in your source files:
+Download the `header-only` library from our [release page](https://github.com/bobluppes/graaf/releases) and add
+the `include/graaflib` directory to your include path. You can now use Graaf in your source files:
 
 ```c++
 // main.cpp
 #include <graaflib/directed_graph>
 ```
 
-For more details or alternative installation methods, see the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/installation).
+For more details or alternative installation methods, see
+the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/installation).
 
 # Algorithms
-Algorithms implemented in the Graaf library include the following. For more information on individual algorithms please take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intro).
+
+Algorithms implemented in the Graaf library include the following. For more information on individual algorithms please
+take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intro).
 
 1. [**Traversal Algorithms**](https://bobluppes.github.io/graaf/docs/category/traversal-algorithms):
     - Breadth-First Search (BFS)
@@ -86,13 +103,19 @@ Algorithms implemented in the Graaf library include the following. For more info
     - DFS-Based Cycle Detection
 4. **Minimum Spanning Tree (MST) Algorithms**
     - Kruskal's Algorithm
-5. [**Strongly Connected Components Algorithms**](https://bobluppes.github.io/graaf/docs/category/strongly-connected-components):
-    - Tarjan's Strongly Connected Components 
+5. [**Strongly Connected Components Algorithms
+   **](https://bobluppes.github.io/graaf/docs/category/strongly-connected-components):
+    - Tarjan's Strongly Connected Components
 
 # Contributing
-The Graaf library welcomes contributions 🎊 
 
-If you're interested in improving, fixing bugs, or adding features, please refer to the [wiki](https://github.com/bobluppes/graaf/wiki) for guidelines. Check out our roadmap on [YouTrack](https://graaf.youtrack.cloud/agiles/147-2/current) to stay up to date on planned features and improvements. We also have an [issue tracker](https://github.com/bobluppes/graaf/issues) for bug reports and feature requests. 
+The Graaf library welcomes contributions 🎊
+
+If you're interested in improving, fixing bugs, or adding features, please refer to
+the [wiki](https://github.com/bobluppes/graaf/wiki) for guidelines. Check out our roadmap
+on [YouTrack](https://graaf.youtrack.cloud/agiles/147-2/current) to stay up to date on planned features and
+improvements. We also have an [issue tracker](https://github.com/bobluppes/graaf/issues) for bug reports and feature
+requests.
 
 Feel free to join our [Discord](https://discord.gg/cGczwRHJ9K) for assistance and a smooth contribution experience.
 
@@ -108,4 +131,5 @@ Special thanks to [JetBrains](https://www.jetbrains.com/community/opensource/) f
 project.
 
 # License
+
 This project is licensed under the [MIT license](LICENSE.md).
