@@ -4,17 +4,17 @@
 
 namespace graaf::algorithm {
 /**
-* @brief Calculates order of vertices in topological order 
-* using DFS traversal
-* 
-* @tparam V The vertex type of the graph.
-* @tparam E The edge type of the graph.
-* @param graph The input graph.
-* @return Vector of vertices sorted in topological order
-*/
+ * @brief Calculates order of vertices in topological order
+ * using DFS traversal
+ *
+ * @tparam V The vertex type of the graph.
+ * @tparam E The edge type of the graph.
+ * @param graph The input graph.
+ * @return Vector of vertices sorted in topological order
+ */
 template <typename V, typename E>
 [[nodiscard]] std::vector<vertex_id_t> topological_sort(
     const graph<V, E, graph_type::DIRECTED>& graph);
 
-} // namespace graaf::algorithm
+}  // namespace graaf::algorithm
 #include "topological_sorting.tpp"
