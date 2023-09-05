@@ -88,6 +88,8 @@ Algorithms implemented in the Graaf library include the following. For more info
     - Kruskal's Algorithm
 5. [**Strongly Connected Components Algorithms**](https://bobluppes.github.io/graaf/docs/category/strongly-connected-components):
     - Tarjan's Strongly Connected Components 
+6. [**Topological Sorting Algorithms**](https://bobluppes.github.io/graaf/docs/category/topological-sorting):
+    - Topological sorting DFS-based
 
 # Contributing
 The Graaf library welcomes contributions 🎊 
