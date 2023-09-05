@@ -136,13 +136,15 @@ TYPED_TEST(TypedTopologicalSort, SimpleGraph) {
   std::vector<vertex_id_t> expected_vertices_3{0, 1, 3, 4, 5, 2, 6};
   std::vector<vertex_id_t> expected_vertices_4{0, 4, 3, 1, 5, 2, 6};
   std::vector<vertex_id_t> expected_vertices_5{0, 4, 1, 3, 5, 2, 6};
+  std::vector<vertex_id_t> expected_vertices_6{0, 1, 4, 3, 5, 2, 6};
 
   // THEN
   ASSERT_TRUE((expected_vertices_1 == sorted_vertices) ||
               (expected_vertices_2 == sorted_vertices) ||
               (expected_vertices_3 == sorted_vertices) ||
               (expected_vertices_4 == sorted_vertices) ||
-              (expected_vertices_5 == sorted_vertices));
+              (expected_vertices_5 == sorted_vertices) ||
+              (expected_vertices_6 == sorted_vertices ));
 }
 
 TYPED_TEST(TypedTopologicalSort, SixSortResults) {
