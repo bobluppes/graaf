@@ -1,5 +1,6 @@
 #pragma once
 
+#include <optional>
 #include <graaflib/graph.h>
 
 namespace graaf::algorithm {
@@ -13,7 +14,7 @@ namespace graaf::algorithm {
  * @return Vector of vertices sorted in topological order
  */
 template <typename V, typename E>
-[[nodiscard]] std::vector<vertex_id_t> topological_sort(
+[[nodiscard]] std::optional<std::vector<vertex_id_t>> topological_sort(
     const graph<V, E, graph_type::DIRECTED>& graph);
 
 }  // namespace graaf::algorithm

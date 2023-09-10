@@ -13,9 +13,9 @@ The runtime of the algorithm is `O(|V|+|E|)` and the memory consumption is `O(|V
 
 ```cpp
 template <typename V, typename E>
-[[nodiscard]] std::vector<edge_id_t> kruskal_minimum_spanning_tree(
-    const graph<V, E, graph_type::UNDIRECTED>& graph);
+[[nodiscard]] std::optional<std::vector<vertex_id_t>> topological_sort(
+    const graph<V, E, graph_type::DIRECTED>& graph);
 ```
 
-- **graph** The graph to traverse.
+- **graph** The directed graph to traverse.
 - **return** Vector of vertices sorted in topological order. If the graph contains cycles, it returns an empty vector.
