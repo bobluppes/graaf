@@ -1,7 +1,8 @@
 #pragma once
 
-#include <optional>
 #include <graaflib/graph.h>
+
+#include <optional>
 
 namespace graaf::algorithm {
 /**
