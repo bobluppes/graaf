@@ -18,4 +18,4 @@ template <typename V, typename E>
 ```
 
 - **graph** The directed graph to traverse.
-- **return** Vector of vertices sorted in topological order. If the graph contains cycles, it returns an empty vector.
+- **return** Vector of vertices sorted in topological order. If the graph contains cycles, it returns std::nullopt.
