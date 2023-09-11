@@ -106,6 +106,8 @@ take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intr
 5. [**Strongly Connected Components Algorithms
    **](https://bobluppes.github.io/graaf/docs/category/strongly-connected-components):
     - Tarjan's Strongly Connected Components
+6. [**Graph Coloring Algorithms**](https://bobluppes.github.io/graaf/docs/category/strongly-connected-components):
+    - Greedy Graph Coloring
 
 # Contributing
 
