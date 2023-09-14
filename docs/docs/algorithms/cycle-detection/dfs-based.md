@@ -22,13 +22,14 @@ The algorithm uses DFS traversal and therefore suffers the same limitations (see
 - Resource dependencies:
   - Redundant connections.
   - Deadlocks in concurrent systems.
+  - Deadlocks in concurrent systems.
 - Logical dependencies:
   - Data base relation.
   - Dependency management.
   - Circuit design.
 - Infinity loops.
 
-[wikipedia]('https://en.wikipedia.org/wiki/Cycle_(graph_theory)#Cycle_detection')
+[wikipedia](https://en.wikipedia.org/wiki/Cycle_(graph_theory)#Cycle_detection)
 
 ## Syntax
 Cycle detection for directed graph.
@@ -52,4 +53,4 @@ template <typename V, typename E>
 
 ## Similar algorithms
 There are many algorithms for cycle detection or algorithms with specific cycle conditions.
-See [wikipedia]('https://en.wikipedia.org/wiki/Cycle_(graph_theory)#Graph_classes_defined_by_cycle')
+See [wikipedia](https://en.wikipedia.org/wiki/Cycle_(graph_theory)#Graph_classes_defined_by_cycle)
