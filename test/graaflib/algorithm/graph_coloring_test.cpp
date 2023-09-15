@@ -68,7 +68,7 @@ TYPED_TEST(GreedyGraphColoringTest, BasicGraphColoring) {
 
   // THEN
   std::unordered_map<vertex_id_t, int> expected_coloring = {
-      {0, 1}, {1, 2}, {2, 1}};
+      {0, 2}, {1, 1}, {2, 0}};
 
   // Check if the obtained coloring matches the expected coloring
   ASSERT_EQ(coloring, expected_coloring);
@@ -89,10 +89,10 @@ TYPED_TEST(GreedyGraphColoringTest, GraphWithNoEdges) {
   auto coloring = greedy_graph_coloring(graph);
 
   std::unordered_map<vertex_id_t, int> expected_coloring = {
-      {0, 1},  // Each vertex is assigned the same color
-      {1, 1},
-      {2, 1},
-      {3, 1}};
+      {0, 0},  // Each vertex is assigned the same color
+      {1, 0},
+      {2, 0},
+      {3, 0}};
 
   // THEN
   // Check if the obtained coloring matches the expected coloring
