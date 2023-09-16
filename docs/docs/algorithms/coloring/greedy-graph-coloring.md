@@ -14,7 +14,7 @@ Colors are represented by the numbers 0, 1, 2,... The greedy algorithm considers
 
 The overall worst-case time complexity of the algorithm is `O(n^2)`. In cases where the graph has a fixed degree (a constant number of neighbors for each vertex), the time complexity can be approximated as `O(n)`. However, if the graph is highly connected (dense) and approaches a complete graph, the time complexity could approach `O(n^2)`.
 
-If no coloring is possible, an empty `unordered_map` is returned.
+If no coloring is possible, an empty `unordered_map` is returned. This is the case when the graph contains no vertices.
 
 [wikipedia](https://en.wikipedia.org/wiki/Greedy_coloring)
 
