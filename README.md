@@ -106,7 +106,9 @@ take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intr
 5. [**Strongly Connected Components Algorithms
    **](https://bobluppes.github.io/graaf/docs/category/strongly-connected-components):
     - Tarjan's Strongly Connected Components
-6. [**Graph Coloring Algorithms**](https://bobluppes.github.io/graaf/docs/category/coloring):
+6. [**Topological Sorting Algorithms**](https://bobluppes.github.io/graaf/docs/category/topological-sorting):
+    - Topological sorting DFS-based
+7. [**Graph Coloring Algorithms**](https://bobluppes.github.io/graaf/docs/category/coloring):
     - Greedy Graph Coloring
 
 # Contributing
