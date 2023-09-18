@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # DFS Based Cycle Detection
 A DFS based cycle detection algorithm is used to identify cycles in graphs, both directed and undirected.
-The algorithm doesn't work on edges with weight and therefore cannot be used for negative weight cycles.
+The algorithm can be used to detect cycles in the structure of a graph, as it does not consider edge weights.
 
 # Directed graph
 The key idea is that when a vertex is processed, mark it as: UNVISITED, VISITED and NO_CYCLE.
