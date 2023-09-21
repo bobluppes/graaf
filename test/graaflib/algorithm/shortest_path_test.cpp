@@ -642,13 +642,18 @@ using undirected_weighted_graph_signed_types = testing::Types<
     /**
      * Non primitive weighted edge type directed graph
      */
-    std::pair<directed_graph<int, my_weighted_edge<int>>,my_weighted_edge<int>>,
-    std::pair<directed_graph<int, my_weighted_edge<float>>,my_weighted_edge<float>>,
-    std::pair<directed_graph<int, my_weighted_edge<long double>>,my_weighted_edge<long double>>>;
+    std::pair<directed_graph<int, my_weighted_edge<int>>,
+              my_weighted_edge<int>>,
+    std::pair<directed_graph<int, my_weighted_edge<float>>,
+              my_weighted_edge<float>>,
+    std::pair<directed_graph<int, my_weighted_edge<long double>>,
+              my_weighted_edge<long double>>>;
 
-TYPED_TEST_SUITE(BellmanFordShortestPathsSignedTypesTest,undirected_weighted_graph_signed_types);
+TYPED_TEST_SUITE(BellmanFordShortestPathsSignedTypesTest,
+                 undirected_weighted_graph_signed_types);
 
-TYPED_TEST(BellmanFordShortestPathsSignedTypesTest, BellmanFordNegativecycleTest) {
+TYPED_TEST(BellmanFordShortestPathsSignedTypesTest,
+           BellmanFordNegativecycleTest) {
   // Bellman Ford can handle negative edge weights only in directed graphs.
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
@@ -671,21 +676,21 @@ TYPED_TEST(BellmanFordShortestPathsSignedTypesTest, BellmanFordNegativecycleTest
   graph.add_edge(vertex_id_4, vertex_id_2, edge_t{static_cast<weight_t>(-2)});
 
   ASSERT_THROW(
-    {
-      try {
-        [[maybe_unused]] const auto path{bellman_ford_shortest_paths(graph, vertex_id_3)};
-        // If the above line doesn't throw an exception, fail the test
-        FAIL() 
-        << "Expected std::invalid_argument exception, but no exception was thrown";
-      } 
-      catch (const std::invalid_argument &ex) {
-        // Verify that the exception message contains the expected err  or message.
-        EXPECT_STREQ("Negative cycle detected in the graph.",ex.what());
-        throw;
-      }
-    },
-    std::invalid_argument);
-
+      {
+        try {
+          [[maybe_unused]] const auto path{
+              bellman_ford_shortest_paths(graph, vertex_id_3)};
+          // If the above line doesn't throw an exception, fail the test
+          FAIL() << "Expected std::invalid_argument exception, but no "
+                    "exception was thrown";
+        } catch (const std::invalid_argument &ex) {
+          // Verify that the exception message contains the expected err  or
+          // message.
+          EXPECT_STREQ("Negative cycle detected in the graph.", ex.what());
+          throw;
+        }
+      },
+      std::invalid_argument);
 }
 template <typename T>
 struct AStarShortestPathTest : public testing::Test {

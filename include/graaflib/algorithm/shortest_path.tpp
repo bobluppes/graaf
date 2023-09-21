@@ -211,10 +211,13 @@ bellman_ford_shortest_paths(const graph<V, E, T>& graph,
   for (const auto& [edge_id, edge] : graph.get_edges()) {
     const auto [u, v]{edge_id};
     WEIGHT_T weight = get_weight(edge);
-    if (shortest_paths[u].total_weight != std::numeric_limits<WEIGHT_T>::max() && shortest_paths[u].total_weight + weight < shortest_paths[v].total_weight) {
-        std::ostringstream error_msg;
-        error_msg << "Negative cycle detected in the graph.";
-        throw std::invalid_argument{error_msg.str()};
+    if (shortest_paths[u].total_weight !=
+            std::numeric_limits<WEIGHT_T>::max() &&
+        shortest_paths[u].total_weight + weight <
+            shortest_paths[v].total_weight) {
+      std::ostringstream error_msg;
+      error_msg << "Negative cycle detected in the graph.";
+      throw std::invalid_argument{error_msg.str()};
     }
   }
   return shortest_paths;
