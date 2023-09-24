@@ -650,7 +650,7 @@ using directed_weighted_graph_signed_types = testing::Types<
               my_weighted_edge<long double>>>;
 
 TYPED_TEST_SUITE(BellmanFordShortestPathsSignedTypesTest,
-                 undirected_weighted_graph_signed_types);
+                 directed_weighted_graph_signed_types);
 
 TYPED_TEST(BellmanFordShortestPathsSignedTypesTest,
            BellmanFordNegativecycleTest) {
