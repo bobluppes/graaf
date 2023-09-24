@@ -215,9 +215,7 @@ bellman_ford_shortest_paths(const graph<V, E, T>& graph,
             std::numeric_limits<WEIGHT_T>::max() &&
         shortest_paths[u].total_weight + weight <
             shortest_paths[v].total_weight) {
-      std::ostringstream error_msg;
-      error_msg << "Negative cycle detected in the graph.";
-      throw std::invalid_argument{error_msg.str()};
+      throw std::invalid_argument{"Negative cycle detected in the graph."};
     }
   }
   return shortest_paths;
