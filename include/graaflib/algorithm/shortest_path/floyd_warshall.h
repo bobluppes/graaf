@@ -25,6 +25,6 @@ template <typename V, typename E, graph_type T,
 std::vector<std::vector<WEIGHT_T>> floyd_warshall_shortest_paths(
     const graph<V, E, T>& graph);
 
-}; // namespace graaf::algorithm
+};  // namespace graaf::algorithm
 
 #include "floyd_warshall.tpp"
