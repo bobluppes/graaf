@@ -178,6 +178,16 @@ bellman_ford_shortest_paths(const graph<V, E, T>& graph,
                             vertex_id_t start_vertex) {
   std::unordered_map<vertex_id_t, graph_path<WEIGHT_T>> shortest_paths;
 
+  const auto found_shorter_path{
+      [&shortest_paths](edge_id_t edge_id, const E& edge) {
+        const auto weight = get_weight(edge);
+        const auto [u, v]{edge_id};
+        return shortest_paths[u].total_weight !=
+                   std::numeric_limits<WEIGHT_T>::max() &&
+               shortest_paths[u].total_weight + weight <
+                   shortest_paths[v].total_weight;
+      }};
+
   // Initialize the shortest path distances from the starting vertex to
   // "infinity" for all vertices
   for (const auto& [vertex_id, _] : graph.get_vertices()) {
@@ -194,10 +204,7 @@ bellman_ford_shortest_paths(const graph<V, E, T>& graph,
       const auto [u, v]{edge_id};
       WEIGHT_T weight = get_weight(edge);
 
-      if (shortest_paths[u].total_weight !=
-              std::numeric_limits<WEIGHT_T>::max() &&
-          shortest_paths[u].total_weight + weight <
-              shortest_paths[v].total_weight) {
+      if (found_shorter_path(edge_id, edge)) {
         // Update the shortest path to vertex v
         shortest_paths[v] = {
             {shortest_paths[u].vertices},
@@ -211,10 +218,7 @@ bellman_ford_shortest_paths(const graph<V, E, T>& graph,
   for (const auto& [edge_id, edge] : graph.get_edges()) {
     const auto [u, v]{edge_id};
     WEIGHT_T weight = get_weight(edge);
-    if (shortest_paths[u].total_weight !=
-            std::numeric_limits<WEIGHT_T>::max() &&
-        shortest_paths[u].total_weight + weight <
-            shortest_paths[v].total_weight) {
+    if (found_shorter_path(edge_id, edge)) {
       throw std::invalid_argument{"Negative cycle detected in the graph."};
     }
   }
@@ -235,10 +239,10 @@ std::optional<graph_path<WEIGHT_T>> a_star_search(
   // vertex to the goal vertex through the current vertex.
   // It's a combination of g_score and h_score:
   // f_score[n] = g_score[n] + h_score[n]
-  // For vertex n, prev_id in path_vertex is the vertex immediately preceding it
-  // on the cheapest path from the start to n currently known.
-  // The priority queue uses internally a binary heap.
-  // To get the minimum element, we use the std::greater comparator.
+  // For vertex n, prev_id in path_vertex is the vertex immediately preceding
+  // it on the cheapest path from the start to n currently known. The priority
+  // queue uses internally a binary heap. To get the minimum element, we use
+  // the std::greater comparator.
   using a_star_queue_t =
       std::priority_queue<weighted_path_item, std::vector<weighted_path_item>,
                           std::greater<>>;
@@ -290,9 +294,9 @@ std::optional<graph_path<WEIGHT_T>> a_star_search(
       // we need to update vertex_info and add it to the open set.
       if (!vertex_info.contains(neighbor) ||
           tentative_g_score < g_score[neighbor]) {
-        // This path to neighbor is better than any previous one, so we need to
-        // update our data.
-        // Update neighbor's g_score, f_score and previous vertex on the path
+        // This path to neighbor is better than any previous one, so we need
+        // to update our data. Update neighbor's g_score, f_score and previous
+        // vertex on the path
         g_score[neighbor] = tentative_g_score;
         auto f_score = tentative_g_score + heuristic(neighbor);
 
