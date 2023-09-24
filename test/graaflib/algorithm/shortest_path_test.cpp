@@ -631,7 +631,7 @@ struct BellmanFordShortestPathsSignedTypesTest : public testing::Test {
   using graph_t = typename T::first_type;
   using edge_t = typename T::second_type;
 };
-using undirected_weighted_graph_signed_types = testing::Types<
+using directed_weighted_graph_signed_types = testing::Types<
     /**
      * Primitive edge type directed graph
      */
