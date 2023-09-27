@@ -2,6 +2,7 @@
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
 #include <gtest/gtest.h>
+#include <utils/scenarios/scenarios.h>
 
 #include <unordered_map>
 #include <unordered_set>
@@ -40,39 +41,6 @@ struct record_edge_callback {
     edge_order[edge] = edge_order_supplier++;
   }
 };
-
-template <typename GRAPH_T>
-struct scenario {
-  GRAPH_T graph{};
-
-  // This vector decouples the test scenario from the graphs internal id
-  // generation logic. The first element in this vector is the first vertex and
-  // so on...
-  std::vector<vertex_id_t> vertex_ids{};
-};
-
-template <typename GRAPH_T>
-[[nodiscard]] scenario<GRAPH_T> create_complex_scenario() {
-  std::vector<vertex_id_t> vertex_ids{};
-  vertex_ids.reserve(5);
-
-  GRAPH_T graph{};
-
-  vertex_ids.push_back(graph.add_vertex(10));
-  vertex_ids.push_back(graph.add_vertex(20));
-  vertex_ids.push_back(graph.add_vertex(30));
-  vertex_ids.push_back(graph.add_vertex(40));
-  vertex_ids.push_back(graph.add_vertex(50));
-
-  // All edges are in the search direction, so the graph specialization does not
-  // matter
-  graph.add_edge(vertex_ids[0], vertex_ids[1], 100);
-  graph.add_edge(vertex_ids[0], vertex_ids[2], 200);
-  graph.add_edge(vertex_ids[2], vertex_ids[3], 300);
-  graph.add_edge(vertex_ids[2], vertex_ids[4], 400);
-
-  return {std::move(graph), std::move(vertex_ids)};
-}
 
 }  // namespace
 
@@ -206,7 +174,8 @@ TEST(GraphTraversalTest, DirectedGraphEdgeWrongDirectionBFS) {
 TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphDFS) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
-  const auto [graph, vertex_ids]{create_complex_scenario<graph_t>()};
+  const auto [graph,
+              vertex_ids]{utils::scenarios::create_tree_scenario<graph_t>()};
 
   seen_edges_t seen_edges{};
   edge_order_t edge_order{};
@@ -233,7 +202,8 @@ TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphDFS) {
 TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphBFS) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
-  const auto [graph, vertex_ids]{create_complex_scenario<graph_t>()};
+  const auto [graph,
+              vertex_ids]{utils::scenarios::create_tree_scenario<graph_t>()};
 
   seen_edges_t seen_edges{};
   edge_order_t edge_order{};
@@ -264,7 +234,8 @@ TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphBFS) {
 TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphDFSImmediateTermination) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
-  const auto [graph, vertex_ids]{create_complex_scenario<graph_t>()};
+  const auto [graph,
+              vertex_ids]{utils::scenarios::create_tree_scenario<graph_t>()};
 
   seen_edges_t seen_edges{};
   edge_order_t edge_order{};
@@ -286,7 +257,8 @@ TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphDFSImmediateTermination) {
 TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphBFSImmediateTermination) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
-  const auto [graph, vertex_ids]{create_complex_scenario<graph_t>()};
+  const auto [graph,
+              vertex_ids]{utils::scenarios::create_tree_scenario<graph_t>()};
 
   seen_edges_t seen_edges{};
   edge_order_t edge_order{};
@@ -308,7 +280,8 @@ TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphBFSImmediateTermination) {
 TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphDFSTermination) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
-  const auto [graph, vertex_ids]{create_complex_scenario<graph_t>()};
+  const auto [graph,
+              vertex_ids]{utils::scenarios::create_tree_scenario<graph_t>()};
 
   seen_edges_t seen_edges{};
   edge_order_t edge_order{};
@@ -335,7 +308,8 @@ TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphDFSTermination) {
 TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphDFSLaterTermination) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
-  const auto [graph, vertex_ids]{create_complex_scenario<graph_t>()};
+  const auto [graph,
+              vertex_ids]{utils::scenarios::create_tree_scenario<graph_t>()};
 
   seen_edges_t seen_edges{};
   edge_order_t edge_order{};
@@ -363,7 +337,8 @@ TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphDFSLaterTermination) {
 TYPED_TEST(TypedGraphTraversalTest, MoreComplexGraphBFSTermination) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
-  const auto [graph, vertex_ids]{create_complex_scenario<graph_t>()};
+  const auto [graph,
+              vertex_ids]{utils::scenarios::create_tree_scenario<graph_t>()};
 
   seen_edges_t seen_edges{};
   edge_order_t edge_order{};

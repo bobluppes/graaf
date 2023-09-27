@@ -18,7 +18,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(fmt)
 
-file(GLOB TEST_SOURCES "graaflib/*.cpp" "graaflib/*/*.cpp")
+file(GLOB_RECURSE TEST_SOURCES "./*.cpp")
 add_executable(
   ${PROJECT_NAME}_test
   ${TEST_SOURCES}
@@ -37,8 +37,9 @@ if (ENABLE_COVERAGE)
   )
 endif()
 
-# Include src such that we can #include <graaflib/*> in the sources
+# Include src such that we can #include <graaflib/*> and #include <utils/*> in the sources
 target_include_directories(${PROJECT_NAME}_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+target_include_directories(${PROJECT_NAME}_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(
   ${PROJECT_NAME}_test
