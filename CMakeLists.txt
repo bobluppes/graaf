@@ -11,21 +11,21 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Example usages of the library
-option(BUILD_EXAMPLES "Build the examples" OFF)
-if(BUILD_EXAMPLES)
+option(SKIP_EXAMPLES "Skip building the examples" OFF)
+if(NOT SKIP_EXAMPLES)
 add_subdirectory(examples)
-endif(BUILD_EXAMPLES)
+endif()
 
 # Enables testing in CMAKE, needs to be called BEFORE call to add_subdirectory
-option(BUILD_TESTS "Built the tests" OFF)
-if(BUILD_TESTS)
+option(SKIP_TESTS "Skip building the tests" OFF)
+if(NOT SKIP_TESTS)
 enable_testing()
 add_subdirectory(test)
-endif(BUILD_TESTS)
+endif()
 
 # Benchmarks
-option(BUILD_BENCHMARKS "Built the performance benchmarks" OFF)
-if(BUILD_BENCHMARKS)
+option(SKIP_BENCHMARKS "Skip building the performance benchmarks" OFF)
+if(NOT SKIP_BENCHMARKS)
 add_subdirectory(perf)
-endif(BUILD_BENCHMARKS)
+endif()
 
