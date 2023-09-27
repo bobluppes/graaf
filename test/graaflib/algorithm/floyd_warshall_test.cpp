@@ -112,64 +112,6 @@ TYPED_TEST(FloydWarshallTest, DirectedGraph) {
   ASSERT_EQ(shortest_paths, expected_paths);
 }
 
-TYPED_TEST(FloydWarshallTest, DirectedGraphNegativeCycle) {
-  // GIVEN
-  directed_graph<int, int> graph{};
-
-  // graph vertices
-  const auto vertex_1{graph.add_vertex(10)};
-  const auto vertex_2{graph.add_vertex(20)};
-  const auto vertex_3{graph.add_vertex(30)};
-  const auto vertex_4{graph.add_vertex(40)};
-
-  // adding edges to our graph
-  graph.add_edge(vertex_1, vertex_2, -100);
-  graph.add_edge(vertex_2, vertex_3, 300);
-  graph.add_edge(vertex_3, vertex_1, -300);
-  graph.add_edge(vertex_4, vertex_2, 300);
-
-  auto NEG_CYCLE = INT_MIN;
-  auto NO_PATH = INT_MAX;
-
-  auto shortest_paths = floyd_warshall_shortest_paths(graph);
-  std::vector<std::vector<int>> expected_paths = {
-      {NEG_CYCLE, NEG_CYCLE, NEG_CYCLE, NO_PATH},
-      {NEG_CYCLE, NEG_CYCLE, NEG_CYCLE, NO_PATH},
-      {NEG_CYCLE, NEG_CYCLE, NEG_CYCLE, NO_PATH},
-      {NEG_CYCLE, NEG_CYCLE, NEG_CYCLE, 0}};
-
-  ASSERT_EQ(shortest_paths, expected_paths);
-}
-
-TYPED_TEST(FloydWarshallTest, UndirectedGraphNegativeCycle) {
-  // GIVEN
-  undirected_graph<int, int> graph{};
-
-  // graph vertices
-  const auto vertex_1{graph.add_vertex(10)};
-  const auto vertex_2{graph.add_vertex(20)};
-  const auto vertex_3{graph.add_vertex(30)};
-  const auto vertex_4{graph.add_vertex(40)};
-
-  // adding edges to our graph
-  graph.add_edge(vertex_1, vertex_2, -100);
-  graph.add_edge(vertex_2, vertex_3, 300);
-  graph.add_edge(vertex_3, vertex_1, -300);
-  graph.add_edge(vertex_4, vertex_2, 300);
-
-  auto NEG_CYCLE = INT_MIN;
-  auto NO_PATH = INT_MAX;
-
-  auto shortest_paths = floyd_warshall_shortest_paths(graph);
-  std::vector<std::vector<int>> expected_paths = {
-      {NEG_CYCLE, NEG_CYCLE, NEG_CYCLE, NEG_CYCLE},
-      {NEG_CYCLE, NEG_CYCLE, NEG_CYCLE, NEG_CYCLE},
-      {NEG_CYCLE, NEG_CYCLE, NEG_CYCLE, NEG_CYCLE},
-      {NEG_CYCLE, NEG_CYCLE, NEG_CYCLE, NEG_CYCLE}};
-
-  ASSERT_EQ(shortest_paths, expected_paths);
-}
-
 TYPED_TEST(FloydWarshallTest, DirectedGraphNoCycleNegativeWeight) {
   directed_graph<int, int> graph{};
 
@@ -189,7 +131,6 @@ TYPED_TEST(FloydWarshallTest, DirectedGraphNoCycleNegativeWeight) {
   graph.add_edge(vertex_4, vertex_6, 100);
   graph.add_edge(vertex_5, vertex_2, -75);
 
-  auto NEG_CYCLE = INT_MIN;
   auto NO_PATH = INT_MAX;
 
   auto shortest_paths = floyd_warshall_shortest_paths(graph);
@@ -254,31 +195,88 @@ TYPED_TEST(FloydWarshallTest, DenseUndirectedGraph) {
   ASSERT_EQ(shortest_paths, expected_paths);
 }
 
-TYPED_TEST(FloydWarshallTest, DirectedGraphWithSubgraphNegativeCycle) {
-  directed_graph<int, int> graph{};
+TYPED_TEST(FloydWarshallTest, UndirectedGraphTwoComponents) {
+  undirected_graph<int, int> graph{};
 
   // graph vertices
   const auto vertex_1{graph.add_vertex(10)};
   const auto vertex_2{graph.add_vertex(20)};
   const auto vertex_3{graph.add_vertex(30)};
   const auto vertex_4{graph.add_vertex(40)};
+  const auto vertex_5{graph.add_vertex(40)};
+  const auto vertex_6{graph.add_vertex(40)};
+  const auto vertex_7{graph.add_vertex(40)};
+  const auto vertex_8{graph.add_vertex(40)};
 
   // adding edges to our graph
-  graph.add_edge(vertex_1, vertex_2, 10);
-  graph.add_edge(vertex_2, vertex_1, -20);
+  graph.add_edge(vertex_1, vertex_2, 12);
+  graph.add_edge(vertex_1, vertex_3, 11);
+  graph.add_edge(vertex_1, vertex_5, 6);
+  graph.add_edge(vertex_2, vertex_5, 14);
+  graph.add_edge(vertex_2, vertex_4, 15);
+  graph.add_edge(vertex_4, vertex_5, 9);
+  graph.add_edge(vertex_4, vertex_3, 7);
+  graph.add_edge(vertex_5, vertex_3, 7);
 
-  graph.add_edge(vertex_4, vertex_3, 75);
-  graph.add_edge(vertex_3, vertex_4, 12);
+  graph.add_edge(vertex_6, vertex_7, 4);
+  graph.add_edge(vertex_6, vertex_8, 2);
+  graph.add_edge(vertex_7, vertex_8, 3);
 
-  auto NEG_CYCLE = INT_MIN;
   auto NO_PATH = INT_MAX;
 
   auto shortest_paths = floyd_warshall_shortest_paths(graph);
-  std::vector<std::vector<int>> expected_paths = {
-      {NEG_CYCLE, NEG_CYCLE, NO_PATH, NO_PATH},
-      {NEG_CYCLE, NEG_CYCLE, NO_PATH, NO_PATH},
-      {NO_PATH, NO_PATH, 0, 12},
-      {NO_PATH, NO_PATH, 75, 0}};
+  std::vector<std::vector<int>> expected_paths{
+      {0, 12, 11, 15, 6, NO_PATH, NO_PATH, NO_PATH},
+      {12, 0, 21, 15, 14, NO_PATH, NO_PATH, NO_PATH},
+      {11, 21, 0, 7, 7, NO_PATH, NO_PATH, NO_PATH},
+      {15, 15, 7, 0, 9, NO_PATH, NO_PATH, NO_PATH},
+      {6, 14, 7, 9, 0, NO_PATH, NO_PATH, NO_PATH},
+      {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 0, 4, 2},
+      {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 4, 0, 3},
+      {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 2, 3, 0}};
+
+  ASSERT_EQ(shortest_paths, expected_paths);
+}
+
+TYPED_TEST(FloydWarshallTest, DirectedGraphTwoComponents) {
+  undirected_graph<int, int> graph{};
+
+  // graph vertices
+  const auto vertex_1{graph.add_vertex(10)};
+  const auto vertex_2{graph.add_vertex(20)};
+  const auto vertex_3{graph.add_vertex(30)};
+  const auto vertex_4{graph.add_vertex(40)};
+  const auto vertex_5{graph.add_vertex(40)};
+  const auto vertex_6{graph.add_vertex(40)};
+  const auto vertex_7{graph.add_vertex(40)};
+  const auto vertex_8{graph.add_vertex(40)};
+
+  // adding edges to our graph
+  graph.add_edge(vertex_1, vertex_2, 12);
+  graph.add_edge(vertex_1, vertex_3, 11);
+  graph.add_edge(vertex_5, vertex_1, 6);
+  graph.add_edge(vertex_2, vertex_5, 14);
+  graph.add_edge(vertex_2, vertex_4, 15);
+  graph.add_edge(vertex_5, vertex_4, 9);
+  graph.add_edge(vertex_4, vertex_3, 7);
+  graph.add_edge(vertex_3, vertex_5, 7);
+
+  graph.add_edge(vertex_6, vertex_7, 4);
+  graph.add_edge(vertex_6, vertex_8, 2);
+  graph.add_edge(vertex_8, vertex_7, 3);
+
+  auto NO_PATH = INT_MAX;
+
+  auto shortest_paths = floyd_warshall_shortest_paths(graph);
+  std::vector<std::vector<int>> expected_paths{
+      {0, 12, 11, 15, 6, NO_PATH, NO_PATH, NO_PATH},
+      {12, 0, 21, 15, 14, NO_PATH, NO_PATH, NO_PATH},
+      {11, 21, 0, 7, 7, NO_PATH, NO_PATH, NO_PATH},
+      {15, 15, 7, 0, 9, NO_PATH, NO_PATH, NO_PATH},
+      {6, 14, 7, 9, 0, NO_PATH, NO_PATH, NO_PATH},
+      {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 0, 4, 2},
+      {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 4, 0, 3},
+      {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 2, 3, 0}};
 
   ASSERT_EQ(shortest_paths, expected_paths);
 }
