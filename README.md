@@ -101,8 +101,9 @@ take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intr
     - Bellman-Ford
 3. [**Cycle Detection Algorithms**](https://bobluppes.github.io/graaf/docs/category/cycle-detection-algorithms):
     - DFS-Based Cycle Detection
-4. **Minimum Spanning Tree (MST) Algorithms**
+4. [**Minimum Spanning Tree (MST) Algorithms**](https://bobluppes.github.io/graaf/docs/category/minimum-spanning-tree)
     - Kruskal's Algorithm
+    - Prim's Algorithm
 5. [**Strongly Connected Components Algorithms
    **](https://bobluppes.github.io/graaf/docs/category/strongly-connected-components):
     - Tarjan's Strongly Connected Components
