@@ -144,12 +144,6 @@ std::optional<std::vector<edge_id_t>> prim_minimum_spanning_tree(
     fringe_vertices.insert(mst_edge.second);
   }
 
-  // If our tree does not cover all vertices in the graph it is not a spanning
-  // tree
-  if (fringe_vertices.size() != graph.vertex_count()) {
-    return std::nullopt;
-  }
-
   return edges_in_mst;
 }
 
