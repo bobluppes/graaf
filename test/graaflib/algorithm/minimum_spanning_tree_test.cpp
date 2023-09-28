@@ -251,6 +251,9 @@ TEST(PrimMstTest, DisconnectedGraph) {
   graph_t graph{};
   const auto start_vertex{graph.add_vertex(10)};
   [[maybe_unused]] const auto vertex_1{graph.add_vertex(20)};
+  [[maybe_unused]] const auto vertex_2{graph.add_vertex(30)};
+
+  graph.add_edge(start_vertex, vertex_1, 100);
 
   // WHEN
   const auto mst{prim_minimum_spanning_tree(graph, start_vertex)};
