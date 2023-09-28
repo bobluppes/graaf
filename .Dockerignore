@@ -1,6 +1,4 @@
 build/
-cmake-modules/
-venv
 
 # IDE
 .vscode/
