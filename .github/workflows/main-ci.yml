@@ -16,13 +16,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Install dependencies
       run: sudo apt-get install lcov -y
 
     - name: Pull CMake modules
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: bilke/cmake-modules
         ref: 877bab9dd1b17468c5d939cacaa2ad7ba99d1977
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: clang-format
         uses: jidicula/clang-format-action@v4.11.0
