@@ -16,7 +16,6 @@ std::unordered_map<vertex_id_t, int> greedy_graph_coloring(const GRAPH& graph) {
 
   // Iterate through each vertex
   for (const auto& [current_vertex_id, _] : vertices) {
-
     // Iterate through neighboring vertices
     // Find the smallest available color for the current vertex
     int available_color{0};

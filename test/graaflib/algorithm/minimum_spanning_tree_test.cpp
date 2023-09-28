@@ -229,7 +229,6 @@ TYPED_TEST(MSTTest, CustomEdgeVertexOneComponentGraph) {
   ASSERT_EQ(expected_mst, mst);
 }
 
-
 TEST(PrimMstTest, SingleVertex) {
   // GIVEN
   using graph_t = undirected_graph<int, int>;
