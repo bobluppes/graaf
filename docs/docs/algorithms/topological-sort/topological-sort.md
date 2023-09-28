@@ -1,8 +1,5 @@
----
-sidebar_position: 1
----
-
 # Topological sort algorithm
+
 Topological sort algorithm processing DAG(directed acyclic graph) using DFS traversal.
 Each vertex is visited only after all its dependencies are visited.
 The runtime of the algorithm is `O(|V|+|E|)` and the memory consumption is `O(|V|)`.

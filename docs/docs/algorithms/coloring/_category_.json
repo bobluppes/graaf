@@ -1,8 +1,7 @@
 {
-    "label": "Graph Coloring Algorithms",
-    "position": 3,
-    "link": {
-      "type": "generated-index"
-    }
+  "label": "Graph Coloring Algorithms",
+  "link": {
+    "type": "generated-index"
   }
+}
   

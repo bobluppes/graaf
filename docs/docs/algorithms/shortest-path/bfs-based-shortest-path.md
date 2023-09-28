@@ -1,8 +1,5 @@
----
-sidebar_position: 1
----
-
 # BFS Based Shortest Path
+
 Breadth-First Search (BFS) is a graph traversal algorithm that efficiently finds the shortest
 path between two vertices in an **unweighted graph** by exploring vertices level by level,
 guaranteeing the shortest path, and has a time complexity of `O(|E| + |V|)`,

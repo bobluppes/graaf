@@ -1,7 +1,3 @@
----
-sidebar_position: 5
----
-
 # Floyd-Warshall algorithm
 
 Floyd-Warshall algorithm computes the shortest path between any two vertices in a graph, both directed and undirected.
