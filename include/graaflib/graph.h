@@ -119,7 +119,7 @@ class graph {
   [[nodiscard]] const vertex_t& get_vertex(vertex_id_t vertex_id) const;
 
   /**
-   * Get edge between two vertices with their ID
+   * Get edge between two vertices with their vertex IDs
    *
    * @param  vertex_id_lhs The ID of the first vertex
    * @param  vertex_id_rhs The ID of the second vertex
@@ -131,8 +131,8 @@ class graph {
                                  vertex_id_t vertex_id_rhs);
 
   /**
-   * Get const version of edge between two vertices with their ID by calling
-   * get_edge()
+   * Get const version of edge between two vertices with their vertex IDs by
+   * calling get_edge()
    *
    * @see    graph#get_edge()
    * @param  vertex_id_lhs The ID of the first vertex
@@ -142,6 +142,26 @@ class graph {
    */
   [[nodiscard]] const edge_t& get_edge(vertex_id_t vertex_id_lhs,
                                        vertex_id_t vertex_id_rhs) const;
+
+  /**
+   * Get edge between two vertices with their edge ID
+   *
+   * @param  edge_id The ID of the edge.
+   * @return edge_t - Shared pointer to either the provided edge or to
+   * primitive_numeric_adapter.
+   * @throws out_of_range exception - If No edge exit between the two vertices
+   */
+  [[nodiscard]] edge_t& get_edge(const edge_id_t& edge_id);
+
+  /**
+   * Const version to get an edge between two vertices with their edge ID
+   *
+   * @param  edge_id The ID of the edge.
+   * @return edge_t - Shared pointer to either the provided edge or to
+   * primitive_numeric_adapter.
+   * @throws out_of_range exception - If No edge exit between the two vertices
+   */
+  [[nodiscard]] const edge_t& get_edge(const edge_id_t& edge_id) const;
 
   /**
    * Get a list of neighbour vertices
@@ -157,7 +177,7 @@ class graph {
    * @param  vertex The vertex to be added
    * @return vertices_id_t - The ID of the new vertex
    */
-  vertex_id_t add_vertex(auto&& vertex);
+  [[nodiscard]] vertex_id_t add_vertex(auto&& vertex);
 
   /**
    * Remove a vertex from the graph and update all its neighbors

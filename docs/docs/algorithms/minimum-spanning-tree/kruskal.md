@@ -1,9 +1,7 @@
----
-sidebar_position: 4
----
-
 # Kruskal's Algorithm
-Kruskal's algorithm finds the minimum spanning forest of an undirected edge-weighted graph. If the graph is connected, it finds a minimum spanning tree.
+
+Kruskal's algorithm finds the minimum spanning forest of an undirected edge-weighted graph. If the graph is connected,
+it finds a minimum spanning tree.
 The algorithm is implemented with disjoint set union and finding minimum weighted edges.
 Worst-case performance is `O(|E|log|V|)`, where `|E|` is the number of edges and `|V|` is the number of vertices in the
 graph. Memory usage is `O(V+E)` for maintaining vertices (DSU) and edges.
@@ -21,9 +19,11 @@ template <typename V, typename E>
 ```
 
 - **graph** The graph to extract MST or MSF.
-- **return** Returns a vector of edges that form MST if the graph is connected, otherwise it returns the minimum spanning forest.
+- **return** Returns a vector of edges that form MST if the graph is connected, otherwise it returns the minimum
+  spanning forest.
 
 ### Special case
+
 In case of multiply edges with same weight leading to a vertex, prioritizing vertices with lesser vertex number.
 
 ```cpp
