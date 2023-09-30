@@ -91,26 +91,25 @@ the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/insta
 Algorithms implemented in the Graaf library include the following. For more information on individual algorithms please
 take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intro).
 
-1. [**Traversal Algorithms**](https://bobluppes.github.io/graaf/docs/category/traversal-algorithms):
-    - Breadth-First Search (BFS)
-    - Depth-First Search (DFS)
-2. [**Shortest Path Algorithms**](https://bobluppes.github.io/graaf/docs/category/shortest-path-algorithms):
-    - A\* search
-    - BFS-Based Shortest Path
-    - Dijkstra
-    - Bellman-Ford
-3. [**Cycle Detection Algorithms**](https://bobluppes.github.io/graaf/docs/category/cycle-detection-algorithms):
-    - DFS-Based Cycle Detection
-4. [**Minimum Spanning Tree (MST) Algorithms**](https://bobluppes.github.io/graaf/docs/category/minimum-spanning-tree)
-    - Kruskal's Algorithm
-    - Prim's Algorithm
-5. [**Strongly Connected Components Algorithms
-   **](https://bobluppes.github.io/graaf/docs/category/strongly-connected-components):
-    - Tarjan's Strongly Connected Components
+1. [**Cycle Detection Algorithms**](https://bobluppes.github.io/graaf/docs/category/cycle-detection-algorithms):
+   - DFS-Based Cycle Detection
+2. [**Graph Coloring Algorithms**](https://bobluppes.github.io/graaf/docs/category/coloring):
+   - Greedy Graph Coloring
+3. [**Minimum Spanning Tree (MST) Algorithms**](https://bobluppes.github.io/graaf/docs/category/minimum-spanning-tree)
+   - Kruskal's Algorithm
+   - Prim's Algorithm
+4. [**Shortest Path Algorithms**](https://bobluppes.github.io/graaf/docs/category/shortest-path-algorithms):
+   - A\* search
+   - BFS-Based Shortest Path
+   - Dijkstra
+   - Bellman-Ford
+5. [**Strongly Connected Components Algorithms**](https://bobluppes.github.io/graaf/docs/category/strongly-connected-components):
+   - Tarjan's Strongly Connected Components
 6. [**Topological Sorting Algorithms**](https://bobluppes.github.io/graaf/docs/category/topological-sorting):
-    - Topological sorting DFS-based
-7. [**Graph Coloring Algorithms**](https://bobluppes.github.io/graaf/docs/category/coloring):
-    - Greedy Graph Coloring
+   - Topological sorting DFS-based
+7. [**Traversal Algorithms**](https://bobluppes.github.io/graaf/docs/category/traversal-algorithms):
+   - Breadth-First Search (BFS)
+   - Depth-First Search (DFS)
 
 # Contributing
 
