@@ -27,4 +27,4 @@ tarjans_strongly_connected_components(
 
 }  // namespace graaf::algorithm
 
-#include "strongly_connected_components.tpp"
+#include "tarjan.tpp"

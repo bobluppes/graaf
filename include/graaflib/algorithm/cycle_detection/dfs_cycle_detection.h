@@ -24,4 +24,4 @@ template <typename V, typename E>
 
 }  // namespace graaf::algorithm
 
-#include "cycle_detection.tpp"
+#include "dfs_cycle_detection.tpp"

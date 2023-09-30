@@ -1,5 +1,5 @@
 #include <fmt/core.h>
-#include <graaflib/algorithm/topological_sorting.h>
+#include <graaflib/algorithm/topological_sorting/dfs_topological_sorting.h>
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
 #include <gtest/gtest.h>
@@ -31,7 +31,7 @@ TYPED_TEST(TypedTopologicalSort, ShortGraph) {
   graph.add_edge(vertex_3, vertex_4, 45);
 
   // WHEN;
-  auto sorted_vertices = topological_sort(graph);
+  auto sorted_vertices = dfs_topological_sort(graph);
   std::vector<vertex_id_t> expected_vertices{vertex_1, vertex_2, vertex_3,
                                              vertex_4};
 
@@ -55,7 +55,7 @@ TYPED_TEST(TypedTopologicalSort, RhombusShapeGraph) {
   graph.add_edge(vertex_2, vertex_4, 55);
 
   // WHEN;
-  auto sorted_vertices = topological_sort(graph);
+  auto sorted_vertices = dfs_topological_sort(graph);
   std::vector<vertex_id_t> expected_vertices_1{vertex_1, vertex_2, vertex_3,
                                                vertex_4};
   std::vector<vertex_id_t> expected_vertices_2{vertex_1, vertex_3, vertex_2,
@@ -82,7 +82,7 @@ TYPED_TEST(TypedTopologicalSort, CycleGraph) {
   graph.add_edge(vertex_4, vertex_1, 55);
 
   // WHEN;
-  auto sorted_vertices = topological_sort(graph);
+  auto sorted_vertices = dfs_topological_sort(graph);
   const auto expected_vertices = std::nullopt;
 
   // THEN
@@ -105,7 +105,7 @@ TYPED_TEST(TypedTopologicalSort, GraphWithParallelEdge) {
   graph.add_edge(vertex_1, vertex_4, 55);
 
   // WHEN
-  auto sorted_vertices = topological_sort(graph);
+  auto sorted_vertices = dfs_topological_sort(graph);
   const auto expected_vertices = std::nullopt;
 
   // THEN
@@ -128,7 +128,7 @@ TYPED_TEST(TypedTopologicalSort, SelfLoop) {
   graph.add_edge(vertex_3, vertex_4, 25);
 
   // WHEN;
-  auto sorted_vertices = topological_sort(graph);
+  auto sorted_vertices = dfs_topological_sort(graph);
   const auto expected_vertices = std::nullopt;
 
   // THEN
@@ -158,7 +158,7 @@ TYPED_TEST(TypedTopologicalSort, SimpleGraph) {
   graph.add_edge(vertex_6, vertex_3, 8);
 
   // WHEN;
-  auto sorted_vertices = topological_sort(graph);
+  auto sorted_vertices = dfs_topological_sort(graph);
   std::vector<vertex_id_t> expected_vertices_1{
       vertex_1, vertex_4, vertex_2, vertex_6, vertex_5, vertex_3, vertex_7};
   std::vector<vertex_id_t> expected_vertices_2{
@@ -208,7 +208,7 @@ TYPED_TEST(TypedTopologicalSort, SixSortResults) {
   graph.add_edge(vertex_6, vertex_7, 6);
 
   // WHEN;
-  auto sorted_vertices = topological_sort(graph);
+  auto sorted_vertices = dfs_topological_sort(graph);
   std::vector<vertex_id_t> expected_vertices_1{
       vertex_1, vertex_2, vertex_3, vertex_4, vertex_5, vertex_6, vertex_7};
   std::vector<vertex_id_t> expected_vertices_2{

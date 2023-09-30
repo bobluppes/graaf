@@ -1,4 +1,4 @@
-#include <graaflib/algorithm/strongly_connected_components.h>
+#include <graaflib/algorithm/strongly_connected_components/tarjan.h>
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
 #include <gtest/gtest.h>

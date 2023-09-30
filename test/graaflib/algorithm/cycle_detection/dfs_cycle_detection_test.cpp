@@ -1,4 +1,4 @@
-#include <graaflib/algorithm/cycle_detection.h>
+#include <graaflib/algorithm/cycle_detection/dfs_cycle_detection.h>
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
 #include <gtest/gtest.h>

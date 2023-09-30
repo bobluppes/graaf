@@ -1,6 +1,6 @@
 #pragma once
 
-#include <graaflib/algorithm/strongly_connected_components.h>
+#include <graaflib/algorithm/strongly_connected_components/tarjan.h>
 
 #include <functional>  // For std::function
 #include <stack>

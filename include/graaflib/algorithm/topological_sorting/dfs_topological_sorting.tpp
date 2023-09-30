@@ -1,7 +1,7 @@
 #pragma once
 
-#include <graaflib/algorithm/cycle_detection.h>
-#include <graaflib/algorithm/topological_sorting.h>
+#include <graaflib/algorithm/cycle_detection/dfs_cycle_detection.h>
+#include <graaflib/algorithm/topological_sorting/dfs_topological_sorting.h>
 
 #include <optional>
 #include <unordered_set>
@@ -31,7 +31,7 @@ void do_dfs_topological_sort(
 };  // namespace detail
 
 template <typename V, typename E>
-std::optional<std::vector<vertex_id_t>> topological_sort(
+std::optional<std::vector<vertex_id_t>> dfs_topological_sort(
     const graph<V, E, graph_type::DIRECTED>& graph) {
   // Graph should be acyclic
   if (dfs_cycle_detection(graph)) {
