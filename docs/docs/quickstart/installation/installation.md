@@ -5,7 +5,9 @@ sidebar_position: 1
 # Installation
 
 ## Graaf Header-Only Installation
-Installing Graaf on your project is easy! Simply copy the `graaflib` directory to your project and add it to your include path.
+
+Installing Graaf on your project is easy! Simply copy the `graaflib` directory to your project and add it to your
+include path.
 
 1. Copy `graaflip` to your project.
 2. Before compiling, add the directory to your include path.
@@ -16,7 +18,7 @@ Installing Graaf on your project is easy! Simply copy the `graaflib` directory t
     export CPLUS_INCLUDE_PATH="/full/path/to/include/graaflib/:$CPLUS_INCLUDE_PATH"
     ```
 
-    Or in CMake:
+   Or in CMake:
     ```CMake
     include_directories("graaf/src/graaflib")
     ```
@@ -26,14 +28,15 @@ Installing Graaf on your project is easy! Simply copy the `graaflib` directory t
     ```
 
 ## CMake FetchContent
+
 Alternatively, this project can be pulled in using CMake's `FetchContent`:
 
 ```CMake
 include(FetchContent)
 FetchContent_Declare(
-  graaflib
-  GIT_REPOSITORY https://github.com/bobluppes/graaf.git
-  GIT_TAG        main
+        graaflib
+        GIT_REPOSITORY https://github.com/bobluppes/graaf.git
+        GIT_TAG main
 )
 FetchContent_MakeAvailable(graaflib)
 ```

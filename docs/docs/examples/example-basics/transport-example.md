@@ -1,9 +1,8 @@
----
-sidebar_position: 3
----
-
 # Network Example
-This example showcases graph traversal and shortest path algorithms in an undirected graph network. As such, it demonstrates the usage of the following classes and algorithms:
+
+This example showcases graph traversal and shortest path algorithms in an undirected graph network. As such, it
+demonstrates the usage of the following classes and algorithms:
+
 - The undirected_graph implemented in `graaf::undirected_graph`
 - The shortest path algorithm implemented in `graaf::algorithm::get_shortest_path`
 - The graph traversal implemented in `graaf::algorithm::graph_traversal`
@@ -34,6 +33,7 @@ struct railroad : public graaf::weighted_edge<double> {
 ```
 
 # Initializing graph, start and end vertecies
+
 First, we create data structure and initializing graph with vertices and edges
 
 ```cpp
@@ -49,6 +49,7 @@ graph_with_start_and_target create_graph_with_start_and_target() {
 ```
 
 ## Visualizing graph traversal result
+
 For shortest path, colouring edges with red to indicate the shortest path for both weighted and unweighted graph
 We need to specify the start and end vertices in order to find the shortest path between the start and end vertices.
 
@@ -104,6 +105,7 @@ Result of shortest path BFS, visited edges are coloured red
 </pre>
 
 ### Graph example usage
+
 First code block: traversing a weighted graph for the shortest path (Dijkstra) and printing the result to *.dot file.
 Second code block: traversing an unweighted graph for the shortest path and printing the result to *.dot file.
 The last one is traversing the graph from a given vertex and printing the result to *.dot file.

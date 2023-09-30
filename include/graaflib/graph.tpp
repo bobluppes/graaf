@@ -103,6 +103,21 @@ graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_edge(
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
+typename graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::edge_t&
+graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_edge(const edge_id_t& edge_id) {
+  const auto [vertex_id_lhs, vertex_id_rhs]{edge_id};
+  return get_edge(vertex_id_lhs, vertex_id_rhs);
+}
+
+template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
+const typename graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::edge_t&
+graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_edge(
+    const edge_id_t& edge_id) const {
+  const auto [vertex_id_lhs, vertex_id_rhs]{edge_id};
+  return get_edge(vertex_id_lhs, vertex_id_rhs);
+}
+
+template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
 typename graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::vertices_t
 graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_neighbors(
     vertex_id_t vertex_id) const {

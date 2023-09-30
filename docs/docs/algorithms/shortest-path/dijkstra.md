@@ -1,7 +1,3 @@
----
-sidebar_position: 2
----
-
 # Dijkstra Shortest Path
 
 Dijkstra's algorithm computes shortest paths between nodes in weighted and unweighted graphs. In weighted graphs,
