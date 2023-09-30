@@ -1,5 +1,5 @@
 #include <fmt/core.h>
-#include <graaflib/algorithm/shortest_path.h>
+#include <graaflib/algorithm/shortest_path/bfs_shortest_path.h>
 #include <graaflib/graph.h>
 #include <graaflib/io/dot.h>
 #include <graaflib/types.h>

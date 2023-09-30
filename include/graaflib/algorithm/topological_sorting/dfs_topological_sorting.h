@@ -15,8 +15,8 @@ namespace graaf::algorithm {
  * @return Vector of vertices sorted in topological order
  */
 template <typename V, typename E>
-[[nodiscard]] std::optional<std::vector<vertex_id_t>> topological_sort(
+[[nodiscard]] std::optional<std::vector<vertex_id_t>> dfs_topological_sort(
     const graph<V, E, graph_type::DIRECTED>& graph);
 
 }  // namespace graaf::algorithm
-#include "topological_sorting.tpp"
+#include "dfs_topological_sorting.tpp"
