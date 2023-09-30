@@ -1,8 +1,8 @@
 #include <fmt/core.h>
-#include <graaflib/algorithm/graph-traversal/breadth_first_search.h>
-#include <graaflib/algorithm/graph-traversal/common.h>
-#include <graaflib/algorithm/shortest-path/bfs_shortest_path.h>
-#include <graaflib/algorithm/shortest-path/dijkstra_shortest_path.h>
+#include <graaflib/algorithm/graph_traversal/breadth_first_search.h>
+#include <graaflib/algorithm/graph_traversal/common.h>
+#include <graaflib/algorithm/shortest_path/bfs_shortest_path.h>
+#include <graaflib/algorithm/shortest_path/dijkstra_shortest_path.h>
 #include <graaflib/graph.h>
 #include <graaflib/io/dot.h>
 #include <graaflib/types.h>
