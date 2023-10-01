@@ -95,6 +95,7 @@ take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intr
    - DFS-Based Cycle Detection
 2. [**Graph Coloring Algorithms**](https://bobluppes.github.io/graaf/docs/category/coloring):
    - Greedy Graph Coloring
+   - Welsh-Powell Algorithm
 3. [**Minimum Spanning Tree (MST) Algorithms**](https://bobluppes.github.io/graaf/docs/category/minimum-spanning-tree)
    - Kruskal's Algorithm
    - Prim's Algorithm
