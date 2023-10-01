@@ -218,6 +218,11 @@ using directed_graph = graph<VERTEX_T, EDGE_T, graph_type::DIRECTED>;
 template <typename VERTEX_T, typename EDGE_T>
 using undirected_graph = graph<VERTEX_T, EDGE_T, graph_type::UNDIRECTED>;
 
+template <typename VERTEX_T, typename EDGE_T>
+void get_transposed_graph(
+    const graph<VERTEX_T, EDGE_T, graph_type::DIRECTED>& original_graph,
+    graph<VERTEX_T, EDGE_T, graph_type::DIRECTED>& out_transposed_graph);
+
 }  // namespace graaf
 
 #include "graph.tpp"
