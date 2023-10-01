@@ -135,6 +135,12 @@ requests.
 
 Feel free to join our [Discord](https://discord.gg/cGczwRHJ9K) for assistance and a smooth contribution experience.
 
+### Contributors
+
+<a href="https://github.com/bobluppes/graaf/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=bobluppes/graaf" />
+</a>
+
 # Acknowledgements
 
 <p align="left">
