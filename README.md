@@ -41,6 +41,27 @@ is designed as a lightweight alternative to the [Boost Graph Library (BGL)](http
 Graaf is written in modern C++20 and is designed with generality in mind. As such, it can be used to store any
 user-defined vertex and edge class as well as allow users to perform complex algorithms.
 
+# Installation
+
+The most straightforward way to use the Graaf in your project is to include it as a header-only library. Please take a
+look at the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/installation) for alternative
+installation methods.
+
+## Header-Only Library
+
+The Graaf libary can be included as a header-only library. All it requires is a compiler with C++ 20 support.
+
+Download the `header-only` library from our [release page](https://github.com/bobluppes/graaf/releases) and add
+the `include/graaflib` directory to your include path. You can now use Graaf in your source files:
+
+```c++
+// main.cpp
+#include <graaflib/directed_graph>
+```
+
+For more details or alternative installation methods, see
+the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/installation).
+
 # How to use Graaf
 
 Using the Graaf library is easy! Specializations are provided for a `directed_graph` as well as for `undirected_graph`.
@@ -76,27 +97,6 @@ with built-in `dot` format support allows us to do things like visualizing the s
 </p>
 
 To get started, take a look at our [quickstart guide](https://bobluppes.github.io/graaf/docs/quickstart/intro).
-
-# Installation
-
-The most straightforward way to use the Graaf in your project is to include it as a header-only library. Please take a
-look at the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/installation) for alternative
-installation methods.
-
-## Header-Only Library
-
-The Graaf libary can be included as a header-only library. All it requires is a compiler with C++ 20 support.
-
-Download the `header-only` library from our [release page](https://github.com/bobluppes/graaf/releases) and add
-the `include/graaflib` directory to your include path. You can now use Graaf in your source files:
-
-```c++
-// main.cpp
-#include <graaflib/directed_graph>
-```
-
-For more details or alternative installation methods, see
-the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/installation).
 
 # Algorithms
 
