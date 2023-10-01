@@ -1,5 +1,5 @@
 <p align="center"><img src="docs/static/img/graaf.png"></p>
-<h1 align="center">Graaf Lib</h1>
+<h1 align="center">Graaf Library</h1>
 
 <p align="center">
   Graaf is a general-purpose header-only graph library implemented in C++. It is designed as a lightweight alternative to the <a href="https://www.boost.org/doc/libs/1_82_0/libs/graph/doc/index.html">Boost Graph Library (BGL)</a>.
@@ -31,6 +31,18 @@
 
 # About
 
+Graph is an abstract data type that is widely used in computer science. It is a collection of vertices (nodes) and edges
+that connect these vertices. Graphs are used to model many real-world problems, such as social networks, road networks,
+and computer networks. As such, graph algorithms are used in many applications, including route planning, network
+analysis, and data mining.
+
+Graaf is created with the goal of providing a lightweight, header-only graph library that is easy to use and extend. It
+is designed as a lightweight alternative to the [Boost Graph Library (BGL)](https://www.boost.org/doc/libs/1_82_0/libs/graph/doc/index.html).
+Graaf is written in modern C++20 and is designed with generality in mind. As such, it can be used to store any
+user-defined vertex and edge class.
+
+# How to use Graaf
+
 Using the Graaf library is easy! Specializations are provided for a `directed_graph` as well as for `undirected_graph`.
 To create your first graph:
 
@@ -38,7 +50,7 @@ To create your first graph:
 undirected_graph<int, float> my_graph{};
 ```
 
-This creates an undirected graph with `int`eger values on the vertices and `float` weights on the edges. Graaf is
+This creates an undirected graph with `integer` values on the vertices and `float` weights on the edges. Graaf is
 designed with generality in mind. As such, it can be used to store any user-defined vertex and edge class:
 
 ```c++
