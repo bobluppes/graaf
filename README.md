@@ -107,6 +107,7 @@ take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intr
    - Tarjan's Strongly Connected Components
 6. [**Topological Sorting Algorithms**](https://bobluppes.github.io/graaf/docs/category/topological-sorting):
    - Topological sorting DFS-based
+   - Kahn's Algorithm
 7. [**Traversal Algorithms**](https://bobluppes.github.io/graaf/docs/category/traversal-algorithms):
    - Breadth-First Search (BFS)
    - Depth-First Search (DFS)
