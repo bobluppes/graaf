@@ -39,7 +39,7 @@ analysis, and data mining.
 Graaf is created with the goal of providing a lightweight, header-only graph library that is easy to use and extend. It
 is designed as a lightweight alternative to the [Boost Graph Library (BGL)](https://www.boost.org/doc/libs/1_82_0/libs/graph/doc/index.html).
 Graaf is written in modern C++20 and is designed with generality in mind. As such, it can be used to store any
-user-defined vertex and edge class.
+user-defined vertex and edge class as well as allow users to perform complex algorithms.
 
 # How to use Graaf
 
