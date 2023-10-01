@@ -202,43 +202,42 @@ void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::remove_edge(
 }
 
 template <typename VERTEX_T, typename EDGE_T>
+vertex_id_t get_index_for_transposed_graph(
+    vertex_id_t original_vertex_id,
+    std::unordered_map<vertex_id_t, vertex_id_t>& id_mapping,
+    const directed_graph<VERTEX_T, EDGE_T>& original_graph,
+    directed_graph<VERTEX_T, EDGE_T>& out_transposed_graph) {
+  vertex_id_t transposed_vertex_id;
+
+  if (id_mapping.find(original_vertex_id) == id_mapping.end()) {
+    vertex_id_t current_vertex_value_lhs =
+        original_graph.get_vertex(original_vertex_id);
+    transposed_vertex_id =
+        out_transposed_graph.add_vertex(current_vertex_value_lhs);
+
+    id_mapping.insert({original_vertex_id, transposed_vertex_id});
+  } else {
+    transposed_vertex_id = id_mapping.find(original_vertex_id)->second;
+  }
+
+  return transposed_vertex_id;
+}
+
+template <typename VERTEX_T, typename EDGE_T>
 void get_transposed_graph(
     const directed_graph<VERTEX_T, EDGE_T>& original_graph,
     directed_graph<VERTEX_T, EDGE_T>& out_transposed_graph) {
-  std::unordered_map<vertex_id_t, vertex_id_t>
-      original_to_transposed_id_mapping;
+  std::unordered_map<vertex_id_t, vertex_id_t> id_mapping;
 
   for (const auto& [edge, edge_type] : original_graph.get_edges()) {
     const auto [current_vertex_id_lhs, current_vertex_id_rhs]{edge};
 
-    vertex_id_t vertex_id_lhs;
-    vertex_id_t vertex_id_rhs;  // This is the actual value that we want
-
-    if (original_to_transposed_id_mapping.find(current_vertex_id_lhs) ==
-        original_to_transposed_id_mapping.end()) {
-      vertex_id_t current_vertex_value_lhs =
-          original_graph.get_vertex(current_vertex_id_lhs);
-      vertex_id_lhs = out_transposed_graph.add_vertex(current_vertex_value_lhs);
-
-      original_to_transposed_id_mapping.insert(
-          {current_vertex_id_lhs, vertex_id_lhs});
-    } else {
-      vertex_id_lhs =
-          original_to_transposed_id_mapping.find(current_vertex_id_lhs)->second;
-    }
-
-    if (original_to_transposed_id_mapping.find(current_vertex_id_rhs) ==
-        original_to_transposed_id_mapping.end()) {
-      vertex_id_t current_vertex_value_rhs =
-          original_graph.get_vertex(current_vertex_id_rhs);
-      vertex_id_rhs = out_transposed_graph.add_vertex(current_vertex_value_rhs);
-
-      original_to_transposed_id_mapping.insert(
-          {current_vertex_id_rhs, vertex_id_rhs});
-    } else {
-      vertex_id_rhs =
-          original_to_transposed_id_mapping.find(current_vertex_id_rhs)->second;
-    }
+    vertex_id_t vertex_id_lhs =
+        get_index_for_transposed_graph(current_vertex_id_lhs, id_mapping,
+                                       original_graph, out_transposed_graph);
+    vertex_id_t vertex_id_rhs =
+        get_index_for_transposed_graph(current_vertex_id_rhs, id_mapping,
+                                       original_graph, out_transposed_graph);
 
     EDGE_T edge_type_to_add = edge_type;
 
