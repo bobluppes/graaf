@@ -36,10 +36,17 @@ that connect these vertices. Graphs are used to model many real-world problems, 
 and computer networks. As such, graph algorithms are used in many applications, including route planning, network
 analysis, and data mining.
 
-Graaf is created with the goal of providing a lightweight, header-only graph library that is easy to use and extend. It
-is designed as a lightweight alternative to the [Boost Graph Library (BGL)](https://www.boost.org/doc/libs/1_82_0/libs/graph/doc/index.html).
-Graaf is written in modern C++20 and is designed with generality in mind. As such, it can be used to store any
-user-defined vertex and edge class as well as allow users to perform complex algorithms.
+Graaf: A Lightweight, Header-Only C++20 Graph Library
+
+**Key Features**:
+- **Header-only**: No separate compilation or linking required.
+- **Modern C++20**: Utilizes the latest C++ features.
+- **Generality**: Supports user-defined vertex and edge classes.
+- **Algorithm Support**: Provides a range of graph algorithms.
+
+**Purpose**:
+Graaf is designed with the goal of simplifying graph-related tasks. It offers a lightweight alternative to the [Boost Graph Library (BGL)](https://www.boost.org/doc/libs/1_82_0/libs/graph/doc/index.html) and is built for simplicity and extensibility. With Graaf, you can easily create, manipulate, and analyze graphs, making it suitable for a wide range of applications.
+
 
 # Installation
 
