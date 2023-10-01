@@ -103,25 +103,25 @@ the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/insta
 Algorithms implemented in the Graaf library include the following. For more information on individual algorithms please
 take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intro).
 
-1. [**Cycle Detection Algorithms**](https://bobluppes.github.io/graaf/docs/category/cycle-detection-algorithms):
-   - DFS-Based Cycle Detection
-2. [**Graph Coloring Algorithms**](https://bobluppes.github.io/graaf/docs/category/coloring):
-   - Greedy Graph Coloring
+1. [**Graph Coloring Algorithms**](https://bobluppes.github.io/graaf/docs/category/graph-coloring-algorithms):
+   - [Greedy Graph Coloring](https://bobluppes.github.io/graaf/docs/algorithms/coloring/greedy-graph-coloring)
+2. [**Cycle Detection Algorithms**](https://bobluppes.github.io/graaf/docs/category/cycle-detection-algorithms):
+   - [DFS-Based Cycle Detection](https://bobluppes.github.io/graaf/docs/algorithms/cycle-detection/dfs-based)
 3. [**Minimum Spanning Tree (MST) Algorithms**](https://bobluppes.github.io/graaf/docs/category/minimum-spanning-tree)
-   - Kruskal's Algorithm
-   - Prim's Algorithm
+   - [Kruskal's Algorithm](https://bobluppes.github.io/graaf/docs/algorithms/minimum-spanning-tree/kruskal)
+   - [Prim's Algorithm](https://bobluppes.github.io/graaf/docs/algorithms/minimum-spanning-tree/prim)
 4. [**Shortest Path Algorithms**](https://bobluppes.github.io/graaf/docs/category/shortest-path-algorithms):
-   - A\* search
-   - BFS-Based Shortest Path
-   - Dijkstra
-   - Bellman-Ford
-5. [**Strongly Connected Components Algorithms**](https://bobluppes.github.io/graaf/docs/category/strongly-connected-components):
-   - Tarjan's Strongly Connected Components
-6. [**Topological Sorting Algorithms**](https://bobluppes.github.io/graaf/docs/category/topological-sorting):
-   - Topological sorting DFS-based
+   - [A\* search](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/a-star)
+   - [Bellman-Ford Shortest Path](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/bellman-ford)
+   - [BFS-Based Shortest Path](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/bfs-based-shortest-path)
+   - [Dijkstra Shortest Path](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/dijkstra)
+   - [Floyd-Warshall Algorithm](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/floyd-warshall)
+5. [**Strongly Connected Components Algorithms**](https://bobluppes.github.io/graaf/docs/category/strongly-connected-component-algorithms):
+   - [Tarjan's Strongly Connected Components](https://bobluppes.github.io/graaf/docs/algorithms/strongly-connected-components/tarjan)
+6. [**Topological Sorting Algorithms**](https://bobluppes.github.io/graaf/docs/algorithms/topological-sort):
 7. [**Traversal Algorithms**](https://bobluppes.github.io/graaf/docs/category/traversal-algorithms):
-   - Breadth-First Search (BFS)
-   - Depth-First Search (DFS)
+   - [Breadth-First Search (BFS)](https://bobluppes.github.io/graaf/docs/algorithms/traversal/breadth-first-search)
+   - [Depth-First Search (DFS)](https://bobluppes.github.io/graaf/docs/algorithms/traversal/depth-first-search)
 
 # Contributing
 
