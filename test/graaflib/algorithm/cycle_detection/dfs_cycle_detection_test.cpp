@@ -2,6 +2,7 @@
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
 #include <gtest/gtest.h>
+#include <utils/fixtures/fixtures.h>
 
 #include <unordered_map>
 #include <unordered_set>
@@ -16,9 +17,7 @@ struct GraphCycleTest : public testing::Test {
   using graph_t = T;
 };
 
-using graph_types =
-    testing::Types<directed_graph<int, int>, undirected_graph<int, int>>;
-TYPED_TEST_SUITE(GraphCycleTest, graph_types);
+TYPED_TEST_SUITE(GraphCycleTest, utils::fixtures::minimal_graph_types);
 
 }  // namespace
 

@@ -1,6 +1,7 @@
 #include <fmt/core.h>
 #include <graaflib/graph.h>
 #include <gtest/gtest.h>
+#include <utils/fixtures/fixtures.h>
 
 /**
  * Tests which test the common functionality of the graph
@@ -15,11 +16,7 @@ struct GraphTest : public testing::Test {
   using graph_t = T;
 };
 
-using graph_types =
-    testing::Types<directed_graph<int, int>, directed_graph<int, int>,
-                   undirected_graph<int, int>, undirected_graph<int, int>>;
-
-TYPED_TEST_SUITE(GraphTest, graph_types);
+TYPED_TEST_SUITE(GraphTest, utils::fixtures::minimal_graph_types);
 
 TYPED_TEST(GraphTest, VertexCount) {
   // GIVEN

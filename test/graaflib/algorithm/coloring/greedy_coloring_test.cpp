@@ -2,6 +2,7 @@
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
 #include <gtest/gtest.h>
+#include <utils/fixtures/fixtures.h>
 
 #include <unordered_map>
 #include <unordered_set>
@@ -18,10 +19,7 @@ struct TypedColoringTest : public testing::Test {
   using edge_t = typename T::second_type;
 };
 
-using graph_types =
-    testing::Types<directed_graph<int, int>, undirected_graph<int, int>>;
-
-TYPED_TEST_SUITE(GraphColoringTest, graph_types);
+TYPED_TEST_SUITE(GraphColoringTest, utils::fixtures::minimal_graph_types);
 
 }  // namespace
 
@@ -30,10 +28,7 @@ struct GreedyGraphColoringTest : public testing::Test {
   using graph_t = T;
 };
 
-using graph_types =
-    testing::Types<directed_graph<int, int>, undirected_graph<int, int>>;
-
-TYPED_TEST_SUITE(GreedyGraphColoringTest, graph_types);
+TYPED_TEST_SUITE(GreedyGraphColoringTest, utils::fixtures::minimal_graph_types);
 
 // Test case for an empty graph
 TYPED_TEST(GreedyGraphColoringTest, EmptyGraph) {
