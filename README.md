@@ -1,5 +1,5 @@
 <p align="center"><img src="docs/static/img/graaf.png"></p>
-<h1 align="center">Graaf Lib</h1>
+<h1 align="center">Graaf Library</h1>
 
 <p align="center">
   Graaf is a general-purpose header-only graph library implemented in C++. It is designed as a lightweight alternative to the <a href="https://www.boost.org/doc/libs/1_82_0/libs/graph/doc/index.html">Boost Graph Library (BGL)</a>.
@@ -31,6 +31,45 @@
 
 # About
 
+Graph is an abstract data type that is widely used in computer science. It is a collection of vertices (nodes) and edges
+that connect these vertices. Graphs are used to model many real-world problems, such as social networks, road networks,
+and computer networks. As such, graph algorithms are used in many applications, including route planning, network
+analysis, and data mining.
+
+Graaf: A Lightweight, Header-Only C++20 Graph Library
+
+**Key Features**:
+- **Header-only**: No separate compilation or linking required.
+- **Generality**: Supports user-defined vertex and edge classes.
+- **Algorithm Support**: Provides a range of graph algorithms.
+
+**Purpose**:
+Graaf is designed with the goal of simplifying graph-related tasks. It offers a lightweight alternative to the [Boost Graph Library (BGL)](https://www.boost.org/doc/libs/1_82_0/libs/graph/doc/index.html) and is built for simplicity and extensibility. With Graaf, you can easily create, manipulate, and analyze graphs, making it suitable for a wide range of applications.
+
+
+# Installation
+
+The most straightforward way to use the Graaf in your project is to include it as a header-only library. Please take a
+look at the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/installation) for alternative
+installation methods.
+
+## Header-Only Library
+
+The Graaf libary can be included as a header-only library. All it requires is a compiler with **C++ 20 support**.
+
+Download the `header-only` library from our [release page](https://github.com/bobluppes/graaf/releases) and add
+the `include/graaflib` directory to your include path. You can now use Graaf in your source files:
+
+```c++
+// main.cpp
+#include <graaflib/directed_graph>
+```
+
+For more details or alternative installation methods, see
+the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/installation).
+
+# How to use Graaf
+
 Using the Graaf library is easy! Specializations are provided for a `directed_graph` as well as for `undirected_graph`.
 To create your first graph:
 
@@ -38,7 +77,7 @@ To create your first graph:
 undirected_graph<int, float> my_graph{};
 ```
 
-This creates an undirected graph with `int`eger values on the vertices and `float` weights on the edges. Graaf is
+This creates an undirected graph with `integer` values on the vertices and `float` weights on the edges. Graaf is
 designed with generality in mind. As such, it can be used to store any user-defined vertex and edge class:
 
 ```c++
@@ -65,51 +104,30 @@ with built-in `dot` format support allows us to do things like visualizing the s
 
 To get started, take a look at our [quickstart guide](https://bobluppes.github.io/graaf/docs/quickstart/intro).
 
-# Installation
-
-The most straightforward way to use the Graaf in your project is to include it as a header-only library. Please take a
-look at the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/installation) for alternative
-installation methods.
-
-## Header-Only Library
-
-The Graaf libary can be included as a header-only library. All it requires is a compiler with C++ 20 support.
-
-Download the `header-only` library from our [release page](https://github.com/bobluppes/graaf/releases) and add
-the `include/graaflib` directory to your include path. You can now use Graaf in your source files:
-
-```c++
-// main.cpp
-#include <graaflib/directed_graph>
-```
-
-For more details or alternative installation methods, see
-the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/installation).
-
 # Algorithms
 
 Algorithms implemented in the Graaf library include the following. For more information on individual algorithms please
 take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intro).
 
-1. [**Cycle Detection Algorithms**](https://bobluppes.github.io/graaf/docs/category/cycle-detection-algorithms):
-   - DFS-Based Cycle Detection
-2. [**Graph Coloring Algorithms**](https://bobluppes.github.io/graaf/docs/category/coloring):
-   - Greedy Graph Coloring
+1. [**Graph Coloring Algorithms**](https://bobluppes.github.io/graaf/docs/category/graph-coloring-algorithms):
+   - [Greedy Graph Coloring](https://bobluppes.github.io/graaf/docs/algorithms/coloring/greedy-graph-coloring)
+2. [**Cycle Detection Algorithms**](https://bobluppes.github.io/graaf/docs/category/cycle-detection-algorithms):
+   - [DFS-Based Cycle Detection](https://bobluppes.github.io/graaf/docs/algorithms/cycle-detection/dfs-based)
 3. [**Minimum Spanning Tree (MST) Algorithms**](https://bobluppes.github.io/graaf/docs/category/minimum-spanning-tree)
-   - Kruskal's Algorithm
-   - Prim's Algorithm
+   - [Kruskal's Algorithm](https://bobluppes.github.io/graaf/docs/algorithms/minimum-spanning-tree/kruskal)
+   - [Prim's Algorithm](https://bobluppes.github.io/graaf/docs/algorithms/minimum-spanning-tree/prim)
 4. [**Shortest Path Algorithms**](https://bobluppes.github.io/graaf/docs/category/shortest-path-algorithms):
-   - A\* search
-   - BFS-Based Shortest Path
-   - Dijkstra
-   - Bellman-Ford
-5. [**Strongly Connected Components Algorithms**](https://bobluppes.github.io/graaf/docs/category/strongly-connected-components):
-   - Tarjan's Strongly Connected Components
-6. [**Topological Sorting Algorithms**](https://bobluppes.github.io/graaf/docs/category/topological-sorting):
-   - Topological sorting DFS-based
+   - [A\* search](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/a-star)
+   - [Bellman-Ford Shortest Path](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/bellman-ford)
+   - [BFS-Based Shortest Path](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/bfs-based-shortest-path)
+   - [Dijkstra Shortest Path](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/dijkstra)
+   - [Floyd-Warshall Algorithm](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/floyd-warshall)
+5. [**Strongly Connected Components Algorithms**](https://bobluppes.github.io/graaf/docs/category/strongly-connected-component-algorithms):
+   - [Tarjan's Strongly Connected Components](https://bobluppes.github.io/graaf/docs/algorithms/strongly-connected-components/tarjan)
+6. [**Topological Sorting Algorithms**](https://bobluppes.github.io/graaf/docs/algorithms/topological-sort):
 7. [**Traversal Algorithms**](https://bobluppes.github.io/graaf/docs/category/traversal-algorithms):
-   - Breadth-First Search (BFS)
-   - Depth-First Search (DFS)
+   - [Breadth-First Search (BFS)](https://bobluppes.github.io/graaf/docs/algorithms/traversal/breadth-first-search)
+   - [Depth-First Search (DFS)](https://bobluppes.github.io/graaf/docs/algorithms/traversal/depth-first-search)
 
 # Contributing
 
@@ -122,6 +140,12 @@ improvements. We also have an [issue tracker](https://github.com/bobluppes/graaf
 requests.
 
 Feel free to join our [Discord](https://discord.gg/cGczwRHJ9K) for assistance and a smooth contribution experience.
+
+### Contributors
+
+<a href="https://github.com/bobluppes/graaf/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=bobluppes/graaf" />
+</a>
 
 # Acknowledgements
 
