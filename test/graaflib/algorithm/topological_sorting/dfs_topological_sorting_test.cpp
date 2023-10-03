@@ -9,7 +9,8 @@ struct TypedTopologicalSort : public testing::Test {
   using graph_t = T;
 };
 
-TYPED_TEST_SUITE(TypedTopologicalSort, utils::fixtures::minimal_directed_graph_type);
+TYPED_TEST_SUITE(TypedTopologicalSort,
+                 utils::fixtures::minimal_directed_graph_type);
 
 };  // namespace
 

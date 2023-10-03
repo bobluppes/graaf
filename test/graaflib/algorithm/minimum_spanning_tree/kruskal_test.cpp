@@ -1,8 +1,8 @@
 #include <fmt/core.h>
 #include <graaflib/algorithm/minimum_spanning_tree/kruskal.h>
 #include <gtest/gtest.h>
-#include <utils/scenarios/scenarios.h>
 #include <utils/fixtures/fixtures.h>
+#include <utils/scenarios/scenarios.h>
 
 #include <utility>
 

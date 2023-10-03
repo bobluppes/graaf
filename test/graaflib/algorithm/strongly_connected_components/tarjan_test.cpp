@@ -12,7 +12,8 @@ struct TypedStronglyConnectedComponentsTest : public testing::Test {
   using graph_t = T;
 };
 
-TYPED_TEST_SUITE(TypedStronglyConnectedComponentsTest, utils::fixtures::minimal_directed_graph_type);
+TYPED_TEST_SUITE(TypedStronglyConnectedComponentsTest,
+                 utils::fixtures::minimal_directed_graph_type);
 
 }  // namespace
 
@@ -44,8 +45,8 @@ bool are_set_vectors_equal(const std::vector<std::vector<vertex_id_t>>& vec1,
   return sorted_vec1 == sorted_vec2;
 }
 
-
-TYPED_TEST_SUITE(TarjansStronglyConnectedComponentsTest, utils::fixtures::directed_weighted_graph_types);
+TYPED_TEST_SUITE(TarjansStronglyConnectedComponentsTest,
+                 utils::fixtures::directed_weighted_graph_types);
 
 TYPED_TEST(TarjansStronglyConnectedComponentsTest,
            TarjansSingleVertexGraphTest) {

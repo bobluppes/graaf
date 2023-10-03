@@ -1,9 +1,9 @@
 #include <graaflib/graph.h>
 #include <gtest/gtest.h>
+#include <utils/fixtures/fixtures.h>
 
 #include <type_traits>
 #include <utility>
-#include <utils/fixtures/fixtures.h>
 
 namespace graaf {
 
@@ -41,7 +41,8 @@ struct UnitWeightedGraphTest : public testing::Test {
   using edge_t = typename T::second_type;
 };
 
-TYPED_TEST_SUITE(UnitWeightedGraphTest, utils::fixtures::unit_weighted_graph_types);
+TYPED_TEST_SUITE(UnitWeightedGraphTest,
+                 utils::fixtures::unit_weighted_graph_types);
 
 TYPED_TEST(UnitWeightedGraphTest, AddUnitWeightedEdge) {
   // GIVEN

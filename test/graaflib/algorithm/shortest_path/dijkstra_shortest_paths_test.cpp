@@ -14,15 +14,14 @@ struct DijkstraShortestPathsTest : public testing::Test {
   using edge_t = typename T::second_type;
 };
 
-
-TYPED_TEST_SUITE(DijkstraShortestPathsTest, utils::fixtures::weighted_graph_types);
+TYPED_TEST_SUITE(DijkstraShortestPathsTest,
+                 utils::fixtures::weighted_graph_types);
 
 template <typename T>
 struct DijkstraShortestPathsSignedTypesTest : public testing::Test {
   using graph_t = typename T::first_type;
   using edge_t = typename T::second_type;
 };
-
 
 TYPED_TEST_SUITE(DijkstraShortestPathsSignedTypesTest,
                  utils::fixtures::weighted_graph_signed_types);

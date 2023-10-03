@@ -21,7 +21,8 @@ struct AStarShortestPathSignedTypesTest : public testing::Test {
   using edge_t = typename T::second_type;
 };
 
-TYPED_TEST_SUITE(AStarShortestPathSignedTypesTest, utils::fixtures::weighted_graph_signed_types);
+TYPED_TEST_SUITE(AStarShortestPathSignedTypesTest,
+                 utils::fixtures::weighted_graph_signed_types);
 
 }  // namespace
 

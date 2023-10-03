@@ -12,7 +12,8 @@ struct BellmanFordShortestPathsTest : public testing::Test {
   using edge_t = typename T::second_type;
 };
 
-TYPED_TEST_SUITE(BellmanFordShortestPathsTest, utils::fixtures::weighted_graph_types);
+TYPED_TEST_SUITE(BellmanFordShortestPathsTest,
+                 utils::fixtures::weighted_graph_types);
 
 template <typename T>
 struct BellmanFordShortestPathsSignedTypesTest : public testing::Test {

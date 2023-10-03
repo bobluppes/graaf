@@ -120,12 +120,14 @@ using directed_weighted_graph_types = testing::Types<
 
     std::pair<directed_graph<int, utils::fixtures::my_weighted_edge<int>>,
               utils::fixtures::my_weighted_edge<int>>,
-    std::pair<directed_graph<int, utils::fixtures::my_weighted_edge<unsigned long>>,
-              utils::fixtures::my_weighted_edge<unsigned long>>,
+    std::pair<
+        directed_graph<int, utils::fixtures::my_weighted_edge<unsigned long>>,
+        utils::fixtures::my_weighted_edge<unsigned long>>,
     std::pair<directed_graph<int, utils::fixtures::my_weighted_edge<float>>,
               utils::fixtures::my_weighted_edge<float>>,
-    std::pair<directed_graph<int, utils::fixtures::my_weighted_edge<long double>>,
-              utils::fixtures::my_weighted_edge<long double>>>;
+    std::pair<
+        directed_graph<int, utils::fixtures::my_weighted_edge<long double>>,
+        utils::fixtures::my_weighted_edge<long double>>>;
 
 using directed_weighted_graph_signed_types = testing::Types<
     /**
