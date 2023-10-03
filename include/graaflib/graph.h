@@ -180,6 +180,16 @@ class graph {
   [[nodiscard]] vertex_id_t add_vertex(auto&& vertex);
 
   /**
+   * Add a vertex to the graph with a specific ID
+   *
+   * @param  vertex The vertex to be added
+   * @param  id The requested ID for the new vertex
+   * @return vertices_id_t - The ID of the new vertex
+   * @throws id_taken exception - If the relevant ID is already in use
+   */
+  vertex_id_t add_vertex(auto&& vertex, vertex_id_t id);
+
+  /**
    * Remove a vertex from the graph and update all its neighbors
    *
    * @param  vertex_id - The ID of the vertex
@@ -217,7 +227,6 @@ using directed_graph = graph<VERTEX_T, EDGE_T, graph_type::DIRECTED>;
 
 template <typename VERTEX_T, typename EDGE_T>
 using undirected_graph = graph<VERTEX_T, EDGE_T, graph_type::UNDIRECTED>;
-
 }  // namespace graaf
 
 #include "graph.tpp"
