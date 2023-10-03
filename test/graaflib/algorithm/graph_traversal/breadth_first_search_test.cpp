@@ -1,6 +1,4 @@
 #include <graaflib/algorithm/graph_traversal/breadth_first_search.h>
-#include <graaflib/graph.h>
-#include <graaflib/types.h>
 #include <gtest/gtest.h>
 #include <utils/scenarios/scenarios.h>
 #include <utils/fixtures/fixtures.h>
@@ -8,7 +6,6 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
-#include <vector>
 
 namespace graaf::algorithm {
 

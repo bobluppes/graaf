@@ -1,12 +1,6 @@
 #include <graaflib/algorithm/cycle_detection/dfs_cycle_detection.h>
-#include <graaflib/graph.h>
-#include <graaflib/types.h>
 #include <gtest/gtest.h>
 #include <utils/fixtures/fixtures.h>
-
-#include <unordered_map>
-#include <unordered_set>
-#include <utility>
 
 namespace graaf::algorithm {
 

@@ -1,13 +1,9 @@
 #include <graaflib/algorithm/coloring/greedy_graph_coloring.h>
-#include <graaflib/graph.h>
-#include <graaflib/types.h>
 #include <gtest/gtest.h>
 #include <utils/fixtures/fixtures.h>
 
 #include <unordered_map>
 #include <unordered_set>
-#include <utility>
-#include <vector>
 
 namespace graaf::algorithm {
 

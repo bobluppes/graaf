@@ -1,7 +1,4 @@
-#include <fmt/core.h>
 #include <graaflib/algorithm/topological_sorting/dfs_topological_sorting.h>
-#include <graaflib/graph.h>
-#include <graaflib/types.h>
 #include <gtest/gtest.h>
 #include <utils/fixtures/fixtures.h>
 

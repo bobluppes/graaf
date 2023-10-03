@@ -1,6 +1,4 @@
 #include <graaflib/algorithm/shortest_path/bfs_shortest_path.h>
-#include <graaflib/graph.h>
-#include <graaflib/types.h>
 #include <gtest/gtest.h>
 #include <utils/fixtures/fixtures.h>
 

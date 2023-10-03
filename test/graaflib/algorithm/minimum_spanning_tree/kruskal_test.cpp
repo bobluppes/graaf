@@ -1,13 +1,9 @@
 #include <fmt/core.h>
 #include <graaflib/algorithm/minimum_spanning_tree/kruskal.h>
-#include <graaflib/graph.h>
-#include <graaflib/types.h>
 #include <gtest/gtest.h>
 #include <utils/scenarios/scenarios.h>
 #include <utils/fixtures/fixtures.h>
 
-#include <type_traits>
-#include <unordered_set>
 #include <utility>
 
 namespace graaf::algorithm {
