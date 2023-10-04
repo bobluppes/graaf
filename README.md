@@ -49,6 +49,8 @@ Graaf is designed with the goal of simplifying graph-related tasks. It offers a 
 
 # Installation
 
+Before you can use the Graaf library, make sure you have your [development environment set up](https://github.com/bobluppes/graaf/wiki/development-setup). Currently, our guide assuming your operating system is Linux. If you're using Windows and IDE such as Visual Studio, Visual Studio Code, feel free to create a guide and submit a pull request showing step-by-step on how you did it on our installation webpage.
+
 The most straightforward way to use the Graaf in your project is to include it as a header-only library. Please take a
 look at the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/installation) for alternative
 installation methods.
