@@ -1,11 +1,6 @@
 #include <graaflib/algorithm/cycle_detection/dfs_cycle_detection.h>
-#include <graaflib/graph.h>
-#include <graaflib/types.h>
 #include <gtest/gtest.h>
-
-#include <unordered_map>
-#include <unordered_set>
-#include <utility>
+#include <utils/fixtures/fixtures.h>
 
 namespace graaf::algorithm {
 
@@ -16,9 +11,7 @@ struct GraphCycleTest : public testing::Test {
   using graph_t = T;
 };
 
-using graph_types =
-    testing::Types<directed_graph<int, int>, undirected_graph<int, int>>;
-TYPED_TEST_SUITE(GraphCycleTest, graph_types);
+TYPED_TEST_SUITE(GraphCycleTest, utils::fixtures::minimal_graph_types);
 
 }  // namespace
 
