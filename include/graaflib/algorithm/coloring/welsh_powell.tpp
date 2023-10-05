@@ -12,10 +12,10 @@ namespace graaf::algorithm {
 template <typename GRAPH>
 std::unordered_map<vertex_id_t, int> welsh_powell_coloring(const GRAPH& graph) {
     
-    using DegreeVertexPair = std::pair<int, vertex_id_t>;
+    using degree_vertex_pair = std::pair<int, vertex_id_t>;
 
     // Step 1: Sort vertices by degree in descending order
-    std::vector<DegreeVertexPair> degree_vertex_pairs;
+    std::vector<degree_vertex_pair> degree_vertex_pairs;
     for (const auto& vertex : graph.get_vertices()) {
         int degree = graph.get_degree(vertex);
         degree_vertex_pairs.emplace_back(degree, vertex);
@@ -26,14 +26,14 @@ std::unordered_map<vertex_id_t, int> welsh_powell_coloring(const GRAPH& graph) {
     // Step 2: Assign colors to vertices
     std::unordered_map<vertex_id_t, int> color_map;
 
-    for (const auto& degree_vertex_pair : degree_vertex_pairs) {
+    for (const auto [_, current_vertex] : degree_vertex_pairs) {
         vertex_id_t current_vertex = degree_vertex_pair.second;
         int color = 0;  // Start with color 0
 
         // Check colors of adjacent vertices
         for (const auto& neighbor : graph.get_neighbors(current_vertex)) {
             // If neighbor is already colored with this color, increment the color
-            if (color_map.count(neighbor) && color_map[neighbor] == color) {
+            if (color_map.contains(neighbor) && color_map[neighbor] == color) {
                     color++;
             }
         }
