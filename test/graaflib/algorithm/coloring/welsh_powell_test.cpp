@@ -42,7 +42,7 @@ TYPED_TEST(WelshPowellTest , EmptyGraph) {
   graph_t graph{};
 
   // WHEN
-  auto coloring = welsh_powell(graph);
+  auto coloring = welsh_powell_coloring(graph);
 
   // THEN
   // Check if the obtained coloring is empty (no vertices to color)
@@ -64,7 +64,7 @@ TYPED_TEST(WelshPowellTest , BasicGraphColoring) {
   graph.add_edge(vertex_2, vertex_3, 1);
 
   // WHEN
-  auto coloring = welsh_powell(graph);
+  auto coloring = welsh_powell_coloring(graph);
 
   // THEN
   std::unordered_map<vertex_id_t, int> expected_coloring = {
@@ -86,7 +86,7 @@ TYPED_TEST(WelshPowellTest, GraphWithNoEdges) {
   const auto vertex_4{graph.add_vertex(40)};
 
   // WHEN
-  auto coloring = welsh_powell(graph);
+  auto coloring = welsh_powell_coloring(graph);
 
   std::unordered_map<vertex_id_t, int> expected_coloring = {
       {0, 0},  // Each vertex is assigned the same color
@@ -119,7 +119,7 @@ TYPED_TEST(WelshPowellTest, CompleteGraph) {
   graph.add_edge(vertex_3, vertex_4, 1);
 
   // WHEN
-  auto coloring = welsh_powell(graph);
+  auto coloring = welsh_powell_coloring(graph);
 
   // THEN
   // Verify that each vertex is assigned a unique color
@@ -150,7 +150,7 @@ TYPED_TEST(WelshPowellTest , DisconnectedComponents) {
                  1);  // Component 2: Vertex 3 and 4 are
                       // Component 3: connected Vertex 5 is disconnected
   // WHEN
-  auto coloring = welsh_powell(graph);
+  auto coloring = welsh_powell_coloring(graph);
 
   // THEN
   // Verify that for each edge, adjacent vertices have different colors
