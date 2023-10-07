@@ -1,7 +1,7 @@
 #pragma once
 
 #include <graaflib/algorithm/coloring/welsh_powell.h>
-
+#include <graaflib/properties/vertex_properties.h>
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
@@ -16,10 +16,10 @@ std::unordered_map<vertex_id_t, int> welsh_powell_coloring(const GRAPH& graph) {
 
     // Step 1: Sort vertices by degree in descending order
     std::vector<degree_vertex_pair> degree_vertex_pairs;
-    for (const auto& vertex : graph.get_vertices()) {
-        int degree = graph.get_degree(vertex);
-        degree_vertex_pairs.emplace_back(degree, vertex);
-    }
+    for (const auto& [vertex_id, _] : graph.get_vertices()) {
+            int degree = properties::vertex_degree(graph, vertex_id);
+            degree_vertex_pairs.emplace_back(degree, vertex);
+       }
 
     std::sort(degree_vertex_pairs.rbegin(), degree_vertex_pairs.rend());
 
@@ -27,7 +27,7 @@ std::unordered_map<vertex_id_t, int> welsh_powell_coloring(const GRAPH& graph) {
     std::unordered_map<vertex_id_t, int> color_map;
 
     for (const auto [_, current_vertex] : degree_vertex_pairs) {
-        
+
         int color = 0;  // Start with color 0
 
         // Check colors of adjacent vertices
