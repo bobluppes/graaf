@@ -39,6 +39,7 @@ analysis, and data mining.
 Graaf: A Lightweight, Header-Only C++20 Graph Library
 
 **Key Features**:
+
 - **Header-only**: No separate compilation or linking required.
 - **Generality**: Supports user-defined vertex and edge classes.
 - **Algorithm Support**: Provides a range of graph algorithms.
@@ -46,10 +47,7 @@ Graaf: A Lightweight, Header-Only C++20 Graph Library
 **Purpose**:
 Graaf is designed with the goal of simplifying graph-related tasks. It offers a lightweight alternative to the [Boost Graph Library (BGL)](https://www.boost.org/doc/libs/1_82_0/libs/graph/doc/index.html) and is built for simplicity and extensibility. With Graaf, you can easily create, manipulate, and analyze graphs, making it suitable for a wide range of applications.
 
-
 # Installation
-
-Before you can use the Graaf library, make sure you have your [development environment set up](https://github.com/bobluppes/graaf/wiki/development-setup). Currently, our guide assuming your operating system is Linux. If you're using Windows and IDE such as Visual Studio, Visual Studio Code, feel free to create a guide and submit a pull request showing step-by-step on how you did it on our installation webpage.
 
 The most straightforward way to use the Graaf in your project is to include it as a header-only library. Please take a
 look at the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/installation) for alternative
@@ -136,7 +134,7 @@ take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intr
 The Graaf library welcomes contributions 🎊
 
 If you're interested in improving, fixing bugs, or adding features, please refer to
-the [wiki](https://github.com/bobluppes/graaf/wiki) for guidelines. Check out our roadmap
+the [wiki](https://github.com/bobluppes/graaf/wiki) for guidelines and have your [development environment set up](https://github.com/bobluppes/graaf/wiki/development-setup) before you start. Check out our roadmap
 on [YouTrack](https://graaf.youtrack.cloud/agiles/147-2/current) to stay up to date on planned features and
 improvements. We also have an [issue tracker](https://github.com/bobluppes/graaf/issues) for bug reports and feature
 requests.
