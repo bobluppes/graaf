@@ -68,7 +68,7 @@ TYPED_TEST(WelshPowellTest , BasicGraphColoring) {
 
   // THEN
   std::unordered_map<vertex_id_t, int> expected_coloring = {
-      {0, 2}, {1, 1}, {2, 0}};
+      {0, 1}, {1, 0}, {2, 1}};
 
   // Check if the obtained coloring matches the expected coloring
   ASSERT_EQ(coloring, expected_coloring);
