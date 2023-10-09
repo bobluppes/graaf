@@ -8,9 +8,9 @@ namespace graaf::algorithm {
  * algorithm.
  *
  * The Bron-Kerbosch algorithm is used for finding all cliques in an undirected
- * graph. A clique is a subset of vertices such that every two distinct vertices
- * are adjacent. This function returns a list of all cliques, each represented
- * as a vector of vertex identifiers.
+ * graph. A clique_detection is a subset of vertices such that every two
+ * distinct vertices are adjacent. This function returns a list of all cliques,
+ * each represented as a vector of vertex identifiers.
  *
  * @tparam V The vertex type of the graph.
  * @tparam E The edge type of the graph.

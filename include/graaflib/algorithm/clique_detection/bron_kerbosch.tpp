@@ -1,6 +1,6 @@
 #pragma once
 
-#include <graaflib/algorithm/clique/bron_kerbosch.h>
+#include <graaflib/algorithm/clique_detection/bron_kerbosch.h>
 
 #include <algorithm>
 #include <iostream>

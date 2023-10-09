@@ -1,5 +1,5 @@
 #include <fmt/core.h>
-#include <graaflib/algorithm/clique/bron_kerbosch.h>
+#include <graaflib/algorithm/clique_detection/bron_kerbosch.h>
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
 #include <gtest/gtest.h>
