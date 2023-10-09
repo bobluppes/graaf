@@ -103,8 +103,7 @@ take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intr
     - BFS-Based Shortest Path
     - Dijkstra
     - Bellman-Ford
-5. [**Strongly Connected Components Algorithms
-   **](https://bobluppes.github.io/graaf/docs/category/strongly-connected-components):
+5. [**Strongly Connected Components Algorithms**](https://bobluppes.github.io/graaf/docs/category/strongly-connected-components):
     - Tarjan's Strongly Connected Components
 6. [**Topological Sorting Algorithms**](https://bobluppes.github.io/graaf/docs/category/topological-sorting):
     - Topological sorting DFS-based
