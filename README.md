@@ -128,6 +128,8 @@ take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intr
 7. [**Traversal Algorithms**](https://bobluppes.github.io/graaf/docs/category/traversal-algorithms):
    - [Breadth-First Search (BFS)](https://bobluppes.github.io/graaf/docs/algorithms/traversal/breadth-first-search)
    - [Depth-First Search (DFS)](https://bobluppes.github.io/graaf/docs/algorithms/traversal/depth-first-search)
+8. [**Clique Detection**](https://bobluppes.github.io/graaf/docs/category/clique-detection)
+    - [Bron-Kerbosch](https://bobluppes.github.io/graaf/docs/algorithms/clique-detection/bron-kerbosch)
 
 # Contributing
 
