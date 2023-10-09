@@ -10,7 +10,8 @@ using minimal_graph_types =
 
 using minimal_directed_graph_type = testing::Types<directed_graph<int, int>>;
 
-using minimal_undirected_graph_type = testing::Types<undirected_graph<int, int>>;
+using minimal_undirected_graph_type =
+    testing::Types<undirected_graph<int, int>>;
 
 /**
  * 2. More detailed weighted graph types
