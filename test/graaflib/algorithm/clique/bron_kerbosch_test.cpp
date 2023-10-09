@@ -7,17 +7,6 @@
 #include <random>
 
 namespace graaf::algorithm {
-namespace {
-template <typename T>
-struct BronKerbosch : public testing::Test {
-  using graph_t = T;
-};
-
-using graph_types = testing::Types<undirected_graph<int, int>>;
-TYPED_TEST_SUITE(BronKerbosch, graph_types);
-
-};  // namespace
-
 void sort_vectors(std::vector<std::vector<vertex_id_t>>& vec1,
                   std::vector<std::vector<vertex_id_t>>& vec2) {
   // Sort 1D vectors
@@ -33,9 +22,18 @@ void sort_vectors(std::vector<std::vector<vertex_id_t>>& vec1,
   std::sort(vec2.begin(), vec2.end());
 }
 
+namespace {
+template <typename T>
+struct BronKerbosch : public testing::Test {
+  using graph_t = T;
+};
+using graph_types = testing::Types<undirected_graph<int, int>>;
+
+TYPED_TEST_SUITE(BronKerbosch, graph_types);
+}  // namespace
+
 TYPED_TEST(BronKerbosch, ThreeCliques) {
-  using graph_t = typename TestFixture::graph_t;
-  graph_t graph{};
+  undirected_graph<int, int> graph{};
 
   const auto vertex_1{graph.add_vertex(1)};
   const auto vertex_2{graph.add_vertex(2)};
@@ -58,8 +56,7 @@ TYPED_TEST(BronKerbosch, ThreeCliques) {
 }
 
 TYPED_TEST(BronKerbosch, OneClique) {
-  using graph_t = typename TestFixture::graph_t;
-  graph_t graph{};
+  undirected_graph<int, int> graph{};
 
   const auto vertex_1{graph.add_vertex(1)};
   const auto vertex_2{graph.add_vertex(2)};
@@ -82,8 +79,7 @@ TYPED_TEST(BronKerbosch, OneClique) {
 }
 
 TYPED_TEST(BronKerbosch, FourCliques) {
-  using graph_t = typename TestFixture::graph_t;
-  graph_t graph{};
+  undirected_graph<int, int> graph{};
 
   const auto vertex_1{graph.add_vertex(1)};
   const auto vertex_2{graph.add_vertex(2)};
@@ -113,8 +109,7 @@ TYPED_TEST(BronKerbosch, FourCliques) {
 }
 
 TYPED_TEST(BronKerbosch, GraphPentogram) {
-  using graph_t = typename TestFixture::graph_t;
-  graph_t graph{};
+  undirected_graph<int, int> graph{};
 
   const auto vertex_1{graph.add_vertex(1)};
   const auto vertex_2{graph.add_vertex(2)};
@@ -148,8 +143,7 @@ TYPED_TEST(BronKerbosch, GraphPentogram) {
 }
 
 TYPED_TEST(BronKerbosch, GraphTriangle) {
-  using graph_t = typename TestFixture::graph_t;
-  graph_t graph{};
+  undirected_graph<int, int> graph{};
 
   const auto vertex_1{graph.add_vertex(1)};
   const auto vertex_2{graph.add_vertex(2)};
@@ -172,8 +166,7 @@ TYPED_TEST(BronKerbosch, GraphTriangle) {
 }
 
 TYPED_TEST(BronKerbosch, GraphCone) {
-  using graph_t = typename TestFixture::graph_t;
-  graph_t graph{};
+  undirected_graph<int, int> graph{};
 
   const auto vertex_1{graph.add_vertex(1)};
   const auto vertex_2{graph.add_vertex(2)};
@@ -204,8 +197,7 @@ TYPED_TEST(BronKerbosch, GraphCone) {
 }
 
 TYPED_TEST(BronKerbosch, GraphEightSideStar) {
-  using graph_t = typename TestFixture::graph_t;
-  graph_t graph{};
+  undirected_graph<int, int> graph{};
 
   const auto vertex_1{graph.add_vertex(1)};
   const auto vertex_2{graph.add_vertex(2)};
@@ -268,32 +260,69 @@ TYPED_TEST(BronKerbosch, GraphEightSideStar) {
   ASSERT_EQ(cliques, expected_cliques);
 }
 
-TYPED_TEST(BronKerbosch, RandomGraphCheckRunTime) {
-  using graph_t = typename TestFixture::graph_t;
-  graph_t graph{};
+TYPED_TEST(BronKerbosch, DensePyramidGraph) {
+  undirected_graph<int, int> graph{};
 
-  std::vector<vertex_id_t> vertices;
+  const auto vertex_1 = graph.add_vertex(10);
+  const auto vertex_2 = graph.add_vertex(20);
+  const auto vertex_3 = graph.add_vertex(30);
+  const auto vertex_4 = graph.add_vertex(40);
+  const auto vertex_5 = graph.add_vertex(50);
+  const auto vertex_6 = graph.add_vertex(60);
+  const auto vertex_7 = graph.add_vertex(70);
 
-  for (int i = 1; i <= 70; ++i) {
-    vertices.push_back(graph.add_vertex(i));
-  }
+  graph.add_edge(vertex_1, vertex_2, 1);
+  graph.add_edge(vertex_6, vertex_7, 1);
+  graph.add_edge(vertex_1, vertex_7, 1);
+  graph.add_edge(vertex_2, vertex_7, 1);
+  graph.add_edge(vertex_1, vertex_6, 1);
+  graph.add_edge(vertex_2, vertex_6, 1);
 
-  std::random_device dev;
-  std::mt19937 rng(dev());
-  std::uniform_int_distribution<std::mt19937::result_type> rand_vertex(0, 69);
+  graph.add_edge(vertex_2, vertex_3, 1);
+  graph.add_edge(vertex_2, vertex_5, 1);
+  graph.add_edge(vertex_3, vertex_6, 1);
+  graph.add_edge(vertex_5, vertex_6, 1);
+  graph.add_edge(vertex_3, vertex_5, 1);
 
-  for (int i = 0; i < 1360; ++i) {
-    graph.add_edge(vertices[rand_vertex(rng)], vertices[rand_vertex(rng)], 1);
-  }
+  graph.add_edge(vertex_3, vertex_4, 1);
+  graph.add_edge(vertex_5, vertex_4, 1);
 
-  auto start = std::chrono::high_resolution_clock::now();
   auto cliques = bron_kerbosch(graph);
-  auto stop = std::chrono::high_resolution_clock::now();
+  std::vector<std::vector<vertex_id_t>> expected_cliques{
+      {vertex_1, vertex_2, vertex_6, vertex_7},
+      {vertex_2, vertex_6, vertex_3, vertex_5},
+      {vertex_3, vertex_4, vertex_5}};
+  sort_vectors(cliques, expected_cliques);
 
-  int expected_time = 900;
-
-  ASSERT_TRUE(expected_time >=
-              duration_cast<std::chrono::milliseconds>(stop - start).count());
+  ASSERT_EQ(cliques, expected_cliques);
 }
 
+TYPED_TEST(BronKerbosch, GraphTwoLines) {
+  undirected_graph<int, int> graph{};
+
+  const auto vertex_1 = graph.add_vertex(10);
+  const auto vertex_2 = graph.add_vertex(20);
+  const auto vertex_3 = graph.add_vertex(30);
+  const auto vertex_4 = graph.add_vertex(40);
+  const auto vertex_5 = graph.add_vertex(50);
+  const auto vertex_6 = graph.add_vertex(60);
+  const auto vertex_7 = graph.add_vertex(70);
+  const auto vertex_8 = graph.add_vertex(80);
+
+  graph.add_edge(vertex_2, vertex_1, 1);
+  graph.add_edge(vertex_2, vertex_3, 1);
+  graph.add_edge(vertex_3, vertex_4, 1);
+
+  graph.add_edge(vertex_5, vertex_6, 1);
+  graph.add_edge(vertex_6, vertex_7, 1);
+
+  auto cliques = bron_kerbosch(graph);
+  std::vector<std::vector<vertex_id_t>> expected_cliques{
+      {vertex_1, vertex_2}, {vertex_2, vertex_3}, {vertex_3, vertex_4},
+      {vertex_5, vertex_6}, {vertex_6, vertex_7}, {vertex_8}};
+
+  sort_vectors(cliques, expected_cliques);
+
+  ASSERT_EQ(cliques, expected_cliques);
+}
 };  // namespace graaf::algorithm

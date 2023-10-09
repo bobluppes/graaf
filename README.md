@@ -111,7 +111,7 @@ take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intr
 7. [**Traversal Algorithms**](https://bobluppes.github.io/graaf/docs/category/traversal-algorithms):
     - Breadth-First Search (BFS)
     - Depth-First Search (DFS)
-8. [**Clique**](https://bobluppes.github.io/graaf/docs/category/clique)
+8. [**Clique Detection**](https://bobluppes.github.io/graaf/docs/category/clique)
     - Bron-Kerbosch
 
 # Contributing

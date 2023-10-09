@@ -5,7 +5,7 @@ sidebar_position: 1
 # Bron-Kerbosch algorithm
 
 Bron-Kerbosch algorithm finding all maximal cliques in an undirected graph. A clique is a subset of vertices such that
-where every two distinct vertices are adjacent to each other.
+every two distinct vertices are adjacent to each other.
 The maximal clique is the subset of vertices of an undirected graph where no additional vertex can be added
 due to the complete connectivity rule. The algorithm lists all maximum cliques of an undirected graph.
 
