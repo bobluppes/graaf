@@ -1,42 +1,21 @@
 #include <graaflib/algorithm/coloring/welsh_powell.h>
-#include <graaflib/graph.h>
-#include <graaflib/types.h>
 #include <gtest/gtest.h>
+#include <utils/fixtures/fixtures.h>
 
 #include <unordered_map>
-#include <unordered_set>
-#include <utility>
-#include <vector>
 
 namespace graaf::algorithm {
-
-namespace {
-
-template <typename T>
-struct TypedColoringTest : public testing::Test {
-  using graph_t = T;
-  using edge_t = typename T::second_type;
-};
-
-using graph_types =
-    testing::Types<directed_graph<int, int>, undirected_graph<int, int>>;
-
-TYPED_TEST_SUITE(GraphColoringTest, graph_types);
-
-}  // namespace
 
 template <typename T>
 struct WelshPowellTest : public testing::Test {
   using graph_t = T;
 };
 
-using graph_types =
-    testing::Types<directed_graph<int, int>, undirected_graph<int, int>>;
-
-TYPED_TEST_SUITE(WelshPowellTest, graph_types);
+TYPED_TEST_SUITE(WelshPowellTest,
+                 utils::fixtures::minimal_undirected_graph_type);
 
 // Test case for an empty graph
-TYPED_TEST(WelshPowellTest , EmptyGraph) {
+TYPED_TEST(WelshPowellTest, EmptyGraph) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   graph_t graph{};
@@ -49,7 +28,7 @@ TYPED_TEST(WelshPowellTest , EmptyGraph) {
   ASSERT_TRUE(coloring.empty());
 }
 
-TYPED_TEST(WelshPowellTest , BasicGraphColoring) {
+TYPED_TEST(WelshPowellTest, BasicGraphColoring) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   graph_t graph{};
@@ -68,7 +47,7 @@ TYPED_TEST(WelshPowellTest , BasicGraphColoring) {
 
   // THEN
   std::unordered_map<vertex_id_t, int> expected_coloring = {
-      {0, 1}, {2, 1}, {1, 0} };
+      {0, 1}, {2, 1}, {1, 0}};
 
   // Check if the obtained coloring matches the expected coloring
   ASSERT_EQ(coloring, expected_coloring);
@@ -123,16 +102,13 @@ TYPED_TEST(WelshPowellTest, CompleteGraph) {
 
   // THEN
   std::unordered_map<vertex_id_t, int> expected_coloring = {
-        {0, 1},
-        {1, 1},
-        {2, 1},
-        {3, 0}};
+      {0, 3}, {1, 2}, {2, 1}, {3, 0}};
 
   // Check if the obtained coloring matches the expected coloring
-    ASSERT_EQ(coloring, expected_coloring);
+  ASSERT_EQ(coloring, expected_coloring);
 }
 
-TYPED_TEST(WelshPowellTest , DisconnectedComponents) {
+TYPED_TEST(WelshPowellTest, DisconnectedComponents) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   graph_t graph{};
