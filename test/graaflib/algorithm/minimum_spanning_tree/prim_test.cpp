@@ -1,11 +1,7 @@
-#include <fmt/core.h>
 #include <graaflib/algorithm/minimum_spanning_tree/prim.h>
-#include <graaflib/graph.h>
-#include <graaflib/types.h>
 #include <gtest/gtest.h>
 #include <utils/scenarios/scenarios.h>
 
-#include <type_traits>
 #include <unordered_set>
 #include <utility>
 

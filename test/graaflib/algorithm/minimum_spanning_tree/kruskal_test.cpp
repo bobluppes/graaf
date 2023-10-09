@@ -1,54 +1,19 @@
 #include <fmt/core.h>
 #include <graaflib/algorithm/minimum_spanning_tree/kruskal.h>
-#include <graaflib/graph.h>
-#include <graaflib/types.h>
 #include <gtest/gtest.h>
+#include <utils/fixtures/fixtures.h>
 #include <utils/scenarios/scenarios.h>
 
-#include <type_traits>
-#include <unordered_set>
 #include <utility>
 
 namespace graaf::algorithm {
-
-template <typename T>
-class my_weighted_edge : public weighted_edge<T> {
- public:
-  explicit my_weighted_edge(T weight) : weight_{weight} {}
-
-  [[nodiscard]] T get_weight() const noexcept override { return weight_; }
-
- private:
-  T weight_{};
-};
 
 template <typename T>
 struct MSTTest : public testing::Test {
   using edge_t = typename T::second_type;
 };
 
-using weighted_graph_types = testing::Types<
-    /**
-     * Primitive edge type undirected graph
-     */
-    std::pair<undirected_graph<int, int>, int>,
-    std::pair<undirected_graph<int, unsigned long>, unsigned long>,
-    std::pair<undirected_graph<int, float>, float>,
-    std::pair<undirected_graph<int, long double>, long double>,
-
-    /**
-     * Non primitive weighted edge type undirected graph
-     */
-    std::pair<undirected_graph<int, my_weighted_edge<int>>,
-              my_weighted_edge<int>>,
-    std::pair<undirected_graph<int, my_weighted_edge<unsigned long>>,
-              my_weighted_edge<unsigned long>>,
-    std::pair<undirected_graph<int, my_weighted_edge<float>>,
-              my_weighted_edge<float>>,
-    std::pair<undirected_graph<int, my_weighted_edge<long double>>,
-              my_weighted_edge<long double>>>;
-
-TYPED_TEST_SUITE(MSTTest, weighted_graph_types);
+TYPED_TEST_SUITE(MSTTest, utils::fixtures::weighted_graph_types);
 
 TYPED_TEST(MSTTest, SparseGraph) {
   undirected_graph<int, int> graph{};

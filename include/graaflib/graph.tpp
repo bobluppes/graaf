@@ -129,10 +129,24 @@ graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_neighbors(
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
 vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex(auto&& vertex) {
-  // TODO: check overflow
-  const auto vertex_id{vertex_id_supplier_++};
+  while (has_vertex(vertex_id_supplier_)) {
+    ++vertex_id_supplier_;
+  }
+  const auto vertex_id{vertex_id_supplier_};
   vertices_.emplace(vertex_id, std::forward<VERTEX_T>(vertex));
   return vertex_id;
+}
+
+template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
+vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex(auto&& vertex,
+                                                              vertex_id_t id) {
+  if (has_vertex(id)) {
+    throw std::invalid_argument{"Vertex already exists at ID [" +
+                                std::to_string(id) + "]"};
+  }
+
+  vertices_.emplace(id, std::forward<VERTEX_T>(vertex));
+  return id;
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>

@@ -1,8 +1,6 @@
-#include <fmt/core.h>
 #include <graaflib/algorithm/topological_sorting/dfs_topological_sorting.h>
-#include <graaflib/graph.h>
-#include <graaflib/types.h>
 #include <gtest/gtest.h>
+#include <utils/fixtures/fixtures.h>
 
 namespace graaf::algorithm {
 namespace {
@@ -11,8 +9,8 @@ struct TypedTopologicalSort : public testing::Test {
   using graph_t = T;
 };
 
-using graph_types = testing::Types<directed_graph<int, int>>;
-TYPED_TEST_SUITE(TypedTopologicalSort, graph_types);
+TYPED_TEST_SUITE(TypedTopologicalSort,
+                 utils::fixtures::minimal_directed_graph_type);
 
 };  // namespace
 
