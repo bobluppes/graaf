@@ -1,5 +1,4 @@
 #pragma once
-
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
 

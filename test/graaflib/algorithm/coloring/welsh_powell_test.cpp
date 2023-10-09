@@ -68,7 +68,7 @@ TYPED_TEST(WelshPowellTest , BasicGraphColoring) {
 
   // THEN
   std::unordered_map<vertex_id_t, int> expected_coloring = {
-      {0, 1}, {1, 0}, {2, 1}};
+      {0, 1}, {2, 1}, {1, 0} };
 
   // Check if the obtained coloring matches the expected coloring
   ASSERT_EQ(coloring, expected_coloring);
@@ -114,21 +114,22 @@ TYPED_TEST(WelshPowellTest, CompleteGraph) {
   graph.add_edge(vertex_1, vertex_2, 1);
   graph.add_edge(vertex_1, vertex_3, 1);
   graph.add_edge(vertex_1, vertex_4, 1);
-  graph.add_edge(vertex_2, vertex_4, 1);
   graph.add_edge(vertex_2, vertex_3, 1);
+  graph.add_edge(vertex_2, vertex_4, 1);
   graph.add_edge(vertex_3, vertex_4, 1);
 
   // WHEN
   auto coloring = welsh_powell_coloring(graph);
 
   // THEN
-  // Verify that each vertex is assigned a unique color
-  std::unordered_set<int> color_set;
-  for (const auto& entry : coloring) {
-    int color = entry.second;
-    ASSERT_FALSE(color_set.count(color) > 0);  // Check if the color is unique
-    color_set.insert(color);
-  }
+  std::unordered_map<vertex_id_t, int> expected_coloring = {
+        {0, 1},
+        {1, 1},
+        {2, 1},
+        {3, 0}};
+
+  // Check if the obtained coloring matches the expected coloring
+    ASSERT_EQ(coloring, expected_coloring);
 }
 
 TYPED_TEST(WelshPowellTest , DisconnectedComponents) {

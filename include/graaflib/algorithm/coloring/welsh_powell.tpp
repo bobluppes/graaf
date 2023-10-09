@@ -1,5 +1,4 @@
 #pragma once
-
 #include <graaflib/algorithm/coloring/welsh_powell.h>
 #include <graaflib/properties/vertex_properties.h>
 #include <unordered_map>
