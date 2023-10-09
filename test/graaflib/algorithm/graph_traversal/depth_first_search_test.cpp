@@ -1,13 +1,11 @@
 #include <graaflib/algorithm/graph_traversal/depth_first_search.h>
-#include <graaflib/graph.h>
-#include <graaflib/types.h>
 #include <gtest/gtest.h>
+#include <utils/fixtures/fixtures.h>
 #include <utils/scenarios/scenarios.h>
 
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
-#include <vector>
 
 namespace graaf::algorithm {
 
@@ -18,9 +16,8 @@ struct TypedGraphTraversalTestDFS : public testing::Test {
   using graph_t = T;
 };
 
-using graph_types =
-    testing::Types<directed_graph<int, int>, undirected_graph<int, int>>;
-TYPED_TEST_SUITE(TypedGraphTraversalTestDFS, graph_types);
+TYPED_TEST_SUITE(TypedGraphTraversalTestDFS,
+                 utils::fixtures::minimal_graph_types);
 
 using seen_edges_t = std::unordered_multiset<edge_id_t, edge_id_hash>;
 using edge_order_t = std::unordered_map<edge_id_t, std::size_t, edge_id_hash>;
