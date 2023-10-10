@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 # Benchmark [ALGORITHM NAME]
-The goal of this issues is to add a benchmark for the `[ALGORITHM NAME]` algorithm. Benchmarks are vital to our library and allow us to measure the impact of future performance improvements.
+The goal of this issues is to add a benchmark for the `[ALGORITHM NAME]` algorithm. The algorithm implementation is located under `include/graaflib/algorithm/`. Benchmarks are vital to our library and allow us to measure the impact of future performance improvements.
 
 We use the [Google benchmark](https://github.com/google/benchmark/blob/main/docs/user_guide.md) framework. For inspiration, please take a look at the existing benchmarks in `/perf`.
 
