@@ -2,7 +2,7 @@
 name: Benchmark Algorithm Template
 about: Template used for creating benchmark issues.
 title: "[BENCH]"
-labels: help wanted, performance
+labels: good first issue, help wanted, performance
 assignees: ''
 
 ---
