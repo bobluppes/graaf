@@ -109,10 +109,11 @@ To get started, take a look at our [quickstart guide](https://bobluppes.github.i
 Algorithms implemented in the Graaf library include the following. For more information on individual algorithms please
 take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intro).
 
-1. [**Graph Coloring Algorithms**](https://bobluppes.github.io/graaf/docs/category/graph-coloring-algorithms):
-   - [Greedy Graph Coloring](https://bobluppes.github.io/graaf/docs/algorithms/coloring/greedy-graph-coloring)
-2. [**Cycle Detection Algorithms**](https://bobluppes.github.io/graaf/docs/category/cycle-detection-algorithms):
+1. [**Cycle Detection Algorithms**](https://bobluppes.github.io/graaf/docs/category/cycle-detection-algorithms):
    - [DFS-Based Cycle Detection](https://bobluppes.github.io/graaf/docs/algorithms/cycle-detection/dfs-based)
+2. [**Graph Coloring Algorithms**](https://bobluppes.github.io/graaf/docs/category/graph-coloring-algorithms):
+   - [Greedy Graph Coloring](https://bobluppes.github.io/graaf/docs/algorithms/coloring/greedy-graph-coloring)
+   - [Welsh-Powell Algorithm]
 3. [**Minimum Spanning Tree (MST) Algorithms**](https://bobluppes.github.io/graaf/docs/category/minimum-spanning-tree)
    - [Kruskal's Algorithm](https://bobluppes.github.io/graaf/docs/algorithms/minimum-spanning-tree/kruskal)
    - [Prim's Algorithm](https://bobluppes.github.io/graaf/docs/algorithms/minimum-spanning-tree/prim)
