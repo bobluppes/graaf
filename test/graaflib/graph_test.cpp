@@ -35,6 +35,13 @@ TYPED_TEST(GraphTest, VertexCount) {
   ASSERT_EQ(graph.vertex_count(), 2);
   ASSERT_TRUE(graph.has_vertex(vertex_id_2));
   ASSERT_EQ(graph.get_vertex(vertex_id_2), 20);
+
+  // WHEN - THEN
+  constexpr int specific_id = 2;
+  const auto vertex_specific_id{graph.add_vertex(30, specific_id)};
+  ASSERT_EQ(graph.vertex_count(), 3);
+  ASSERT_TRUE(graph.has_vertex(specific_id));
+  ASSERT_EQ(graph.get_vertex(specific_id), 30);
 }
 
 TYPED_TEST(GraphTest, RemoveVertex) {
@@ -170,6 +177,24 @@ TYPED_TEST(GraphTest, VertexTests) {
   EXPECT_FALSE(graph.has_vertex(nonExistingVertexId));
   EXPECT_TRUE(graph.has_vertex(vertex_id_2));
   EXPECT_EQ(graph.get_vertex(vertex_id_2), 20);
+
+  ASSERT_THROW(
+      {
+        try {
+          // Add vertex to ID that already exists
+          [[maybe_unused]] const auto duplicate_id{
+              graph.add_vertex(50, vertex_id_1)};
+          FAIL()
+              << "Expected std::invalid_argument exception, but no exception "
+                 "was thrown.";
+        } catch (const std::invalid_argument &ex) {
+          EXPECT_EQ(ex.what(), fmt::format("Vertex already exists at ID [{}]",
+                                           vertex_id_1));
+          throw;
+        }
+      },
+      std::invalid_argument);
+  EXPECT_EQ(graph.get_vertex(vertex_id_1), 1);
 }
 
 TYPED_TEST(GraphTest, GetEdgeNonExistingEdge) {

@@ -39,13 +39,13 @@ analysis, and data mining.
 Graaf: A Lightweight, Header-Only C++20 Graph Library
 
 **Key Features**:
+
 - **Header-only**: No separate compilation or linking required.
 - **Generality**: Supports user-defined vertex and edge classes.
 - **Algorithm Support**: Provides a range of graph algorithms.
 
 **Purpose**:
 Graaf is designed with the goal of simplifying graph-related tasks. It offers a lightweight alternative to the [Boost Graph Library (BGL)](https://www.boost.org/doc/libs/1_82_0/libs/graph/doc/index.html) and is built for simplicity and extensibility. With Graaf, you can easily create, manipulate, and analyze graphs, making it suitable for a wide range of applications.
-
 
 # Installation
 
@@ -129,13 +129,15 @@ take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intr
 7. [**Traversal Algorithms**](https://bobluppes.github.io/graaf/docs/category/traversal-algorithms):
    - [Breadth-First Search (BFS)](https://bobluppes.github.io/graaf/docs/algorithms/traversal/breadth-first-search)
    - [Depth-First Search (DFS)](https://bobluppes.github.io/graaf/docs/algorithms/traversal/depth-first-search)
+8. [**Clique Detection**](https://bobluppes.github.io/graaf/docs/category/clique-detection)
+    - [Bron-Kerbosch](https://bobluppes.github.io/graaf/docs/algorithms/clique-detection/bron-kerbosch)
 
 # Contributing
 
 The Graaf library welcomes contributions 🎊
 
 If you're interested in improving, fixing bugs, or adding features, please refer to
-the [wiki](https://github.com/bobluppes/graaf/wiki) for guidelines. Check out our roadmap
+the [wiki](https://github.com/bobluppes/graaf/wiki) for guidelines and have your [development environment set up](https://github.com/bobluppes/graaf/wiki/development-setup) before you start. Check out our roadmap
 on [YouTrack](https://graaf.youtrack.cloud/agiles/147-2/current) to stay up to date on planned features and
 improvements. We also have an [issue tracker](https://github.com/bobluppes/graaf/issues) for bug reports and feature
 requests.
