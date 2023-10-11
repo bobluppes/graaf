@@ -17,12 +17,11 @@ void do_visit_vertex(const vertex_id_t vertex_id,
                      std::stack<vertex_id_t>& stack,
                      std::unordered_set<vertex_id_t>& seen_vertices) {
   if (!seen_vertices.contains(vertex_id)) {
-    stack.push(vertex_id);
     seen_vertices.insert(vertex_id);
-
     for (const auto neighbour : graph.get_neighbors(vertex_id)) {
       do_visit_vertex(neighbour, graph, stack, seen_vertices);
     }
+    stack.push(vertex_id);
   }
 }
 
