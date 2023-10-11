@@ -12,14 +12,14 @@ namespace graaf::algorithm {
 template <typename V, typename E>
 std::vector<std::vector<vertex_id_t>> kosarajus_strongly_connected_components(
     const directed_graph<V, E>& graph) {
-  std::vector<std::vector<vertex_id_t>> sccs;
+  std::vector<std::vector<vertex_id_t>> sccs{};
 
   if (graph.get_vertices().size() == 0) {
     return sccs;
   }
 
-  std::stack<vertex_id_t> stack;
-  std::unordered_set<vertex_id_t> seen_vertices;
+  std::stack<vertex_id_t> stack{};
+  std::unordered_set<vertex_id_t> seen_vertices{};
 
   std::function<void(vertex_id_t)> visit_vertex;
   visit_vertex = [&](vertex_id_t vertex) {
@@ -42,7 +42,7 @@ std::vector<std::vector<vertex_id_t>> kosarajus_strongly_connected_components(
   seen_vertices.clear();
 
   directed_graph<V, E> transposed_graph = get_transposed_graph(graph);
-  std::vector<vertex_id_t> scc;
+  std::vector<vertex_id_t> scc{};
 
   std::function<void(vertex_id_t)> strong_connect;
   strong_connect = [&](vertex_id_t vertex) {
