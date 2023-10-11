@@ -9,6 +9,41 @@
 
 namespace graaf::algorithm {
 
+namespace {
+
+template <typename V, typename E>
+void do_visit_vertex(const vertex_id_t vertex_id,
+                     const directed_graph<V, E>& graph,
+                     std::stack<vertex_id_t>& stack,
+                     std::unordered_set<vertex_id_t>& seen_vertices) {
+  if (!seen_vertices.contains(vertex_id)) {
+    stack.push(vertex_id);
+    seen_vertices.insert(vertex_id);
+
+    for (const auto neighbour : graph.get_neighbors(vertex_id)) {
+      do_visit_vertex(neighbour, graph, stack, seen_vertices);
+    }
+  }
+}
+
+template <typename V, typename E>
+void make_strongly_connected_component_from_vertex(
+    const vertex_id_t vertex, const directed_graph<V, E>& transposed_graph,
+    std::vector<vertex_id_t>& scc,
+    std::unordered_set<vertex_id_t>& seen_vertices) {
+  if (!seen_vertices.contains(vertex)) {
+    seen_vertices.insert(vertex);
+    scc.push_back(vertex);
+
+    for (const auto neighbour : transposed_graph.get_neighbors(vertex)) {
+      make_strongly_connected_component_from_vertex(neighbour, transposed_graph,
+                                                    scc, seen_vertices);
+    }
+  }
+}
+
+}  // namespace
+
 template <typename V, typename E>
 std::vector<std::vector<vertex_id_t>> kosarajus_strongly_connected_components(
     const directed_graph<V, E>& graph) {
@@ -21,21 +56,9 @@ std::vector<std::vector<vertex_id_t>> kosarajus_strongly_connected_components(
   std::stack<vertex_id_t> stack{};
   std::unordered_set<vertex_id_t> seen_vertices{};
 
-  std::function<void(vertex_id_t)> visit_vertex;
-  visit_vertex = [&](vertex_id_t vertex) {
-    if (!seen_vertices.contains(vertex)) {
-      stack.push(vertex);
-      seen_vertices.insert(vertex);
-
-      for (const auto neighbour : graph.get_neighbors(vertex)) {
-        visit_vertex(neighbour);
-      }
-    }
-  };
-
   for (const auto& [vertex_id, vertex] : graph.get_vertices()) {
     if (!seen_vertices.contains(vertex_id)) {
-      visit_vertex(vertex_id);
+      do_visit_vertex(vertex_id, graph, stack, seen_vertices);
     }
   }
 
@@ -44,22 +67,11 @@ std::vector<std::vector<vertex_id_t>> kosarajus_strongly_connected_components(
   directed_graph<V, E> transposed_graph = get_transposed_graph(graph);
   std::vector<vertex_id_t> scc{};
 
-  std::function<void(vertex_id_t)> strong_connect;
-  strong_connect = [&](vertex_id_t vertex) {
-    if (!seen_vertices.contains(vertex)) {
-      seen_vertices.insert(vertex);
-      scc.push_back(vertex);
-
-      for (const auto neighbour : transposed_graph.get_neighbors(vertex)) {
-        strong_connect(neighbour);
-      }
-    }
-  };
-
   while (!stack.empty()) {
     if (!seen_vertices.contains(stack.top())) {
       scc.clear();
-      strong_connect(stack.top());
+      make_strongly_connected_component_from_vertex(
+          stack.top(), transposed_graph, scc, seen_vertices);
       sccs.push_back(scc);
     }
 
