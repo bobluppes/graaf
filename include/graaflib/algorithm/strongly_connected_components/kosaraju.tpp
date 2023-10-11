@@ -63,7 +63,7 @@ std::vector<std::vector<vertex_id_t>> kosarajus_strongly_connected_components(
 
   seen_vertices.clear();
 
-  directed_graph<V, E> transposed_graph = get_transposed_graph(graph);
+  const auto transposed_graph = get_transposed_graph(graph);
   std::vector<vertex_id_t> scc{};
 
   while (!stack.empty()) {
