@@ -18,7 +18,7 @@ is highly connected (dense) and approaches a complete graph, the time complexity
 
 If no coloring is possible, an empty `unordered_map` is returned. This is the case when the graph contains no vertices.
 
-[wikipedia](https://www.tutorialspoint.com/welsh-powell-graph-colouring-algorithm)
+[Tutorials Point](https://www.tutorialspoint.com/welsh-powell-graph-colouring-algorithm)
 
 ## Syntax
 
