@@ -1,3 +1,4 @@
+#include <graaflib/algorithm/strongly_connected_components/common.h>
 #include <graaflib/algorithm/strongly_connected_components/tarjan.h>
 #include <gtest/gtest.h>
 #include <utils/fixtures/fixtures.h>
@@ -23,11 +24,10 @@ struct TarjansStronglyConnectedComponentsTest : public testing::Test {
   using edge_t = typename T::second_type;
 };
 
-bool are_set_vectors_equal(const std::vector<std::vector<vertex_id_t>>& vec1,
-                           const std::vector<std::vector<vertex_id_t>>& vec2) {
+bool are_set_vectors_equal(const sccs_t& vec1, const sccs_t& vec2) {
   // Make copies of the input vectors to avoid modifying the originals
-  std::vector<std::vector<vertex_id_t>> sorted_vec1 = vec1;
-  std::vector<std::vector<vertex_id_t>> sorted_vec2 = vec2;
+  sccs_t sorted_vec1 = vec1;
+  sccs_t sorted_vec2 = vec2;
 
   // Sort the inner vectors within each vector
   for (std::vector<vertex_id_t>& inner_vec : sorted_vec1) {
@@ -64,7 +64,7 @@ TYPED_TEST(TarjansStronglyConnectedComponentsTest,
   auto sccs = tarjans_strongly_connected_components(graph);
 
   // THEN
-  std::vector<std::vector<vertex_id_t>> expected_sccs;
+  sccs_t expected_sccs;
 
   std::vector<vertex_id_t> component1 = {0};
   expected_sccs.push_back(component1);
@@ -101,7 +101,7 @@ TYPED_TEST(TarjansStronglyConnectedComponentsTest, TarjansTwoTrianglesTest) {
   // WHEN
   auto sccs = tarjans_strongly_connected_components(graph);
 
-  std::vector<std::vector<vertex_id_t>> expected_sccs;
+  sccs_t expected_sccs;
 
   std::vector<vertex_id_t> triangle_1 = {0, 1, 2};
   std::vector<vertex_id_t> triangle_2 = {3, 4, 5};
@@ -136,7 +136,7 @@ TYPED_TEST(TarjansStronglyConnectedComponentsTest, TarjansLinearChainTest) {
   auto sccs = tarjans_strongly_connected_components(graph);
 
   // THEN
-  std::vector<std::vector<vertex_id_t>> expected_sccs;
+  sccs_t expected_sccs;
 
   // Each vertex is its own SCC in a linear chain graph
   for (const auto& vertex_id : vertex_ids) {
@@ -169,7 +169,7 @@ TYPED_TEST(TarjansStronglyConnectedComponentsTest, TarjansCycleTest) {
   auto sccs = tarjans_strongly_connected_components(graph);
 
   // THEN
-  std::vector<std::vector<vertex_id_t>> expected_sccs;
+  sccs_t expected_sccs;
 
   std::vector<vertex_id_t> component = {0, 1, 2};
   expected_sccs.push_back(component);
@@ -206,7 +206,7 @@ TYPED_TEST(TarjansStronglyConnectedComponentsTest,
 
   // THEN
   // Each vertex itself is considered an SCC.
-  std::vector<std::vector<vertex_id_t>> expected_sccs;
+  sccs_t expected_sccs;
 
   std::vector<vertex_id_t> component1 = {0};
   expected_sccs.push_back(component1);
@@ -246,7 +246,7 @@ TYPED_TEST(TarjansStronglyConnectedComponentsTest,
   auto sccs = tarjans_strongly_connected_components(graph);
 
   // THEN
-  std::vector<std::vector<vertex_id_t>> expected_sccs;
+  sccs_t expected_sccs;
 
   std::vector<vertex_id_t> component1 = {0};
   std::vector<vertex_id_t> component2 = {1};
@@ -288,7 +288,7 @@ TYPED_TEST(TarjansStronglyConnectedComponentsTest, TarjansComplexGraphTest) {
   auto sccs = tarjans_strongly_connected_components(graph);
 
   // THEN
-  std::vector<std::vector<vertex_id_t>> expected_sccs;
+  sccs_t expected_sccs;
 
   std::vector<vertex_id_t> component1 = {0, 1, 2};
   std::vector<vertex_id_t> component2 = {3, 4, 5};

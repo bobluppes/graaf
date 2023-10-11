@@ -1,11 +1,10 @@
+#include <graaflib/algorithm/strongly_connected_components/common.h>
 #include <graaflib/algorithm/strongly_connected_components/kosaraju.h>
 #include <gtest/gtest.h>
 
 namespace graaf::algorithm {
 
 TEST(KosarajuTest, EqualOutputSCCS) {
-  using sccs_t = std::vector<std::vector<vertex_id_t>>;
-
   // GIVEN
   directed_graph<int, int> graph{};
   const auto vertex_id_1 = graph.add_vertex(1, 1);

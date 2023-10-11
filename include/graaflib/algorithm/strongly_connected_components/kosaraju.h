@@ -1,5 +1,6 @@
 #pragma once
 
+#include <graaflib/algorithm/strongly_connected_components/common.h>
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
 
@@ -19,11 +20,12 @@ namespace graaf::algorithm {
  * @tparam E The edge type of the graph.
  * @param graph The input directed graph.
  *
- * @return A std::vector of vectors, each of which contains the vertex IDs
- * forming a strongly connected component.
+ * @return An sccs_t, a type representing an std::vector of vectors,
+ * each of which contains the vertex IDs forming a strongly connected
+ * component.
  */
 template <typename V, typename E>
-std::vector<std::vector<vertex_id_t>> kosarajus_strongly_connected_components(
+sccs_t kosarajus_strongly_connected_components(
     const directed_graph<V, E>& graph);
 
 }  // namespace graaf::algorithm

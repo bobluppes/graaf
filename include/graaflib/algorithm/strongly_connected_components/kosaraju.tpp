@@ -44,9 +44,9 @@ void make_strongly_connected_component_from_vertex(
 }  // namespace
 
 template <typename V, typename E>
-std::vector<std::vector<vertex_id_t>> kosarajus_strongly_connected_components(
+sccs_t kosarajus_strongly_connected_components(
     const directed_graph<V, E>& graph) {
-  std::vector<std::vector<vertex_id_t>> sccs{};
+  sccs_t sccs{};
 
   if (graph.get_vertices().size() == 0) {
     return sccs;
