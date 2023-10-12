@@ -10,19 +10,19 @@
 namespace graaf::algorithm {
 
 template <typename V, typename E>
-[[nodiscard]] std::vector<std::vector<vertex_id_t>>
+[[nodiscard]] sccs_t
 tarjans_strongly_connected_components(
     const graph<V, E, graph_type::DIRECTED>& graph) {
   // Vector to store strongly connected components
-  std::vector<std::vector<vertex_id_t>> sccs;
+  sccs_t sccs{};
 
   // Stack to hold vertices during traversal
   std::stack<vertex_id_t> stack;
 
   // Maps to keep track of indices, low-link values, and stack membership
-  std::unordered_map<vertex_id_t, size_t> indices;
-  std::unordered_map<vertex_id_t, size_t> low_links;
-  std::unordered_map<vertex_id_t, bool> on_stack;
+  std::unordered_map<vertex_id_t, size_t> indices{};
+  std::unordered_map<vertex_id_t, size_t> low_links{};
+  std::unordered_map<vertex_id_t, bool> on_stack{};
 
   // Counter for indexing vertices
   size_t index_counter = 0;
