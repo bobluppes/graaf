@@ -24,7 +24,7 @@
 
 </p>
 
-> <img src="docs/static/img/hacktoberfest-logo.png" width="50" align="center">**Hacktoberfest**<br>
+<img src="docs/static/img/hacktoberfest-logo.png" width="50" align="center">**Hacktoberfest**<br>
 > The Graaf project participates in [Hacktoberfest 2023](https://hacktoberfest.com/). For a step-by-step guide on how
 > to contribute, please take a look at our [wiki](https://github.com/bobluppes/graaf/wiki). Also, feel free to join
 > out [Discord](https://discord.gg/cGczwRHJ9K) in case of any problems, or simply to hang out with other contributors.
