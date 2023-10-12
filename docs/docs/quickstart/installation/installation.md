@@ -27,8 +27,7 @@ include path.
 
 3. Include the graaf header in your sources.
    ```c++
-   #include <graaflib/directed_graph.h>
-   ```
+   #include <graaflib/graph.h>
 
 ## CMake FetchContent
 
