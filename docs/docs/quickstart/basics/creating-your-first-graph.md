@@ -53,4 +53,4 @@ int main()
 
 ### Congratulations! You just created the following graph 🎉
 
-![Alt text](Graph.png)
+![Directed graph example](../../../static/img/quickstart/Graph.png)
