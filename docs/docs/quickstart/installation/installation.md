@@ -9,7 +9,7 @@ sidebar_position: 1
 Installing Graaf on your project is easy! Simply copy the `graaflib` directory to your project and add it to your
 include path.
 
-1. Copy `graaflip` to your project.
+1. Copy `graaflib` to your project.
 2. Before compiling, add the directory to your include path.
 
    ```bash
@@ -27,8 +27,7 @@ include path.
 
 3. Include the graaf header in your sources.
    ```c++
-   #include <graaflib/directed_graph.h>
-   ```
+   #include <graaflib/graph.h>
 
 ## CMake FetchContent
 
