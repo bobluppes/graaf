@@ -113,6 +113,8 @@ take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intr
    - [Greedy Graph Coloring](https://bobluppes.github.io/graaf/docs/algorithms/coloring/greedy-graph-coloring)
 2. [**Cycle Detection Algorithms**](https://bobluppes.github.io/graaf/docs/category/cycle-detection-algorithms):
    - [DFS-Based Cycle Detection](https://bobluppes.github.io/graaf/docs/algorithms/cycle-detection/dfs-based)
+3. [**Maximum Flow Algorithms**](https://bobluppes.github.io/graaf/docs/category/maximum-flow)
+   - [Edmonds-Karp algorithm](https://bobluppes.github.io/graaf/docs/algorithms/aximum-flow/edmonds-karp)
 3. [**Minimum Spanning Tree (MST) Algorithms**](https://bobluppes.github.io/graaf/docs/category/minimum-spanning-tree)
    - [Kruskal's Algorithm](https://bobluppes.github.io/graaf/docs/algorithms/minimum-spanning-tree/kruskal)
    - [Prim's Algorithm](https://bobluppes.github.io/graaf/docs/algorithms/minimum-spanning-tree/prim)
