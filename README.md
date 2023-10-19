@@ -115,19 +115,19 @@ take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intr
    - [DFS-Based Cycle Detection](https://bobluppes.github.io/graaf/docs/algorithms/cycle-detection/dfs-based)
 3. [**Maximum Flow Algorithms**](https://bobluppes.github.io/graaf/docs/category/maximum-flow)
    - [Edmonds-Karp algorithm](https://bobluppes.github.io/graaf/docs/algorithms/aximum-flow/edmonds-karp)
-3. [**Minimum Spanning Tree (MST) Algorithms**](https://bobluppes.github.io/graaf/docs/category/minimum-spanning-tree)
+4. [**Minimum Spanning Tree (MST) Algorithms**](https://bobluppes.github.io/graaf/docs/category/minimum-spanning-tree)
    - [Kruskal's Algorithm](https://bobluppes.github.io/graaf/docs/algorithms/minimum-spanning-tree/kruskal)
    - [Prim's Algorithm](https://bobluppes.github.io/graaf/docs/algorithms/minimum-spanning-tree/prim)
-4. [**Shortest Path Algorithms**](https://bobluppes.github.io/graaf/docs/category/shortest-path-algorithms):
+5. [**Shortest Path Algorithms**](https://bobluppes.github.io/graaf/docs/category/shortest-path-algorithms):
    - [A\* search](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/a-star)
    - [Bellman-Ford Shortest Path](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/bellman-ford)
    - [BFS-Based Shortest Path](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/bfs-based-shortest-path)
    - [Dijkstra Shortest Path](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/dijkstra)
    - [Floyd-Warshall Algorithm](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/floyd-warshall)
-5. [**Strongly Connected Components Algorithms**](https://bobluppes.github.io/graaf/docs/category/strongly-connected-component-algorithms):
+6. [**Strongly Connected Components Algorithms**](https://bobluppes.github.io/graaf/docs/category/strongly-connected-component-algorithms):
    - [Tarjan's Strongly Connected Components](https://bobluppes.github.io/graaf/docs/algorithms/strongly-connected-components/tarjan)
-6. [**Topological Sorting Algorithms**](https://bobluppes.github.io/graaf/docs/algorithms/topological-sort):
-7. [**Traversal Algorithms**](https://bobluppes.github.io/graaf/docs/category/traversal-algorithms):
+7. [**Topological Sorting Algorithms**](https://bobluppes.github.io/graaf/docs/algorithms/topological-sort):
+8. [**Traversal Algorithms**](https://bobluppes.github.io/graaf/docs/category/traversal-algorithms):
    - [Breadth-First Search (BFS)](https://bobluppes.github.io/graaf/docs/algorithms/traversal/breadth-first-search)
    - [Depth-First Search (DFS)](https://bobluppes.github.io/graaf/docs/algorithms/traversal/depth-first-search)
 
