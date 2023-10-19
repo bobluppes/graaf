@@ -5,7 +5,6 @@ sidebar_position: 3
 # Edmonds-Karp Algorithm
 
 The Edmonds-Karp algorithm computes the maximum flow in a flow network.
-The Edmonds-Karp algorithm re-uses the existing `breadth_first_traverse` method for finding the shortest path that has available capacity. It runs in `O(|V||E|^2)` time, where `|V|` the number of vertices in the graph and `|E|` is the number of edges.
 
 [wikipedia](https://en.wikipedia.org/wiki/Edmonds%E2%80%93Karp_algorithm)
 
