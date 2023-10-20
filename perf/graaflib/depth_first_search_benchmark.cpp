@@ -72,7 +72,7 @@ void construct_graph(graaf::directed_graph<int, int>& graph,
   for (const auto& vertex : vertices) {
     for (const auto path : construct_path[graph_path]) {
       auto next_vertex = (vertex + path) * modify;
-      if(next_vertex >= vertices.size()) break;
+      if (next_vertex >= vertices.size()) break;
       graph.add_edge(vertex, vertices[next_vertex], 1);
     }
     if (++graph_path >= construct_path.size()) graph_path = 0;
@@ -88,7 +88,7 @@ void construct_graph(graaf::undirected_graph<int, int>& graph,
     for (const auto path : construct_path[graph_path]) {
       auto next_vertex = (vertex + path) * modify;
 
-      if(next_vertex >= vertices.size()) break;
+      if (next_vertex >= vertices.size()) break;
       graph.add_edge(vertex, vertices[next_vertex], 1);
     }
     if (++graph_path >= construct_path.size()) graph_path = 0;
