@@ -13,9 +13,8 @@ number of edges in the graph. So it runs in linear time.
 
 ```cpp
 template <typename V, typename E>
-[[nodiscard]] std::vector<std::vector<vertex_id_t>> 
-tarjans_strongly_connected_components(const graph<V, E, graph_type::DIRECTED>& graph);
+[[nodiscard]] sccs_t tarjans_strongly_connected_components(const graph<V, E, graph_type::DIRECTED>& graph);
 ```
 
 - **graph** The graph for which to compute SCCs.
-- **return** A vector of vectors representing SCCs.
+- **return** A type consisting of a vector of vectors representing SCCs.
