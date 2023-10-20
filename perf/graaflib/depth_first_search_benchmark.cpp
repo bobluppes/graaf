@@ -1,7 +1,6 @@
 #include <benchmark/benchmark.h>
 #include <graaflib/algorithm/graph_traversal/depth_first_search.h>
 
-#include <iostream>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
@@ -131,7 +130,7 @@ static void dfs_target_traversal(benchmark::State& state) {
   seen_edges_t seen_edges{};
   edge_order_t edge_order{};
   auto target_vertex = std::min(
-      static_cast<unsigned long long int>(state.range(1)), number_of_vertices);
+      static_cast<graaf::vertex_id_t>(state.range(1)), number_of_vertices);
   const auto termination_strategy{
       [target = vertices[target_vertex]](const graaf::vertex_id_t& vertex) {
         return vertex == target;
@@ -160,7 +159,7 @@ static void dfs_target_traversal_matrix(benchmark::State& state) {
   seen_edges_t seen_edges{};
   edge_order_t edge_order{};
   auto target_vertex = std::min(
-      static_cast<unsigned long long int>(state.range(1)), number_of_vertices);
+      static_cast<graaf::vertex_id_t>(state.range(1)), number_of_vertices);
   const auto termination_strategy{
       [target = vertices[target_vertex]](const graaf::vertex_id_t& vertex) {
         return vertex == target;
@@ -189,7 +188,7 @@ static void dfs_target_traversal_cones(benchmark::State& state) {
   seen_edges_t seen_edges{};
   edge_order_t edge_order{};
   auto target_vertex = std::min(
-      static_cast<unsigned long long int>(state.range(1)), number_of_vertices);
+      static_cast<graaf::vertex_id_t>(state.range(1)), number_of_vertices);
   const auto termination_strategy{
       [target = vertices[target_vertex]](const graaf::vertex_id_t& vertex) {
         return vertex == target;
@@ -218,7 +217,7 @@ static void dfs_target_traversal_binary_tree(benchmark::State& state) {
   seen_edges_t seen_edges{};
   edge_order_t edge_order{};
   auto target_vertex = std::min(
-      static_cast<unsigned long long int>(state.range(1)), number_of_vertices);
+      static_cast<graaf::vertex_id_t>(state.range(1)), number_of_vertices);
   const auto termination_strategy{
       [target = vertices[target_vertex]](const graaf::vertex_id_t& vertex) {
         return vertex == target;
@@ -247,7 +246,7 @@ static void dfs_target_traversal_ternary_tree(benchmark::State& state) {
   seen_edges_t seen_edges{};
   edge_order_t edge_order{};
   auto target_vertex = std::min(
-      static_cast<unsigned long long int>(state.range(1)), number_of_vertices);
+      static_cast<graaf::vertex_id_t>(state.range(1)), number_of_vertices);
   const auto termination_strategy{
       [target = vertices[target_vertex]](const graaf::vertex_id_t& vertex) {
         return vertex == target;
