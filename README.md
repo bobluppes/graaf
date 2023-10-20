@@ -24,7 +24,7 @@
 
 </p>
 
-> <img src="docs/static/img/hacktoberfest-logo.png" width="50" align="center">**Hacktoberfest**<br>
+<img src="docs/static/img/hacktoberfest-logo.png" width="50" align="center">**Hacktoberfest**<br>
 > The Graaf project participates in [Hacktoberfest 2023](https://hacktoberfest.com/). For a step-by-step guide on how
 > to contribute, please take a look at our [wiki](https://github.com/bobluppes/graaf/wiki). Also, feel free to join
 > out [Discord](https://discord.gg/cGczwRHJ9K) in case of any problems, or simply to hang out with other contributors.
@@ -125,6 +125,7 @@ take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intr
    - [Floyd-Warshall Algorithm](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/floyd-warshall)
 5. [**Strongly Connected Components Algorithms**](https://bobluppes.github.io/graaf/docs/category/strongly-connected-component-algorithms):
    - [Tarjan's Strongly Connected Components](https://bobluppes.github.io/graaf/docs/algorithms/strongly-connected-components/tarjan)
+   - [Kosaraju's Strongly Connected Components](https://bobluppes.github.io/graaf/docs/algorithms/strongly-connected-components/kosarajus)
 6. [**Topological Sorting Algorithms**](https://bobluppes.github.io/graaf/docs/algorithms/topological-sort):
 7. [**Traversal Algorithms**](https://bobluppes.github.io/graaf/docs/category/traversal-algorithms):
    - [Breadth-First Search (BFS)](https://bobluppes.github.io/graaf/docs/algorithms/traversal/breadth-first-search)
