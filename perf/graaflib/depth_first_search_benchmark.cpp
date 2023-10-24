@@ -69,8 +69,9 @@ void construct_graph(graaf::directed_graph<int, int>& graph,
                      int modify = 1) {
   int graph_path = 0;
   for (const auto& vertex : vertices) {
-    for (const auto path : construct_path[graph_path]) {
+    for (const auto& path : construct_path[graph_path]) {
       auto next_vertex = (vertex + path) * modify;
+
       if (next_vertex >= vertices.size()) break;
       graph.add_edge(vertex, vertices[next_vertex], 1);
     }
@@ -84,7 +85,7 @@ void construct_graph(graaf::undirected_graph<int, int>& graph,
                      int modify = 1) {
   int graph_path = 0;
   for (const auto& vertex : vertices) {
-    for (const auto path : construct_path[graph_path]) {
+    for (const auto& path : construct_path[graph_path]) {
       auto next_vertex = (vertex + path) * modify;
 
       if (next_vertex >= vertices.size()) break;
@@ -95,9 +96,10 @@ void construct_graph(graaf::undirected_graph<int, int>& graph,
 }
 }  // namespace
 
+template <class GRAPH>
 static void dfs_all_nodes_traversal(benchmark::State& state) {
   const auto number_of_edges{static_cast<size_t>(state.range(0))};
-  graaf::directed_graph<int, int> graph{};
+  GRAPH graph{};
 
   // We create enough vertices to construct the requested number of edges
   const auto number_of_vertices{number_of_edges + 1};
@@ -116,10 +118,11 @@ static void dfs_all_nodes_traversal(benchmark::State& state) {
   state.SetComplexityN(state.range(0));
 }
 
+template <class GRAPH>
 static void dfs_target_traversal(benchmark::State& state) {
   const auto number_of_edges{static_cast<size_t>(state.range(0))};
 
-  graaf::directed_graph<int, int> graph{};
+  GRAPH graph{};
 
   // We create enough vertices to construct the requested number of edges
   const auto number_of_vertices{number_of_edges + 1};
@@ -145,10 +148,11 @@ static void dfs_target_traversal(benchmark::State& state) {
   state.SetComplexityN(state.range(1));
 }
 
+template <class GRAPH>
 static void dfs_target_traversal_matrix(benchmark::State& state) {
   const auto number_of_edges{static_cast<size_t>(state.range(0))};
 
-  graaf::directed_graph<int, int> graph{};
+  GRAPH graph{};
 
   // We create enough vertices to construct the requested number of edges
   const auto number_of_vertices{number_of_edges + 1};
@@ -174,10 +178,11 @@ static void dfs_target_traversal_matrix(benchmark::State& state) {
   state.SetComplexityN(state.range(1));
 }
 
+template <class GRAPH>
 static void dfs_target_traversal_cones(benchmark::State& state) {
   const auto number_of_edges{static_cast<size_t>(state.range(0))};
 
-  graaf::directed_graph<int, int> graph{};
+  GRAPH graph{};
 
   // We create enough vertices to construct the requested number of edges
   const auto number_of_vertices{number_of_edges + 1};
@@ -203,10 +208,11 @@ static void dfs_target_traversal_cones(benchmark::State& state) {
   state.SetComplexityN(state.range(1));
 }
 
+template <class GRAPH>
 static void dfs_target_traversal_binary_tree(benchmark::State& state) {
   const auto number_of_edges{static_cast<size_t>(state.range(0))};
 
-  graaf::directed_graph<int, int> graph{};
+  GRAPH graph{};
 
   // We create enough vertices to construct the requested number of edges
   const auto number_of_vertices{number_of_edges + 1};
@@ -232,10 +238,11 @@ static void dfs_target_traversal_binary_tree(benchmark::State& state) {
   state.SetComplexityN(state.range(1));
 }
 
+template <class GRAPH>
 static void dfs_target_traversal_ternary_tree(benchmark::State& state) {
   const auto number_of_edges{static_cast<size_t>(state.range(0))};
 
-  graaf::directed_graph<int, int> graph{};
+  GRAPH graph{};
 
   // We create enough vertices to construct the requested number of edges
   const auto number_of_vertices{number_of_edges + 1};
@@ -261,27 +268,57 @@ static void dfs_target_traversal_ternary_tree(benchmark::State& state) {
   state.SetComplexityN(state.range(1));
 }
 
-BENCHMARK(dfs_all_nodes_traversal)
-    ->Range(100, 300)
+BENCHMARK_TEMPLATE(dfs_all_nodes_traversal, graaf::undirected_graph<int, int>)
+    ->Range(100, 10000)
     ->Unit(benchmark::kMillisecond)
     ->Complexity();
-BENCHMARK(dfs_target_traversal)
+BENCHMARK_TEMPLATE(dfs_all_nodes_traversal, graaf::directed_graph<int, int>)
+    ->Range(100, 10000)
+    ->Unit(benchmark::kMillisecond)
+    ->Complexity();
+BENCHMARK_TEMPLATE(dfs_target_traversal, graaf::undirected_graph<int, int>)
     ->Ranges({{100, 10000}, {2, 8192}})
     ->Unit(benchmark::kMillisecond)
     ->Complexity();
-BENCHMARK(dfs_target_traversal_matrix)
+BENCHMARK_TEMPLATE(dfs_target_traversal, graaf::directed_graph<int, int>)
     ->Ranges({{100, 10000}, {2, 8192}})
     ->Unit(benchmark::kMillisecond)
     ->Complexity();
-BENCHMARK(dfs_target_traversal_cones)
+BENCHMARK_TEMPLATE(dfs_target_traversal_matrix,
+                   graaf::undirected_graph<int, int>)
+    ->Ranges({{100, 8192}, {2, 8192}}) /* deep recursion*/
+    ->Unit(benchmark::kMillisecond)
+    ->Complexity();
+BENCHMARK_TEMPLATE(dfs_target_traversal_matrix, graaf::directed_graph<int, int>)
     ->Ranges({{100, 10000}, {2, 8192}})
     ->Unit(benchmark::kMillisecond)
     ->Complexity();
-BENCHMARK(dfs_target_traversal_binary_tree)
+BENCHMARK_TEMPLATE(dfs_target_traversal_cones,
+                   graaf::undirected_graph<int, int>)
     ->Ranges({{100, 10000}, {2, 8192}})
     ->Unit(benchmark::kMillisecond)
     ->Complexity();
-BENCHMARK(dfs_target_traversal_ternary_tree)
+BENCHMARK_TEMPLATE(dfs_target_traversal_cones, graaf::directed_graph<int, int>)
+    ->Ranges({{100, 10000}, {2, 8192}})
+    ->Unit(benchmark::kMillisecond)
+    ->Complexity();
+BENCHMARK_TEMPLATE(dfs_target_traversal_binary_tree,
+                   graaf::undirected_graph<int, int>)
+    ->Ranges({{100, 10000}, {2, 8192}})
+    ->Unit(benchmark::kMillisecond)
+    ->Complexity();
+BENCHMARK_TEMPLATE(dfs_target_traversal_binary_tree,
+                   graaf::directed_graph<int, int>)
+    ->Ranges({{100, 10000}, {2, 8192}})
+    ->Unit(benchmark::kMillisecond)
+    ->Complexity();
+BENCHMARK_TEMPLATE(dfs_target_traversal_ternary_tree,
+                   graaf::undirected_graph<int, int>)
+    ->Ranges({{100, 10000}, {3, 8192}})
+    ->Unit(benchmark::kMillisecond)
+    ->Complexity();
+BENCHMARK_TEMPLATE(dfs_target_traversal_ternary_tree,
+                   graaf::directed_graph<int, int>)
     ->Ranges({{100, 10000}, {3, 8192}})
     ->Unit(benchmark::kMillisecond)
     ->Complexity();
