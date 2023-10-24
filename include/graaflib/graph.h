@@ -67,7 +67,7 @@ class graph {
   /**
    * @brief Get the internal edges
    *
-   * One thing to not here is that edges are internally stored as shared
+   * One thing to note here is that edges are internally stored as shared
    * pointers to either the user provided edge type or to
    * primitive_numeric_adapter.
    *
