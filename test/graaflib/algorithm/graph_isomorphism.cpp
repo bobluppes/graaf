@@ -976,11 +976,23 @@ TEST_F(GraphIsomorphismTests, testToSeeIfIsomorphicDisconnectedGraphsAreLabeledA
 	vertex_id_t five_2 = G2.add_vertex(5.1);
 	
 	G1.add_edge(one, two, 5);
-	G2.add_edge(three_2, five_2, 2000);
+	G2.add_edge(three_2, five_2, 5);
+	std::cout << "G1" << std::endl;
+	std::cout << "one " << one << " the value: " << G1.get_vertex(one) << std::endl; 
+	std::cout << "two " << two << " the value: " << G1.get_vertex(two) << std::endl; 
+	std::cout << std::endl;
+	std::cout << "G2" << std::endl;
+	std::cout << "three_2 " << three_2 << " the value: " << G2.get_vertex(three_2) << std::endl; 
+	std::cout << "five_2 " << five_2 << " the value: " << G2.get_vertex(five_2) << std::endl; 
 	
-	ASSERT_NE(check_isomorphism(G1, G2), std::nullopt);
 	
 
+	std::optional<Mapping> _optional = check_isomorphism(G1, G2);
+	ASSERT_NE(_optional, std::nullopt);
+	// FOR DEBUGGING
+	for(const auto & key_val: _optional.value()){
+		std::cout << G1.get_vertex(key_val.first) <<  " : " << G2.get_vertex(key_val.second) << std::endl;
+	}
 }
 TEST_F(GraphIsomorphismTests, isIsomorphic){
 	graph<int, int, graph_type::DIRECTED> G1;

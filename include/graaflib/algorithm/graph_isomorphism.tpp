@@ -21,22 +21,26 @@ check_isomorphism(
 	if(valid_mapping_found){
 		std::unordered_map<vertex_id_t, vertex_id_t> mapping;
 		std::cout << "lhs core" << std::endl;
+		int i = 0;
 		for(const auto & item : state -> lhs_core){
-			std::cout << item << std::endl;
+			std::cout << i << ": " << item << std::endl;
+			i++;
 		}
 		std::cout << "rhs core" << std::endl;
+		i = 0;
 		for(const auto & item : state -> rhs_core){
-			std::cout << item << std::endl;
+			std::cout << i << ": " << item << std::endl;
+			i++;
 		}
 		
 		std::cout << "lhs_core_len " << state -> lhs_core_len << std::endl;
 		std::cout << "rhs_core_len " << state -> rhs_core_len << std::endl;
 		
 		for(int i = 0; i < state -> lhs_core.size(); i++){
-			std::cout<<"faill" << std::endl;
 			//mapping[state -> lhs_reverse_node_order.at(i)] = state -> rhs_reverse_node_order.at(state -> lhs_core[i]);
-			mapping[state -> lhs_reverse_node_order.at(state -> rhs_core[i])] = state -> rhs_reverse_node_order.at(state ->
-			lhs_core[i]);
+			//mapping[state -> lhs_reverse_node_order.at(state -> rhs_core[i])] = state -> rhs_reverse_node_order.at(state ->
+			//lhs_core[i]);
+			mapping[state -> lhs_reverse_node_order.at(i)] = state -> rhs_reverse_node_order.at(state -> lhs_core[i]);
 		}
 		delete state;
 		std::optional<Mapping> _optional = mapping;
@@ -350,9 +354,16 @@ Candidate_pairs generate_candidate_pairs(
 			// in tout and core then continue, because if it is in core then we consider it not in tout
 			if(state.tout_1[i] == -1)
 				continue;
-
+			
+			/*
 			if(state.tout_1[i] != -1 && state.lhs_core[i] != -1){
 			
+				std::cout << "continuting" << std::endl;
+				std::cout << state.tout_1[i] << " " << state.lhs_core[i] << std::endl;
+				continue;
+			}
+			*/
+			if(state.lhs_core[i] != -1){
 				std::cout << "continuting" << std::endl;
 				std::cout << state.tout_1[i] << " " << state.lhs_core[i] << std::endl;
 				continue;
@@ -362,8 +373,12 @@ Candidate_pairs generate_candidate_pairs(
 			for(int j = 0; j < state.tout_2.size(); j++){
 				if(state.tout_2[j] == -1)
 					continue;
+				/*
 				if(state.tout_2[j] != -1 && state.rhs_core[j] != -1)
 					continue;			
+				*/
+				if(state.rhs_core[j] != -1)
+					continue;
 				pairs.push_back(std::make_pair(i,j));
 				
 			}	
@@ -764,5 +779,15 @@ bool check_for_possibility_of_isomorphism(
 			return false;
 	return true;		
 }	
+
+// FOR DEBUGGING PURPOSES
+void printMapping(
+	const Mapping & mapping
+){
+	std::cout << "format id (value of id) -> id (value of id)" << std::endl;
+	for(const auto & key_val : mapping){
+		std::cout << key_val.first << " : " << key_val.second << std::endl;
+	}
+}
 } // namespace graaf :: algorithm
 
