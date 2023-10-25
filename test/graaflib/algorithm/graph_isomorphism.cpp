@@ -953,13 +953,11 @@ TEST_F(GraphIsomorphismTests, randomlyGeneratingDirectedIsomorphicGraphsAndRunni
 			
 	
 	}
-	*/
-	
-	
+	*/	
 	
 }
 
-TEST_F(GraphIsomorphismTests, testToSeeIfIsomorphicDisconnectedGraphsAreLabeledAsIsomorphic){
+TEST_F(GraphIsomorphismTests, testToSeeIfIsomorphicDisconnectedDirectedGraphsAreLabeledAsIsomorphic){
 	graph<float, int, graph_type::DIRECTED> G1;
 	graph<float, int, graph_type::DIRECTED> G2;
 	
@@ -977,24 +975,45 @@ TEST_F(GraphIsomorphismTests, testToSeeIfIsomorphicDisconnectedGraphsAreLabeledA
 	
 	G1.add_edge(one, two, 5);
 	G2.add_edge(three_2, five_2, 5);
-	std::cout << "G1" << std::endl;
-	std::cout << "one " << one << " the value: " << G1.get_vertex(one) << std::endl; 
-	std::cout << "two " << two << " the value: " << G1.get_vertex(two) << std::endl; 
-	std::cout << std::endl;
-	std::cout << "G2" << std::endl;
-	std::cout << "three_2 " << three_2 << " the value: " << G2.get_vertex(three_2) << std::endl; 
-	std::cout << "five_2 " << five_2 << " the value: " << G2.get_vertex(five_2) << std::endl; 
 	
-	
-
 	std::optional<Mapping> _optional = check_isomorphism(G1, G2);
 	ASSERT_NE(_optional, std::nullopt);
-	// FOR DEBUGGING
-	for(const auto & key_val: _optional.value()){
-		std::cout << G1.get_vertex(key_val.first) <<  " : " << G2.get_vertex(key_val.second) << std::endl;
-	}
+	
+	G2.remove_edge(three_2, five_2);
+	ASSERT_EQ(check_isomorphism(G1, G2), std::nullopt);
+	G1.remove_edge(one, two);
+	ASSERT_NE(check_isomorphism(G1, G2), std::nullopt);
 }
-TEST_F(GraphIsomorphismTests, isIsomorphic){
+
+TEST_F(GraphIsomorphismTests, testToSeeIfIsomorphicDisconnectedUndirectedGraphsAreLabeledAsIsomorphic){
+	graph<float, int, graph_type::DIRECTED> G1;
+	graph<float, int, graph_type::DIRECTED> G2;
+	
+	vertex_id_t one = G1.add_vertex(1.1);
+	vertex_id_t two = G1.add_vertex(2.1);	
+	vertex_id_t three = G1.add_vertex(3.1);
+	vertex_id_t four = G1.add_vertex(4.1);
+	vertex_id_t five = G1.add_vertex(5.1);
+	
+	vertex_id_t one_2 = G2.add_vertex(1.1);
+	vertex_id_t two_2 = G2.add_vertex(2.1);	
+	vertex_id_t three_2 = G2.add_vertex(3.1);
+	vertex_id_t four_2 = G2.add_vertex(4.1);
+	vertex_id_t five_2 = G2.add_vertex(5.1);
+	
+	G1.add_edge(one, two, 5);
+	G2.add_edge(three_2, five_2, 5);
+	
+	std::optional<Mapping> _optional = check_isomorphism(G1, G2);
+	ASSERT_NE(_optional, std::nullopt);
+	
+	G2.remove_edge(three_2, five_2);
+	ASSERT_EQ(check_isomorphism(G1, G2), std::nullopt);
+	G1.remove_edge(one, two);
+	ASSERT_NE(check_isomorphism(G1, G2), std::nullopt);
+}
+
+TEST_F(GraphIsomorphismTests, testIfGraphisIsomorphic){
 	graph<int, int, graph_type::DIRECTED> G1;
 	graph<int, int, graph_type::DIRECTED> G2;
 	
@@ -1029,7 +1048,7 @@ TEST_F(GraphIsomorphismTests, isIsomorphic){
 	}
 }
 
-TEST_F(GraphIsomorphismTests, isIsomorphicGraphThree){
+TEST_F(GraphIsomorphismTests, testIfUndirectedGraphIsIsomorphic){
 	graph<std::string, int, graph_type::UNDIRECTED> G1;
 	graph<std::string, int, graph_type::UNDIRECTED> G2;
 	
@@ -1064,7 +1083,7 @@ TEST_F(GraphIsomorphismTests, isIsomorphicGraphThree){
 	}
 }
 
-TEST_F(GraphIsomorphismTests, isIsomorphicGraphFour){
+TEST_F(GraphIsomorphismTests, testIfGraphIsIsomorphic2){
 	graph<int, int, graph_type::DIRECTED> G1;
 	graph<int, int, graph_type::DIRECTED> G2;
 	vertex_id_t one = G1.add_vertex(1);
@@ -1102,10 +1121,28 @@ TEST_F(GraphIsomorphismTests, isIsomorphicGraphFour){
 	std::optional<std::unordered_map<vertex_id_t, vertex_id_t>> _optional = check_isomorphism(G1, G2);
 	ASSERT_NE(_optional, std::nullopt);
 	
+	/*
 	for(const auto & pair : _optional.value()){
 		std::cout << "id: " << pair.first << " value: " << G1.get_vertex(pair.first)
 		<< "-> id: " << pair.second << " value: " << G2.get_vertex(pair.second) << std::endl;
 	}
+	*/
 }
+ 
+TEST_F(GraphIsomorphismTests, testIfVF2CanIdentityIfGraphsAreNotIsomorphic){
+	graph<int, int, graph_type::DIRECTED> G1;
+	graph<int, int, graph_type::DIRECTED> G2;
+	vertex_id_t one = G1.add_vertex(1);
+	vertex_id_t two = G1.add_vertex(2);
+	vertex_id_t three = G1.add_vertex(3);
+	vertex_id_t four = G1.add_vertex(4);
+	vertex_id_t five = G1.add_vertex(5);
+	vertex_id_t six = G1.add_vertex(6);
+	vertex_id_t seven = G1.add_vertex(7);
+
+
+
+}
+
 
 } // namespace graaf::algorithm
