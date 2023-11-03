@@ -7,13 +7,51 @@
 #include <random>
 #include <string>
 
-namespace graaf :: algorithm {
+namespace graaf::algorithm {
 
-class GraphIsomorphismTests : public testing::Test{
+class GraphIsomorphismTests: public testing::Test{
 };
 
 class GraphIsomorphismTestsVf2TerminalSets: public testing::Test{
 };
+
+class SetIntersectionTests: public testing::Test{
+};
+
+TEST_F(SetIntersectionTests, testSetIntersectionWithNonemptySets){
+	std::unordered_set<vertex_id_t> setA, setB, setC;
+	setA.insert(1);
+	setA.insert(2);
+	setA.insert(3);
+	
+	setB.insert(2);
+	setB.insert(3);
+	setB.insert(5);
+	
+	setC = set_intersection(setA, setB);
+	
+	ASSERT_NE(setC.count(2), 0);
+	ASSERT_NE(setC.count(3), 0);
+	ASSERT_EQ(setC.count(5), 0);
+	ASSERT_EQ(setC.count(1), 0);
+}
+
+TEST_F(SetIntersectionTests, testSetIntersectionWithOneEmptySets){
+	std::unordered_set<vertex_id_t> setA, setB, setC;
+	setA.insert(1);
+	setA.insert(2);
+	setA.insert(3);
+
+	setC = set_intersection(setA, setB);
+	
+	ASSERT_EQ(setC.size(), 0);
+}
+
+TEST_F(SetIntersectionTests, testSetIntersectionWithTwoEmptySets){
+	std::unordered_set<vertex_id_t> setA, setB, setC;	
+	setC = set_intersection(setA, setB);
+	ASSERT_EQ(setC.size(), 0);
+}
 	
 TEST_F(GraphIsomorphismTestsVf2TerminalSets, testUpdatingAndRestoringTerminalSetsAndMappingsForTout){
 	graph<int, int, graph_type::DIRECTED> G1;
@@ -938,25 +976,6 @@ TEST_F(GraphIsomorphismTests, testRnewWithUndirectedGraph){
 }
 
 
-TEST_F(GraphIsomorphismTests, randomlyGeneratingDirectedIsomorphicGraphsAndRunningItThroughVF2){
-	graph<int,int, graph_type::DIRECTED> G1;
-	graph<int,int, graph_type::DIRECTED> G2;
-	
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> distribution_1(1, 100);
-	std::uniform_int_distribution<int> distribution_2(1, 8);
-	
-	/*
-	size_t levels = distribution_2(gen);
-	for(size_t i; i < levels; i++){
-			
-	
-	}
-	*/	
-	
-}
-
 TEST_F(GraphIsomorphismTests, testToSeeIfIsomorphicDisconnectedDirectedGraphsAreLabeledAsIsomorphic){
 	graph<float, int, graph_type::DIRECTED> G1;
 	graph<float, int, graph_type::DIRECTED> G2;
@@ -1121,12 +1140,6 @@ TEST_F(GraphIsomorphismTests, testIfGraphIsIsomorphic2){
 	std::optional<std::unordered_map<vertex_id_t, vertex_id_t>> _optional = check_isomorphism(G1, G2);
 	ASSERT_NE(_optional, std::nullopt);
 	
-	/*
-	for(const auto & pair : _optional.value()){
-		std::cout << "id: " << pair.first << " value: " << G1.get_vertex(pair.first)
-		<< "-> id: " << pair.second << " value: " << G2.get_vertex(pair.second) << std::endl;
-	}
-	*/
 }
  
 TEST_F(GraphIsomorphismTests, testIfVF2CanIdentityIfGraphsAreNotIsomorphic){
@@ -1135,13 +1148,20 @@ TEST_F(GraphIsomorphismTests, testIfVF2CanIdentityIfGraphsAreNotIsomorphic){
 	vertex_id_t one = G1.add_vertex(1);
 	vertex_id_t two = G1.add_vertex(2);
 	vertex_id_t three = G1.add_vertex(3);
-	vertex_id_t four = G1.add_vertex(4);
-	vertex_id_t five = G1.add_vertex(5);
-	vertex_id_t six = G1.add_vertex(6);
-	vertex_id_t seven = G1.add_vertex(7);
-
-
-
+	
+	vertex_id_t one_2 = G2.add_vertex(1);
+	vertex_id_t two_2 = G2.add_vertex(2);
+	vertex_id_t three_2 = G2.add_vertex(3);
+	
+	G1.add_edge(one, two, -1);
+	G1.add_edge(two, three, -1);
+	G1.add_edge(three, one, -1);
+	
+	G2.add_edge(one_2, two_2, -1);
+	G2.add_edge(two_2, three_2, -1);
+	G2.add_edge(three_2, two_2, -1);
+	
+	ASSERT_EQ(check_isomorphism(G1, G2), std::nullopt);
 }
 
 
