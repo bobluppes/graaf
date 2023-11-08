@@ -22,7 +22,7 @@
 
 # About
 The Graaf library is a general-purpose header-only graph library implemented in C++. It is designed as a lightweight alternative to the <a href="https://www.boost.org/doc/libs/1_82_0/libs/graph/doc/index.html">Boost Graph Library (BGL)</a>
-and it is built for simplicity and extensibility. The purpose of the project is to simplify graph-related tasks. With Graaf, you can easily create, manipulate, and analyze graphs making them suitable for a wide range of applications.
+and it is built for simplicity and extensibility. The purpose of the project is to simplify graph-related tasks. With Graaf, you can easily create, manipulate, and analyze graphs making it suitable for a wide range of applications.
 
 Graaf: a lightweight, header-only C++20 graph library
 
@@ -50,7 +50,7 @@ installation methods.
 
 ## Header-only library
 
-The Graaf library can be included as a header-only library. All it requires is a compiler with **C++ 20 support**.
+The Graaf library can be included as a header-only library. All that is required is a compiler with **C++ 20 support**.
 
 Download the `header-only` library from our [release page](https://github.com/bobluppes/graaf/releases) and add
 the `include/graaflib` directory to your include path. You can now use Graaf in your source files:
@@ -104,17 +104,17 @@ To get started, take a look at our [Quickstart guide](https://bobluppes.github.i
 The Graaf library includes the following implemented algorithms:
 
 1. [**Cycle Detection Algorithms**](https://bobluppes.github.io/graaf/docs/category/cycle-detection-algorithms):
-   - DFS-Based Cycle Detection
+   - DFS Based Cycle Detection
 2. [**Graph Coloring Algorithms**](https://bobluppes.github.io/graaf/docs/category/graph-coloring-algorithms):
    - Greedy Graph Coloring
-   - Welsh-Powell Algorithm
+   - Welsh Powell Algorithm
 3. [**Minimum Spanning Tree (MST) Algorithms**](https://bobluppes.github.io/graaf/docs/category/minimum-spanning-tree)
    - Kruskal's Algorithm
    - Prim's Algorithm
 4. [**Shortest Path Algorithms**](https://bobluppes.github.io/graaf/docs/category/shortest-path-algorithms):
    - A\* search
    - Bellman-Ford Shortest Path
-   - BFS-Based Shortest Path
+   - BFS Based Shortest Path
    - Dijkstra Shortest Path
    - Floyd-Warshall Algorithm
 5. [**Strongly Connected Components Algorithms**](https://bobluppes.github.io/graaf/docs/category/strongly-connected-component-algorithms):
@@ -122,8 +122,8 @@ The Graaf library includes the following implemented algorithms:
    - Kosaraju's Strongly Connected Components
 6. [**Topological Sorting Algorithms**](https://bobluppes.github.io/graaf/docs/algorithms/topological-sort):
 7. [**Traversal Algorithms**](https://bobluppes.github.io/graaf/docs/category/traversal-algorithms):
-   - Breadth-First Search (BFS)
-   - Depth-First Search (DFS)
+   - Breadth First Search (BFS)
+   - Depth First Search (DFS)
 8. [**Clique Detection**](https://bobluppes.github.io/graaf/docs/category/clique-detection)
     - Bron-Kerbosch
 
