@@ -6,7 +6,7 @@
  * https://ieeexplore.ieee.org/document/1323804
  */
 
-namespace graaf::algorithm {
+namespace graaf::algorithm::vf2 {
 using vertex_mapping =
     std::unordered_map<vertex_id_t,
                        vertex_id_t>;  // used to map real vertex ids to values

@@ -9,7 +9,7 @@
 #include <unordered_set>
 #include <vector>
 
-namespace graaf::algorithm {
+namespace graaf::algorithm::vf2 {
 
 /**
  * @brief Checks if two graphs are isomorphic.
