@@ -215,12 +215,12 @@ std::vector<std::pair<vertex_id_t, vertex_id_t>> vf2_target_sets:: generate_pote
 
   // generate candidate pairs based on tin sets
   if (!((tin_1_length == 0 || tin_2_length == 0))) {
-    for (int i = 0; i < tout_1.size(); i++) {
+    for (int i = 0; i < tin_1.size(); i++) {
       // if vertex in tin but also in the corresponding core_set then we
       // consider the vertex not apart of the tin set
       if (tin_1[i] == -1) continue;
       if (tin_1[i] != -1 && core_1[i] != -1) continue;
-      for (int j = 0; j < tout_2.size(); j++) {
+      for (int j = 0; j < tin_2.size(); j++) {
         if (tin_2[j] == -1) continue;
         if (tin_2[j] != -1 && core_2[j] != -1) continue;
         pairs.push_back(std::make_pair(i, j));
@@ -239,6 +239,14 @@ std::vector<std::pair<vertex_id_t, vertex_id_t>> vf2_target_sets:: generate_pote
   }
 	return std::move(pairs);
 	
+}
+template <typename V, typename E, graph_type T>
+vertex_mapping vf2_target_sets::generate_final_mapping(const vf2_vertex_id_mapper<V, E, T> & mapper){
+	vertex_mapping final_mapping;
+	for(int i = 0; i < core_1.size(); i++){
+		final_mapping[mapper.graph1_reverse_mapping.at(i)] = mapper.graph2_reverse_mapping.at(core_1[i]);
+	}
+	return std::move(final_mapping);
 }
 
 /* DEFINITIONS DONE */
@@ -264,7 +272,9 @@ bool vf2_isomorphism_feasibility_checker<V, E, T>::checkFeasibility(
 	bool result_3 = lookahead_tin_rule(state, pred_and_succ_vertex1, pred_and_succ_vertex2);
 	bool result_4 = lookahead_tout_rule(state, pred_and_succ_vertex1, pred_and_succ_vertex2);
 	bool result_5 = lookahead_new_rule(state, pred_and_succ_vertex1, pred_and_succ_vertex2);
-	 
+	
+	//std::cout << result_1 << " " << result_2 << " " << result_3 << " " << result_4 << " " << result_5 << " " << std::endl;
+	
 	return result_1 && result_2 && result_3 && result_4 && result_5;
 }
 
@@ -450,28 +460,42 @@ bool vf2_isomorphism_feasibility_checker<V, E, T>::lookahead_new_rule(
 /* DEFINITIONS DONE */
 template <typename V, typename E, graph_type T>
 bool check_isomorphism(const graph<V, E, T>& graph1, const graph<V, E, T>& graph2, const std::unique_ptr<vf2_information<V,E,T>> &state, const vf2_isomorphism_feasibility_checker<V,E,T>& checker, size_t depth){
+
+	//std::cout << "ON DEPTH ["<< depth << "] " << "length of current mapping " << state -> sets -> get_core_1_length() << std::endl;
 	if(state -> sets -> get_core_1_length() == graph1.vertex_count()) return true;
-	
+		
 	std::vector<std::pair<vertex_id_t, vertex_id_t>> candidate_pairs = state -> sets -> generate_potential_vertex_pairings();
+	
+	// debugging
+	//std::cout << "ON DEPTH ["<< depth << "] " << "enumerating all candidate pairs" << std::endl;
+	/*
 	for(const auto & pair : candidate_pairs){
+		std::cout << pair.first << " : " << pair.second << std::endl;  
+	}
+	*/
+	
+	for(const auto & pair : candidate_pairs){
+		//std::cout << "trying pair " << pair.first<<"," <<pair.second << std::endl;
 		bool possible_valid_pair = checker.checkFeasibility(state, pair);
-		state -> sets -> update_mappings(pair.first, pair.second, depth);
-		
-		predecessors_and_successors_of_vertex graph1_vertex;
-		predecessors_and_successors_of_vertex graph2_vertex;
-		
-		graph1_vertex.predecessors = state -> mapper -> get_predecessors(pair.first, WhichGraph::GRAPH_1);
-		graph1_vertex.successors = state -> mapper -> get_successors(pair.first, WhichGraph::GRAPH_1);
-		graph2_vertex.predecessors = state -> mapper -> get_predecessors(pair.second, WhichGraph::GRAPH_2);
-		graph2_vertex.successors = state -> mapper -> get_successors(pair.second, WhichGraph::GRAPH_2);
-		
-		state -> sets -> update_target_sets(graph1_vertex, graph2_vertex, depth);
-		
-		if(check_isomorphism(graph1, graph2, state, checker, depth + 1) == true)
-			return true;
+		if(possible_valid_pair){
+			state -> sets -> update_mappings(pair.first, pair.second, depth);
 			
-		state -> sets -> restore_target_sets(depth);
-		state -> sets -> restore_mappings(pair.first, pair.second, depth);
+			predecessors_and_successors_of_vertex graph1_vertex;
+			predecessors_and_successors_of_vertex graph2_vertex;
+			
+			graph1_vertex.predecessors = state -> mapper -> get_predecessors(pair.first, WhichGraph::GRAPH_1);
+			graph1_vertex.successors = state -> mapper -> get_successors(pair.first, WhichGraph::GRAPH_1);
+			graph2_vertex.predecessors = state -> mapper -> get_predecessors(pair.second, WhichGraph::GRAPH_2);
+			graph2_vertex.successors = state -> mapper -> get_successors(pair.second, WhichGraph::GRAPH_2);
+			
+			state -> sets -> update_target_sets(graph1_vertex, graph2_vertex, depth);
+			
+			if(check_isomorphism(graph1, graph2, state, checker, depth + 1) == true)
+				return true;
+				
+			state -> sets -> restore_target_sets(depth);
+			state -> sets -> restore_mappings(pair.first, pair.second, depth);
+		}
 	}
 	
 	return false;

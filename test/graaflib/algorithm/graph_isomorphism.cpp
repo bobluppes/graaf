@@ -9,6 +9,15 @@
 #include <string>
 #include <vector>
 
+// delete later
+#include <iostream>
+#include <fstream>
+
+class NullStreamBuffer : public std::streambuf {
+public:
+    int overflow(int c) { return traits_type::not_eof(c); }
+};
+
 namespace graaf::algorithm::vf2 {
 
 class GraphIsomorphismTests : public testing::Test {};
@@ -18,22 +27,99 @@ TEST_F(GraphIsomorphismTests, testVf2WithSelfLoop){
 	vertex_id_t zero = G1.add_vertex(0);
 	vertex_id_t two = G1.add_vertex(1);
 	vertex_id_t three = G1.add_vertex(2);
-	G1.add_edge(zero, zero, 1);
-	G1.add_edge(zero, two, 1);
+
 	G1.add_edge(zero, three, 1);
+
+	std::cout << zero << " " << two << " " << three << std::endl << std::endl;
 	
 	graph<int, int, graph_type::DIRECTED> G2;
 	vertex_id_t one = G2.add_vertex(0);
 	vertex_id_t two_2 = G2.add_vertex(1);
 	vertex_id_t three_2 = G2.add_vertex(2);
-	G2.add_edge(one, one, 1);
+	
 	G2.add_edge(one, two_2, 1);
 	G2.add_edge(one, three_2, 1);
-	
-	ASSERT_NE(std::nullopt, check_isomorphism(G1, G2));
+	std::cout << one << " " << two_2 << " " << three_2 << std::endl << std::endl;
+		
+	ASSERT_EQ(std::nullopt, check_isomorphism(G1, G2));
 
-	
 }
+
+TEST_F(GraphIsomorphismTests, testIfGraphIsIsomorphic4) {
+	std::streambuf* oldCoutBuffer = std::cout.rdbuf();
+	NullStreamBuffer nullStreamBuffer;
+	std::cout.rdbuf(&nullStreamBuffer);
+
+  // GIVEN
+  graph<int, int, graph_type::UNDIRECTED> G1;
+  graph<int, int, graph_type::UNDIRECTED> G2;
+
+  vertex_id_t one = G1.add_vertex(1);
+  vertex_id_t two = G1.add_vertex(2);
+  vertex_id_t three = G1.add_vertex(3);
+  vertex_id_t four = G1.add_vertex(4);
+  vertex_id_t five = G1.add_vertex(5);
+  vertex_id_t six = G1.add_vertex(6);
+  vertex_id_t seven = G1.add_vertex(7);
+  vertex_id_t eight = G1.add_vertex(8);
+  vertex_id_t nine = G1.add_vertex(9);
+  vertex_id_t ten = G1.add_vertex(10);
+
+  G1.add_edge(one, two, -1);
+  G1.add_edge(one, five, -1);
+  G1.add_edge(one, three, -1);
+  G1.add_edge(two, four, -1);
+  G1.add_edge(two, six, -1);
+  G1.add_edge(three, nine, -1);
+  G1.add_edge(three, eight, -1);
+  G1.add_edge(eight, ten, -1);
+  G1.add_edge(eight, four, -1);
+  G1.add_edge(ten, five, -1);
+  G1.add_edge(six, nine, -1);
+  G1.add_edge(six, ten, -1);
+  G1.add_edge(seven, nine, -1);
+  G1.add_edge(four, seven, -1);
+  G1.add_edge(five, seven, -1);
+
+  vertex_id_t one_2 = G2.add_vertex(1);
+  vertex_id_t two_2 = G2.add_vertex(2);
+  vertex_id_t three_2 = G2.add_vertex(3);
+  vertex_id_t four_2 = G2.add_vertex(4);
+  vertex_id_t five_2 = G2.add_vertex(5);
+  vertex_id_t six_2 = G2.add_vertex(6);
+  vertex_id_t seven_2 = G2.add_vertex(7);
+  vertex_id_t eight_2 = G2.add_vertex(8);
+  vertex_id_t nine_2 = G2.add_vertex(9);
+  vertex_id_t ten_2 = G2.add_vertex(10);
+
+  G2.add_edge(one_2, two_2, -1);
+  G2.add_edge(two_2, five_2, -1);
+  G2.add_edge(five_2, four_2, -1);
+  G2.add_edge(four_2, three_2, -1);
+  G2.add_edge(three_2, one_2, -1);
+
+  G2.add_edge(one_2, nine_2, -1);
+  G2.add_edge(three_2, eight_2, -1);
+  G2.add_edge(four_2, seven_2, -1);
+  G2.add_edge(five_2, six_2, -1);
+  G2.add_edge(two_2, ten_2, -1);
+
+  G2.add_edge(ten_2, eight_2, -1);
+  G2.add_edge(ten_2, seven_2, -1);
+  G2.add_edge(six_2, nine_2, -1);
+  G2.add_edge(six_2, eight_2, -1);
+  G2.add_edge(seven_2, nine_2, -1);
+
+  // THEN
+  ASSERT_NE(std::nullopt, check_isomorphism(G1, G2));
+  // WHEN
+  G2.remove_edge(seven_2, nine_2);
+  G2.add_edge(seven_2, eight_2, -1);
+  // THEN
+  ASSERT_EQ(std::nullopt, check_isomorphism(G1, G2));
+  std::cout.rdbuf(oldCoutBuffer);
+}
+
 
 /*
 class GraphIsomorphismTestsVf2TerminalSets : public testing::Test {};

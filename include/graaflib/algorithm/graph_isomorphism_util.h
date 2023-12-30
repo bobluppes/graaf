@@ -9,13 +9,6 @@
 // Delete later
 #include <iostream>
 
-
-/*Left off here: 
-- work on feasability rules class, then the new vf2_state.
-- vf2_state will contain info on vf2_target_sets and vf2_mapping, these can generate target, core, and pred and succ sets for feasibilty to use
-- additionally we need a candiate_pair function this will also take in vf2_state
-- for testing I will start by testing the isomorphism tests, then debug further
-*/
 /**
 HELPER CLASSES
 */
@@ -45,6 +38,13 @@ class vf2_vertex_id_mapper {
 			vf2_vertex_id_mapper(const graph<V, E, T>& _graph1, const graph<V, E, T>& _graph2);
 			std::unordered_set<vertex_id_t> get_predecessors(vertex_id_t, WhichGraph);
 			std::unordered_set<vertex_id_t> get_successors(vertex_id_t, WhichGraph);
+			friend class vf2_target_sets;
+			
+			// move to private later
+			vertex_mapping graph1_mapping;
+			vertex_mapping graph1_reverse_mapping;
+			vertex_mapping graph2_mapping;
+			vertex_mapping graph2_reverse_mapping;
 
 		private:
 			void create_mapping(vertex_mapping&, const graph<V, E, T>& graph);
@@ -53,10 +53,6 @@ class vf2_vertex_id_mapper {
 			const graph<V, E, T>* graph1;
 			const graph<V, E, T>* graph2; 
 			
-			vertex_mapping graph1_mapping;
-			vertex_mapping graph1_reverse_mapping;
-			vertex_mapping graph2_mapping;
-			vertex_mapping graph2_reverse_mapping;
 			
 };
 
@@ -80,14 +76,13 @@ class vf2_target_sets{
 		size_t get_tout_2_length();
 		size_t get_core_1_length();
 		size_t get_core_2_length();
-		size_t read_tin_1(size_t);
-		size_t read_tin_2(size_t);
-		size_t read_tout_1(size_t);
-		size_t read_tout_2(size_t);
+		
+		template <typename V, typename E, graph_type T>
+		vertex_mapping generate_final_mapping(const vf2_vertex_id_mapper<V,E,T>&);
 		
 		template <typename V, typename E, graph_type T>
 		friend class vf2_isomorphism_feasibility_checker;
-
+		
 	private:
 		void update_target_set(const std::unordered_set<vertex_id_t>&, target&, int, size_t&);
 		void restore_target_set(target&, int, size_t&);
