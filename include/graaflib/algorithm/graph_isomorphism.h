@@ -2,12 +2,17 @@
 
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
+#include <graaflib/algorithm/graph_isomorphism_util.h>
 
 #include <algorithm>
 #include <optional>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+
+// Delete later
+#include <iostream>
+
 
 namespace graaf::algorithm::vf2 {
 

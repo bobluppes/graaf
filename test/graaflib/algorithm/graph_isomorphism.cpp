@@ -18,7 +18,7 @@ TEST_F(GraphIsomorphismTests, testVf2WithSelfLoop){
 	vertex_id_t zero = G1.add_vertex(0);
 	vertex_id_t two = G1.add_vertex(1);
 	vertex_id_t three = G1.add_vertex(2);
-	//G1.add_edge(zero, zero, 1);
+	G1.add_edge(zero, zero, 1);
 	G1.add_edge(zero, two, 1);
 	G1.add_edge(zero, three, 1);
 	
@@ -30,8 +30,8 @@ TEST_F(GraphIsomorphismTests, testVf2WithSelfLoop){
 	G2.add_edge(one, two_2, 1);
 	G2.add_edge(one, three_2, 1);
 	
-//	ASSERT_NE(std::nullopt, check_isomorphism(G1, G2));
-	ASSERT_EQ(std::nullopt, check_isomorphism(G1, G2));
+	ASSERT_NE(std::nullopt, check_isomorphism(G1, G2));
+
 	
 }
 
