@@ -273,7 +273,7 @@ bool vf2_isomorphism_feasibility_checker<V, E, T>::checkFeasibility(
 	bool result_4 = lookahead_tout_rule(state, pred_and_succ_vertex1, pred_and_succ_vertex2);
 	bool result_5 = lookahead_new_rule(state, pred_and_succ_vertex1, pred_and_succ_vertex2);
 	
-	//std::cout << result_1 << " " << result_2 << " " << result_3 << " " << result_4 << " " << result_5 << " " << std::endl;
+	std::cout << result_1 << " " << result_2 << " " << result_3 << " " << result_4 << " " << result_5 << " " << std::endl;
 	
 	return result_1 && result_2 && result_3 && result_4 && result_5;
 }
@@ -461,21 +461,21 @@ bool vf2_isomorphism_feasibility_checker<V, E, T>::lookahead_new_rule(
 template <typename V, typename E, graph_type T>
 bool check_isomorphism(const graph<V, E, T>& graph1, const graph<V, E, T>& graph2, const std::unique_ptr<vf2_information<V,E,T>> &state, const vf2_isomorphism_feasibility_checker<V,E,T>& checker, size_t depth){
 
-	//std::cout << "ON DEPTH ["<< depth << "] " << "length of current mapping " << state -> sets -> get_core_1_length() << std::endl;
+	std::cout << "ON DEPTH ["<< depth << "] " << "length of current mapping " << state -> sets -> get_core_1_length() << std::endl;
 	if(state -> sets -> get_core_1_length() == graph1.vertex_count()) return true;
 		
 	std::vector<std::pair<vertex_id_t, vertex_id_t>> candidate_pairs = state -> sets -> generate_potential_vertex_pairings();
 	
 	// debugging
-	//std::cout << "ON DEPTH ["<< depth << "] " << "enumerating all candidate pairs" << std::endl;
-	/*
+	std::cout << "ON DEPTH ["<< depth << "] " << "enumerating all candidate pairs" << std::endl;
+	
 	for(const auto & pair : candidate_pairs){
 		std::cout << pair.first << " : " << pair.second << std::endl;  
 	}
-	*/
+	
 	
 	for(const auto & pair : candidate_pairs){
-		//std::cout << "trying pair " << pair.first<<"," <<pair.second << std::endl;
+		std::cout << "trying pair " << pair.first<<"," <<pair.second << std::endl;
 		bool possible_valid_pair = checker.checkFeasibility(state, pair);
 		if(possible_valid_pair){
 			state -> sets -> update_mappings(pair.first, pair.second, depth);
@@ -496,12 +496,10 @@ bool check_isomorphism(const graph<V, E, T>& graph1, const graph<V, E, T>& graph
 			state -> sets -> restore_target_sets(depth);
 			state -> sets -> restore_mappings(pair.first, pair.second, depth);
 		}
-	}
-	
+	}	
 	return false;
-	
-
 }
+
 
 }
 

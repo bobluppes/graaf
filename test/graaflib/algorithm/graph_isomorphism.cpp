@@ -46,9 +46,11 @@ TEST_F(GraphIsomorphismTests, testVf2WithSelfLoop){
 }
 
 TEST_F(GraphIsomorphismTests, testIfGraphIsIsomorphic4) {
+	/*
 	std::streambuf* oldCoutBuffer = std::cout.rdbuf();
 	NullStreamBuffer nullStreamBuffer;
 	std::cout.rdbuf(&nullStreamBuffer);
+	*/
 
   // GIVEN
   graph<int, int, graph_type::UNDIRECTED> G1;
@@ -117,7 +119,7 @@ TEST_F(GraphIsomorphismTests, testIfGraphIsIsomorphic4) {
   G2.add_edge(seven_2, eight_2, -1);
   // THEN
   ASSERT_EQ(std::nullopt, check_isomorphism(G1, G2));
-  std::cout.rdbuf(oldCoutBuffer);
+  //std::cout.rdbuf(oldCoutBuffer);
 }
 
 
