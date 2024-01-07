@@ -244,4 +244,74 @@ TYPED_TEST(GraphTest, ConstGetter) {
   ASSERT_NO_THROW(test_getters_on_const_graph(graph));
 }
 
+/**
+ * Class which records whether or not it was copy constructed. Can be used to
+ * check whether copy/move semantics are correctly implemented.
+ */
+class copy_recorder {
+ public:
+  // Default ctor
+  copy_recorder() : copied_{false} {}
+
+  // Copy ctor
+  copy_recorder(const copy_recorder &) : copied_{true} {}
+
+  // Move ctor
+  copy_recorder(copy_recorder &&) noexcept : copied_{false} {}
+
+  [[nodiscard]] bool is_copy_constructed() const { return copied_; }
+
+ private:
+  bool copied_{false};
+};
+
+class MoveTest : public testing::Test {
+ protected:
+  using graph_t = directed_graph<copy_recorder, copy_recorder>;
+  graph_t graph_{};
+  copy_recorder moveable_{};
+};
+
+TEST_F(MoveTest, VertexLvalueShouldNotBeMoved) {
+  // WHEN we pass in an l-value
+  const auto id{graph_.add_vertex(moveable_)};
+
+  // THEN the vertex in the graph should be copy constructed
+  EXPECT_TRUE(graph_.get_vertex(id).is_copy_constructed());
+}
+
+TEST_F(MoveTest, VertexRvalueShouldBeMoved) {
+  // WHEN we pass in an r-value
+  const auto id{graph_.add_vertex(std::move(moveable_))};
+
+  // THEN the vertex in the graph should be move constructed
+  EXPECT_FALSE(graph_.get_vertex(id).is_copy_constructed());
+}
+
+TEST_F(MoveTest, EdgeLvalueShouldNotBeMoved) {
+  // GIVEN
+  using vertex_t = graph_t::vertex_t;
+  const auto lhs_vertex{graph_.add_vertex(vertex_t{})};
+  const auto rhs_vertex{graph_.add_vertex(vertex_t{})};
+
+  // WHEN we pass in an l-value
+  graph_.add_edge(lhs_vertex, rhs_vertex, moveable_);
+
+  // THEN the edge in the graph should be copy constructed
+  EXPECT_TRUE(graph_.get_edge(lhs_vertex, rhs_vertex).is_copy_constructed());
+}
+
+TEST_F(MoveTest, EdgeRvalueShouldBeMoved) {
+  // GIVEN
+  using vertex_t = graph_t::vertex_t;
+  const auto lhs_vertex{graph_.add_vertex(vertex_t{})};
+  const auto rhs_vertex{graph_.add_vertex(vertex_t{})};
+
+  // WHEN we pass in an r-value
+  graph_.add_edge(lhs_vertex, rhs_vertex, std::move(moveable_));
+
+  // THEN the edge in the graph should be move constructed
+  EXPECT_FALSE(graph_.get_edge(lhs_vertex, rhs_vertex).is_copy_constructed());
+}
+
 }  // namespace graaf

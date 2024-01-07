@@ -133,7 +133,7 @@ vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex(auto&& vertex) {
     ++vertex_id_supplier_;
   }
   const auto vertex_id{vertex_id_supplier_};
-  vertices_.emplace(vertex_id, std::forward<VERTEX_T>(vertex));
+  vertices_.emplace(vertex_id, std::forward<decltype(vertex)>(vertex));
   return vertex_id;
 }
 
@@ -145,7 +145,7 @@ vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex(auto&& vertex,
                                 std::to_string(id) + "]"};
   }
 
-  vertices_.emplace(id, std::forward<VERTEX_T>(vertex));
+  vertices_.emplace(id, std::forward<decltype(vertex)>(vertex));
   return id;
 }
 
@@ -182,13 +182,13 @@ void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_edge(vertex_id_t vertex_id_lhs,
   if constexpr (GRAPH_TYPE_V == DIRECTED) {
     adjacency_list_[vertex_id_lhs].insert(vertex_id_rhs);
     edges_.emplace(std::make_pair(vertex_id_lhs, vertex_id_rhs),
-                   std::forward<EDGE_T>(edge));
+                   std::forward<decltype(edge)>(edge));
     return;
   } else if constexpr (GRAPH_TYPE_V == UNDIRECTED) {
     adjacency_list_[vertex_id_lhs].insert(vertex_id_rhs);
     adjacency_list_[vertex_id_rhs].insert(vertex_id_lhs);
     edges_.emplace(detail::make_sorted_pair(vertex_id_lhs, vertex_id_rhs),
-                   std::forward<EDGE_T>(edge));
+                   std::forward<decltype(edge)>(edge));
     return;
   }
 
