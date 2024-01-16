@@ -1,8 +1,7 @@
 {
-    "label": "Cycle Detection Algorithms",
-    "position": 3,
-    "link": {
-      "type": "generated-index"
-    }
+  "label": "Cycle Detection Algorithms",
+  "link": {
+    "type": "generated-index"
   }
+}
   

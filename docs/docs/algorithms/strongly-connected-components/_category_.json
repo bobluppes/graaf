@@ -1,8 +1,7 @@
 {
-    "label": "Strongly Connected Component Algorithms",
-    "position": 4,
-    "link": {
-      "type": "generated-index"
-    }
+  "label": "Strongly Connected Component Algorithms",
+  "link": {
+    "type": "generated-index"
   }
+}
   

@@ -1,7 +1,3 @@
----
-sidebar_position: 2
----
-
 # Shortest Path Example
 
 The shortest path algorithm implemented in `graaf::algorithm::get_shortest_path` can be used to compute the shortest

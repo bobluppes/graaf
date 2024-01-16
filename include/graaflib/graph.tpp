@@ -103,6 +103,21 @@ graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_edge(
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
+typename graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::edge_t&
+graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_edge(const edge_id_t& edge_id) {
+  const auto [vertex_id_lhs, vertex_id_rhs]{edge_id};
+  return get_edge(vertex_id_lhs, vertex_id_rhs);
+}
+
+template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
+const typename graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::edge_t&
+graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_edge(
+    const edge_id_t& edge_id) const {
+  const auto [vertex_id_lhs, vertex_id_rhs]{edge_id};
+  return get_edge(vertex_id_lhs, vertex_id_rhs);
+}
+
+template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
 typename graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::vertices_t
 graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_neighbors(
     vertex_id_t vertex_id) const {
@@ -114,10 +129,24 @@ graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_neighbors(
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
 vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex(auto&& vertex) {
-  // TODO: check overflow
-  const auto vertex_id{vertex_id_supplier_++};
-  vertices_.emplace(vertex_id, std::forward<VERTEX_T>(vertex));
+  while (has_vertex(vertex_id_supplier_)) {
+    ++vertex_id_supplier_;
+  }
+  const auto vertex_id{vertex_id_supplier_};
+  vertices_.emplace(vertex_id, std::forward<decltype(vertex)>(vertex));
   return vertex_id;
+}
+
+template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
+vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex(auto&& vertex,
+                                                              vertex_id_t id) {
+  if (has_vertex(id)) {
+    throw std::invalid_argument{"Vertex already exists at ID [" +
+                                std::to_string(id) + "]"};
+  }
+
+  vertices_.emplace(id, std::forward<decltype(vertex)>(vertex));
+  return id;
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
@@ -153,13 +182,13 @@ void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_edge(vertex_id_t vertex_id_lhs,
   if constexpr (GRAPH_TYPE_V == DIRECTED) {
     adjacency_list_[vertex_id_lhs].insert(vertex_id_rhs);
     edges_.emplace(std::make_pair(vertex_id_lhs, vertex_id_rhs),
-                   std::forward<EDGE_T>(edge));
+                   std::forward<decltype(edge)>(edge));
     return;
   } else if constexpr (GRAPH_TYPE_V == UNDIRECTED) {
     adjacency_list_[vertex_id_lhs].insert(vertex_id_rhs);
     adjacency_list_[vertex_id_rhs].insert(vertex_id_lhs);
     edges_.emplace(detail::make_sorted_pair(vertex_id_lhs, vertex_id_rhs),
-                   std::forward<EDGE_T>(edge));
+                   std::forward<decltype(edge)>(edge));
     return;
   }
 

@@ -1,8 +1,7 @@
 {
-    "label": "Traversal Algorithms",
-    "position": 1,
-    "link": {
-      "type": "generated-index"
-    }
+  "label": "Traversal Algorithms",
+  "link": {
+    "type": "generated-index"
   }
+}
   

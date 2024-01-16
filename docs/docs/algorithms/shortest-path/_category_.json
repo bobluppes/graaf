@@ -1,8 +1,7 @@
 {
-    "label": "Shortest Path Algorithms",
-    "position": 2,
-    "link": {
-      "type": "generated-index"
-    }
+  "label": "Shortest Path Algorithms",
+  "link": {
+    "type": "generated-index"
   }
+}
   
