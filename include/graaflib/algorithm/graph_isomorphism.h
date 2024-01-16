@@ -10,11 +10,10 @@
 #include <unordered_set>
 #include <vector>
 
-// Delete later
-#include <iostream>
 
 
-namespace graaf::algorithm::vf2 {
+
+namespace graaf::algorithm {
 
 /**
  * @brief Checks if two graphs are isomorphic.
