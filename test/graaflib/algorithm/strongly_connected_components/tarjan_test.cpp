@@ -2,7 +2,7 @@
 #include <graaflib/algorithm/strongly_connected_components/tarjan.h>
 #include <gtest/gtest.h>
 #include <utils/fixtures/fixtures.h>
-
+#include <algorithm>
 #include <vector>
 
 namespace graaf::algorithm {
