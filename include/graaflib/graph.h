@@ -55,7 +55,7 @@ class graph {
   [[nodiscard]] std::size_t edge_count() const noexcept;
 
   /**
-   * @brief Get the intrnal vertices
+   * @brief Get the internal vertices
    *
    * @return const vertex_id_to_vertex_t& Map from vertex id to the user
    * provided vertex.
@@ -67,7 +67,7 @@ class graph {
   /**
    * @brief Get the internal edges
    *
-   * One thing to not here is that edges are internally stored as shared
+   * One thing to note here is that edges are internally stored as shared
    * pointers to either the user provided edge type or to
    * primitive_numeric_adapter.
    *
