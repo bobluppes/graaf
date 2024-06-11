@@ -10,6 +10,8 @@ project(Graaf
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(${GRAAF_LIB_TARGET_NAME} ${PROJECT_NAME})
+
 # Example usages of the library
 option(SKIP_EXAMPLES "Skip building the examples" OFF)
 if(NOT SKIP_EXAMPLES)
@@ -29,3 +31,7 @@ if(NOT SKIP_BENCHMARKS)
 add_subdirectory(perf)
 endif()
 
+add_library(Graaf INTERFACE)
+#add_library(${PROJECT_NAME}::${GRAAF_LIB_TARGET_NAME} ALIAS ${PROJECT_NAME})
+
+target_include_directories(Graaf INTERFACE "${PROJECT_BINARY_DIR}" "${PROJECT_SOURCE_DIR}/include/")
