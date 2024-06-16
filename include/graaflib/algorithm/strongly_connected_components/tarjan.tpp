@@ -10,8 +10,7 @@
 namespace graaf::algorithm {
 
 template <typename V, typename E>
-[[nodiscard]] sccs_t
-tarjans_strongly_connected_components(
+[[nodiscard]] sccs_t tarjans_strongly_connected_components(
     const graph<V, E, graph_type::DIRECTED>& graph) {
   // Vector to store strongly connected components
   sccs_t sccs{};
