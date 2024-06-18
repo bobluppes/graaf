@@ -1,6 +1,7 @@
 build/
 cmake-modules/
 venv
+cmake-build-debug
 
 # IDE
 .vscode/
