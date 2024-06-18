@@ -91,8 +91,8 @@ class graph {
    *
    * @param  vertex_id_lhs The ID of the first vertex
    * @param  vertex_id_rhs The ID of the second vertex
-   * @return boolean - This returns True to indicate there is an edge between the
-   * two vertices otherwise False
+   * @return boolean - This returns True to indicate there is an edge between
+   * the two vertices otherwise False
    */
 
   [[nodiscard]] bool has_edge(vertex_id_t vertex_id_lhs,
