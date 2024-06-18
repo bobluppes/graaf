@@ -67,7 +67,7 @@ class graph {
   /**
    * @brief Get the internal edges
    *
-   * One thing to not here is that edges are internally stored as shared
+   * One thing to note here is that edges are internally stored as shared
    * pointers to either the user provided edge type or to
    * primitive_numeric_adapter.
    *
@@ -81,7 +81,7 @@ class graph {
    * Checks whether a vertex with a given ID is contained in the graph.
    *
    * @param  vertex_id The ID of the vertex we want to check
-   * @return boolean - This return Ture to indicate the vertex is contained in
+   * @return boolean - This returns True to indicate the vertex is contained in
    * the graph otherwise False
    */
   [[nodiscard]] bool has_vertex(vertex_id_t vertex_id) const noexcept;
@@ -91,8 +91,8 @@ class graph {
    *
    * @param  vertex_id_lhs The ID of the first vertex
    * @param  vertex_id_rhs The ID of the second vertex
-   * @return boolean - This return Ture to indicate there is an edge between the
-   * two vertices otherwise False
+   * @return boolean - This returns True to indicate there is an edge between
+   * the two vertices otherwise False
    */
 
   [[nodiscard]] bool has_edge(vertex_id_t vertex_id_lhs,
@@ -103,7 +103,7 @@ class graph {
    *
    * @param vertex_id The ID of the vertex
    * @return vertex_t - A reference to the vertex
-   * @throws out_of_range exception - If vertex_id does not existing within the
+   * @throws out_of_range exception - If vertex_id does not exist within the
    * graph
    */
   [[nodiscard]] vertex_t& get_vertex(vertex_id_t vertex_id);
@@ -125,7 +125,7 @@ class graph {
    * @param  vertex_id_rhs The ID of the second vertex
    * @return edge_t - Shared pointer to either the provided edge or to
    * primitive_numeric_adapter.
-   * @throws out_of_range exception - If No edge exit between the two vertices
+   * @throws out_of_range exception - If no edge exists between the two vertices
    */
   [[nodiscard]] edge_t& get_edge(vertex_id_t vertex_id_lhs,
                                  vertex_id_t vertex_id_rhs);
@@ -149,7 +149,7 @@ class graph {
    * @param  edge_id The ID of the edge.
    * @return edge_t - Shared pointer to either the provided edge or to
    * primitive_numeric_adapter.
-   * @throws out_of_range exception - If No edge exit between the two vertices
+   * @throws out_of_range exception - If no edge exists between the two vertices
    */
   [[nodiscard]] edge_t& get_edge(const edge_id_t& edge_id);
 
@@ -159,7 +159,7 @@ class graph {
    * @param  edge_id The ID of the edge.
    * @return edge_t - Shared pointer to either the provided edge or to
    * primitive_numeric_adapter.
-   * @throws out_of_range exception - If No edge exit between the two vertices
+   * @throws out_of_range exception - If no edge exists between the two vertices
    */
   [[nodiscard]] const edge_t& get_edge(const edge_id_t& edge_id) const;
 
@@ -167,7 +167,7 @@ class graph {
    * Get a list of neighbour vertices
    *
    * @param  vertex_id The ID of the vertex
-   * @return vertices_t - A list of neigbounthood vertices
+   * @return vertices_t - A list of neighboring vertices
    */
   [[nodiscard]] vertices_t get_neighbors(vertex_id_t vertex_id) const;
 
@@ -200,7 +200,7 @@ class graph {
    * Add a new edge between two existing vertices
    *
    * @param  vertex_id The ID of the vertex
-   * @throws out_of_range - If either of the vertex does not exist in graph
+   * @throws out_of_range - If either of the vertices do not exist in graph
    */
   void add_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs,
                 auto&& edge);
