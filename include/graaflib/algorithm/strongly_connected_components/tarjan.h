@@ -3,7 +3,6 @@
 #include <graaflib/algorithm/strongly_connected_components/common.h>
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
-#include <algorithm>
 
 namespace graaf::algorithm {
 
