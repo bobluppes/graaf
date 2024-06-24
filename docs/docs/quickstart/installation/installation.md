@@ -51,7 +51,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Graaf::Graaf)
 
 ## CMake Options
 
-There are multiple CMake Options available to choose how you want to build it in your Project.
+There are multiple CMake Options available to choose how you want to build Graaf in your Project.
 
 - `SKIP_TESTS`
   - Default: `OFF`
