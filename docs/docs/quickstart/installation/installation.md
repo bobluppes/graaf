@@ -65,7 +65,7 @@ There are multiple CMake Options available to choose how you want to build Graaf
 
 These Options can be set while executing the cmake command
 ```bash
-cmake -DSKIP_TESTS=ON -DSKIP_EXAMPLES=ON -DSKIP_BENCHMARKS=ON \[source_directory\]
+cmake -DSKIP_TESTS=ON -DSKIP_EXAMPLES=ON -DSKIP_BENCHMARKS=ON [source_directory]
 ```
 
 or by setting them in your Projects CMakeLists.txt (before `FetchContent_MakeAvailable(graaflib)`)
