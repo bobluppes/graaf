@@ -43,8 +43,36 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(graaflib)
 ```
 
-Now you can link your target against `Graaf_lib`:
+Now you can link your target against `Graaf::Graaf`:
 
 ```CMake
-target_link_libraries(${PROJECT_NAME} PRIVATE Graaf_lib)
+target_link_libraries(${PROJECT_NAME} PRIVATE Graaf::Graaf)
+```
+
+## CMake Options
+
+There are multiple CMake Options available to choose how you want to build Graaf in your Project.
+
+- `SKIP_TESTS`
+  - Default: `OFF`
+  - Enabling skips building the tests.
+- `SKIP_EXAMPLES`
+  - Default: `OFF`
+  - This skips building the example usages of the Library.
+- `SKIP_BENCHMARKS`
+  - Default: `OFF`
+  - This skips building the Benchmarks.
+
+These Options can be set while executing the cmake command
+```bash
+cmake -DSKIP_TESTS=ON -DSKIP_EXAMPLES=ON -DSKIP_BENCHMARKS=ON [source_directory]
+```
+
+or by setting them in your Projects CMakeLists.txt (before `FetchContent_MakeAvailable(graaflib)`)
+
+```cmake
+set(SKIP_TESTS ON)
+set(SKIP_BENCHMARKS ON)
+set(SKIP_EXAMPLES ON)
+FetchContent_MakeAvailable(graaflib)
 ```
