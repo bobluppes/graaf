@@ -4,7 +4,8 @@
 
 #include <optional>
 
-namespace graaf::algorithm {
+namespace graaf::algorithm
+{
 /**
  * @brief Calculates order of vertices in topological order
  * using DFS traversal
@@ -14,9 +15,11 @@ namespace graaf::algorithm {
  * @param graph The input graph.
  * @return Vector of vertices sorted in topological order
  */
-template <typename V, typename E>
-[[nodiscard]] std::optional<std::vector<vertex_id_t>> dfs_topological_sort(
-    const graph<V, E, graph_type::DIRECTED>& graph);
+template<typename V, typename E>
+[[nodiscard]]
+std::optional<std::vector<vertex_id_t>> dfs_topological_sort(
+    graph<V, E, graph_type::DIRECTED> const& graph);
 
-}  // namespace graaf::algorithm
+} // namespace graaf::algorithm
+
 #include "dfs_topological_sorting.tpp"

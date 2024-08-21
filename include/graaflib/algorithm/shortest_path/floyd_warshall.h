@@ -3,7 +3,8 @@
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
 
-namespace graaf::algorithm {
+namespace graaf::algorithm
+{
 /**
  * @brief Floyd-Warshall Algorithm
  *
@@ -20,11 +21,13 @@ namespace graaf::algorithm {
  * @return A 2D vector where element at [i][j] is the shortest distance from
  * vertex i to vertex j.
  */
-template <typename V, typename E, graph_type T,
-          typename WEIGHT_T = decltype(get_weight(std::declval<E>()))>
+template<typename V,
+         typename E,
+         graph_type T,
+         typename WEIGHT_T = decltype(get_weight(std::declval<E>()))>
 std::vector<std::vector<WEIGHT_T>> floyd_warshall_shortest_paths(
-    const graph<V, E, T>& graph);
+    graph<V, E, T> const& graph);
 
-};  // namespace graaf::algorithm
+}; // namespace graaf::algorithm
 
 #include "floyd_warshall.tpp"

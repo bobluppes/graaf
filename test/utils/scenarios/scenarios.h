@@ -4,16 +4,18 @@
 
 #include <vector>
 
-namespace graaf::utils::scenarios {
+namespace graaf::utils::scenarios
+{
 
-template <typename GRAPH_T>
-struct scenario {
-  GRAPH_T graph{};
+template<typename GRAPH_T>
+struct scenario
+{
+    GRAPH_T graph {};
 
-  // This vector decouples the test scenario from the graphs internal id
-  // generation logic. The first element in this vector is the first vertex and
-  // so on...
-  std::vector<vertex_id_t> vertex_ids{};
+    // This vector decouples the test scenario from the graphs internal id
+    // generation logic. The first element in this vector is the first vertex and
+    // so on...
+    std::vector<vertex_id_t> vertex_ids {};
 };
 
 /**
@@ -44,8 +46,9 @@ struct scenario {
  * vertices and edges.
  * @return The scenario containing the graph structure.
  */
-template <typename GRAPH_T>
-[[nodiscard]] scenario<GRAPH_T> create_tree_scenario();
+template<typename GRAPH_T>
+[[nodiscard]]
+scenario<GRAPH_T> create_tree_scenario();
 
 /**
  * Creates a scenario containing a simple graph structure. In the visualization
@@ -87,8 +90,9 @@ template <typename GRAPH_T>
  * vertices and edges.
  * @return The scenario containing the graph structure.
  */
-template <typename GRAPH_T>
-[[nodiscard]] scenario<GRAPH_T> create_simple_graph_scenario();
+template<typename GRAPH_T>
+[[nodiscard]]
+scenario<GRAPH_T> create_simple_graph_scenario();
 
 /**
  * Creates a scenario containing a fully connected graph structure. In the
@@ -135,8 +139,9 @@ template <typename GRAPH_T>
  * vertices and edges.
  * @return The scenario containing the graph structure.
  */
-template <typename GRAPH_T>
-[[nodiscard]] scenario<GRAPH_T> create_fully_connected_graph_scenario();
+template<typename GRAPH_T>
+[[nodiscard]]
+scenario<GRAPH_T> create_fully_connected_graph_scenario();
 
 /**
  * Creates a scenario containing a disconnected graph consisting of two
@@ -176,8 +181,9 @@ template <typename GRAPH_T>
  * vertices and edges.
  * @return The scenario containing the graph structure.
  */
-template <typename GRAPH_T>
-[[nodiscard]] scenario<GRAPH_T> create_disconnected_graph_scenario();
-}  // namespace graaf::utils::scenarios
+template<typename GRAPH_T>
+[[nodiscard]]
+scenario<GRAPH_T> create_disconnected_graph_scenario();
+} // namespace graaf::utils::scenarios
 
 #include "scenarios.tpp"

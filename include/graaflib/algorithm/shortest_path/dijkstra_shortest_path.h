@@ -6,7 +6,8 @@
 
 #include <optional>
 
-namespace graaf::algorithm {
+namespace graaf::algorithm
+{
 
 /**
  * @brief calculates the shortest path between one start_vertex and one
@@ -19,12 +20,14 @@ namespace graaf::algorithm {
  * @param end_vertex Vertex id where the shortest path should end.
  * @return An optional with the shortest path (list of vertices) if found.
  */
-template <typename V, typename E, graph_type T,
-          typename WEIGHT_T = decltype(get_weight(std::declval<E>()))>
-std::optional<graph_path<WEIGHT_T>> dijkstra_shortest_path(
-    const graph<V, E, T>& graph, vertex_id_t start_vertex,
-    vertex_id_t end_vertex);
+template<typename V,
+         typename E,
+         graph_type T,
+         typename WEIGHT_T = decltype(get_weight(std::declval<E>()))>
+std::optional<graph_path<WEIGHT_T>> dijkstra_shortest_path(graph<V, E, T> const& graph,
+                                                           vertex_id_t start_vertex,
+                                                           vertex_id_t end_vertex);
 
-}  // namespace graaf::algorithm
+} // namespace graaf::algorithm
 
 #include "dijkstra_shortest_path.tpp"

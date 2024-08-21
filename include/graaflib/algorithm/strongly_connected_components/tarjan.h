@@ -4,7 +4,8 @@
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
 
-namespace graaf::algorithm {
+namespace graaf::algorithm
+{
 
 /**
  * Computes the Strongly Connected Components (SCCs) of a graph using Tarjan's
@@ -22,10 +23,11 @@ namespace graaf::algorithm {
  * each of which contains the vertex IDs forming a strongly connected
  * component.
  */
-template <typename V, typename E>
-[[nodiscard]] sccs_t tarjans_strongly_connected_components(
-    const graph<V, E, graph_type::DIRECTED>& graph);
+template<typename V, typename E>
+[[nodiscard]]
+sccs_t tarjans_strongly_connected_components(
+    graph<V, E, graph_type::DIRECTED> const& graph);
 
-}  // namespace graaf::algorithm
+} // namespace graaf::algorithm
 
 #include "tarjan.tpp"

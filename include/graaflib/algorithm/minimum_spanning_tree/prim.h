@@ -6,7 +6,8 @@
 #include <optional>
 #include <vector>
 
-namespace graaf::algorithm {
+namespace graaf::algorithm
+{
 
 /**
  * Computes the minimum spanning tree (MST) of a graph using Prim's algorithm.
@@ -19,10 +20,12 @@ namespace graaf::algorithm {
  * exists, or an empty optional if the MST doesn't exist (e.g., graph is not
  * connected).
  */
-template <typename V, typename E>
-[[nodiscard]] std::optional<std::vector<edge_id_t> > prim_minimum_spanning_tree(
-    const graph<V, E, graph_type::UNDIRECTED>& graph, vertex_id_t start_vertex);
+template<typename V, typename E>
+[[nodiscard]]
+std::optional<std::vector<edge_id_t>> prim_minimum_spanning_tree(
+    graph<V, E, graph_type::UNDIRECTED> const& graph,
+    vertex_id_t start_vertex);
 
-}  // namespace graaf::algorithm
+} // namespace graaf::algorithm
 
 #include "prim.tpp"

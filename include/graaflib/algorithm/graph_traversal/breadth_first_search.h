@@ -6,7 +6,8 @@
 
 #include <concepts>
 
-namespace graaf::algorithm {
+namespace graaf::algorithm
+{
 
 /**
  * @brief Traverses the graph, starting at start_vertex, and visits all
@@ -20,19 +21,20 @@ namespace graaf::algorithm {
  * should continue the traversal or not. Traversal continues while this
  * predicate returns false.
  */
-template <
-    typename V, typename E, graph_type T,
-    typename EDGE_CALLBACK_T = detail::noop_callback,
-    typename SEARCH_TERMINATION_STRATEGY_T = detail::exhaustive_search_strategy>
-  requires std::invocable<EDGE_CALLBACK_T &, edge_id_t &> &&
-           std::is_invocable_r_v<bool, SEARCH_TERMINATION_STRATEGY_T &,
-                                 vertex_id_t>
+template<typename V,
+         typename E,
+         graph_type T,
+         typename EDGE_CALLBACK_T               = detail::noop_callback,
+         typename SEARCH_TERMINATION_STRATEGY_T = detail::exhaustive_search_strategy>
+    requires std::invocable<EDGE_CALLBACK_T&, edge_id_t&> &&
+             std::is_invocable_r_v<bool, SEARCH_TERMINATION_STRATEGY_T&, vertex_id_t>
 void breadth_first_traverse(
-    const graph<V, E, T> &graph, vertex_id_t start_vertex,
-    const EDGE_CALLBACK_T &edge_callback,
-    const SEARCH_TERMINATION_STRATEGY_T &search_termination_strategy =
-        SEARCH_TERMINATION_STRATEGY_T{});
+    graph<V, E, T> const& graph,
+    vertex_id_t start_vertex,
+    const EDGE_CALLBACK_T& edge_callback,
+    const SEARCH_TERMINATION_STRATEGY_T& search_termination_strategy =
+        SEARCH_TERMINATION_STRATEGY_T {});
 
-}  // namespace graaf::algorithm
+} // namespace graaf::algorithm
 
 #include "breadth_first_search.tpp"

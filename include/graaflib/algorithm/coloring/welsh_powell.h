@@ -2,7 +2,8 @@
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
 
-namespace graaf::algorithm {
+namespace graaf::algorithm
+{
 
 /**
  * @brief Applies the Welsh-Powell greedy graph coloring algorithm to the given
@@ -17,9 +18,9 @@ namespace graaf::algorithm {
  * @return std::unordered_map<vertex_id_t, int> An unordered map from vertex ID
  * to color if the graph could be colored, or an empty map otherwise.
  */
-template <typename GRAPH>
+template<typename GRAPH>
 std::unordered_map<vertex_id_t, int> welsh_powell_coloring(const GRAPH& graph);
 
-}  // namespace graaf::algorithm
+} // namespace graaf::algorithm
 
 #include "welsh_powell.tpp"

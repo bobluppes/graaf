@@ -5,7 +5,8 @@
 
 #include <vector>
 
-namespace graaf::algorithm {
+namespace graaf::algorithm
+{
 /**
  * Computes the minimum spanning tree (MST) or minimum spanning forest of a
  * graph using Kruskal's algorithm.
@@ -15,10 +16,11 @@ namespace graaf::algorithm {
  * @param graph The input graph.
  * @return A vector of edges forming the MST or minimum spanning forest.
  */
-template <typename V, typename E>
-[[nodiscard]] std::vector<edge_id_t> kruskal_minimum_spanning_tree(
-    const graph<V, E, graph_type::UNDIRECTED>& graph);
+template<typename V, typename E>
+[[nodiscard]]
+std::vector<edge_id_t> kruskal_minimum_spanning_tree(
+    graph<V, E, graph_type::UNDIRECTED> const& graph);
 
-}  // namespace graaf::algorithm
+} // namespace graaf::algorithm
 
 #include "kruskal.tpp"

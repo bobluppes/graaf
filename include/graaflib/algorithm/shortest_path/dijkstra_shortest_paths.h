@@ -4,7 +4,8 @@
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
 
-namespace graaf::algorithm {
+namespace graaf::algorithm
+{
 
 /**
  * Find the shortest paths from a source vertex to all other vertices in the
@@ -22,11 +23,15 @@ namespace graaf::algorithm {
  * (list of vertex IDs) from the source to the target. If a vertex is not
  * reachable from the source, its entry will be absent from the map.
  */
-template <typename V, typename E, graph_type T,
-          typename WEIGHT_T = decltype(get_weight(std::declval<E>()))>
-[[nodiscard]] std::unordered_map<vertex_id_t, graph_path<WEIGHT_T>>
-dijkstra_shortest_paths(const graph<V, E, T>& graph, vertex_id_t source_vertex);
+template<typename V,
+         typename E,
+         graph_type T,
+         typename WEIGHT_T = decltype(get_weight(std::declval<E>()))>
+[[nodiscard]]
+std::unordered_map<vertex_id_t, graph_path<WEIGHT_T>> dijkstra_shortest_paths(
+    graph<V, E, T> const& graph,
+    vertex_id_t source_vertex);
 
-}  // namespace graaf::algorithm
+} // namespace graaf::algorithm
 
 #include "dijkstra_shortest_paths.tpp"
