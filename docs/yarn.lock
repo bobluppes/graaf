@@ -1989,10 +1989,10 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
   integrity sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==
 
-"@sindresorhus/is@^6.3.1":
-  version "6.3.1"
-  resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-6.3.1.tgz#43bbe2a94de0d7a11b95b7fc8100fa0e4694bbe0"
-  integrity sha512-FX4MfcifwJyFOI2lPoX7PQxCqx8BG1HCho7WdiXwpEQx1Ycij0JxkfYtGK7yqNScrZGSlt6RE6sw8QYoH7eKnQ==
+"@sindresorhus/is@^7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-7.0.1.tgz#693cd0bfa7fdc71a3386b72088b660fb70851927"
+  integrity sha512-QWLl2P+rsCJeofkDNIT3WFmb6NrRud1SUYW8dIhXK/46XFV8Q/g7Bsvib0Askb0reRLe+WYPeeE+l5cH7SlkuQ==
 
 "@slorber/static-site-generator-webpack-plugin@^4.0.7":
   version "4.0.7"
@@ -4477,11 +4477,6 @@ get-stream@^6.0.0:
   resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-6.0.1.tgz#a262d8eef67aced57c2852ad6167526a43cbf7b7"
   integrity sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==
 
-get-stream@^8.0.1:
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-8.0.1.tgz#def9dfd71742cd7754a7761ed43749a27d02eca2"
-  integrity sha512-VaUJspBffn/LMCJVoMvSAdmscJyS1auj5Zulnn5UoYcY531UWmdwhRWkcGKnGU93m5HSXP9LP2usOryrBtQowA==
-
 get-stream@^9.0.1:
   version "9.0.1"
   resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-9.0.1.tgz#95157d21df8eb90d1647102b63039b1df60ebd27"
@@ -4577,23 +4572,22 @@ globby@^13.1.1:
     merge2 "^1.4.1"
     slash "^4.0.0"
 
-got@14.4.1:
-  version "14.4.1"
-  resolved "https://registry.yarnpkg.com/got/-/got-14.4.1.tgz#23966728d8bc8606de3841ba6db9f81518d39a24"
-  integrity sha512-IvDJbJBUeexX74xNQuMIVgCRRuNOm5wuK+OC3Dc2pnSoh1AOmgc7JVj7WC+cJ4u0aPcO9KZ2frTXcqK4W/5qTQ==
+got@14.4.3:
+  version "14.4.3"
+  resolved "https://registry.yarnpkg.com/got/-/got-14.4.3.tgz#ecef887ba2a0916cc8a44a5514fe8426a39e632f"
+  integrity sha512-iTC0Z87yxSijWTh/IpvGpwOhIQK7+GgWkYrMRoN/hB9qeRj9RPuLGODwevs0p5idUf7nrxCVa5IlOmK3b8z+KA==
   dependencies:
-    "@sindresorhus/is" "^6.3.1"
+    "@sindresorhus/is" "^7.0.1"
     "@szmarczak/http-timer" "^5.0.1"
     cacheable-lookup "^7.0.0"
     cacheable-request "^12.0.1"
     decompress-response "^6.0.0"
     form-data-encoder "^4.0.2"
-    get-stream "^8.0.1"
     http2-wrapper "^2.2.1"
     lowercase-keys "^3.0.0"
     p-cancelable "^4.0.1"
     responselike "^3.0.0"
-    type-fest "^4.19.0"
+    type-fest "^4.26.1"
 
 got@^9.6.0:
   version "9.6.0"
@@ -8237,10 +8231,10 @@ type-fest@^2.5.0:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.19.0.tgz#88068015bb33036a598b952e55e9311a60fd3a9b"
   integrity sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==
 
-type-fest@^4.19.0:
-  version "4.20.1"
-  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-4.20.1.tgz#d97bb1e923bf524e5b4b43421d586760fb2ee8be"
-  integrity sha512-R6wDsVsoS9xYOpy8vgeBlqpdOyzJ12HNfQhC/aAKWM3YoCV9TtunJzh/QpkMgeDhkoynDcw5f1y+qF9yc/HHyg==
+type-fest@^4.26.1:
+  version "4.26.1"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-4.26.1.tgz#a4a17fa314f976dd3e6d6675ef6c775c16d7955e"
+  integrity sha512-yOGpmOAL7CkKe/91I5O3gPICmJNLJ1G4zFYVAsRHg7M64biSnPtRj0WNQt++bRkjYOqjWXrhnUw1utzmVErAdg==
 
 type-is@~1.6.18:
   version "1.6.18"
