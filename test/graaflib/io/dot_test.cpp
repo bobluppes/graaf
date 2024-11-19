@@ -74,7 +74,7 @@ inline std::pair<vertex_id_t, vertex_id_t> make_sorted_pair(
 
 TEST(DotTest, EmptyUndirectedGraph) {
   // GIVEN
-  const std::filesystem::path path{"./test.dot"};
+  const std::filesystem::path path{"./DotTest_EmptyUndirectedGraph.dot"};
   undirected_graph<int, int> graph{};
 
   // WHEN
@@ -87,7 +87,7 @@ TEST(DotTest, EmptyUndirectedGraph) {
 
 TEST(DotTest, EmptyDirectedGraph) {
   // GIVEN
-  const std::filesystem::path path{"./test.dot"};
+  const std::filesystem::path path{"./DotTest_EmptyDirectedGraph.dot"};
   directed_graph<int, int> graph{};
 
   // WHEN
@@ -100,7 +100,7 @@ TEST(DotTest, EmptyDirectedGraph) {
 
 TEST(DotTest, UndirectedGraph) {
   // GIVEN
-  const std::filesystem::path path{"./test.dot"};
+  const std::filesystem::path path{"./DotTest_UndirectedGraph.dot"};
   undirected_graph<int, int> graph{};
 
   const auto vertex_1{graph.add_vertex(10)};
@@ -144,7 +144,7 @@ TEST(DotTest, UndirectedGraph) {
 
 TEST(DotTest, DirectedGraph) {
   // GIVEN
-  const std::filesystem::path path{"./test.dot"};
+  const std::filesystem::path path{"./DotTest_DirectedGraph.dot"};
   directed_graph<int, int> graph{};
 
   const auto vertex_1{graph.add_vertex(10)};
@@ -198,7 +198,8 @@ TEST(DotTest, UserProvidedVertexAndEdgeClass) {
     std::string string_data{};
   };
 
-  const std::filesystem::path path{"./test.dot"};
+  const std::filesystem::path path{
+      "./DotTest_UserProvidedVertexAndEdgeClass.dot"};
   directed_graph<vertex_t, edge_t> graph{};
 
   const auto vertex_1{graph.add_vertex(vertex_t{10, "vertex 1"})};
@@ -228,7 +229,7 @@ TEST(DotTest, UserProvidedVertexAndEdgeClass) {
 
 TEST(DotTest, DefaultWriters) {
   // GIVEN
-  const std::filesystem::path path{"./test.dot"};
+  const std::filesystem::path path{"./DotTest_DefaultWriters.dot"};
   directed_graph<int, float> graph{};
 
   const auto vertex_1{graph.add_vertex(10)};
