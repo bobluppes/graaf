@@ -7,6 +7,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "welsh_powell.h"
+
 namespace graaf::algorithm {
 
 template <typename GRAPH>

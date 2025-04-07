@@ -1,4 +1,5 @@
 #pragma once
+#include "edge.h"
 
 namespace graaf {
 

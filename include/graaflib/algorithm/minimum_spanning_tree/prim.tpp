@@ -1,10 +1,11 @@
 #pragma once
-
 #include <graaflib/types.h>
 
 #include <algorithm>
 #include <unordered_map>
 #include <unordered_set>
+
+#include "prim.h"
 
 namespace graaf::algorithm {
 
