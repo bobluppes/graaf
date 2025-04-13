@@ -1,6 +1,7 @@
 #pragma once
-
 #include <graaflib/algorithm/graph_traversal/breadth_first_search.h>
+
+#include "bfs_shortest_path.h"
 
 namespace graaf::algorithm {
 

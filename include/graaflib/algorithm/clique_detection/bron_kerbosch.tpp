@@ -1,5 +1,4 @@
 #pragma once
-
 #include <graaflib/algorithm/clique_detection/bron_kerbosch.h>
 
 #include <algorithm>
@@ -9,6 +8,8 @@
 #include <ranges>
 #include <unordered_set>
 #include <vector>
+
+#include "bron_kerbosch.h"
 
 namespace graaf::algorithm {
 

@@ -1,11 +1,12 @@
 #pragma once
-
 #include <graaflib/algorithm/strongly_connected_components/tarjan.h>
 
 #include <functional>  // For std::function
 #include <stack>
 #include <unordered_map>
 #include <vector>
+
+#include "tarjan.h"
 
 namespace graaf::algorithm {
 
