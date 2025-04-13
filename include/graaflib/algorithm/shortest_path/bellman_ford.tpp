@@ -1,4 +1,5 @@
 #pragma once
+#include "bellman_ford.h"
 
 namespace graaf::algorithm {
 

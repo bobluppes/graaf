@@ -1,6 +1,7 @@
 #pragma once
-
 #include <algorithm>
+
+#include "vertex_properties.h"
 
 namespace graaf::properties {
 

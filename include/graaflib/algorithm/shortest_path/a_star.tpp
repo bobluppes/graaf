@@ -1,6 +1,7 @@
 #pragma once
-
 #include <queue>
+
+#include "a_star.h"
 
 namespace graaf::algorithm {
 

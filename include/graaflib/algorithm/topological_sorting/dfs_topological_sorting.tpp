@@ -1,11 +1,12 @@
 #pragma once
-
 #include <graaflib/algorithm/cycle_detection/dfs_cycle_detection.h>
 #include <graaflib/algorithm/topological_sorting/dfs_topological_sorting.h>
 
 #include <optional>
 #include <unordered_set>
 #include <vector>
+
+#include "dfs_topological_sorting.h"
 
 namespace graaf::algorithm {
 

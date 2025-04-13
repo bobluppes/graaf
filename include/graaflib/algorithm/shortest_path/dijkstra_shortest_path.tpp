@@ -1,7 +1,8 @@
 #pragma once
-
 #include <queue>
 #include <sstream>
+
+#include "dijkstra_shortest_path.h"
 
 namespace graaf::algorithm {
 

@@ -1,8 +1,9 @@
 #pragma once
-
 #include <algorithm>
 #include <queue>
 #include <unordered_set>
+
+#include "depth_first_search.h"
 
 namespace graaf::algorithm {
 

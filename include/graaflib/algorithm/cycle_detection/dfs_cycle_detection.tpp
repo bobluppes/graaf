@@ -1,9 +1,10 @@
 #pragma once
-
 #include <graaflib/types.h>
 
 #include <algorithm>
 #include <unordered_map>
+
+#include "dfs_cycle_detection.h"
 
 namespace graaf::algorithm {
 

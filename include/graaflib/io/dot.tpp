@@ -1,9 +1,10 @@
 #pragma once
-
 #include <graaflib/graph.h>
 
 #include <fstream>
 #include <string_view>
+
+#include "dot.h"
 
 namespace graaf::io {
 

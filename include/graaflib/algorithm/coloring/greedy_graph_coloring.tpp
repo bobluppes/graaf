@@ -1,8 +1,9 @@
 #pragma once
-
 #include <graaflib/algorithm/coloring/greedy_graph_coloring.h>
 
 #include <unordered_map>
+
+#include "greedy_graph_coloring.h"
 
 namespace graaf::algorithm {
 

@@ -1,9 +1,10 @@
 #pragma once
-
 #include <graaflib/algorithm/shortest_path/floyd_warshall.h>
 
 #include <limits>
 #include <vector>
+
+#include "floyd_warshall.h"
 
 namespace graaf::algorithm {
 

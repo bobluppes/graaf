@@ -1,7 +1,8 @@
 #pragma once
-
 #include <stdexcept>
 #include <string>
+
+#include "graph.h"
 
 namespace graaf {
 

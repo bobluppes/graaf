@@ -1,11 +1,12 @@
 #pragma once
-
 #include <graaflib/algorithm/graph_traversal/depth_first_search.h>
 #include <graaflib/algorithm/strongly_connected_components/kosaraju.h>
 #include <graaflib/algorithm/utils.h>
 
 #include <iostream>
 #include <stack>
+
+#include "kosaraju.h"
 
 namespace graaf::algorithm {
 
