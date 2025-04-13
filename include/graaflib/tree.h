@@ -20,6 +20,9 @@ class tree {
   };
 
   struct tree_node {
+    // TODO(b.luppes): we are leaking implementation details regarding memory
+    // management of children using std::unique_ptr. Consider providing a
+    // non-owning view into the children.
     VERTEX_T value{};
     tree_node* parent{};  // raw pointer to break cyclic dependency
     std::vector<child_link> children{};
