@@ -24,15 +24,15 @@ class tree {
     tree_node* parent{};  // raw pointer to break cyclic dependency
     std::vector<child_link> children{};
 
-    [[nodiscard]] node_ptr_t& add_child(EDGE_T edge_val, VERTEX_T child_val);
+    [[nodiscard]] tree_node* add_child(EDGE_T edge_val, VERTEX_T child_val);
   };
 
   explicit tree(VERTEX_T root_val)
       : root_{std::make_unique<tree_node>(std::move(root_val), nullptr,
                                           std::vector<child_link>{})} {}
 
-  [[nodiscard]] node_ptr_t& root() { return root_; }
-  [[nodiscard]] const node_ptr_t& root() const { return root_; }
+  [[nodiscard]] tree_node* root() { return root_.get(); }
+  [[nodiscard]] const tree_node* root() const { return root_.get(); }
 
  private:
   node_ptr_t root_{};

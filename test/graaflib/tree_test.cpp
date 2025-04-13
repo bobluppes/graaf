@@ -27,16 +27,16 @@ TEST(TreeTest, CanConstructWithChild) {
   tree_t tree{42};
 
   // WHEN
-  const auto& child{tree.root()->add_child(EDGE_VAL, CHILD_VAL)};
+  const auto* child{tree.root()->add_child(EDGE_VAL, CHILD_VAL)};
 
   // THEN
-  const auto& root{tree.root()};
+  const auto* root{tree.root()};
   ASSERT_EQ(root->children.size(), 1);
   ASSERT_EQ(root->children.front().value, EDGE_VAL);
-  ASSERT_EQ(root->children.front().child, child);
+  ASSERT_EQ(root->children.front().child.get(), child);
 
   ASSERT_EQ(child->value, CHILD_VAL);
-  ASSERT_EQ(child->parent, root.get());
+  ASSERT_EQ(child->parent, root);
   ASSERT_EQ(child->children.size(), 0);
 }
 
