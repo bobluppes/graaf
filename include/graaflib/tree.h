@@ -23,6 +23,8 @@ class tree {
     VERTEX_T value{};
     tree_node* parent{};  // raw pointer to break cyclic dependency
     std::vector<child_link> children{};
+
+    [[nodiscard]] node_ptr_t& add_child(EDGE_T edge_val, VERTEX_T child_val);
   };
 
   explicit tree(VERTEX_T root_val)
@@ -31,9 +33,6 @@ class tree {
 
   [[nodiscard]] node_ptr_t& root() { return root_; }
   [[nodiscard]] const node_ptr_t& root() const { return root_; }
-
-  [[nodiscard]] node_ptr_t& add_child(node_ptr_t& parent, EDGE_T edge_val,
-                                      VERTEX_T child_val);
 
  private:
   node_ptr_t root_{};

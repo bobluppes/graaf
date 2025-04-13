@@ -27,7 +27,7 @@ TEST(TreeTest, CanConstructWithChild) {
   tree_t tree{42};
 
   // WHEN
-  const auto& child{tree.add_child(tree.root(), EDGE_VAL, CHILD_VAL)};
+  const auto& child{tree.root()->add_child(EDGE_VAL, CHILD_VAL)};
 
   // THEN
   const auto& root{tree.root()};
