@@ -45,20 +45,20 @@ void do_merge_sets(vertex_id_t vertex_a, vertex_id_t vertex_b,
 }
 
 template <typename T>
-struct edge_to_process : public weighted_edge<T> {
+struct edge_to_process {
  public:
   vertex_id_t vertex_a, vertex_b;
   T weight_;
 
-  [[nodiscard]] T get_weight() const noexcept override { return weight_; }
-
   edge_to_process(vertex_id_t vertex_u, vertex_id_t vertex_w, T weight)
       : vertex_a{vertex_u}, vertex_b{vertex_w}, weight_{weight} {};
-  edge_to_process(){};
-  ~edge_to_process(){};
 
-  bool operator!=(const edge_to_process& e) const noexcept {
-    return this->weight_ != e.weight_;
+  [[nodiscard]] bool operator<(const edge_to_process& other) const {
+    // We order based on the weight first; breaking ties using the source/target
+    // vertices
+    if (weight_ != other.weight_) return weight_ < other.weight_;
+    if (vertex_a != other.vertex_a) return vertex_a < other.vertex_a;
+    return vertex_b < other.vertex_b;
   }
 };
 
@@ -80,11 +80,7 @@ std::vector<edge_id_t> kruskal_minimum_spanning_tree(
         {edge.first.first, edge.first.second, edge.second});
   }
 
-  std::sort(edges_to_process.begin(), edges_to_process.end(),
-            [](detail::edge_to_process<E>& e1, detail::edge_to_process<E>& e2) {
-              if (e1 != e2) return e1.get_weight() < e2.get_weight();
-              return e1.vertex_a < e2.vertex_a || e1.vertex_b < e2.vertex_b;
-            });
+  std::sort(edges_to_process.begin(), edges_to_process.end());
 
   for (const auto& edge : edges_to_process) {
     if (detail::do_find_set(edge.vertex_a, parent) !=
