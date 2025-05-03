@@ -16,6 +16,18 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(fmt)
 
+set(INPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/input_data/web-Google.txt")
+set(INPUT_URL "https://snap.stanford.edu/data/web-Google.txt.gz")
+if(NOT EXISTS "${INPUT_FILE}")
+  if(NOT EXISTS "${INPUT_FILE}.gz")
+    file(DOWNLOAD "${INPUT_URL}" "${INPUT_FILE}.gz" SHOW_PROGRESS)
+  endif()
+  execute_process(
+    COMMAND gzip -dc "${INPUT_FILE}.gz"
+    OUTPUT_FILE "${INPUT_FILE}"
+  )
+endif()
+
 file(GLOB PERF_SOURCES "graaflib/*.cpp" "graaflib/*/*.cpp")
 add_executable(
   ${PROJECT_NAME}_perf
@@ -31,3 +43,4 @@ target_link_libraries(
   benchmark
   fmt::fmt
 )
+
