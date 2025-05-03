@@ -5,25 +5,39 @@
 #include <filesystem>
 #include <fstream>
 #include <string>
+#include <unordered_map>
 
 namespace {
 
-const std::filesystem::path IN_FILE{"input_data/web-Google.txt"};
-const std::size_t NUM_HEADER_LINES{4};
+struct graph_file {
+  std::filesystem::path filename{};
+  std::size_t number_of_header_lines{};
+};
+
+enum class dataset : int64_t { WEB_GOOGLE, WEB_BERK_STAN };
+
+const std::unordered_map<dataset, graph_file> DATASETS{
+    {dataset::WEB_GOOGLE, graph_file{.filename = "input_data/web-Google.txt",
+                                     .number_of_header_lines = 4}},
+    {dataset::WEB_BERK_STAN,
+     graph_file{.filename = "input_data/web-BerkStan.txt",
+                .number_of_header_lines = 4}}};
 
 struct no_data {};
 int UNIT_WEIGHT{1};
 using graph_t = graaf::undirected_graph<no_data, int>;
 
-[[nodiscard]] graph_t construct_graph_from_file() {
+[[nodiscard]] graph_t construct_graph_from_file(const dataset& dataset_name) {
+  const auto& dataset{DATASETS.at(dataset_name)};
+
   std::ifstream file{};
-  file.open(IN_FILE);
+  file.open(dataset.filename);
   assert(file.is_open());
 
   std::string line;
 
   // Skip the header lines
-  for (int i{0}; i < NUM_HEADER_LINES; ++i) {
+  for (int i{0}; i < dataset.number_of_header_lines; ++i) {
     std::getline(file, line);
   }
 
@@ -48,8 +62,8 @@ using graph_t = graaf::undirected_graph<no_data, int>;
   return graph;
 }
 
-static void bm_prim_mst(benchmark::State& state) {
-  static const auto graph{construct_graph_from_file()};
+static void bm_kruskal(benchmark::State& state, const dataset& dataset_name) {
+  static const auto graph{construct_graph_from_file(dataset_name)};
 
   for (auto _ : state) {
     auto result = graaf::algorithm::kruskal_minimum_spanning_tree(graph);
@@ -60,4 +74,11 @@ static void bm_prim_mst(benchmark::State& state) {
 }  // namespace
 
 // Register the benchmarks
-BENCHMARK(bm_prim_mst)->Iterations(3);
+static void CustomArguments(benchmark::internal::Benchmark* b) {
+  b->Iterations(3);
+}
+
+BENCHMARK_CAPTURE(bm_kruskal, web_google, dataset::WEB_GOOGLE)
+    ->Apply(CustomArguments);
+BENCHMARK_CAPTURE(bm_kruskal, web_berkstan, dataset::WEB_BERK_STAN)
+    ->Apply(CustomArguments);

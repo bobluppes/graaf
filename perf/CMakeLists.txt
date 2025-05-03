@@ -16,15 +16,27 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(fmt)
 
-set(INPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/input_data/web-Google.txt")
-set(INPUT_URL "https://snap.stanford.edu/data/web-Google.txt.gz")
-if(NOT EXISTS "${INPUT_FILE}")
-  if(NOT EXISTS "${INPUT_FILE}.gz")
-    file(DOWNLOAD "${INPUT_URL}" "${INPUT_FILE}.gz" SHOW_PROGRESS)
+set(GOOGLE_WEB_INPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/input_data/web-Google.txt")
+set(GOOGLE_WEB_INPUT_URL "https://snap.stanford.edu/data/web-Google.txt.gz")
+if(NOT EXISTS "${GOOGLE_WEB_INPUT_FILE}")
+  if(NOT EXISTS "${GOOGLE_WEB_INPUT_FILE}.gz")
+    file(DOWNLOAD "${GOOGLE_WEB_INPUT_URL}" "${GOOGLE_WEB_INPUT_FILE}.gz" SHOW_PROGRESS)
   endif()
   execute_process(
-    COMMAND gzip -dc "${INPUT_FILE}.gz"
-    OUTPUT_FILE "${INPUT_FILE}"
+    COMMAND gzip -dc "${GOOGLE_WEB_INPUT_FILE}.gz"
+    OUTPUT_FILE "${GOOGLE_WEB_INPUT_FILE}"
+  )
+endif()
+
+set(BERKELEY_STANFORD_INPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/input_data/web-BerkStan.txt")
+set(BERKELEY_STANFORD_INPUT_URL "https://snap-sentiment.stanford.edu/data/web-BerkStan.txt.gz")
+if(NOT EXISTS "${BERKELEY_STANFORD_INPUT_FILE}")
+  if(NOT EXISTS "${BERKELEY_STANFORD_INPUT_FILE}.gz")
+    file(DOWNLOAD "${BERKELEY_STANFORD_INPUT_URL}" "${BERKELEY_STANFORD_INPUT_FILE}.gz" SHOW_PROGRESS)
+  endif()
+  execute_process(
+    COMMAND gzip -dc "${BERKELEY_STANFORD_INPUT_FILE}.gz"
+    OUTPUT_FILE "${BERKELEY_STANFORD_INPUT_FILE}"
   )
 endif()
 
