@@ -8,7 +8,7 @@
 
 namespace {
 
-const std::filesystem::path IN_FILE{"./web-Google.txt"};
+const std::filesystem::path IN_FILE{"input_data/web-Google.txt"};
 const std::size_t NUM_HEADER_LINES{4};
 
 struct no_data {};
