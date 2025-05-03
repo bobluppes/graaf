@@ -18,11 +18,5 @@ static void bm_kruskal(benchmark::State& state,
 }  // namespace
 
 // Register the benchmarks
-static void CustomArguments(benchmark::internal::Benchmark* b) {
-  b->Iterations(3);
-}
-
-BENCHMARK_CAPTURE(bm_kruskal, web_google, utils::dataset::WEB_GOOGLE)
-    ->Apply(CustomArguments);
-BENCHMARK_CAPTURE(bm_kruskal, web_berkstan, utils::dataset::WEB_BERK_STAN)
-    ->Apply(CustomArguments);
+BENCHMARK_CAPTURE(bm_kruskal, web_google, utils::dataset::WEB_GOOGLE);
+BENCHMARK_CAPTURE(bm_kruskal, web_berkstan, utils::dataset::WEB_BERK_STAN);

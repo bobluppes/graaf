@@ -53,11 +53,5 @@ static void bm_prim(benchmark::State& state, const utils::dataset& dataset_name,
 }  // namespace
 
 // Register the benchmarks
-static void CustomArguments(benchmark::internal::Benchmark* b) {
-  b->Iterations(3);
-}
-
-BENCHMARK_CAPTURE(bm_prim, web_google, utils::dataset::WEB_GOOGLE, 1)
-    ->Apply(CustomArguments);
-BENCHMARK_CAPTURE(bm_prim, web_berkstan, utils::dataset::WEB_BERK_STAN, 1)
-    ->Apply(CustomArguments);
+BENCHMARK_CAPTURE(bm_prim, web_google, utils::dataset::WEB_GOOGLE, 1);
+BENCHMARK_CAPTURE(bm_prim, web_berkstan, utils::dataset::WEB_BERK_STAN, 1);
