@@ -27,8 +27,8 @@ std::unordered_map<vertex_id_t, int> welsh_powell_coloring(const GRAPH& graph) {
   // Step 2: Assign colors to vertices
   std::unordered_map<vertex_id_t, int> color_map;
 
+  int color = 0;  // Start with color 0
   for (const auto [_, current_vertex] : degree_vertex_pairs) {
-    int color = 0;  // Start with color 0
 
     // Check colors of adjacent vertices
     for (const auto& neighbor : graph.get_neighbors(current_vertex)) {
