@@ -30,7 +30,7 @@ First, we create a datastructure of all edges on the shortest path such that we 
 
 ```c++
 // We use a set here for O(1) time contains checks
-std::unordered_set<graaf::vertex_ids_t, graaf::vertex_ids_hash> edges_on_shortest_path{};
+std::unordered_set<graaf::edge_id_t, graaf::vertex_ids_hash> edges_on_shortest_path{};
 
 // Convert the list of vertices on the shortest path to edges
 graaf::vertex_id_t prev{shortest_path.vertices.front()};
@@ -55,7 +55,7 @@ const auto vertex_writer{
 }};
 
 const auto edge_writer{
-[&edges_on_shortest_path](const graaf::vertex_ids_t& edge_id, int edge) -> std::string {
+[&edges_on_shortest_path](const graaf::edge_id_t& edge_id, int edge) -> std::string {
   if (edges_on_shortest_path.contains(edge_id)) {
     return "label=\"\", color=red";
   }

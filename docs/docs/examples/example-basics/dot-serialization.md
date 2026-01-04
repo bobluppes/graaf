@@ -56,7 +56,7 @@ const auto vertex_writer{[](graaf::vertex_id_t vertex_id,
 **Edge writer**
 
 ```c++
-const auto edge_writer{[](const graaf::vertex_ids_t& /*edge_id*/,
+const auto edge_writer{[](const graaf::edge_id_t& /*edge_id*/,
                             const my_edge& edge) -> std::string {
   const auto style{edge.priority == edge_priority::HIGH ? "solid" : "dashed"};
   return fmt::format("label=\"{}\", style={}, color=gray, fontcolor=gray", edge.weight, style);
