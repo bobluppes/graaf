@@ -169,7 +169,7 @@ class graph {
    * @param  vertex_id The ID of the vertex
    * @return vertices_t - A list of neighboring vertices
    */
-  [[nodiscard]] vertices_t get_neighbors(vertex_id_t vertex_id) const;
+  [[nodiscard]] const vertices_t& get_neighbors(vertex_id_t vertex_id) const;
 
   /**
    * Add a vertex to the graph
