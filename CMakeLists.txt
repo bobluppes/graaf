@@ -37,5 +37,14 @@ endif()
 #Adding Interface to enable use of FetchContent
 add_library(${GRAAF_LIB_TARGET_NAME} INTERFACE)
 add_library(${PROJECT_NAME}::${GRAAF_LIB_TARGET_NAME} ALIAS ${PROJECT_NAME})
-
 target_include_directories(${GRAAF_LIB_TARGET_NAME} INTERFACE "${PROJECT_BINARY_DIR}" "${PROJECT_SOURCE_DIR}/include/")
+include(GNUInstallDirs)
+install(
+    DIRECTORY "${PROJECT_SOURCE_DIR}/include/"
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+configure_file(${CMAKE_SOURCE_DIR}/packaging/graaf.pc.in graaf.pc @ONLY)
+install(
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/graaf.pc
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
+)
