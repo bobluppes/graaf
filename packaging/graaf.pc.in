@@ -1,0 +1,8 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: graaf
+Version: @PROJECT_VERSION@
+Description: @PROJECT_DESCRIPTION@
+Cflags: -I${includedir}
