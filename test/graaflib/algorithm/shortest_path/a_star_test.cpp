@@ -193,7 +193,7 @@ TYPED_TEST(AStarShortestPathSignedTypesTest, AStarNegativeWeight) {
               ex.what(),
               fmt::format(
                   "Negative edge weight [{}] between vertices [{}] -> [{}].",
-                  -1, vertex_id_1, vertex_id_2));
+                  std::to_string(weight_t{-1}), vertex_id_1, vertex_id_2));
           throw;
         }
       },
