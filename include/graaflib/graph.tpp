@@ -129,6 +129,25 @@ graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_neighbors(
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
+typename graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::vertices_t
+graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_predecessors(
+    vertex_id_t vertex_id) const {
+
+  using enum graph_type;
+  if constexpr (GRAPH_TYPE_V == UNDIRECTED) {
+    return get_neighbors(vertex_id);
+  }
+  vertices_t predecessors{};
+  for (const auto& [source_id, neighbors] : adjacency_list_) {
+    if (neighbors.contains(vertex_id)) {
+      predecessors.insert(source_id);
+    }
+  }
+
+  return predecessors;
+}
+
+template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
 vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex(auto&& vertex) {
   while (has_vertex(vertex_id_supplier_)) {
     ++vertex_id_supplier_;
