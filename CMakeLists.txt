@@ -43,7 +43,7 @@ install(
     DIRECTORY "${PROJECT_SOURCE_DIR}/include/"
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
-configure_file(${CMAKE_SOURCE_DIR}/packaging/graaf.pc.in graaf.pc @ONLY)
+configure_file(${PROJECT_SOURCE_DIR}/packaging/graaf.pc.in graaf.pc @ONLY)
 install(
     FILES ${CMAKE_CURRENT_BINARY_DIR}/graaf.pc
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
