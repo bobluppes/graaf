@@ -11,6 +11,6 @@ jobs:
     steps:
     - uses: actions/first-interaction@v3
       with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        issue-message: "Hi there! Thank you for creating your first issue on the Graaf library, we will look into it shortly. In the mean time, please make sure the issue has the correct labels set."
-        pr-message: "Hi there! Thank you for creating your first pull-request on the Graaf library :)"
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        issue_message: "Hi there! Thank you for creating your first issue on the Graaf library, we will look into it shortly. In the mean time, please make sure the issue has the correct labels set."
+        pr_message: "Hi there! Thank you for creating your first pull-request on the Graaf library :)"
