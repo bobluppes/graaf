@@ -6,6 +6,16 @@ project(Graaf
   LANGUAGES C CXX
 )
 
+# CMake >=3.21 sets this automatically; fall back to the equivalent check
+# since this project's floor is CMake 3.11.
+if(NOT DEFINED PROJECT_IS_TOP_LEVEL)
+  if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+    set(PROJECT_IS_TOP_LEVEL TRUE)
+  else()
+    set(PROJECT_IS_TOP_LEVEL FALSE)
+  endif()
+endif()
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # This project uses C++ 20 features
@@ -43,7 +53,7 @@ install(
     DIRECTORY "${PROJECT_SOURCE_DIR}/include/"
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
-if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)  # Only if graalib is the top-level project (e.g. skip if obtained via FetchContent)
+if(PROJECT_IS_TOP_LEVEL)  # Skip if Graaf was obtained via FetchContent
     configure_file(${CMAKE_SOURCE_DIR}/packaging/graaf.pc.in graaf.pc @ONLY)
     install(
         FILES ${CMAKE_CURRENT_BINARY_DIR}/graaf.pc
