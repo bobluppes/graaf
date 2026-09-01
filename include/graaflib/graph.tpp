@@ -118,12 +118,14 @@ graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_edge(
   return get_edge(vertex_id_lhs, vertex_id_rhs);
 }
 
+static const std::unordered_set<vertex_id_t> empty_list;
+
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
-typename graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::vertices_t
+const typename graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::vertices_t&
 graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_neighbors(
     vertex_id_t vertex_id) const {
   if (!adjacency_list_.contains(vertex_id)) {
-    return {};
+    return empty_list;
   }
   return adjacency_list_.at(vertex_id);
 }
