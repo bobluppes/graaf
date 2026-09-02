@@ -105,7 +105,7 @@ jobs:
       - uses: actions/checkout@v7
 
       - name: Configure consumer project
-        run: cmake -B ${{github.workspace}}/consumer-build -S ${{github.workspace}}/test/cmake_integration/consumer -DGRAAF_SOURCE_DIR=${{github.workspace}}
+        run: cmake -B ${{github.workspace}}/consumer-build -S ${{github.workspace}}/cmake_integration/consumer -DGRAAF_SOURCE_DIR=${{github.workspace}}
 
       - name: Build consumer project
         run: cmake --build ${{github.workspace}}/consumer-build

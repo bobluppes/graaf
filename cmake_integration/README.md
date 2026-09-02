@@ -8,7 +8,7 @@ Graaf is built as a subproject rather than top-level (see #310/#312).
 Run it locally from the repo root:
 
 ```bash
-cmake -B /tmp/graaf-consumer-build -S test/cmake_integration/consumer -DGRAAF_SOURCE_DIR="$(pwd)"
+cmake -B /tmp/graaf-consumer-build -S cmake_integration/consumer -DGRAAF_SOURCE_DIR="$(pwd)"
 cmake --build /tmp/graaf-consumer-build
 cmake --install /tmp/graaf-consumer-build --prefix /tmp/graaf-consumer-install
 ```
