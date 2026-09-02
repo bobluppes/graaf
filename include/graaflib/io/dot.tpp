@@ -72,7 +72,7 @@ template <typename V, typename E, graph_type T, typename VERTEX_WRITER_T,
                                  const typename graph<V, E, T>::edge_t&>
 void to_dot(const graph<V, E, T>& graph, const std::filesystem::path& path,
             const VERTEX_WRITER_T& vertex_writer,
-            const EDGE_WRITER_T& edge_writer) {
+            const EDGE_WRITER_T& edge_writer, bool horizontal) {
   std::ofstream dot_file{path};
 
   const auto append_line{
@@ -80,6 +80,10 @@ void to_dot(const graph<V, E, T>& graph, const std::filesystem::path& path,
 
   // TODO(bluppes): replace with std::format once Clang supports it
   append_line(std::string(detail::graph_type_to_string(T)) + " {");
+
+  if (horizontal) {
+    append_line("rankdir=\"LR\";");
+  }
 
   for (const auto& [vertex_id, vertex] : graph.get_vertices()) {
     append_line("\t" + std::to_string(vertex_id) + " [" +
