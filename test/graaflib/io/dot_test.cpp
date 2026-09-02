@@ -256,4 +256,40 @@ TEST(DotTest, DefaultWriters) {
                                            vertex_2)) != std::string::npos);
 }
 
+TEST(DotTest, HorizontalGraph) {
+  // GIVEN
+  struct vertex_t {
+    int numeric_data{};
+    std::string string_data{};
+  };
+
+  struct edge_t {
+    int numeric_data{};
+    std::string string_data{};
+  };
+
+  const std::filesystem::path path{std::filesystem::temp_directory_path() /
+                                   "DotTest_HorizontalGraph.dot"};
+  directed_graph<vertex_t, edge_t> graph{};
+
+  const auto vertex_1{graph.add_vertex(vertex_t{10, "vertex 1"})};
+  const auto vertex_2{graph.add_vertex(vertex_t{20, "vertex 2"})};
+  graph.add_edge(vertex_1, vertex_2, edge_t{100, "edge 1"});
+
+  const auto vertex_writer{
+      [](vertex_id_t /*vertex_id*/, const vertex_t& vertex) {
+        return fmt::format("{}, {}", vertex.numeric_data, vertex.string_data);
+      }};
+  const auto edge_writer{[](const edge_id_t& /*edge_id*/, const auto& edge) {
+    return fmt::format("{}, {}", edge.numeric_data, edge.string_data);
+  }};
+
+  // WHEN
+  to_dot(graph, path, vertex_writer, edge_writer, true);
+
+  // THEN
+  const auto dot_content{read_to_string(path)};
+  ASSERT_TRUE(dot_content.find("rankdir=\"LR\"") != std::string::npos);
+}
+
 }  // namespace graaf::io

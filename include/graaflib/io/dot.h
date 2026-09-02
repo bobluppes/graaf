@@ -43,6 +43,8 @@ const auto default_edge_writer{
  * edge_id_t and a graph::edge_t and serialize it to a string. Default
  * implementations are provided for primitive numeric types.
  * @param path Path to the output dot file.
+ * @param horizontal If true, lays out the graph horizontally, otherwise lays it
+ * out vertically. Defaults to false.
  */
 template <typename V, typename E, graph_type T,
           typename VERTEX_WRITER_T = decltype(detail::default_vertex_writer<V>),
@@ -55,7 +57,8 @@ template <typename V, typename E, graph_type T,
 void to_dot(
     const graph<V, E, T>& graph, const std::filesystem::path& path,
     const VERTEX_WRITER_T& vertex_writer = detail::default_vertex_writer<V>,
-    const EDGE_WRITER_T& edge_writer = detail::default_edge_writer);
+    const EDGE_WRITER_T& edge_writer = detail::default_edge_writer,
+    bool horizontal = false);
 
 }  // namespace graaf::io
 
