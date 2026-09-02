@@ -93,3 +93,32 @@ jobs:
           cd docs
           npm install 
           npm run build
+
+  verify_fetchcontent:
+    # Graaf is commonly consumed via FetchContent. This builds a minimal
+    # standalone project that does exactly that, to catch regressions in our
+    # own CMakeLists.txt that only surface when Graaf is a subproject rather
+    # than top-level (see #310/#312).
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Configure consumer project
+        run: cmake -B ${{github.workspace}}/consumer-build -S ${{github.workspace}}/test/cmake_integration/consumer -DGRAAF_SOURCE_DIR=${{github.workspace}}
+
+      - name: Build consumer project
+        run: cmake --build ${{github.workspace}}/consumer-build
+
+      - name: Run consumer executable
+        run: ${{github.workspace}}/consumer-build/consumer
+
+      - name: Install consumer project
+        run: cmake --install ${{github.workspace}}/consumer-build --prefix ${{github.workspace}}/consumer-install
+
+      - name: Verify no pkgconfig file leaked from the FetchContent dependency
+        run: |
+          if [ -f "${{github.workspace}}/consumer-install/lib/pkgconfig/graaf.pc" ]; then
+            echo "::error::graaf.pc should not be installed when Graaf is consumed via FetchContent"
+            exit 1
+          fi
