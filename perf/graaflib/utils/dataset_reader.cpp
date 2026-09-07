@@ -19,9 +19,9 @@ struct graph_file {
 
 const std::unordered_map<dataset, graph_file> DATASETS{
     {dataset::WEB_GOOGLE,
-     graph_file{.filename = "web-Google.txt", .number_of_header_lines = 4}},
-    {dataset::WEB_BERK_STAN,
-     graph_file{.filename = "web-BerkStan.txt", .number_of_header_lines = 4}}};
+     graph_file{.filename = WEB_GOOGLE_FILENAME, .number_of_header_lines = 4}},
+    {dataset::WEB_BERK_STAN, graph_file{.filename = WEB_BERK_STAN_FILENAME,
+                                        .number_of_header_lines = 4}}};
 
 int UNIT_WEIGHT{1};
 

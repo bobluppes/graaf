@@ -3,5 +3,9 @@
 namespace utils {
 
 inline constexpr char const* DATASET_DIR = "@GRAAF_PERF_DATASET_DIR@";
+inline constexpr char const* WEB_GOOGLE_FILENAME =
+    "@GRAAF_WEB_GOOGLE_FILENAME@";
+inline constexpr char const* WEB_BERK_STAN_FILENAME =
+    "@GRAAF_WEB_BERK_STAN_FILENAME@";
 
 }  // namespace utils

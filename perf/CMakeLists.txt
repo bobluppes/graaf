@@ -33,6 +33,12 @@ option(GRAAF_DOWNLOAD_PERF_DATASETS
 # consumer's root instead).
 set(GRAAF_PERF_DATASET_DIR "${PROJECT_SOURCE_DIR}/.cache/perf_datasets")
 
+# Filenames are declared once here and used both to download the datasets
+# below and, via the generated dataset_dir.h, to open them in
+# dataset_reader.cpp - so the two can never drift out of sync.
+set(GRAAF_WEB_GOOGLE_FILENAME web-Google.txt)
+set(GRAAF_WEB_BERK_STAN_FILENAME web-BerkStan.txt)
+
 # Downloads and extracts a gzip-compressed dataset into GRAAF_PERF_DATASET_DIR,
 # unless it is already present there from a previous configure. The download
 # is written to a temporary name and only renamed into place on success, so a
@@ -72,8 +78,8 @@ if(GRAAF_DOWNLOAD_PERF_DATASETS)
 
   file(MAKE_DIRECTORY "${GRAAF_PERF_DATASET_DIR}")
 
-  graaf_download_dataset(web-Google.txt https://snap.stanford.edu/data/web-Google.txt.gz)
-  graaf_download_dataset(web-BerkStan.txt https://snap-sentiment.stanford.edu/data/web-BerkStan.txt.gz)
+  graaf_download_dataset(${GRAAF_WEB_GOOGLE_FILENAME} https://snap.stanford.edu/data/web-Google.txt.gz)
+  graaf_download_dataset(${GRAAF_WEB_BERK_STAN_FILENAME} https://snap-sentiment.stanford.edu/data/web-BerkStan.txt.gz)
 endif()
 
 # Generated unconditionally so the dataset-backed benchmarks always compile,
