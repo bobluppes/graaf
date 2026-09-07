@@ -8,13 +8,13 @@ assignees: ''
 ---
 
 # Documentation [ALGORITHM_NAME]
-The goal of this issue if the improve the documentation of an existing algorithm. This documentation should go into the algorithms section of our [docusaurus docs](https://bobluppes.github.io/graaf/docs/algorithms/intro).
+The goal of this issue if the improve the documentation of an existing algorithm. This documentation should go into the algorithms section of our [docs](https://bobluppes.github.io/graaf/algorithms/intro.html).
 
 More detail on how to build the documentation locally can be found on the [wiki](https://github.com/bobluppes/graaf/wiki/development-setup#documentation).
 
-An existing documentation page exists, which should be extended. The page can be found under `docs/docs/algorithms/`.
+An existing documentation page exists, which should be extended. The page can be found under `docs/src/algorithms/`.
 OR
-A new documentation page should be created under `docs/docs/algorithms`. Potentially, a new subdirectory should be created for the algorithm's category.
+A new documentation page should be created under `docs/src/algorithms`. Potentially, a new subdirectory should be created for the algorithm's category.
 
 The corresponding algorithm is called `` and can be found under `include/graaflib/algorithm/`.
 

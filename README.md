@@ -1,4 +1,4 @@
-<p align="center"><img src="docs/static/img/graaf.png"></p>
+<p align="center"><img src="docs/src/img/graaf.png"></p>
 <h1 align="center">Graaf Library</h1>
 
 <p align="center">
@@ -10,7 +10,7 @@
 <p align="center">
   <a href="https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml"><img src="https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml/badge.svg" height="20"></a>
   <a href="https://codecov.io/github/bobluppes/graaf"><img src="https://codecov.io/github/bobluppes/graaf/branch/main/graph/badge.svg?token=ZFBLNFN39C" height="20"></a>
-  <a href="https://bobluppes.github.io/graaf/"><img src="https://img.shields.io/badge/user_docs-docusaurus-%23ff69b4" height="20"></a>
+  <a href="https://bobluppes.github.io/graaf/"><img src="https://img.shields.io/badge/user_docs-mdbook-%23ff69b4" height="20"></a>
   <a href="https://github.com/bobluppes/graaf/wiki"><img src="https://img.shields.io/badge/contributer_docs-wiki-9cf" height="20"></a>
 </p>
 
@@ -45,7 +45,7 @@ Graaf is designed with the goal of simplifying graph-related tasks. It offers a 
 # Installation
 
 The most straightforward way to use the Graaf in your project is to include it as a header-only library. Please take a
-look at the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/installation) for alternative
+look at the [installation guide](https://bobluppes.github.io/graaf/quickstart/installation/) for alternative
 installation methods.
 
 ## Header-Only Library
@@ -61,7 +61,7 @@ the `include/graaflib` directory to your include path. You can now use Graaf in 
 ```
 
 For more details or alternative installation methods, see
-the [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/installation).
+the [installation guide](https://bobluppes.github.io/graaf/quickstart/installation/).
 
 # How to use Graaf
 
@@ -94,39 +94,39 @@ Implementations for common [graph algorithms](#algorithms) are provided under th
 with built-in `dot` format support allows us to do things like visualizing the shortest path between two vertices:
 
 <p align="center">
-<img src="docs/static/img/graph_example.png">
+<img src="docs/src/img/graph_example.png">
 </p>
 
-To get started, take a look at our [quickstart guide](https://bobluppes.github.io/graaf/docs/quickstart/intro).
+To get started, take a look at our [quickstart guide](https://bobluppes.github.io/graaf/quickstart/intro.html).
 
 # Algorithms
 
 Algorithms implemented in the Graaf library include the following. For more information on individual algorithms please
-take a look at the [docs](https://bobluppes.github.io/graaf/docs/algorithms/intro).
+take a look at the [docs](https://bobluppes.github.io/graaf/algorithms/intro.html).
 
-1. [**Cycle Detection Algorithms**](https://bobluppes.github.io/graaf/docs/category/cycle-detection-algorithms):
-   - [DFS-Based Cycle Detection](https://bobluppes.github.io/graaf/docs/algorithms/cycle-detection/dfs-based)
-2. [**Graph Coloring Algorithms**](https://bobluppes.github.io/graaf/docs/category/graph-coloring-algorithms):
-   - [Greedy Graph Coloring](https://bobluppes.github.io/graaf/docs/algorithms/coloring/greedy-graph-coloring)
+1. [**Cycle Detection Algorithms**](https://bobluppes.github.io/graaf/algorithms/cycle-detection/):
+   - [DFS-Based Cycle Detection](https://bobluppes.github.io/graaf/algorithms/cycle-detection/dfs-based.html)
+2. [**Graph Coloring Algorithms**](https://bobluppes.github.io/graaf/algorithms/coloring/):
+   - [Greedy Graph Coloring](https://bobluppes.github.io/graaf/algorithms/coloring/greedy-graph-coloring.html)
    - [Welsh-Powell Algorithm]
-3. [**Minimum Spanning Tree (MST) Algorithms**](https://bobluppes.github.io/graaf/docs/category/minimum-spanning-tree)
-   - [Kruskal's Algorithm](https://bobluppes.github.io/graaf/docs/algorithms/minimum-spanning-tree/kruskal)
-   - [Prim's Algorithm](https://bobluppes.github.io/graaf/docs/algorithms/minimum-spanning-tree/prim)
-4. [**Shortest Path Algorithms**](https://bobluppes.github.io/graaf/docs/category/shortest-path-algorithms):
-   - [A\* search](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/a-star)
-   - [Bellman-Ford Shortest Path](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/bellman-ford)
-   - [BFS-Based Shortest Path](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/bfs-based-shortest-path)
-   - [Dijkstra Shortest Path](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/dijkstra)
-   - [Floyd-Warshall Algorithm](https://bobluppes.github.io/graaf/docs/algorithms/shortest-path/floyd-warshall)
-5. [**Strongly Connected Components Algorithms**](https://bobluppes.github.io/graaf/docs/category/strongly-connected-component-algorithms):
-   - [Tarjan's Strongly Connected Components](https://bobluppes.github.io/graaf/docs/algorithms/strongly-connected-components/tarjan)
-   - [Kosaraju's Strongly Connected Components](https://bobluppes.github.io/graaf/docs/algorithms/strongly-connected-components/kosarajus)
-6. [**Topological Sorting Algorithms**](https://bobluppes.github.io/graaf/docs/algorithms/topological-sort):
-7. [**Traversal Algorithms**](https://bobluppes.github.io/graaf/docs/category/traversal-algorithms):
-   - [Breadth-First Search (BFS)](https://bobluppes.github.io/graaf/docs/algorithms/traversal/breadth-first-search)
-   - [Depth-First Search (DFS)](https://bobluppes.github.io/graaf/docs/algorithms/traversal/depth-first-search)
-8. [**Clique Detection**](https://bobluppes.github.io/graaf/docs/category/clique-detection)
-    - [Bron-Kerbosch](https://bobluppes.github.io/graaf/docs/algorithms/clique-detection/bron_kerbosch)
+3. [**Minimum Spanning Tree (MST) Algorithms**](https://bobluppes.github.io/graaf/algorithms/minimum-spanning-tree/)
+   - [Kruskal's Algorithm](https://bobluppes.github.io/graaf/algorithms/minimum-spanning-tree/kruskal.html)
+   - [Prim's Algorithm](https://bobluppes.github.io/graaf/algorithms/minimum-spanning-tree/prim.html)
+4. [**Shortest Path Algorithms**](https://bobluppes.github.io/graaf/algorithms/shortest-path/):
+   - [A\* search](https://bobluppes.github.io/graaf/algorithms/shortest-path/a-star.html)
+   - [Bellman-Ford Shortest Path](https://bobluppes.github.io/graaf/algorithms/shortest-path/bellman-ford.html)
+   - [BFS-Based Shortest Path](https://bobluppes.github.io/graaf/algorithms/shortest-path/bfs-based-shortest-path.html)
+   - [Dijkstra Shortest Path](https://bobluppes.github.io/graaf/algorithms/shortest-path/dijkstra.html)
+   - [Floyd-Warshall Algorithm](https://bobluppes.github.io/graaf/algorithms/shortest-path/floyd-warshall.html)
+5. [**Strongly Connected Components Algorithms**](https://bobluppes.github.io/graaf/algorithms/strongly-connected-components/):
+   - [Tarjan's Strongly Connected Components](https://bobluppes.github.io/graaf/algorithms/strongly-connected-components/tarjan.html)
+   - [Kosaraju's Strongly Connected Components](https://bobluppes.github.io/graaf/algorithms/strongly-connected-components/kosarajus.html)
+6. [**Topological Sorting Algorithms**](https://bobluppes.github.io/graaf/algorithms/topological-sort/topological-sort.html):
+7. [**Traversal Algorithms**](https://bobluppes.github.io/graaf/algorithms/traversal/):
+   - [Breadth-First Search (BFS)](https://bobluppes.github.io/graaf/algorithms/traversal/breadth-first-search.html)
+   - [Depth-First Search (DFS)](https://bobluppes.github.io/graaf/algorithms/traversal/depth-first-search.html)
+8. [**Clique Detection**](https://bobluppes.github.io/graaf/algorithms/clique-detection/)
+    - [Bron-Kerbosch](https://bobluppes.github.io/graaf/algorithms/clique-detection/bron_kerbosch.html)
 
 # Contributing
 
@@ -150,7 +150,7 @@ Feel free to join our [Discord](https://discord.gg/cGczwRHJ9K) for assistance an
 
 <p align="left">
   <a href="https://www.jetbrains.com">
-    <img src="docs/static/img/jetbrains-logo.svg" width="60" alt="JetBrains Logo">
+    <img src="docs/src/img/jetbrains-logo.svg" width="60" alt="JetBrains Logo">
   </a>
 </p>
 

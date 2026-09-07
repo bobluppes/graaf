@@ -1,17 +1,17 @@
 # Website
 
-This website is built using [Docusaurus 3](https://docusaurus.io/), a modern static website generator.
+This website is built using [mdBook](https://rust-lang.github.io/mdBook/), a command line tool to create books with Markdown.
 
 ### Installation
 
 ```
-$ yarn
+$ cargo install mdbook
 ```
 
 ### Local Development
 
 ```
-$ yarn start
+$ mdbook serve
 ```
 
 This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
@@ -19,23 +19,7 @@ This command starts a local development server and opens up a browser window. Mo
 ### Build
 
 ```
-$ yarn build
+$ mdbook build
 ```
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
-### Deployment
-
-Using SSH:
-
-```
-$ USE_SSH=true yarn deploy
-```
-
-Not using SSH:
-
-```
-$ GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+This command generates static content into the `book` directory and can be served using any static contents hosting service.
