@@ -16,29 +16,73 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(fmt)
 
-set(GOOGLE_WEB_INPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/input_data/web-Google.txt")
-set(GOOGLE_WEB_INPUT_URL "https://snap.stanford.edu/data/web-Google.txt.gz")
-if(NOT EXISTS "${GOOGLE_WEB_INPUT_FILE}")
-  if(NOT EXISTS "${GOOGLE_WEB_INPUT_FILE}.gz")
-    file(DOWNLOAD "${GOOGLE_WEB_INPUT_URL}" "${GOOGLE_WEB_INPUT_FILE}.gz" SHOW_PROGRESS)
+# A few benchmarks (Kruskal/Prim MST) run against large real-world graph
+# datasets that are downloaded from the web. This is off by default so that
+# configuring Graaf - whether standalone, in CI, or as a FetchContent
+# dependency of another project - never silently hits the network. Enable
+# this locally to actually download the datasets and run those benchmarks.
+option(GRAAF_DOWNLOAD_PERF_DATASETS
+  "Download large real-world graph datasets used by some perf benchmarks"
+  OFF)
+
+# Datasets are cached here, outside of the build directory, so that they
+# survive a clean rebuild instead of being re-downloaded every time.
+# PROJECT_SOURCE_DIR (Graaf's own root), not CMAKE_SOURCE_DIR, so that this
+# still resolves correctly when Graaf is pulled in as a FetchContent
+# dependency of another project (where CMAKE_SOURCE_DIR would point at the
+# consumer's root instead).
+set(GRAAF_PERF_DATASET_DIR "${PROJECT_SOURCE_DIR}/.cache/perf_datasets")
+
+# Downloads and extracts a gzip-compressed dataset into GRAAF_PERF_DATASET_DIR,
+# unless it is already present there from a previous configure. The download
+# is written to a temporary name and only renamed into place on success, so a
+# failed or interrupted download can never be mistaken for a valid cache entry.
+function(graaf_download_dataset filename url)
+  set(extracted "${GRAAF_PERF_DATASET_DIR}/${filename}")
+  if(NOT EXISTS "${extracted}")
+    set(archive "${extracted}.gz")
+    if(NOT EXISTS "${archive}")
+      set(archive_partial "${archive}.partial")
+      file(DOWNLOAD "${url}" "${archive_partial}" SHOW_PROGRESS STATUS download_status)
+      list(GET download_status 0 download_status_code)
+      if(NOT download_status_code EQUAL 0)
+        list(GET download_status 1 download_status_message)
+        file(REMOVE "${archive_partial}")
+        message(FATAL_ERROR "Failed to download dataset '${filename}' from ${url}: ${download_status_message}")
+      endif()
+      file(RENAME "${archive_partial}" "${archive}")
+    endif()
+    execute_process(
+      COMMAND "${GRAAF_GZIP_EXECUTABLE}" -dc "${archive}"
+      OUTPUT_FILE "${extracted}"
+      RESULT_VARIABLE gzip_result
+    )
+    if(NOT gzip_result EQUAL 0)
+      file(REMOVE "${extracted}")
+      message(FATAL_ERROR "Failed to extract dataset '${filename}' ('gzip' exited with ${gzip_result})")
+    endif()
   endif()
-  execute_process(
-    COMMAND gzip -dc "${GOOGLE_WEB_INPUT_FILE}.gz"
-    OUTPUT_FILE "${GOOGLE_WEB_INPUT_FILE}"
-  )
+endfunction()
+
+if(GRAAF_DOWNLOAD_PERF_DATASETS)
+  find_program(GRAAF_GZIP_EXECUTABLE gzip)
+  if(NOT GRAAF_GZIP_EXECUTABLE)
+    message(FATAL_ERROR "GRAAF_DOWNLOAD_PERF_DATASETS is ON but 'gzip' was not found on PATH; it is required to extract the perf benchmark datasets.")
+  endif()
+
+  file(MAKE_DIRECTORY "${GRAAF_PERF_DATASET_DIR}")
+
+  graaf_download_dataset(web-Google.txt https://snap.stanford.edu/data/web-Google.txt.gz)
+  graaf_download_dataset(web-BerkStan.txt https://snap-sentiment.stanford.edu/data/web-BerkStan.txt.gz)
 endif()
 
-set(BERKELEY_STANFORD_INPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/input_data/web-BerkStan.txt")
-set(BERKELEY_STANFORD_INPUT_URL "https://snap-sentiment.stanford.edu/data/web-BerkStan.txt.gz")
-if(NOT EXISTS "${BERKELEY_STANFORD_INPUT_FILE}")
-  if(NOT EXISTS "${BERKELEY_STANFORD_INPUT_FILE}.gz")
-    file(DOWNLOAD "${BERKELEY_STANFORD_INPUT_URL}" "${BERKELEY_STANFORD_INPUT_FILE}.gz" SHOW_PROGRESS)
-  endif()
-  execute_process(
-    COMMAND gzip -dc "${BERKELEY_STANFORD_INPUT_FILE}.gz"
-    OUTPUT_FILE "${BERKELEY_STANFORD_INPUT_FILE}"
-  )
-endif()
+# Generated unconditionally so the dataset-backed benchmarks always compile,
+# even when GRAAF_DOWNLOAD_PERF_DATASETS is off (they just can't be run).
+configure_file(
+  graaflib/utils/dataset_dir.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/generated/graaflib/utils/dataset_dir.h
+  @ONLY
+)
 
 file(GLOB PERF_SOURCES "graaflib/*.cpp" "graaflib/*/*.cpp")
 add_executable(
@@ -49,10 +93,12 @@ add_executable(
 # Include src such that we can #include <graaflib/*> in the sources
 target_include_directories(${PROJECT_NAME}_perf PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
+# Include the generated dataset_dir.h
+target_include_directories(${PROJECT_NAME}_perf PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated)
+
 target_link_libraries(
   ${PROJECT_NAME}_perf
   PRIVATE
   benchmark
   fmt::fmt
 )
-

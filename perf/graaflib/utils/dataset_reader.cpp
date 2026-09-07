@@ -1,8 +1,10 @@
 #include "dataset_reader.h"
 
-#include <cassert>
+#include <graaflib/utils/dataset_dir.h>
+
 #include <filesystem>
 #include <fstream>
+#include <stdexcept>
 #include <string>
 #include <unordered_map>
 
@@ -16,11 +18,10 @@ struct graph_file {
 };
 
 const std::unordered_map<dataset, graph_file> DATASETS{
-    {dataset::WEB_GOOGLE, graph_file{.filename = "input_data/web-Google.txt",
-                                     .number_of_header_lines = 4}},
+    {dataset::WEB_GOOGLE,
+     graph_file{.filename = "web-Google.txt", .number_of_header_lines = 4}},
     {dataset::WEB_BERK_STAN,
-     graph_file{.filename = "input_data/web-BerkStan.txt",
-                .number_of_header_lines = 4}}};
+     graph_file{.filename = "web-BerkStan.txt", .number_of_header_lines = 4}}};
 
 int UNIT_WEIGHT{1};
 
@@ -28,10 +29,16 @@ int UNIT_WEIGHT{1};
 
 graph_t construct_graph_from_file(const dataset& dataset_name) {
   const auto& dataset{DATASETS.at(dataset_name)};
+  const auto path{std::filesystem::path(DATASET_DIR) / dataset.filename};
 
   std::ifstream file{};
-  file.open(dataset.filename);
-  assert(file.is_open());
+  file.open(path);
+  if (!file.is_open()) {
+    throw std::runtime_error(
+        "Could not open dataset file: " + path.string() +
+        ". Re-run cmake with -DGRAAF_DOWNLOAD_PERF_DATASETS=ON to download "
+        "it.");
+  }
 
   std::string line;
 

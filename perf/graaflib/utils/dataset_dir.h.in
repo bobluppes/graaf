@@ -1,0 +1,7 @@
+#pragma once
+
+namespace utils {
+
+inline constexpr char const* DATASET_DIR = "@GRAAF_PERF_DATASET_DIR@";
+
+}  // namespace utils
