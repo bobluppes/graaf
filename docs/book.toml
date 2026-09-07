@@ -2,13 +2,8 @@
 title = "Graaf lib"
 description = "A general-purpose lightweight graph library implemented in C++"
 authors = ["Bob Luppes"]
-language = "en"
-src = "src"
 
 [output.html]
 git-repository-url = "https://github.com/bobluppes/graaf"
 edit-url-template = "https://github.com/bobluppes/graaf/edit/main/docs/src/{path}"
 site-url = "/graaf/"
-
-[output.html.search]
-enable = true

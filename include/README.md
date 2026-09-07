@@ -1,5 +1,5 @@
 # Graaf Header-Only Installation
-Installing Graaf on your project is easy! Simply copy the `graaflib` directory to your project and add it to your include path. For more details or alternative installation methods, take a look at our [installation guide](https://bobluppes.github.io/graaf/docs/quickstart/installation).
+Installing Graaf on your project is easy! Simply copy the `graaflib` directory to your project and add it to your include path. For more details or alternative installation methods, take a look at our [installation guide](https://bobluppes.github.io/graaf/quickstart/installation/).
 
 1. Copy `graaflip` to your project.
 2. Before compiling, add the directory to your include path.

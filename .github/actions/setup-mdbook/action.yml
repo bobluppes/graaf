@@ -1,0 +1,10 @@
+name: Setup mdBook
+description: Install the pinned mdBook version used to build the documentation site.
+
+runs:
+  using: composite
+  steps:
+    - name: Install mdBook
+      uses: peaceiris/actions-mdbook@v2
+      with:
+        mdbook-version: "0.5.4"
