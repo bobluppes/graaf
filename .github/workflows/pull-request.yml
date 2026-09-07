@@ -86,7 +86,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v7
         with:
-          node-version: "18"
+          node-version: "20"
 
       - name: Build Docusaurus website
         run: |
