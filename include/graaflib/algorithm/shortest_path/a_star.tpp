@@ -84,7 +84,7 @@ std::optional<graph_path<WEIGHT_T>> a_star_search(
         // always update vertex_info[neighbor]
         vertex_info[neighbor] = {
             neighbor,   // vertex id
-            f_score,    // f_score = tentantive_g_score + h(neighbor)
+            f_score,    // f_score = tentative_g_score + h(neighbor)
             current.id  // neighbor vertex came from current vertex
         };
 

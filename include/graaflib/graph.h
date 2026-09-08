@@ -55,7 +55,7 @@ class graph {
   [[nodiscard]] std::size_t edge_count() const noexcept;
 
   /**
-   * @brief Get the intrnal vertices
+   * @brief Get the internal vertices
    *
    * @return const vertex_id_to_vertex_t& Map from vertex id to the user
    * provided vertex.
