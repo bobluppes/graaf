@@ -50,7 +50,7 @@ installation methods.
 
 ## Header-Only Library
 
-The Graaf libary can be included as a header-only library. All it requires is a compiler with **C++ 20 support**.
+The Graaf library can be included as a header-only library. All it requires is a compiler with **C++ 20 support**.
 
 Download the `header-only` library from our [release page](https://github.com/bobluppes/graaf/releases) and add
 the `include/graaflib` directory to your include path. You can now use Graaf in your source files:
