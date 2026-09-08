@@ -140,7 +140,7 @@ template <typename GRAPH_T>
 
 /**
  * Creates a scenario containing a disconnected graph consisting of two
- * conntected subgraphs. In the visualization below, vertices and edge values
+ * connected subgraphs. In the visualization below, vertices and edge values
  * are shown. Vertex IDs are given between parentheses.
  *
  * The direction of the edges is visualized. However, undirected edges are

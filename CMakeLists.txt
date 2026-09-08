@@ -43,7 +43,7 @@ install(
     DIRECTORY "${PROJECT_SOURCE_DIR}/include/"
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
-if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)  # Only if graalib is the top-level project (e.g. skip if obtained via FetchContent)
+if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)  # Only if graaflib is the top-level project (e.g. skip if obtained via FetchContent)
     configure_file(${CMAKE_SOURCE_DIR}/packaging/graaf.pc.in graaf.pc @ONLY)
     install(
         FILES ${CMAKE_CURRENT_BINARY_DIR}/graaf.pc

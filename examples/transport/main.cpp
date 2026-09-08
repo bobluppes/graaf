@@ -180,7 +180,7 @@ int main() {
   const auto unweighted_shortest_path{
       graaf::algorithm::bfs_shortest_path(graph, start, target)};
   print_shortest_path(graph, unweighted_shortest_path,
-                      "example_unwieghted_graph.dot");
+                      "example_unweighted_graph.dot");
 
   seen_edges_t seen_edges{};
   graaf::algorithm::breadth_first_traverse(graph, start,
