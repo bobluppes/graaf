@@ -492,6 +492,11 @@
   resolved "https://registry.yarnpkg.com/@babel/helper-plugin-utils/-/helper-plugin-utils-7.25.9.tgz#9cbdd63a9443a2c92a725cca7ebca12cc8dd9f46"
   integrity sha512-kSMlyUVdWe25rEsRGviIgOWnoT/nfABVWlqt9N19/dIPWViAOW2s9wznP5tURbs/IDuNk4gPy3YdYRgH3uxhBw==
 
+"@babel/helper-plugin-utils@^7.29.7":
+  version "7.29.7"
+  resolved "https://registry.yarnpkg.com/@babel/helper-plugin-utils/-/helper-plugin-utils-7.29.7.tgz#c0a0766f1a13617d8a17407d7ab8f9d486225ea4"
+  integrity sha512-G7sHYigPY17oO5SYWnfD/0MTBwVR781S/JI643e/JhUYgVgWE/61SoW3NH9KWUKyKq5LVh3npif99Wkt6j86Jw==
+
 "@babel/helper-remap-async-to-generator@^7.25.7":
   version "7.25.7"
   resolved "https://registry.yarnpkg.com/@babel/helper-remap-async-to-generator/-/helper-remap-async-to-generator-7.25.7.tgz#9efdc39df5f489bcd15533c912b6c723a0a65021"
@@ -1298,25 +1303,15 @@
     "@babel/helper-plugin-utils" "^7.25.9"
     "@babel/helper-simple-access" "^7.25.9"
 
-"@babel/plugin-transform-modules-systemjs@^7.25.7":
-  version "7.25.7"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-modules-systemjs/-/plugin-transform-modules-systemjs-7.25.7.tgz#8b14d319a177cc9c85ef8b0512afd429d9e2e60b"
-  integrity sha512-t9jZIvBmOXJsiuyOwhrIGs8dVcD6jDyg2icw1VL4A/g+FnWyJKwUfSSU2nwJuMV2Zqui856El9u+ElB+j9fV1g==
+"@babel/plugin-transform-modules-systemjs@^7.25.7", "@babel/plugin-transform-modules-systemjs@^7.25.9":
+  version "7.29.8"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-modules-systemjs/-/plugin-transform-modules-systemjs-7.29.8.tgz#e60a6a42ac63a3095f9cc7264f698a100c8fe05d"
+  integrity sha512-6iSnEK0zlkLKU4heofK/AdmRD4e2SHVpJMtrwnTCzhnaM98ria4rTrOXBBi45BTTYnJtO8txnPsX4fChYXkmeA==
   dependencies:
-    "@babel/helper-module-transforms" "^7.25.7"
-    "@babel/helper-plugin-utils" "^7.25.7"
-    "@babel/helper-validator-identifier" "^7.25.7"
-    "@babel/traverse" "^7.25.7"
-
-"@babel/plugin-transform-modules-systemjs@^7.25.9":
-  version "7.25.9"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-modules-systemjs/-/plugin-transform-modules-systemjs-7.25.9.tgz#8bd1b43836269e3d33307151a114bcf3ba6793f8"
-  integrity sha512-hyss7iIlH/zLHaehT+xwiymtPOpsiwIIRlCAOwBB04ta5Tt+lNItADdlXw3jAWZ96VJ2jlhl/c+PNIQPKNfvcA==
-  dependencies:
-    "@babel/helper-module-transforms" "^7.25.9"
-    "@babel/helper-plugin-utils" "^7.25.9"
-    "@babel/helper-validator-identifier" "^7.25.9"
-    "@babel/traverse" "^7.25.9"
+    "@babel/helper-module-transforms" "^7.29.7"
+    "@babel/helper-plugin-utils" "^7.29.7"
+    "@babel/helper-validator-identifier" "^7.29.7"
+    "@babel/traverse" "^7.29.8"
 
 "@babel/plugin-transform-modules-umd@^7.25.7":
   version "7.25.7"
@@ -2080,7 +2075,7 @@
     debug "^4.3.1"
     globals "^11.1.0"
 
-"@babel/traverse@^7.29.7":
+"@babel/traverse@^7.29.7", "@babel/traverse@^7.29.8":
   version "7.29.8"
   resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.29.8.tgz#4111014cdc71a0f95d9471907590baa0b8a6b28a"
   integrity sha512-I5z7H3bf/41ktsNVLtpN0wAa336HkqIHQ5BuPLEhTkt1jVSyZpeNKIzTgEWmlxjdg81R0IgUCcaE+Ok3NvrfZg==
