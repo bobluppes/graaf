@@ -3,6 +3,8 @@
 #include <gtest/gtest.h>
 #include <utils/scenarios/scenarios.h>
 
+#include <algorithm>
+
 namespace graaf::algorithm {
 
 namespace {
