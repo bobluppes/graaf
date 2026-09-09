@@ -29,7 +29,7 @@ namespace {
 // of millions of times for a graph with only a few million edges, which is
 // itself slow enough to reintroduce the runtime problem this cap exists to
 // avoid.
-constexpr std::size_t MAX_SUBGRAPH_VERTICES{1'000};
+constexpr std::size_t MAX_SUBGRAPH_VERTICES{2'400};
 
 [[nodiscard]] utils::graph_t compute_connected_subgraph(
     const utils::graph_t& graph, const graaf::vertex_id_t start_vertex,
