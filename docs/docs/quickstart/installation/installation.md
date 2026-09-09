@@ -62,6 +62,9 @@ There are multiple CMake Options available to choose how you want to build Graaf
 - `SKIP_BENCHMARKS`
   - Default: `OFF`
   - This skips building the Benchmarks.
+- `GRAAF_DOWNLOAD_PERF_DATASETS`
+  - Default: `OFF`
+  - Some benchmarks run against large real-world graph datasets. Enabling this downloads those datasets so these benchmarks can run; leaving it off still builds them, it just skips downloading the data.
 
 These Options can be set while executing the cmake command
 ```bash
