@@ -2,6 +2,7 @@
 #include <graaflib/algorithm/clique_detection/bron_kerbosch.h>
 #include <graaflib/graph.h>
 
+#include <algorithm>
 #include <random>
 #include <vector>
 
