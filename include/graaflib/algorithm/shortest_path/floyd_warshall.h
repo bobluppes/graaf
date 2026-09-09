@@ -3,6 +3,8 @@
 #include <graaflib/graph.h>
 #include <graaflib/types.h>
 
+#include <vector>
+
 namespace graaf::algorithm {
 /**
  * @brief Floyd-Warshall Algorithm

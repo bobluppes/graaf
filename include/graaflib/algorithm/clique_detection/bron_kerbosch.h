@@ -2,6 +2,8 @@
 
 #include <graaflib/graph.h>
 
+#include <vector>
+
 namespace graaf::algorithm {
 /**
  * @brief Finds all cliques in an undirected graph using the Bron-Kerbosch

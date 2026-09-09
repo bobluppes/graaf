@@ -1,5 +1,6 @@
 #pragma once
 #include <algorithm>
+#include <cstdlib>
 
 #include "vertex_properties.h"
 
