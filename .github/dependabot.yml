@@ -5,8 +5,9 @@ updates:
     schedule:
       interval: "weekly"
 
-  - package-ecosystem: "npm"
-    # Look for `package.json` and `lock` files in the `root` directory
-    directory: "/docs"
+  - package-ecosystem: "github-actions"
+    # Composite actions under .github/actions/** are not picked up by the
+    # root "/" entry above, so they need their own directory entry.
+    directory: "/.github/actions/setup-mdbook"
     schedule:
       interval: "weekly"
