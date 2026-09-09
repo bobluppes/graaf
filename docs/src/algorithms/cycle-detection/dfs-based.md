@@ -46,7 +46,7 @@ template <typename V, typename E>
 
 ```
 
-Cycle detection for unidrected graph.
+Cycle detection for undirected graph.
 
 ```cpp
 template <typename V, typename E>

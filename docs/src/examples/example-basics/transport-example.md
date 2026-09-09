@@ -32,7 +32,7 @@ struct railroad : public graaf::weighted_edge<double> {
 };
 ```
 
-# Initializing graph, start and end vertecies
+# Initializing graph, start and end vertices
 
 First, we create data structure and initializing graph with vertices and edges
 
@@ -121,7 +121,7 @@ The last one is traversing the graph from a given vertex and printing the result
   const auto unweighted_shortest_path{
       graaf::algorithm::bfs_shortest_path(graph, start, target)};
   print_shortest_path(graph, unweighted_shortest_path,
-                      "example_unwieghted_graph.dot");
+                      "example_unweighted_graph.dot");
 
   seen_edges_t seen_edges{};
   graaf::algorithm::breadth_first_traverse(

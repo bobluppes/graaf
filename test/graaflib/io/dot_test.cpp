@@ -39,7 +39,7 @@ const auto make_edge_string{[](edge_id_t edge_id,
 }};
 
 /**
- * @brief Returns a pair with the smalles vertex_id first.
+ * @brief Returns a pair with the smallest vertex_id first.
  * Edges from undirected graphs are sorted on vertex ID, this function is used
  * to sort the expected values in the same fashion.
  *
