@@ -3,8 +3,29 @@
 #include <utils/fixtures/fixtures.h>
 
 #include <unordered_map>
+#include <unordered_set>
 
 namespace graaf::algorithm {
+
+namespace {
+
+// A coloring is proper iff no two vertices connected by an edge share the
+// same color. Note that graph::get_neighbors() returns an unordered_set, so
+// the exact colors assigned to individual vertices are not guaranteed to be
+// stable across STL implementations/platforms - only this invariant is.
+template <typename GRAPH>
+bool is_proper_coloring(const GRAPH& graph,
+                        const std::unordered_map<vertex_id_t, int>& coloring) {
+  for (const auto& [edge_id, edge] : graph.get_edges()) {
+    const auto [u, v]{edge_id};
+    if (coloring.at(u) == coloring.at(v)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+}  // namespace
 
 template <typename T>
 struct WelshPowellTest : public testing::Test {
@@ -46,11 +67,8 @@ TYPED_TEST(WelshPowellTest, BasicGraphColoring) {
   auto coloring = welsh_powell_coloring(graph);
 
   // THEN
-  std::unordered_map<vertex_id_t, int> expected_coloring = {
-      {0, 1}, {2, 1}, {1, 0}};
-
-  // Check if the obtained coloring matches the expected coloring
-  ASSERT_EQ(coloring, expected_coloring);
+  ASSERT_EQ(coloring.size(), 3);
+  ASSERT_TRUE(is_proper_coloring(graph, coloring));
 }
 
 TYPED_TEST(WelshPowellTest, GraphWithNoEdges) {
@@ -101,11 +119,15 @@ TYPED_TEST(WelshPowellTest, CompleteGraph) {
   auto coloring = welsh_powell_coloring(graph);
 
   // THEN
-  std::unordered_map<vertex_id_t, int> expected_coloring = {
-      {0, 3}, {1, 2}, {2, 1}, {3, 0}};
+  ASSERT_TRUE(is_proper_coloring(graph, coloring));
 
-  // Check if the obtained coloring matches the expected coloring
-  ASSERT_EQ(coloring, expected_coloring);
+  // A complete graph on 4 vertices requires exactly 4 distinct colors, since
+  // every vertex is adjacent to every other vertex.
+  std::unordered_set<int> distinct_colors;
+  for (const auto& [vertex_id, color] : coloring) {
+    distinct_colors.insert(color);
+  }
+  ASSERT_EQ(distinct_colors.size(), 4);
 }
 
 TYPED_TEST(WelshPowellTest, DisconnectedComponents) {
@@ -130,13 +152,7 @@ TYPED_TEST(WelshPowellTest, DisconnectedComponents) {
   auto coloring = welsh_powell_coloring(graph);
 
   // THEN
-  // Verify that for each edge, adjacent vertices have different colors
-  for (const auto& [edge_id, edge] : graph.get_edges()) {
-    const auto [u, v]{edge_id};
-    int color_u = coloring[u];
-    int color_v = coloring[v];
-    ASSERT_TRUE(color_u != color_v);
-  }
+  ASSERT_TRUE(is_proper_coloring(graph, coloring));
 }
 
 }  // namespace graaf::algorithm

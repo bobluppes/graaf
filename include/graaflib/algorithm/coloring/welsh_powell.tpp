@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <iostream>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include "welsh_powell.h"
@@ -28,17 +29,24 @@ std::unordered_map<vertex_id_t, int> welsh_powell_coloring(const GRAPH& graph) {
   std::unordered_map<vertex_id_t, int> color_map;
 
   for (const auto [_, current_vertex] : degree_vertex_pairs) {
-    int color = 0;  // Start with color 0
-
-    // Check colors of adjacent vertices
+    // Collect the colors already used by neighbors of the current vertex.
+    // Note that this needs to be gathered up front and independent of
+    // iteration order, since graph::get_neighbors() returns an
+    // unordered_set whose iteration order is unspecified.
+    std::unordered_set<int> neighbor_colors;
     for (const auto& neighbor : graph.get_neighbors(current_vertex)) {
-      // If neighbor is already colored with this color, increment the color
-      if (color_map.contains(neighbor) && color_map[neighbor] == color) {
-        color++;
+      if (const auto it{color_map.find(neighbor)}; it != color_map.end()) {
+        neighbor_colors.insert(it->second);
       }
     }
 
-    // Assign the color to the current vertex
+    // Assign the smallest color not used by any neighbor to the current
+    // vertex.
+    int color = 0;
+    while (neighbor_colors.contains(color)) {
+      color++;
+    }
+
     color_map[current_vertex] = color;
   }
 
