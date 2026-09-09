@@ -17,10 +17,10 @@ Calculates the shortest path between any two vertices.
 ```cpp
 template <typename V, typename E, graph_type T,
           typename WEIGHT_T = decltype(get_weight(std::declval<E>()))>
-std::vector<std::vector<WEIGHT_T>> floyd_warshall_shortest_paths(
-    const graph<V, E, T>& graph);
+std::unordered_map<vertex_id_t, std::unordered_map<vertex_id_t, WEIGHT_T>>
+floyd_warshall_shortest_paths(const graph<V, E, T>& graph);
 ```
 
 - **graph** The graph to extract the shortest path from.
-- **return** Returns a 2D vector of the shortest path. If a path doesn't exist between two vertices, mark it as
-  TYPE_MAX.
+- **return** Returns a map of maps, where `result.at(from).at(to)` is the shortest distance from vertex `from` to
+  vertex `to`. If no path exists between two vertices, there is no corresponding entry.

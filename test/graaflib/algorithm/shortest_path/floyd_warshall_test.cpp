@@ -13,6 +13,27 @@ struct FloydWarshallTest : public testing::Test {
   using graph_t = typename T::first_type;
   using edge_t = typename T::second_type;
 };
+
+constexpr auto NO_PATH = INT_MAX;
+
+// Converts a dense matrix (indexed in the same order as vertex_ids) into the
+// vertex_id_t-keyed map of maps returned by floyd_warshall_shortest_paths,
+// dropping any entry marked as NO_PATH.
+std::unordered_map<vertex_id_t, std::unordered_map<vertex_id_t, int>>
+to_expected_paths(const std::vector<vertex_id_t>& vertex_ids,
+                   const std::vector<std::vector<int>>& matrix) {
+  std::unordered_map<vertex_id_t, std::unordered_map<vertex_id_t, int>>
+      expected_paths{};
+  for (std::size_t from{0}; from < vertex_ids.size(); ++from) {
+    for (std::size_t to{0}; to < vertex_ids.size(); ++to) {
+      if (matrix[from][to] != NO_PATH) {
+        expected_paths[vertex_ids[from]][vertex_ids[to]] = matrix[from][to];
+      }
+    }
+  }
+  return expected_paths;
+}
+
 }  // namespace
 
 TYPED_TEST_SUITE(FloydWarshallTest, utils::fixtures::weighted_graph_types);
@@ -32,8 +53,9 @@ TYPED_TEST(FloydWarshallTest, UndirectedGraph) {
   graph.add_edge(vertex_3, vertex_1, 300);
 
   auto shortest_paths = floyd_warshall_shortest_paths(graph);
-  std::vector<std::vector<int>> expected_paths = {
-      {0, 100, 300}, {100, 0, 300}, {300, 300, 0}};
+  auto expected_paths = to_expected_paths(
+      {vertex_1, vertex_2, vertex_3},
+      {{0, 100, 300}, {100, 0, 300}, {300, 300, 0}});
 
   ASSERT_EQ(shortest_paths, expected_paths);
 }
@@ -53,8 +75,9 @@ TYPED_TEST(FloydWarshallTest, DirectedGraph) {
   graph.add_edge(vertex_3, vertex_1, 300);
 
   auto shortest_paths = floyd_warshall_shortest_paths(graph);
-  std::vector<std::vector<int>> expected_paths = {
-      {0, 100, 400}, {600, 0, 300}, {300, 400, 0}};
+  auto expected_paths = to_expected_paths(
+      {vertex_1, vertex_2, vertex_3},
+      {{0, 100, 400}, {600, 0, 300}, {300, 400, 0}});
 
   ASSERT_EQ(shortest_paths, expected_paths);
 }
@@ -78,16 +101,15 @@ TYPED_TEST(FloydWarshallTest, DirectedGraphNoCycleNegativeWeight) {
   graph.add_edge(vertex_4, vertex_6, 100);
   graph.add_edge(vertex_5, vertex_2, -75);
 
-  auto NO_PATH = INT_MAX;
-
   auto shortest_paths = floyd_warshall_shortest_paths(graph);
-  std::vector<std::vector<int>> expected_paths = {
-      {0, 100, 150, 80, NO_PATH, 147},
-      {NO_PATH, 0, 50, -20, NO_PATH, 47},
-      {NO_PATH, NO_PATH, 0, NO_PATH, NO_PATH, -3},
-      {NO_PATH, NO_PATH, NO_PATH, 0, NO_PATH, 100},
-      {NO_PATH, -75, -25, -95, 0, -28},
-      {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 0}};
+  auto expected_paths = to_expected_paths(
+      {vertex_1, vertex_2, vertex_3, vertex_4, vertex_5, vertex_6},
+      {{0, 100, 150, 80, NO_PATH, 147},
+       {NO_PATH, 0, 50, -20, NO_PATH, 47},
+       {NO_PATH, NO_PATH, 0, NO_PATH, NO_PATH, -3},
+       {NO_PATH, NO_PATH, NO_PATH, 0, NO_PATH, 100},
+       {NO_PATH, -75, -25, -95, 0, -28},
+       {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 0}});
 
   ASSERT_EQ(shortest_paths, expected_paths);
 }
@@ -112,8 +134,9 @@ TYPED_TEST(FloydWarshallTest, DenseDirectedGraph) {
   graph.add_edge(vertex_1, vertex_4, 12);
 
   auto shortest_paths = floyd_warshall_shortest_paths(graph);
-  std::vector<std::vector<int>> expected_paths{
-      {0, 10, 60, 12}, {20, 0, 50, 32}, {23, 3, 0, 35}, {10, 12, 62, 0}};
+  auto expected_paths = to_expected_paths(
+      {vertex_1, vertex_2, vertex_3, vertex_4},
+      {{0, 10, 60, 12}, {20, 0, 50, 32}, {23, 3, 0, 35}, {10, 12, 62, 0}});
 
   ASSERT_EQ(shortest_paths, expected_paths);
 }
@@ -136,8 +159,9 @@ TYPED_TEST(FloydWarshallTest, DenseUndirectedGraph) {
   graph.add_edge(vertex_1, vertex_4, 12);
 
   auto shortest_paths = floyd_warshall_shortest_paths(graph);
-  std::vector<std::vector<int>> expected_paths{
-      {0, 10, 13, 10}, {10, 0, 3, 12}, {13, 3, 0, 15}, {10, 12, 15, 0}};
+  auto expected_paths = to_expected_paths(
+      {vertex_1, vertex_2, vertex_3, vertex_4},
+      {{0, 10, 13, 10}, {10, 0, 3, 12}, {13, 3, 0, 15}, {10, 12, 15, 0}});
 
   ASSERT_EQ(shortest_paths, expected_paths);
 }
@@ -169,18 +193,18 @@ TYPED_TEST(FloydWarshallTest, UndirectedGraphTwoComponents) {
   graph.add_edge(vertex_6, vertex_8, 2);
   graph.add_edge(vertex_7, vertex_8, 3);
 
-  auto NO_PATH = INT_MAX;
-
   auto shortest_paths = floyd_warshall_shortest_paths(graph);
-  std::vector<std::vector<int>> expected_paths{
-      {0, 12, 11, 15, 6, NO_PATH, NO_PATH, NO_PATH},
-      {12, 0, 21, 15, 14, NO_PATH, NO_PATH, NO_PATH},
-      {11, 21, 0, 7, 7, NO_PATH, NO_PATH, NO_PATH},
-      {15, 15, 7, 0, 9, NO_PATH, NO_PATH, NO_PATH},
-      {6, 14, 7, 9, 0, NO_PATH, NO_PATH, NO_PATH},
-      {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 0, 4, 2},
-      {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 4, 0, 3},
-      {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 2, 3, 0}};
+  auto expected_paths = to_expected_paths(
+      {vertex_1, vertex_2, vertex_3, vertex_4, vertex_5, vertex_6, vertex_7,
+       vertex_8},
+      {{0, 12, 11, 15, 6, NO_PATH, NO_PATH, NO_PATH},
+       {12, 0, 21, 15, 14, NO_PATH, NO_PATH, NO_PATH},
+       {11, 21, 0, 7, 7, NO_PATH, NO_PATH, NO_PATH},
+       {15, 15, 7, 0, 9, NO_PATH, NO_PATH, NO_PATH},
+       {6, 14, 7, 9, 0, NO_PATH, NO_PATH, NO_PATH},
+       {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 0, 4, 2},
+       {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 4, 0, 3},
+       {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 2, 3, 0}});
 
   ASSERT_EQ(shortest_paths, expected_paths);
 }
@@ -212,20 +236,45 @@ TYPED_TEST(FloydWarshallTest, DirectedGraphTwoComponents) {
   graph.add_edge(vertex_6, vertex_8, 2);
   graph.add_edge(vertex_8, vertex_7, 3);
 
-  auto NO_PATH = INT_MAX;
-
   auto shortest_paths = floyd_warshall_shortest_paths(graph);
-  std::vector<std::vector<int>> expected_paths{
-      {0, 12, 11, 15, 6, NO_PATH, NO_PATH, NO_PATH},
-      {12, 0, 21, 15, 14, NO_PATH, NO_PATH, NO_PATH},
-      {11, 21, 0, 7, 7, NO_PATH, NO_PATH, NO_PATH},
-      {15, 15, 7, 0, 9, NO_PATH, NO_PATH, NO_PATH},
-      {6, 14, 7, 9, 0, NO_PATH, NO_PATH, NO_PATH},
-      {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 0, 4, 2},
-      {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 4, 0, 3},
-      {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 2, 3, 0}};
+  auto expected_paths = to_expected_paths(
+      {vertex_1, vertex_2, vertex_3, vertex_4, vertex_5, vertex_6, vertex_7,
+       vertex_8},
+      {{0, 12, 11, 15, 6, NO_PATH, NO_PATH, NO_PATH},
+       {12, 0, 21, 15, 14, NO_PATH, NO_PATH, NO_PATH},
+       {11, 21, 0, 7, 7, NO_PATH, NO_PATH, NO_PATH},
+       {15, 15, 7, 0, 9, NO_PATH, NO_PATH, NO_PATH},
+       {6, 14, 7, 9, 0, NO_PATH, NO_PATH, NO_PATH},
+       {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 0, 4, 2},
+       {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 4, 0, 3},
+       {NO_PATH, NO_PATH, NO_PATH, NO_PATH, NO_PATH, 2, 3, 0}});
 
   ASSERT_EQ(shortest_paths, expected_paths);
+}
+
+TYPED_TEST(FloydWarshallTest, GraphWithNonContiguousVertexIdsAfterRemoval) {
+  // GIVEN a graph where a vertex has been removed, so the remaining vertex
+  // IDs are not contiguous (0, 2, 3 - vertex 1 was removed).
+  directed_graph<int, int> graph{};
+
+  const auto vertex_1{graph.add_vertex(10)};
+  const auto vertex_2{graph.add_vertex(20)};
+  const auto vertex_3{graph.add_vertex(30)};
+  const auto vertex_4{graph.add_vertex(40)};
+
+  graph.remove_vertex(vertex_2);
+
+  graph.add_edge(vertex_1, vertex_3, 5);
+  graph.add_edge(vertex_3, vertex_4, 7);
+
+  // WHEN / THEN this must neither throw nor produce out-of-bounds access.
+  auto shortest_paths = floyd_warshall_shortest_paths(graph);
+  auto expected_paths =
+      to_expected_paths({vertex_1, vertex_3, vertex_4},
+                         {{0, 5, 12}, {NO_PATH, 0, 7}, {NO_PATH, NO_PATH, 0}});
+
+  ASSERT_EQ(shortest_paths, expected_paths);
+  ASSERT_FALSE(shortest_paths.contains(vertex_2));
 }
 
 }  // namespace graaf::algorithm
