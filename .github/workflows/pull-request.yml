@@ -86,9 +86,8 @@ jobs:
         uses: ./.github/actions/setup-mdbook
 
       - name: Build mdBook website
-        run: |
-          cd docs
-          mdbook build
+        working-directory: docs
+        run: mdbook build
 
   verify_fetchcontent:
     # Graaf is commonly consumed via FetchContent. This builds a minimal

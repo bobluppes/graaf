@@ -16,9 +16,8 @@ jobs:
         uses: ./.github/actions/setup-mdbook
 
       - name: Build mdBook website
-        run: |
-          cd docs
-          mdbook build
+        working-directory: docs
+        run: mdbook build
 
       - name: Deploy to GitHub Pages
         if: success()

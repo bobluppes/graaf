@@ -4,3 +4,10 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+
+  - package-ecosystem: "github-actions"
+    # Composite actions under .github/actions/** are not picked up by the
+    # root "/" entry above, so they need their own directory entry.
+    directory: "/.github/actions/setup-mdbook"
+    schedule:
+      interval: "weekly"

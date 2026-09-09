@@ -5,7 +5,7 @@ This website is built using [mdBook](https://rust-lang.github.io/mdBook/), a com
 ### Installation
 
 ```
-$ cargo install mdbook
+$ cargo install mdbook --version 0.5.4
 ```
 
 ### Local Development
