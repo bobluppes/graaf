@@ -2,6 +2,7 @@
 #include <graaflib/types.h>
 
 #include <algorithm>
+#include <optional>
 #include <unordered_map>
 
 #include "dfs_cycle_detection.h"
@@ -33,23 +34,21 @@ bool do_dfs_directed(
 }
 
 template <typename V, typename E>
-bool do_dfs_undirected(
-    const graph<V, E, graph_type::UNDIRECTED>& graph,
-    std::unordered_map<vertex_id_t, bool>& visited_vertices,
-    std::unordered_map<vertex_id_t, vertex_id_t>& parent_vertices,
-    vertex_id_t parent_vertex, vertex_id_t current) {
+bool do_dfs_undirected(const graph<V, E, graph_type::UNDIRECTED>& graph,
+                        std::unordered_map<vertex_id_t, bool>& visited_vertices,
+                        std::optional<vertex_id_t> parent_vertex,
+                        vertex_id_t current) {
   visited_vertices[current] = true;
 
   for (const auto& neighbour_vertex : graph.get_neighbors(current)) {
-    if (neighbour_vertex == parent_vertex) continue;
+    if (parent_vertex.has_value() && neighbour_vertex == *parent_vertex) {
+      continue;
+    }
 
     if (visited_vertices[neighbour_vertex]) return true;
 
-    parent_vertices[neighbour_vertex] = parent_vertex;
-
-    if (do_dfs_undirected(graph, visited_vertices, parent_vertices,
-                          neighbour_vertex,
-                          parent_vertices[neighbour_vertex])) {
+    if (do_dfs_undirected(graph, visited_vertices, current,
+                          neighbour_vertex)) {
       return true;
     }
   }
@@ -82,13 +81,11 @@ bool dfs_cycle_detection(const graph<V, E, graph_type::UNDIRECTED>& graph) {
   }
 
   std::unordered_map<vertex_id_t, bool> visited_vertices{};
-  std::unordered_map<vertex_id_t, vertex_id_t> parent_vertices{};
 
   for (const auto& vertex : graph.get_vertices()) {
     if (!visited_vertices.contains(vertex.first) &&
-        detail::do_dfs_undirected(graph, visited_vertices, parent_vertices,
-                                  vertex.first,
-                                  parent_vertices[vertex.first])) {
+        detail::do_dfs_undirected(graph, visited_vertices, std::nullopt,
+                                  vertex.first)) {
       return true;
     }
   }

@@ -108,6 +108,26 @@ TYPED_TEST(GraphCycleTest, UndirectedGraphWithCycle) {
   ASSERT_TRUE(cycle);
 }
 
+TYPED_TEST(GraphCycleTest, UndirectedGraphWithCycleAndIsolatedVertex) {
+  // GIVEN a triangle (0, 1, 2) plus an isolated vertex (3), so that
+  // edge_count() == 3 < vertex_count() == 4 and the edge_count >=
+  // vertex_count() fast-path shortcut does not fire.
+  undirected_graph<int, int> graph{};
+
+  const auto vertex_1{graph.add_vertex(10)};
+  const auto vertex_2{graph.add_vertex(20)};
+  const auto vertex_3{graph.add_vertex(30)};
+  [[maybe_unused]] const auto vertex_4{graph.add_vertex(40)};
+
+  graph.add_edge(vertex_1, vertex_2, 100);
+  graph.add_edge(vertex_2, vertex_3, 300);
+  graph.add_edge(vertex_3, vertex_1, 400);
+
+  // checking if graph contains cycle
+  bool cycle = dfs_cycle_detection(graph);
+  ASSERT_TRUE(cycle);
+}
+
 TYPED_TEST(GraphCycleTest, EmptyGraphs) {
   // GIVEN
   directed_graph<int, int> directed_graph{};
