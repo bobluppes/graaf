@@ -2,6 +2,8 @@
 #include <gtest/gtest.h>
 #include <utils/fixtures/fixtures.h>
 
+#include <climits>
+
 namespace graaf::algorithm {
 
 namespace {

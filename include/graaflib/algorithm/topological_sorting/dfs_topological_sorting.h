@@ -3,6 +3,7 @@
 #include <graaflib/graph.h>
 
 #include <optional>
+#include <vector>
 
 namespace graaf::algorithm {
 /**
