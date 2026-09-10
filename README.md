@@ -8,7 +8,7 @@
 <br/>
 
 <p align="center">
-  Want to try Graaf without installing anything? Give it a spin on [Compiler Explorer](https://godbolt.org/z/dxnf7bzMc)!
+  Want to try Graaf without installing anything? Give it a spin on <a href="https://godbolt.org/z/dxnf7bzMc">Compiler Explorer</a>!
 </p>
 
 <p align="center">
