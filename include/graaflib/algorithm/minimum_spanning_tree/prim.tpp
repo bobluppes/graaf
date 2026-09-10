@@ -1,9 +1,9 @@
 #pragma once
 #include <graaflib/types.h>
 
-#include <algorithm>
-#include <unordered_map>
+#include <queue>
 #include <unordered_set>
+#include <vector>
 
 #include "prim.h"
 
@@ -11,52 +11,65 @@ namespace graaf::algorithm {
 
 namespace detail {
 
-template <class GRAPH_T>
-[[nodiscard]] std::vector<edge_id_t> find_candidate_edges(
-    const GRAPH_T& graph,
-    const std::unordered_set<vertex_id_t>& fringe_vertices) {
-  std::vector<edge_id_t> candidates{};
+template <typename WEIGHT_T>
+struct prim_candidate_edge {
+  vertex_id_t from;
+  vertex_id_t to;
+  WEIGHT_T weight;
 
-  for (const auto fringe_vertex : fringe_vertices) {
-    for (const auto neighbor : graph.get_neighbors(fringe_vertex)) {
-      if (!fringe_vertices.contains(neighbor)) {
-        candidates.emplace_back(fringe_vertex, neighbor);
-      }
-    }
+  [[nodiscard]] bool operator>(const prim_candidate_edge<WEIGHT_T>& other) const {
+    return weight > other.weight;
   }
-
-  return candidates;
-}
+};
 
 };  // namespace detail
 
-template <typename V, typename E>
+template <typename V, typename E, typename WEIGHT_T>
 std::optional<std::vector<edge_id_t>> prim_minimum_spanning_tree(
     const graph<V, E, graph_type::UNDIRECTED>& graph,
     vertex_id_t start_vertex) {
+  const auto vertex_count{graph.vertex_count()};
+
   std::vector<edge_id_t> edges_in_mst{};
-  edges_in_mst.reserve(
-      graph.edge_count());  // Reserve the upper bound of edges in the mst
+  edges_in_mst.reserve(vertex_count > 0 ? vertex_count - 1 : 0);
 
-  std::unordered_set<vertex_id_t> fringe_vertices{start_vertex};
+  std::unordered_set<vertex_id_t> in_mst{start_vertex};
 
-  while (fringe_vertices.size() < graph.vertex_count()) {
-    const auto candidates{detail::find_candidate_edges(graph, fringe_vertices)};
+  using candidate_edge = detail::prim_candidate_edge<WEIGHT_T>;
+  std::priority_queue<candidate_edge, std::vector<candidate_edge>,
+                      std::greater<>>
+      to_explore{};
 
-    if (candidates.empty()) {
-      // The graph is not connected
-      return std::nullopt;
+  const auto push_edges_from{[&graph, &in_mst, &to_explore](vertex_id_t from) {
+    for (const auto neighbor : graph.get_neighbors(from)) {
+      if (!in_mst.contains(neighbor)) {
+        to_explore.push(candidate_edge{
+            from, neighbor, get_weight(graph.get_edge(from, neighbor))});
+      }
+    }
+  }};
+
+  push_edges_from(start_vertex);
+
+  while (!to_explore.empty() && in_mst.size() < vertex_count) {
+    const auto candidate{to_explore.top()};
+    to_explore.pop();
+
+    // The target vertex may already have been added to the tree via a
+    // cheaper edge found later than this one - skip this stale entry rather
+    // than removing it from the queue up front (lazy deletion).
+    if (in_mst.contains(candidate.to)) {
+      continue;
     }
 
-    const edge_id_t mst_edge{*std::ranges::min_element(
-        candidates,
-        [graph](const edge_id_t& lhs, const edge_id_t& rhs) -> bool {
-          return get_weight(graph.get_edge(lhs)) <
-                 get_weight(graph.get_edge(rhs));
-        })};
+    in_mst.insert(candidate.to);
+    edges_in_mst.emplace_back(candidate.from, candidate.to);
+    push_edges_from(candidate.to);
+  }
 
-    edges_in_mst.emplace_back(mst_edge);
-    fringe_vertices.insert(mst_edge.second);
+  if (in_mst.size() < vertex_count) {
+    // The graph is not connected
+    return std::nullopt;
   }
 
   return edges_in_mst;
