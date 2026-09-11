@@ -103,7 +103,7 @@ class graph {
    *
    * @param vertex_id The ID of the vertex
    * @return vertex_t - A reference to the vertex
-   * @throws out_of_range exception - If vertex_id does not exist within the
+   * @throws std::invalid_argument - If vertex_id does not exist within the
    * graph
    */
   [[nodiscard]] vertex_t& get_vertex(vertex_id_t vertex_id);
@@ -125,7 +125,7 @@ class graph {
    * @param  vertex_id_rhs The ID of the second vertex
    * @return edge_t - Shared pointer to either the provided edge or to
    * primitive_numeric_adapter.
-   * @throws out_of_range exception - If no edge exists between the two vertices
+   * @throws std::invalid_argument - If no edge exists between the two vertices
    */
   [[nodiscard]] edge_t& get_edge(vertex_id_t vertex_id_lhs,
                                  vertex_id_t vertex_id_rhs);
@@ -149,7 +149,7 @@ class graph {
    * @param  edge_id The ID of the edge.
    * @return edge_t - Shared pointer to either the provided edge or to
    * primitive_numeric_adapter.
-   * @throws out_of_range exception - If no edge exists between the two vertices
+   * @throws std::invalid_argument - If no edge exists between the two vertices
    */
   [[nodiscard]] edge_t& get_edge(const edge_id_t& edge_id);
 
@@ -159,7 +159,7 @@ class graph {
    * @param  edge_id The ID of the edge.
    * @return edge_t - Shared pointer to either the provided edge or to
    * primitive_numeric_adapter.
-   * @throws out_of_range exception - If no edge exists between the two vertices
+   * @throws std::invalid_argument - If no edge exists between the two vertices
    */
   [[nodiscard]] const edge_t& get_edge(const edge_id_t& edge_id) const;
 
@@ -200,7 +200,8 @@ class graph {
    * Add a new edge between two existing vertices
    *
    * @param  vertex_id The ID of the vertex
-   * @throws out_of_range - If either of the vertices do not exist in graph
+   * @throws std::invalid_argument - If either of the vertices do not exist in
+   * graph
    */
   void add_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs,
                 auto&& edge);
