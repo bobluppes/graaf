@@ -23,4 +23,5 @@ std::vector<std::vector<WEIGHT_T>> floyd_warshall_shortest_paths(
 
 - **graph** The graph to extract the shortest path from.
 - **return** Returns a 2D vector of the shortest path. If a path doesn't exist between two vertices, mark it as
-  TYPE_MAX.
+  TYPE_MAX. Rows/columns are indexed by the ascending order of the graph's vertex IDs: if no vertex has been
+  removed from the graph, index `i` corresponds exactly to vertex `i`.

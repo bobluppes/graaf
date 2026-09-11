@@ -228,4 +228,33 @@ TYPED_TEST(FloydWarshallTest, DirectedGraphTwoComponents) {
   ASSERT_EQ(shortest_paths, expected_paths);
 }
 
+TYPED_TEST(FloydWarshallTest, GraphWithNonContiguousVertexIdsAfterRemoval) {
+  // GIVEN a graph where a vertex has been removed, so the remaining vertex
+  // IDs are not contiguous (0, 2, 3 - vertex 1 was removed).
+  directed_graph<int, int> graph{};
+
+  const auto vertex_1{graph.add_vertex(10)};
+  const auto vertex_2{graph.add_vertex(20)};
+  const auto vertex_3{graph.add_vertex(30)};
+  const auto vertex_4{graph.add_vertex(40)};
+
+  graph.remove_vertex(vertex_2);
+
+  graph.add_edge(vertex_1, vertex_3, 5);
+  graph.add_edge(vertex_3, vertex_4, 7);
+
+  auto NO_PATH = INT_MAX;
+
+  // WHEN this must neither throw nor produce out-of-bounds access.
+  // THEN the result is indexed by ascending order of the remaining vertex
+  // IDs (0, 2, 3), i.e. index 0 -> vertex_1, index 1 -> vertex_3, index 2 ->
+  // vertex_4.
+  auto shortest_paths = floyd_warshall_shortest_paths(graph);
+  std::vector<std::vector<int>> expected_paths{
+      {0, 5, 12}, {NO_PATH, 0, 7}, {NO_PATH, NO_PATH, 0}};
+
+  ASSERT_EQ(shortest_paths, expected_paths);
+  ASSERT_EQ(shortest_paths.size(), 3);
+}
+
 }  // namespace graaf::algorithm
