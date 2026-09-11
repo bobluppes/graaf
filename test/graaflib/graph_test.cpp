@@ -132,9 +132,8 @@ TYPED_TEST(GraphTest, RemoveNonExistentEdgeThrows) {
           graph.remove_edge(vertex_id_2, vertex_id_1);
         } catch (const std::invalid_argument &ex) {
           EXPECT_EQ(ex.what(),
-                    fmt::format(
-                        "No edge found between vertices [{}] -> [{}].",
-                        vertex_id_2, vertex_id_1));
+                    fmt::format("No edge found between vertices [{}] -> [{}].",
+                                vertex_id_2, vertex_id_1));
           throw;
         }
       },
