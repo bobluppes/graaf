@@ -211,6 +211,13 @@ void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_edge(vertex_id_t vertex_id_lhs,
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
 void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::remove_edge(
     vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs) {
+  if (!has_edge(vertex_id_lhs, vertex_id_rhs)) {
+    // TODO(bluppes): replace with std::format once Clang supports it
+    throw std::invalid_argument{"No edge found between vertices [" +
+                                std::to_string(vertex_id_lhs) + "] -> [" +
+                                std::to_string(vertex_id_rhs) + "]."};
+  }
+
   using enum graph_type;
   if constexpr (GRAPH_TYPE_V == DIRECTED) {
     adjacency_list_.at(vertex_id_lhs).erase(vertex_id_rhs);

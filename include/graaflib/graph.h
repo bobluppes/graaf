@@ -214,6 +214,8 @@ class graph {
    *
    * @param  vertex_id_lhs The ID of the first vertex
    * @param  vertex_id_rhs The ID of the second vertex
+   * @throws invalid_argument exception - If no edge exists between the two
+   * vertices
    */
   void remove_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs);
 
