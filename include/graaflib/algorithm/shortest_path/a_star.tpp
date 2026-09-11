@@ -97,9 +97,9 @@ std::optional<graph_path<WEIGHT_T>> a_star_search(
         // always update vertex_info[neighbor] with the true accumulated cost
         // (g_score), so reconstruct_path reports the correct total_weight.
         vertex_info[neighbor] = {
-            neighbor,          // vertex id
-            tentative_g_score, // true accumulated cost from start
-            current.id         // neighbor vertex came from current vertex
+            neighbor,           // vertex id
+            tentative_g_score,  // true accumulated cost from start
+            current.id          // neighbor vertex came from current vertex
         };
 
         open_set.push(open_set_item{neighbor, f_score});
