@@ -237,11 +237,20 @@ TYPED_TEST(AStarShortestPathTest, AStarHeuristicImpact) {
       a_star_search(graph, start_vertex, target_vertex, heuristic2);
 
   // THEN
-  // Verify that the path with the underestimating heuristic is shorter
+  // The heuristic only affects the order in which vertices are explored, not
+  // the cost reported for the resulting path: total_weight must always be
+  // the true accumulated edge weight, never inflated by the heuristic value
+  // (e.g. heuristic2 returns 10 at every vertex, including the target, so a
+  // bug that reported the f-score instead of the true cost would surface
+  // here as 13 instead of 3).
   ASSERT_TRUE(path_with_underestimating_heuristic.has_value());
   ASSERT_TRUE(path_with_overestimating_heuristic.has_value());
-  ASSERT_LT(path_with_underestimating_heuristic->total_weight,
-            path_with_overestimating_heuristic->total_weight);
+
+  constexpr weight_t expected_total_weight{3};
+  ASSERT_EQ(path_with_underestimating_heuristic->total_weight,
+            expected_total_weight);
+  ASSERT_EQ(path_with_overestimating_heuristic->total_weight,
+            expected_total_weight);
 }
 
 }  // namespace graaf::algorithm
