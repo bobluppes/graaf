@@ -1,4 +1,4 @@
-<p align="center"><img src="docs/src/img/graaf.png"></p>
+<p align="center"><img src="docs/src/img/graaf.png" width="231"></p>
 <h1 align="center">Graaf Library</h1>
 
 <p align="center">
