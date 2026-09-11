@@ -2,7 +2,7 @@
 <h1 align="center">Graaf Library</h1>
 
 <p align="center">
-  Graaf is a general-purpose header-only graph library implemented in C++. It is designed as a lightweight alternative to the <a href="https://www.boost.org/doc/libs/1_82_0/libs/graph/doc/index.html">Boost Graph Library (BGL)</a>.
+  Graaf is a <b>general-purpose header-only graph library</b> implemented in C++. It is designed as a lightweight alternative to the <a href="https://www.boost.org/doc/libs/1_82_0/libs/graph/doc/index.html">Boost Graph Library (BGL)</a>.
 </p>
 
 <br/>
