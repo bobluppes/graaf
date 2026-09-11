@@ -116,6 +116,36 @@ TYPED_TEST(GraphTest, RemoveEdge) {
   ASSERT_TRUE(graph.has_vertex(vertex_id_2));
 }
 
+TYPED_TEST(GraphTest, RemoveNonExistentEdgeThrows) {
+  // GIVEN - two vertices with no edge between them, so vertex_id_2 has no
+  // entry in the adjacency list
+  using graph_t = typename TestFixture::graph_t;
+  graph_t graph{};
+
+  const auto vertex_id_1{graph.add_vertex(10)};
+  const auto vertex_id_2{graph.add_vertex(20)};
+
+  // WHEN - THEN
+  ASSERT_THROW(
+      {
+        try {
+          graph.remove_edge(vertex_id_2, vertex_id_1);
+        } catch (const std::invalid_argument &ex) {
+          EXPECT_EQ(ex.what(),
+                    fmt::format(
+                        "No edge found between vertices [{}] -> [{}].",
+                        vertex_id_2, vertex_id_1));
+          throw;
+        }
+      },
+      std::invalid_argument);
+
+  // Removing a non-existent edge does not affect the vertices
+  ASSERT_EQ(graph.edge_count(), 0);
+  ASSERT_TRUE(graph.has_vertex(vertex_id_1));
+  ASSERT_TRUE(graph.has_vertex(vertex_id_2));
+}
+
 TYPED_TEST(GraphTest, AddEdge) {
   using graph_t = typename TestFixture::graph_t;
 
