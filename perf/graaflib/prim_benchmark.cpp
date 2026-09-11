@@ -60,7 +60,8 @@ constexpr std::size_t MAX_SUBGRAPH_VERTICES{2'400};
         }
 
         if (connected_subgraph.has_vertex(source) &&
-            connected_subgraph.has_vertex(target)) {
+            connected_subgraph.has_vertex(target) &&
+            !connected_subgraph.has_edge(source, target)) {
           connected_subgraph.add_edge(source, target, 1);
         }
       },

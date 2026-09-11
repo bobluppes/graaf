@@ -185,7 +185,7 @@ class graph {
    * @param  vertex The vertex to be added
    * @param  id The requested ID for the new vertex
    * @return vertices_id_t - The ID of the new vertex
-   * @throws id_taken exception - If the relevant ID is already in use
+   * @throws std::invalid_argument - If the relevant ID is already in use
    */
   vertex_id_t add_vertex(auto&& vertex, vertex_id_t id);
 
@@ -202,6 +202,9 @@ class graph {
    * @param  vertex_id The ID of the vertex
    * @throws std::invalid_argument - If either of the vertices do not exist in
    * graph
+   * @throws std::invalid_argument - If an edge already exists between the two
+   * vertices. Use get_edge() and modify the returned edge in place, or call
+   * remove_edge() first, to update an existing edge.
    */
   void add_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs,
                 auto&& edge);

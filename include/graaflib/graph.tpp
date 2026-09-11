@@ -182,6 +182,14 @@ void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_edge(vertex_id_t vertex_id_lhs,
         std::to_string(vertex_id_rhs) + "] not found in graph."};
   }
 
+  if (has_edge(vertex_id_lhs, vertex_id_rhs)) {
+    // TODO(bluppes): replace with std::format once Clang supports it
+    throw std::invalid_argument{
+        "An edge already exists between vertices with ID [" +
+        std::to_string(vertex_id_lhs) + "] and [" +
+        std::to_string(vertex_id_rhs) + "]."};
+  }
+
   using enum graph_type;
   if constexpr (GRAPH_TYPE_V == DIRECTED) {
     adjacency_list_[vertex_id_lhs].insert(vertex_id_rhs);

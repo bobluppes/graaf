@@ -143,6 +143,36 @@ TYPED_TEST(GraphTest, AddEdge) {
   EXPECT_FALSE(graph.has_edge(vertex_id_1, vertex_id_2));
 }
 
+TYPED_TEST(GraphTest, AddDuplicateEdge) {
+  using graph_t = typename TestFixture::graph_t;
+
+  graph_t graph{};
+  const auto vertex_id_1{graph.add_vertex(10)};
+  const auto vertex_id_2{graph.add_vertex(20)};
+
+  graph.add_edge(vertex_id_1, vertex_id_2, 100);
+
+  ASSERT_THROW(
+      {
+        try {
+          // Adding an edge which already exists should throw rather than
+          // silently discarding the new value or overwriting the old one.
+          graph.add_edge(vertex_id_1, vertex_id_2, 200);
+        } catch (const std::invalid_argument &ex) {
+          EXPECT_EQ(ex.what(),
+                    fmt::format("An edge already exists between vertices "
+                                "with ID [{}] and [{}].",
+                                vertex_id_1, vertex_id_2));
+          throw;
+        }
+      },
+      std::invalid_argument);
+
+  // The original edge value should be unaffected
+  EXPECT_EQ(graph.edge_count(), 1);
+  EXPECT_EQ(get_weight(graph.get_edge(vertex_id_1, vertex_id_2)), 100);
+}
+
 TYPED_TEST(GraphTest, VertexTests) {
   using graph_t = typename TestFixture::graph_t;
   graph_t graph{};

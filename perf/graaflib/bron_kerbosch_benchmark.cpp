@@ -32,10 +32,13 @@ void add_clique(graaf::undirected_graph<int, EDGE_T>& graph,
   // We are in range of vector of vertices
   size_t end_vertex = std::min(start_vertex + clique_size, vertices.size());
 
-  // Constructing a clique
+  // Constructing a clique. Some of these edges may already exist (e.g. from
+  // a connecting path built before the clique), so only add what is missing.
   for (size_t i{start_vertex}; i < end_vertex; ++i) {
     for (size_t j{i + 1}; j < end_vertex; ++j) {
-      graph.add_edge(vertices[i], vertices[j], 1);
+      if (!graph.has_edge(vertices[i], vertices[j])) {
+        graph.add_edge(vertices[i], vertices[j], 1);
+      }
     }
   }
 }

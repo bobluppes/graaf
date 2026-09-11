@@ -133,7 +133,6 @@ TYPED_TEST(FloydWarshallTest, DenseUndirectedGraph) {
   graph.add_edge(vertex_4, vertex_1, 10);
   graph.add_edge(vertex_4, vertex_3, 75);
   graph.add_edge(vertex_4, vertex_2, 12);
-  graph.add_edge(vertex_1, vertex_4, 12);
 
   auto shortest_paths = floyd_warshall_shortest_paths(graph);
   std::vector<std::vector<int>> expected_paths{
