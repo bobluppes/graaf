@@ -13,6 +13,13 @@ namespace graaf::algorithm {
  * same color. The algorithm is heuristic and does not guarantee an optimal
  * coloring.
  *
+ * For a directed graph, this colors the underlying undirected graph: two
+ * vertices are considered adjacent if there is an edge between them in
+ * either direction. This is not the only reasonable notion of coloring for a
+ * directed graph (the "dichromatic number", which only forbids monochromatic
+ * directed cycles, is another well-known one and generally admits fewer
+ * colors), but it is the one this library implements.
+ *
  * @tparam GRAPH The type of the graph
  * @param graph The graph object
  * @return An unordered_map where keys are vertex identifiers and values are

@@ -155,4 +155,41 @@ TYPED_TEST(WelshPowellTest, DisconnectedComponents) {
   ASSERT_TRUE(is_proper_coloring(graph, coloring));
 }
 
+template <typename T>
+struct WelshPowellDirectedTest : public testing::Test {
+  using graph_t = T;
+};
+
+TYPED_TEST_SUITE(WelshPowellDirectedTest,
+                 utils::fixtures::minimal_directed_graph_type);
+
+// Regression test for https://github.com/bobluppes/graaf/issues/379:
+// graph::get_neighbors() only reports outgoing edges for a directed_graph, so
+// a vertex reached only via incoming edges must still be colored differently
+// from its predecessor.
+//
+// vertex_y has the highest degree (out-degree 2), so Welsh-Powell colors it
+// first regardless of unordered_map iteration order; vertex_z and vertex_x
+// are pure sinks (out-degree 0) whose only edge is incoming from vertex_y.
+// Once vertex_y is colored, a coloring that ignores incoming edges will color
+// both sinks the same as vertex_y, since it never looks back at it.
+TYPED_TEST(WelshPowellDirectedTest, ConvergingEdgesColoredDifferently) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  graph_t graph{};
+
+  const auto vertex_y{graph.add_vertex(1)};
+  const auto vertex_z{graph.add_vertex(2)};
+  const auto vertex_x{graph.add_vertex(3)};
+
+  graph.add_edge(vertex_y, vertex_z, 1);
+  graph.add_edge(vertex_y, vertex_x, 1);
+
+  // WHEN
+  auto coloring = welsh_powell_coloring(graph);
+
+  // THEN
+  ASSERT_TRUE(is_proper_coloring(graph, coloring));
+}
+
 }  // namespace graaf::algorithm

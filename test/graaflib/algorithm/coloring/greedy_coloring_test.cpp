@@ -122,6 +122,47 @@ TYPED_TEST(GreedyGraphColoringTest, CompleteGraph) {
   }
 }
 
+// Regression test for https://github.com/bobluppes/graaf/issues/379: two
+// vertices with no edge between them but a shared successor must still be
+// colored differently from that successor. For a directed_graph, this means
+// the coloring may not rely solely on outgoing edges (A -> C, B -> C).
+//
+// The vertices in each converging triple are added in a different order
+// (sink added last, then sink added first) since graph::get_vertices()
+// returns an unordered_map whose iteration order is unspecified: whether the
+// bug is exposed for a given triple can depend on whether the sink happens to
+// be visited before or after its predecessors, so both orderings are covered
+// to make this test independent of that iteration order.
+TYPED_TEST(GreedyGraphColoringTest, ConvergingEdgesColoredDifferently) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  graph_t graph{};
+
+  // Triple 1: predecessors added before the sink.
+  const auto vertex_a1{graph.add_vertex(1)};
+  const auto vertex_b1{graph.add_vertex(2)};
+  const auto vertex_c1{graph.add_vertex(3)};
+  graph.add_edge(vertex_a1, vertex_c1, 1);
+  graph.add_edge(vertex_b1, vertex_c1, 1);
+
+  // Triple 2: sink added before its predecessors.
+  const auto vertex_c2{graph.add_vertex(4)};
+  const auto vertex_a2{graph.add_vertex(5)};
+  const auto vertex_b2{graph.add_vertex(6)};
+  graph.add_edge(vertex_a2, vertex_c2, 1);
+  graph.add_edge(vertex_b2, vertex_c2, 1);
+
+  // WHEN
+  auto coloring = greedy_graph_coloring(graph);
+
+  // THEN
+  // Verify that for each edge, adjacent vertices have different colors
+  for (const auto& [edge_id, edge] : graph.get_edges()) {
+    const auto [u, v]{edge_id};
+    ASSERT_NE(coloring[u], coloring[v]);
+  }
+}
+
 TYPED_TEST(GreedyGraphColoringTest, DisconnectedComponents) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;

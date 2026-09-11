@@ -25,6 +25,20 @@ std::unordered_map<vertex_id_t, int> welsh_powell_coloring(const GRAPH& graph) {
 
   std::sort(degree_vertex_pairs.rbegin(), degree_vertex_pairs.rend());
 
+  // graph::get_neighbors() only reports outgoing edges. For a directed graph,
+  // two vertices sharing a common predecessor must still get different
+  // colors, so we additionally need to take incoming edges into account. We
+  // precompute them here to keep this linear in the number of edges.
+  std::unordered_map<vertex_id_t, std::unordered_set<vertex_id_t>>
+      predecessors{};
+  if (graph.is_directed()) {
+    for (const auto& [vertex_id, _] : graph.get_vertices()) {
+      for (const auto& neighbor_id : graph.get_neighbors(vertex_id)) {
+        predecessors[neighbor_id].insert(vertex_id);
+      }
+    }
+  }
+
   // Step 2: Assign colors to vertices
   std::unordered_map<vertex_id_t, int> color_map;
 
@@ -34,9 +48,21 @@ std::unordered_map<vertex_id_t, int> welsh_powell_coloring(const GRAPH& graph) {
     // iteration order, since graph::get_neighbors() returns an
     // unordered_set whose iteration order is unspecified.
     std::unordered_set<int> neighbor_colors;
-    for (const auto& neighbor : graph.get_neighbors(current_vertex)) {
-      if (const auto it{color_map.find(neighbor)}; it != color_map.end()) {
+
+    const auto collect_neighbor_color{[&](vertex_id_t neighbor_id) {
+      if (const auto it{color_map.find(neighbor_id)}; it != color_map.end()) {
         neighbor_colors.insert(it->second);
+      }
+    }};
+
+    for (const auto& neighbor : graph.get_neighbors(current_vertex)) {
+      collect_neighbor_color(neighbor);
+    }
+
+    if (const auto it{predecessors.find(current_vertex)};
+        it != predecessors.end()) {
+      for (const auto& predecessor : it->second) {
+        collect_neighbor_color(predecessor);
       }
     }
 

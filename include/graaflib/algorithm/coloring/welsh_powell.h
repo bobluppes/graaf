@@ -12,6 +12,13 @@ namespace graaf::algorithm {
  * attempts to color the graph in a way that no two adjacent vertices share the
  * same color.
  *
+ * For a directed graph, this colors the underlying undirected graph: two
+ * vertices are considered adjacent if there is an edge between them in
+ * either direction. This is not the only reasonable notion of coloring for a
+ * directed graph (the "dichromatic number", which only forbids monochromatic
+ * directed cycles, is another well-known one and generally admits fewer
+ * colors), but it is the one this library implements.
+ *
  * @tparam GRAPH The graph type.
  * @param graph The input graph to color.
  * @return std::unordered_map<vertex_id_t, int> An unordered map from vertex ID
