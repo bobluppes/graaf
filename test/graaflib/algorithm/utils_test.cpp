@@ -1,6 +1,8 @@
 #include <graaflib/algorithm/utils.h>
 #include <gtest/gtest.h>
 
+#include <unordered_set>
+
 /**
  * Tests which miscellaneous utility functions contained
  * in utils.h should go here. Any test relating specifically
@@ -60,6 +62,52 @@ TEST(UtilsTest, TransposePreservesIsolatedVertices) {
 
   // The original-direction edge should not survive the transpose.
   EXPECT_FALSE(transposed_graph.has_edge(vertex_id_1, vertex_id_2));
+}
+
+TEST(UtilsTest, GetPredecessorsDirectedGraph) {
+  // GIVEN
+  using graph_t = directed_graph<int, int>;
+  graph_t graph{};
+  const auto vertex_a = graph.add_vertex(1);
+  const auto vertex_b = graph.add_vertex(2);
+  const auto vertex_c = graph.add_vertex(3);
+
+  // a -> c, b -> c, a has no predecessors
+  graph.add_edge(vertex_a, vertex_c, 100);
+  graph.add_edge(vertex_b, vertex_c, 200);
+
+  // WHEN
+  const auto predecessors = get_predecessors(graph);
+
+  // THEN
+  ASSERT_TRUE(predecessors.contains(vertex_c));
+  EXPECT_EQ(predecessors.at(vertex_c),
+            std::unordered_set<vertex_id_t>({vertex_a, vertex_b}));
+  EXPECT_FALSE(predecessors.contains(vertex_a));
+  EXPECT_FALSE(predecessors.contains(vertex_b));
+}
+
+TEST(UtilsTest, GetPredecessorsUndirectedGraph) {
+  // GIVEN
+  using graph_t = undirected_graph<int, int>;
+  graph_t graph{};
+  const auto vertex_a = graph.add_vertex(1);
+  const auto vertex_b = graph.add_vertex(2);
+
+  graph.add_edge(vertex_a, vertex_b, 100);
+
+  // WHEN
+  const auto predecessors = get_predecessors(graph);
+
+  // THEN
+  // For an undirected graph, add_edge inserts both directions, so each
+  // vertex is a "predecessor" of the other.
+  ASSERT_TRUE(predecessors.contains(vertex_a));
+  EXPECT_EQ(predecessors.at(vertex_a),
+            std::unordered_set<vertex_id_t>({vertex_b}));
+  ASSERT_TRUE(predecessors.contains(vertex_b));
+  EXPECT_EQ(predecessors.at(vertex_b),
+            std::unordered_set<vertex_id_t>({vertex_a}));
 }
 
 }  // namespace graaf

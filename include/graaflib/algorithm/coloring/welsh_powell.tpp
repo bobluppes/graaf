@@ -1,9 +1,8 @@
 #pragma once
 #include <graaflib/algorithm/coloring/welsh_powell.h>
-#include <graaflib/properties/vertex_properties.h>
+#include <graaflib/algorithm/utils.h>
 
 #include <algorithm>
-#include <iostream>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -16,28 +15,28 @@ template <typename GRAPH>
 std::unordered_map<vertex_id_t, int> welsh_powell_coloring(const GRAPH& graph) {
   using degree_vertex_pair = std::pair<int, vertex_id_t>;
 
-  // Step 1: Sort vertices by degree in descending order
+  // graph::get_neighbors() only reports outgoing edges. For a directed graph,
+  // two vertices sharing a common predecessor must still get different
+  // colors, so we additionally need to take incoming edges into account.
+  std::unordered_map<vertex_id_t, std::unordered_set<vertex_id_t>>
+      predecessors{};
+  if (graph.is_directed()) {
+    predecessors = get_predecessors(graph);
+  }
+
+  // Step 1: Sort vertices by degree in descending order. The degree is the
+  // number of outgoing edges plus, for a directed graph, the number of
+  // incoming edges (from the predecessors map computed above).
   std::vector<degree_vertex_pair> degree_vertex_pairs;
   for (const auto& [vertex_id, _] : graph.get_vertices()) {
-    int degree = properties::vertex_degree(graph, vertex_id);
+    int degree = static_cast<int>(graph.get_neighbors(vertex_id).size());
+    if (const auto it{predecessors.find(vertex_id)}; it != predecessors.end()) {
+      degree += static_cast<int>(it->second.size());
+    }
     degree_vertex_pairs.emplace_back(degree, vertex_id);
   }
 
   std::sort(degree_vertex_pairs.rbegin(), degree_vertex_pairs.rend());
-
-  // graph::get_neighbors() only reports outgoing edges. For a directed graph,
-  // two vertices sharing a common predecessor must still get different
-  // colors, so we additionally need to take incoming edges into account. We
-  // precompute them here to keep this linear in the number of edges.
-  std::unordered_map<vertex_id_t, std::unordered_set<vertex_id_t>>
-      predecessors{};
-  if (graph.is_directed()) {
-    for (const auto& [vertex_id, _] : graph.get_vertices()) {
-      for (const auto& neighbor_id : graph.get_neighbors(vertex_id)) {
-        predecessors[neighbor_id].insert(vertex_id);
-      }
-    }
-  }
 
   // Step 2: Assign colors to vertices
   std::unordered_map<vertex_id_t, int> color_map;

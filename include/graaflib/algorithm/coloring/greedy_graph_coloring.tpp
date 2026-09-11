@@ -1,5 +1,6 @@
 #pragma once
 #include <graaflib/algorithm/coloring/greedy_graph_coloring.h>
+#include <graaflib/algorithm/utils.h>
 
 #include <unordered_map>
 #include <unordered_set>
@@ -18,17 +19,11 @@ std::unordered_map<vertex_id_t, int> greedy_graph_coloring(const GRAPH& graph) {
 
   // graph::get_neighbors() only reports outgoing edges. For a directed graph,
   // two vertices sharing a common predecessor must still get different
-  // colors, so we additionally need to take incoming edges into account. We
-  // precompute them here to keep the main loop below linear in the number of
-  // edges.
+  // colors, so we additionally need to take incoming edges into account.
   std::unordered_map<vertex_id_t, std::unordered_set<vertex_id_t>>
       predecessors{};
   if (graph.is_directed()) {
-    for (const auto& [vertex_id, _] : vertices) {
-      for (const auto neighbor_id : graph.get_neighbors(vertex_id)) {
-        predecessors[neighbor_id].insert(vertex_id);
-      }
-    }
+    predecessors = get_predecessors(graph);
   }
 
   // Iterate through each vertex

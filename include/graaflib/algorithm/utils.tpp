@@ -22,4 +22,17 @@ directed_graph<VERTEX_T, EDGE_T> get_transposed_graph(
   return transposed_graph;
 }
 
+template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
+std::unordered_map<vertex_id_t, std::unordered_set<vertex_id_t>>
+get_predecessors(const graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>& graph) {
+  std::unordered_map<vertex_id_t, std::unordered_set<vertex_id_t>>
+      predecessors{};
+  for (const auto& [vertex_id, _] : graph.get_vertices()) {
+    for (const auto& neighbor_id : graph.get_neighbors(vertex_id)) {
+      predecessors[neighbor_id].insert(vertex_id);
+    }
+  }
+  return predecessors;
+}
+
 }  // namespace graaf
