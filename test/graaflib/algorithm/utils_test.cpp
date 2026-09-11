@@ -33,4 +33,33 @@ TEST(UtilsTest, Transpose) {
             300);
 }
 
+TEST(UtilsTest, TransposePreservesIsolatedVertices) {
+  // GIVEN
+  using graph_t = directed_graph<int, int>;
+  graph_t graph{};
+  const auto vertex_id_1 = graph.add_vertex(1);
+  const auto vertex_id_2 = graph.add_vertex(2);
+  const auto vertex_id_3 = graph.add_vertex(3);
+  graph.add_edge(vertex_id_1, vertex_id_2, 100);
+
+  // WHEN
+  graph_t transposed_graph = get_transposed_graph(graph);
+
+  // THEN
+  // Fully pin down the transposed graph: exactly the same three vertices,
+  // with their original values, and exactly one edge, reversed.
+  ASSERT_EQ(transposed_graph.vertex_count(), 3);
+  EXPECT_EQ(transposed_graph.get_vertex(vertex_id_1), 1);
+  EXPECT_EQ(transposed_graph.get_vertex(vertex_id_2), 2);
+  EXPECT_EQ(transposed_graph.get_vertex(vertex_id_3), 3);
+
+  ASSERT_EQ(transposed_graph.edge_count(), 1);
+  EXPECT_TRUE(transposed_graph.has_edge(vertex_id_2, vertex_id_1));
+  EXPECT_EQ(get_weight(transposed_graph.get_edge(vertex_id_2, vertex_id_1)),
+            100);
+
+  // The original-direction edge should not survive the transpose.
+  EXPECT_FALSE(transposed_graph.has_edge(vertex_id_1, vertex_id_2));
+}
+
 }  // namespace graaf
