@@ -62,7 +62,12 @@ graph_t construct_graph_from_file(const dataset& dataset_name) {
       graph.add_vertex(no_data{}, target);
     }
 
-    graph.add_edge(source, target, UNIT_WEIGHT);
+    // The source dataset is directed and may contain reciprocal edges
+    // (source->target and target->source), which map to the same edge in
+    // this undirected graph. Skip edges we've already added.
+    if (!graph.has_edge(source, target)) {
+      graph.add_edge(source, target, UNIT_WEIGHT);
+    }
   }
 
   return graph;

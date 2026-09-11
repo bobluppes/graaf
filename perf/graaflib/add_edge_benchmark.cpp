@@ -21,13 +21,15 @@ template <typename EDGE_T>
 static void bm_add_primitive_numeric_edge(benchmark::State& state) {
   const auto number_of_edges{static_cast<size_t>(state.range(0))};
 
-  graaf::directed_graph<int, int> graph{};
-
   // We create enough vertices to construct the requested number of edges
   const auto number_of_vertices{number_of_edges + 1};
-  const auto vertices{create_vertices(graph, number_of_vertices)};
 
   for (auto _ : state) {
+    state.PauseTiming();
+    graaf::directed_graph<int, int> graph{};
+    const auto vertices{create_vertices(graph, number_of_vertices)};
+    state.ResumeTiming();
+
     for (size_t i{0}; i < number_of_edges; ++i) {
       graph.add_edge(vertices[i], vertices[i + 1], i);
     }
@@ -42,13 +44,15 @@ struct edge {
 static void bm_add_user_defined_edge(benchmark::State& state) {
   const auto number_of_edges{static_cast<size_t>(state.range(0))};
 
-  graaf::directed_graph<int, edge> graph{};
-
   // We create enough vertices to construct the requested number of edges
   const auto number_of_vertices{number_of_edges + 1};
-  const auto vertices{create_vertices(graph, number_of_vertices)};
 
   for (auto _ : state) {
+    state.PauseTiming();
+    graaf::directed_graph<int, edge> graph{};
+    const auto vertices{create_vertices(graph, number_of_vertices)};
+    state.ResumeTiming();
+
     for (size_t i{0}; i < number_of_edges; ++i) {
       graph.add_edge(vertices[i], vertices[i + 1], edge{});
     }
