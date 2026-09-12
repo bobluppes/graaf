@@ -15,7 +15,7 @@
   <a href="https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml"><img src="https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml/badge.svg" height="20"></a>
   <a href="https://codecov.io/github/bobluppes/graaf"><img src="https://codecov.io/github/bobluppes/graaf/branch/main/graph/badge.svg?token=ZFBLNFN39C" height="20"></a>
   <a href="https://bobluppes.github.io/graaf/"><img src="https://img.shields.io/badge/user_docs-mdbook-%23ff69b4" height="20"></a>
-  <a href="https://github.com/bobluppes/graaf/wiki"><img src="https://img.shields.io/badge/contributer_docs-wiki-9cf" height="20"></a>
+  <a href="https://bobluppes.github.io/graaf/development/intro.html"><img src="https://img.shields.io/badge/contributer_docs-mdbook-9cf" height="20"></a>
 </p>
 
 <p align="center">
@@ -137,7 +137,7 @@ take a look at the [docs](https://bobluppes.github.io/graaf/algorithms/intro.htm
 The Graaf library welcomes contributions 🎊
 
 If you're interested in improving, fixing bugs, or adding features, please refer to
-the [wiki](https://github.com/bobluppes/graaf/wiki) for guidelines and have your [development environment set up](https://github.com/bobluppes/graaf/wiki/development-setup) before you start. Check out our roadmap
+the [development docs](https://bobluppes.github.io/graaf/development/intro.html) for guidelines and have your [development environment set up](https://bobluppes.github.io/graaf/development/contributing/development-setup.html) before you start. Check out our roadmap
 on [YouTrack](https://graaf.youtrack.cloud/agiles/147-2/current) to stay up to date on planned features and
 improvements. We also have an [issue tracker](https://github.com/bobluppes/graaf/issues) for bug reports and feature
 requests.
