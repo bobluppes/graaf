@@ -1,0 +1,1791 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Graaf lib</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="A general-purpose lightweight graph library implemented in C++">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="shortcut icon" href="favicon-b8a2e9d4.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-7fb72a96.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-ffcd02a1.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Graaf lib</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/bobluppes/graaf" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="graaf-lib"><a class="header" href="#graaf-lib">Graaf lib</a></h1>
+<p>A general-purpose lightweight graph library implemented in C++</p>
+<p><a href="#quickstart-intro">Graaf Quickstart - 5min ⏱️</a></p>
+<h2 id="easy-to-use"><a class="header" href="#easy-to-use">Easy to Use</a></h2>
+<p>Graaf is designed as a lightweight alternative for Boost Graph. The library
+is created to be easy to use right from the start.</p>
+<h2 id="general-purpose"><a class="header" href="#general-purpose">General-Purpose</a></h2>
+<p>Graphs can wrap arbitrary types, i.e. <code>graaf::directed_graph&lt;MyVertexClass, MyEdgeClass&gt;</code></p>
+<h2 id="lightning-fast"><a class="header" href="#lightning-fast">Lightning Fast</a></h2>
+<p>Graaf is written in C++ with performance in mind. This allows users to
+efficiently perform complex algorithms on large graphs.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="quickstart-intro"><a class="header" href="#quickstart-intro">Quickstart Intro</a></h1>
+<p>Let’s install Graaf in your project…</p>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="quickstart---installation"><a class="header" href="#quickstart---installation">Quickstart - Installation</a></h1>
+<p>5 minutes to learn the most important Graaf concepts.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="installation"><a class="header" href="#installation">Installation</a></h1>
+<h2 id="graaf-header-only-installation"><a class="header" href="#graaf-header-only-installation">Graaf Header-Only Installation</a></h2>
+<p>Installing Graaf on your project is easy! Simply copy the <code>graaflib</code> directory to your project and add it to your
+include path.</p>
+<ol>
+<li>
+<p>Copy <code>graaflib</code> to your project.</p>
+</li>
+<li>
+<p>Before compiling, add the directory to your include path.</p>
+<pre><code class="language-bash"># For C compiler
+export C_INCLUDE_PATH="/full/path/to/include/:$C_INCLUDE_PATH"
+# For Cpp compiler
+export CPLUS_INCLUDE_PATH="/full/path/to/include/:$CPLUS_INCLUDE_PATH"
+</code></pre>
+<p>Or in CMake:</p>
+<pre><code class="language-CMake">include_directories("graaf/include")
+</code></pre>
+</li>
+<li>
+<p>Include the graaf header in your sources.</p>
+<pre><code class="language-c++">#include &lt;graaflib/graph.h&gt;
+
+</code></pre>
+</li>
+</ol>
+<h2 id="cmake-fetchcontent"><a class="header" href="#cmake-fetchcontent">CMake FetchContent</a></h2>
+<p>Alternatively, this project can be pulled in using CMake’s <code>FetchContent</code>:</p>
+<pre><code class="language-CMake">include(FetchContent)
+FetchContent_Declare(
+        graaflib
+        GIT_REPOSITORY https://github.com/bobluppes/graaf.git
+        GIT_TAG v1.2.0
+)
+FetchContent_MakeAvailable(graaflib)
+</code></pre>
+<p>Pin <code>GIT_TAG</code> to a released version rather than <code>main</code> - <code>main</code> can contain unreleased, potentially breaking changes.</p>
+<p>Now you can link your target against <code>Graaf::Graaf</code>:</p>
+<pre><code class="language-CMake">target_link_libraries(${PROJECT_NAME} PRIVATE Graaf::Graaf)
+</code></pre>
+<h2 id="cmake-options"><a class="header" href="#cmake-options">CMake Options</a></h2>
+<p>There are multiple CMake Options available to choose how you want to build Graaf in your Project.</p>
+<ul>
+<li><code>SKIP_TESTS</code>
+<ul>
+<li>Default: <code>OFF</code></li>
+<li>Enabling skips building the tests.</li>
+</ul>
+</li>
+<li><code>SKIP_EXAMPLES</code>
+<ul>
+<li>Default: <code>OFF</code></li>
+<li>This skips building the example usages of the Library.</li>
+</ul>
+</li>
+<li><code>SKIP_BENCHMARKS</code>
+<ul>
+<li>Default: <code>OFF</code></li>
+<li>This skips building the Benchmarks.</li>
+</ul>
+</li>
+<li><code>GRAAF_DOWNLOAD_PERF_DATASETS</code>
+<ul>
+<li>Default: <code>OFF</code></li>
+<li>Some benchmarks run against large real-world graph datasets. Enabling this downloads those datasets so these benchmarks can run; leaving it off still builds them, it just skips downloading the data.</li>
+</ul>
+</li>
+</ul>
+<p>These Options can be set while executing the cmake command</p>
+<pre><code class="language-bash">cmake -DSKIP_TESTS=ON -DSKIP_EXAMPLES=ON -DSKIP_BENCHMARKS=ON [source_directory]
+</code></pre>
+<p>or by setting them in your Projects CMakeLists.txt (before <code>FetchContent_MakeAvailable(graaflib)</code>)</p>
+<pre><code class="language-cmake">set(SKIP_TESTS ON)
+set(SKIP_BENCHMARKS ON)
+set(SKIP_EXAMPLES ON)
+FetchContent_MakeAvailable(graaflib)
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="alternative-installation-methods"><a class="header" href="#alternative-installation-methods">Alternative Installation Methods</a></h1>
+<h2 id="as-a-submodule"><a class="header" href="#as-a-submodule">As a submodule</a></h2>
+<p>Graaf can also be installed as a submodule in your project</p>
+<ol>
+<li>Go to your project directory <code>cd projectdir</code></li>
+<li>Add Graaf as submodule <code>git submodule add https://github.com/bobluppes/graaf.git</code></li>
+<li>Then add Graaf as include directory with CMake:</li>
+</ol>
+<pre><code class="language-CMake">   include_directories("graaf/include")
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="quickstart---basics"><a class="header" href="#quickstart---basics">Quickstart - Basics</a></h1>
+<p>5 minutes to learn the most important Graaf concepts.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="graaf-architecture"><a class="header" href="#graaf-architecture">Graaf Architecture</a></h1>
+<p>From a very high level, the project is structured in two parts:</p>
+<ul>
+<li>The graph classes and core data structures</li>
+<li>Algorithms and additional functionality</li>
+</ul>
+<h2 id="graph-classes-and-core-data-structures"><a class="header" href="#graph-classes-and-core-data-structures">Graph classes and core data structures</a></h2>
+<p>The main class of the library is the abstract graph class:</p>
+<pre><code class="language-c++">enum class edge_type { WEIGHTED, UNWEIGHTED };
+enum class graph_spec { DIRECTED, UNDIRECTED };
+
+template &lt;typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V, graph_spec GRAPH_SPEC_V&gt;
+class graph {...};
+</code></pre>
+<p>An instance of a <code>graph</code> can have user provided types for the vertices and edges. Internally, it stores the graph in an
+adjacency list, and has separate containers for the vertex and edge instances:</p>
+<pre><code class="language-c++">// N.B. These types are a bit more abstracted in the codebase behind using
+// declarations, but for clarity I have left this out.
+
+// Adjacency information is stored in a set for fast existence checks and fast removal
+std::unordered_map&lt;vertex_id_t, std::unordered_set&lt;vertex_id_t&gt;&gt; adjacency_list_{};
+
+// Storing these in a separate container has the advantage that
+// vertices and edges are only in memory once
+std::unordered_map&lt;vertex_id_t, VERTEX_T&gt; vertices_{};
+std::unordered_map&lt;std::pair&lt;vertex_id_t, vertex_id_t&gt;, edge_t, edge_id_hash&gt; edges_{};
+</code></pre>
+<p>The <code>graph</code> class is abstract as it contains pure virtual private methods related to the handling of
+edges (<code>do_has_edge</code>, <code>do_get_edge</code>, <code>do_add_edge</code>, and <code>do_remove_edge</code>).</p>
+<h3 id="directed-and-undirected-graphs"><a class="header" href="#directed-and-undirected-graphs">Directed and undirected graphs</a></h3>
+<p>There are two classes which publicly derive from <code>graph</code>:</p>
+<ul>
+<li><code>directed_graph</code></li>
+<li><code>undirected_graph</code></li>
+</ul>
+<pre><code class="language-c++">template &lt;typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V = edge_type::UNWEIGHTED&gt;
+class directed_graph final
+    : public graph&lt;VERTEX_T, EDGE_T, EDGE_TYPE_V, graph_spec::DIRECTED&gt; 
+    {...};
+
+template &lt;typename VERTEX_T, typename EDGE_T, edge_type EDGE_TYPE_V = edge_type::UNWEIGHTED&gt;
+class undirected_graph final
+    : public graph&lt;VERTEX_T, EDGE_T, EDGE_TYPE_V, graph_spec::UNDIRECTED&gt; 
+    {...};
+</code></pre>
+<p>These are the classes which the user instantiates.</p>
+<p>They provide implementations for the pure virtual methods related to handling edges. The <code>unweighted_graph</code> first sorts
+the pair of vertex ids related to an edge before interacting with the internal <code>edges_</code> data structure. This ensures
+that an edge <strong>a</strong>-&gt;<strong>b</strong> is the same as an edge from <strong>b</strong>-&gt;<strong>a</strong>.</p>
+<h3 id="weighted-graphs"><a class="header" href="#weighted-graphs">Weighted graphs</a></h3>
+<p>Certain algorithms (such as A*) operate on weighted graphs. A graph is automatically weighted if a primitive numeric
+type is passed as a template parameter to <code>EDGE_T</code>. Alternatively, user provided edge classes can publicly derive
+from <code>weighted_edge</code>.</p>
+<p>The <code>weighted_edge</code> class provides a default implementation for the <code>get_weight</code> method, but this can be overridden in
+the derived class:</p>
+<pre><code class="language-c++">template &lt;typename WEIGHT_T = int&gt;
+class weighted_edge {
+ public:
+  using weight_t = WEIGHT_T;
+  /**
+   * By default an edge has a unit weight.
+   */
+  [[nodiscard]] virtual WEIGHT_T get_weight() const noexcept { return 1; };
+};
+
+</code></pre>
+<p>To create an unweighted graph, simply do not derive from <code>weighted_edge</code> in your edge class.</p>
+<h2 id="algorithms-and-additional-functionality"><a class="header" href="#algorithms-and-additional-functionality">Algorithms and additional functionality</a></h2>
+<p>The idea here is to keep the graph classes as general-purpose as possible, and to not include use case specific logic (
+such as dot serialization) as member functions. Therefore, each algorithm/utility function is implemented as a free
+function.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="creating-your-first-graph"><a class="header" href="#creating-your-first-graph">Creating Your First Graph</a></h1>
+<ol>
+<li>In your <code>main.cpp</code> import Graaf:</li>
+</ol>
+<pre><code class="language-c++">#include &lt;graaflib/graph.h&gt;
+</code></pre>
+<ol start="2">
+<li>Define a directed graph <code>g</code></li>
+</ol>
+<pre><code class="language-c++">graaf::directed_graph&lt;const char, int&gt; g;
+</code></pre>
+<ol start="3">
+<li>Add vertices to the graph:</li>
+</ol>
+<pre><code class="language-c++">const auto a = g.add_vertex('a');
+const auto b = g.add_vertex('b');
+const auto c = g.add_vertex('c');
+</code></pre>
+<ol start="4">
+<li>Connect the vertices with edges:</li>
+</ol>
+<pre><code class="language-c++">g.add_edge(a, b, 1);
+g.add_edge(a, c, 1);
+</code></pre>
+<ol start="5">
+<li>Putting it all together:</li>
+</ol>
+<pre><code class="language-c++">#include &lt;graaflib/graph.h&gt;
+
+int main()
+{
+    graaf::directed_graph&lt;const char, int&gt; g;
+
+    const auto a = g.add_vertex('a');
+    const auto b = g.add_vertex('b');
+    const auto c = g.add_vertex('c');
+
+    g.add_edge(a, b, 1);
+    g.add_edge(a, c, 1);
+
+    return 0;
+}
+</code></pre>
+<h3 id="congratulations-you-just-created-the-following-graph-"><a class="header" href="#congratulations-you-just-created-the-following-graph-">Congratulations! You just created the following graph 🎉</a></h3>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="img/quickstart/Graph.png" alt="Directed graph example"><span class="img-wrapper"><img src="img/quickstart/Graph.png" alt="Directed graph example"></span></label></p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="using-algorithms"><a class="header" href="#using-algorithms">Using Algorithms</a></h1>
+<ol>
+<li>In your <code>main.cpp</code> import Graaf and algorithm of choice:</li>
+</ol>
+<pre><code class="language-c++">#include &lt;graaflib/graph.h&gt;
+#include &lt;graaflib/algorithm/cycle_detection/dfs_cycle_detection.h&gt;
+</code></pre>
+<ol start="2">
+<li>Build your graph:</li>
+</ol>
+<pre><code class="language-c++">graaf::directed_graph&lt;const char, int&gt; g;
+
+const auto a = g.add_vertex('a');
+const auto b = g.add_vertex('b');
+const auto c = g.add_vertex('c');
+
+g.add_edge(a, b, 1);
+g.add_edge(c, a, 1);
+</code></pre>
+<ol start="3">
+<li>Run the algorithm:</li>
+</ol>
+<pre><code class="language-c++">std::cout &lt;&lt; "Has cycles: " &lt;&lt; graaf::algorithm::dfs_cycle_detection(g) &lt;&lt; "\n";
+</code></pre>
+<ol start="4">
+<li>Visualize the graph:</li>
+</ol>
+<pre><code class="language-c++">#include &lt;graaflib/io/dot.h&gt;
+...
+graaf::io::to_dot(g, "./Cycles.dot");
+</code></pre>
+<ol start="5">
+<li>Putting it all together:</li>
+</ol>
+<pre><code class="language-c++">#include &lt;graaflib/graph.h&gt;
+#include &lt;graaflib/io/dot.h&gt;
+#include &lt;graaflib/algorithm/cycle_detection/dfs_cycle_detection.h&gt;
+
+#include &lt;iostream&gt;
+
+int main(int argc, char** argv)
+{
+    graaf::directed_graph&lt;const char, int&gt; g;
+
+    const auto a = g.add_vertex('a');
+    const auto b = g.add_vertex('b');
+    const auto c = g.add_vertex('c');
+
+    g.add_edge(a, b, 1);
+    g.add_edge(c, a, 1);
+
+    std::cout &lt;&lt; "Vertices: " &lt;&lt; g.vertex_count() &lt;&lt; "\n";
+    std::cout &lt;&lt; "Edges: " &lt;&lt; g.edge_count() &lt;&lt; "\n";
+
+    std::cout &lt;&lt; "Has cycles: " &lt;&lt; graaf::algorithm::dfs_cycle_detection(g) &lt;&lt; "\n";
+
+    g.add_edge(b, c, 1);
+    std::cout &lt;&lt; "Has cycles: " &lt;&lt; graaf::algorithm::dfs_cycle_detection(g) &lt;&lt; "\n";
+
+    graaf::io::to_dot(g, "./Cycles.dot");
+    std::cout &lt;&lt; "Run: dot -Tpng -o Cycles.png Cycles.dot\n";
+    
+    return 0;
+}
+
+</code></pre>
+<h3 id="congratulations-you-just-detected-if-there-are-cycles-in-the-following-graph"><a class="header" href="#congratulations-you-just-detected-if-there-are-cycles-in-the-following-graph">Congratulations! You just detected if there are cycles in the following graph</a></h3>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="img/quickstart/Cycles.png" alt="Cycle detection example"><span class="img-wrapper"><img src="img/quickstart/Cycles.png" alt="Cycle detection example"></span></label></p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="algorithms-overview"><a class="header" href="#algorithms-overview">Algorithms Overview</a></h1>
+<p>This section provides an overview of the algorithms currently implemented in Graaf.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="clique-detection"><a class="header" href="#clique-detection">Clique Detection</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="bron-kerbosch-algorithm"><a class="header" href="#bron-kerbosch-algorithm">Bron-Kerbosch algorithm</a></h1>
+<p>Bron-Kerbosch algorithm finding all maximal cliques in an undirected graph. A clique is a subset of vertices such that
+every two distinct vertices are adjacent to each other.
+The maximal clique is the subset of vertices of an undirected graph where no additional vertex can be added
+due to the complete connectivity rule. The algorithm lists all maximum cliques of an undirected graph.</p>
+<p>The worst-case run time of the algorithm is 3<sup>V/3</sup>.
+<a href="https://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm#Worst-case_analysis">wikipedia</a></p>
+<h2 id="syntax"><a class="header" href="#syntax">Syntax</a></h2>
+<pre><code class="language-cpp">template &lt;typename V, typename E&gt;
+std::vector&lt;std::vector&lt;vertex_id_t&gt;&gt; bron_kerbosch(
+    const graph&lt;V, E, graph_type::UNDIRECTED&gt;&amp; graph);
+</code></pre>
+<ul>
+<li><strong>graph</strong> The graph to extract maximal cliques.</li>
+<li><strong>return</strong> Returns 2D vector of vertices each vector represent set of vertices that form clique.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="graph-coloring-algorithms"><a class="header" href="#graph-coloring-algorithms">Graph Coloring Algorithms</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="greedy-graph-coloring-algorithm"><a class="header" href="#greedy-graph-coloring-algorithm">Greedy Graph Coloring Algorithm</a></h1>
+<p>Greedy Graph Coloring computes a coloring of the vertices of a (simple, connected) graph such that no two adjacent
+vertices have the same color.</p>
+<p>If the graph has different connected components, each component will be treated as a separate simple connected graph.</p>
+<p>For a directed graph, this colors the underlying undirected graph: two vertices are considered adjacent if there is
+an edge between them in either direction.</p>
+<p>The algorithm is heuristic and does not guarantee an optimal number of different colors (that is, equal to the chromatic
+number of a simple, connected graph).</p>
+<p>Colors are represented by the numbers 0, 1, 2,… The greedy algorithm considers the vertices of the graph in sequence
+and assigns each vertex its first available color, i.e. the color with the smallest number that is not already used by
+one of its neighbors.</p>
+<p>The overall worst-case time complexity of the algorithm is <code>O(n^2)</code>. In cases where the graph has a fixed degree (a
+constant number of neighbors for each vertex), the time complexity can be approximated as <code>O(n)</code>. However, if the graph
+is highly connected (dense) and approaches a complete graph, the time complexity could approach <code>O(n^2)</code>.</p>
+<p>If no coloring is possible, an empty <code>unordered_map</code> is returned. This is the case when the graph contains no vertices.</p>
+<p><a href="https://en.wikipedia.org/wiki/Greedy_coloring">wikipedia</a></p>
+<h2 id="syntax-1"><a class="header" href="#syntax-1">Syntax</a></h2>
+<pre><code class="language-cpp">template &lt;typename GRAPH&gt;
+std::unordered_map&lt;vertex_id_t, int&gt; greedy_graph_coloring(const GRAPH&amp; graph);
+</code></pre>
+<ul>
+<li><strong>graph</strong> A graph to perform graph coloring on.</li>
+<li><strong>return</strong> An unordered_map where keys are vertex identifiers and values are their respective colors. If no coloring
+is possible, an empty <code>unordered_map</code> is returned.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="welsh-powell-algorithm"><a class="header" href="#welsh-powell-algorithm">Welsh Powell Algorithm</a></h1>
+<p>Welsh Powell Algorithm computes a coloring of the vertices of a (simple, connected) graph such that no two adjacent
+vertices have the same color.</p>
+<p>If the graph has different connected components, each component will be treated as a separate simple connected graph.</p>
+<p>For a directed graph, this colors the underlying undirected graph: two vertices are considered adjacent if there is
+an edge between them in either direction.</p>
+<p>The algorithm is heuristic and does not guarantee an optimal number of different colors (that is, equal to the chromatic
+number of a simple, connected graph).</p>
+<p>Colors are represented by the numbers 0, 1, 2,… The Welsh Powell algorithm considers the vertices of the graph in
+descending order of their degrees and assigns each vertex with its first available color, i.e. the color with the
+smallest number that is not already used by one of its neighbors.</p>
+<p>The overall worst-case time complexity of the algorithm is <code>O(n^2)</code>. In cases where the graph has a fixed degree (a
+constant number of neighbors for each vertex), the time complexity can be approximated as <code>O(n)</code>. However, if the graph
+is highly connected (dense) and approaches a complete graph, the time complexity could approach <code>O(n^2)</code>.</p>
+<p>If no coloring is possible, an empty <code>unordered_map</code> is returned. This is the case when the graph contains no vertices.</p>
+<p><a href="https://www.tutorialspoint.com/welsh-powell-graph-colouring-algorithm">Tutorials Point</a></p>
+<h2 id="syntax-2"><a class="header" href="#syntax-2">Syntax</a></h2>
+<pre><code class="language-cpp">template &lt;typename GRAPH&gt;
+std::unordered_map&lt;vertex_id_t, int&gt; welsh_powell_coloring(const GRAPH&amp; graph);
+</code></pre>
+<ul>
+<li><strong>graph</strong> A graph to perform graph coloring on.</li>
+<li><strong>return</strong> An unordered_map where keys are vertex identifiers and values are their respective colors. If no coloring
+is possible, an empty <code>unordered_map</code> is returned.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="cycle-detection-algorithms"><a class="header" href="#cycle-detection-algorithms">Cycle Detection Algorithms</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="dfs-based-cycle-detection"><a class="header" href="#dfs-based-cycle-detection">DFS Based Cycle Detection</a></h1>
+<p>A DFS based cycle detection algorithm is used to identify cycles in graphs, both directed and undirected.
+The algorithm can be used to detect cycles in the structure of a graph, as it does not consider edge weights.</p>
+<h1 id="directed-graph"><a class="header" href="#directed-graph">Directed graph</a></h1>
+<p>The key idea is that when a vertex is processed, mark it as: UNVISITED, VISITED and NO_CYCLE.
+By default all vertices marked as UNVISITED. During the traversal, we label vertices as VISITED. At the exit of the
+recursion, we label the vertex as NO CYCLE.
+If we met a vertex labeled VISITED, we found a cycle in the graph.</p>
+<h1 id="undirected-graph"><a class="header" href="#undirected-graph">Undirected graph</a></h1>
+<p>The key idea is to store the parent of each vertex during the traversal. So when we check neighboring vertices, we skip
+back edge.
+During the traversal we mark the vertex as visited and continue the traversal. In case a vertex was visited before and
+vertices have different parents, we found a cycle.</p>
+<p>The runtime of the algorithm is <code>O(|V| + |E|)</code> and memory consumption is <code>O(|V|)</code>. Where V is the number of vertices in
+the graph and E the number of edges.
+The algorithm uses DFS traversal and therefore suffers the same limitations (see depth-first-search.md).</p>
+<h1 id="use-cases"><a class="header" href="#use-cases">Use cases</a></h1>
+<ul>
+<li>Resource dependencies:
+<ul>
+<li>Redundant connections.</li>
+<li>Deadlocks in concurrent systems.</li>
+<li>Deadlocks in concurrent systems.</li>
+</ul>
+</li>
+<li>Logical dependencies:
+<ul>
+<li>Data base relation.</li>
+<li>Dependency management.</li>
+<li>Circuit design.</li>
+</ul>
+</li>
+<li>Infinity loops.</li>
+</ul>
+<p><a href="https://en.wikipedia.org/wiki/Cycle_(graph_theory)#Cycle_detection">wikipedia</a></p>
+<h2 id="syntax-3"><a class="header" href="#syntax-3">Syntax</a></h2>
+<p>Cycle detection for directed graph.</p>
+<pre><code class="language-cpp">template &lt;typename V, typename E&gt;
+[[nodiscard]] bool dfs_cycle_detection(
+    const graph&lt;V, E, graph_type::DIRECTED&gt; &amp;graph);
+
+</code></pre>
+<p>Cycle detection for undirected graph.</p>
+<pre><code class="language-cpp">template &lt;typename V, typename E&gt;
+[[nodiscard]] bool dfs_cycle_detection(
+    const graph&lt;V, E, graph_type::UNDIRECTED&gt; &amp;graph);
+</code></pre>
+<ul>
+<li><strong>graph</strong> The graph to traverse.</li>
+<li><strong>return</strong> Returns true in case of cycle otherwise returns false.</li>
+</ul>
+<h2 id="similar-algorithms"><a class="header" href="#similar-algorithms">Similar algorithms</a></h2>
+<p>There are many algorithms for cycle detection or algorithms with specific cycle conditions.
+See <a href="https://en.wikipedia.org/wiki/Cycle_(graph_theory)#Graph_classes_defined_by_cycle">wikipedia</a></p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="minimum-spanning-tree"><a class="header" href="#minimum-spanning-tree">Minimum Spanning Tree</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="kruskals-algorithm"><a class="header" href="#kruskals-algorithm">Kruskal’s Algorithm</a></h1>
+<p>Kruskal’s algorithm finds the minimum spanning forest of an undirected edge-weighted graph. If the graph is connected,
+it finds a minimum spanning tree.
+The algorithm is implemented with disjoint set union and finding minimum weighted edges.
+Worst-case performance is <code>O(|E|log|V|)</code>, where <code>|E|</code> is the number of edges and <code>|V|</code> is the number of vertices in the
+graph. Memory usage is <code>O(V+E)</code> for maintaining vertices (DSU) and edges.</p>
+<p><a href="https://en.wikipedia.org/wiki/Kruskal%27s_algorithm">wikipedia</a></p>
+<h2 id="syntax-4"><a class="header" href="#syntax-4">Syntax</a></h2>
+<p>Calculates the shortest path with the minimum edge sum.</p>
+<pre><code class="language-cpp">template &lt;typename V, typename E&gt;
+[[nodiscard]] std::vector&lt;edge_id_t&gt; kruskal_minimum_spanning_tree(
+    const graph&lt;V, E, graph_type::UNDIRECTED&gt;&amp; graph);
+</code></pre>
+<ul>
+<li><strong>graph</strong> The graph to extract MST or MSF.</li>
+<li><strong>return</strong> Returns a vector of edges that form MST if the graph is connected, otherwise it returns the minimum
+spanning forest.</li>
+</ul>
+<h3 id="special-case"><a class="header" href="#special-case">Special case</a></h3>
+<p>In case of multiply edges with same weight leading to a vertex, prioritizing vertices with lesser vertex number.</p>
+<pre><code class="language-cpp">std::sort(edges_to_process.begin(), edges_to_process.end(),
+              [](detail::edge_to_process&lt;E&gt;&amp; e1,
+                 detail::edge_to_process&lt;E&gt;&amp; e2) {
+                       if (e1 != e2)
+                           return e1.get_weight() &lt; e2.get_weight();
+          return e1.vertex_a &lt; e2.vertex_a || e1.vertex_b &lt; e2.vertex_b;
+        });
+</code></pre>
+<p>For custom type edge, we should provide &lt; and != operators</p>
+<pre><code class="language-cpp">struct custom_edge : public graaf::weighted_edge&lt;int&gt; {
+ public:
+  int weight_{};
+
+  [[nodiscard]] int get_weight() const noexcept override { return weight_; }
+ 
+  custom_edge(int weight): weight_{weight} {};
+  custom_edge(){};
+  ~custom_edge(){};
+
+  // Providing '&lt;' and '!=' operators for sorting edges
+  bool operator&lt;(const custom_edge&amp; e) const noexcept {
+    return this-&gt;weight_ &lt; e.weight_;
+  }
+  bool operator!=(const custom_edge&amp; e) const noexcept {
+    return this-&gt;weight_ != e.weight_;
+  }
+};
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="prims-algorithm"><a class="header" href="#prims-algorithm">Prim’s Algorithm</a></h1>
+<p>Prim’s algorithm computes the minimum spanning tree (MST) of a connected, undirected graph with weighted edges. Starting
+with an arbitrary vertex, the algorithm iteratively selects the edge with the smallest weight that connects a
+vertex in the tree to a vertex outside the tree, adding it to the MST.</p>
+<p>The algorithm’s worst-case time complexity is O(∣E∣log∣V∣).</p>
+<p>Unlike Kruskal’s algorithm, Prim’s algorithm works efficiently on dense graphs. A limitation is that it requires the
+graph to be connected and does not handle disconnected graphs or graphs with negative-weight cycles.</p>
+<p>Prim’s MST is often used in network design, such as electrical wiring and telecommunications.</p>
+<p><a href="https://en.wikipedia.org/wiki/Prim%27s_algorithm">wikipedia</a></p>
+<h2 id="syntax-5"><a class="header" href="#syntax-5">Syntax</a></h2>
+<pre><code class="language-cpp">template &lt;typename V, typename E&gt;
+[[nodiscard]] std::optional&lt;std::vector&lt;edge_id_t&gt; &gt; prim_minimum_spanning_tree(
+    const graph&lt;V, E, graph_type::UNDIRECTED&gt;&amp; graph, vertex_id_t start_vertex);
+</code></pre>
+<ul>
+<li><strong>graph</strong> The undirected graph for which we want to compute the MST.</li>
+<li><strong>start_vertex</strong> The vertex ID which should be the root of the MST.</li>
+<li><strong>return</strong> Returns a vector of edges that form MST if the graph is connected, otherwise returns an empty optional.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="shortest-path-algorithms"><a class="header" href="#shortest-path-algorithms">Shortest Path Algorithms</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="a-search-algorithm"><a class="header" href="#a-search-algorithm">A* Search Algorithm</a></h1>
+<p>A* computes the shortest path between a starting vertex and a target vertex in weighted and unweighted graphs.
+It can be seen as an extension of Dijkstra’s classical shortest paths algorithm. The implementation of A* also tries to
+follow <code>dijkstra_shortest_path</code> closely where appropriate. Compared to Dijkstra’s algorithm, A* only finds the shortest
+path from a start vertex to a target vertex, and not the shortest path to all possible target vertices. Another
+difference is that A* uses a heuristic function to achieve better performance.</p>
+<p>At each iteration of its main loop, A* needs to determine which of its paths to extend. It does so by minimizing the
+so-called <code>f_score</code>.</p>
+<p>In A*, the <code>f_score</code> represents the estimated total cost of the path from the start vertex to the goal vertex through
+the current vertex. It’s a combination of two components:</p>
+<ol>
+<li><code>g_score</code>: The actual cost of the path from the start vertex to the current vertex.</li>
+<li><code>h_score</code> (heuristic score): An estimate of the cost required from the current vertex to the goal vertex.</li>
+</ol>
+<p>A* tries to minimize the <code>f_score</code> for each vertex as it explores the graph. The idea is to prioritize exploring
+vertices that have lower <code>f_score</code> values, as they are expected to lead to potentially better paths.</p>
+<p>Mathematically, <code>f_score</code> is often defined as:</p>
+<pre><code>f_score = g_score + h_score
+</code></pre>
+<p>Where:</p>
+<ul>
+<li><code>g_score</code> is the cost of the path from the start vertex to the current vertex.</li>
+<li><code>h_score</code> is the heuristic estimate of the cost from the current vertex to the goal vertex.</li>
+</ul>
+<p>In the implementation, the heuristic function <code>heuristic</code> provides an estimate of <code>h_score</code> for each vertex, and the
+actual cost of the path from the start vertex to the current vertex is stored in the <code>g_score</code> unordered map, as the
+algorithm progresses.</p>
+<p>In the implementation, <code>dist_from_start</code> from <code>path_vertex</code> represents the <code>g_score</code> (the true accumulated cost from
+the start vertex), which is what is reported as <code>total_weight</code> on the resulting path. The <code>f_score</code> used to order the
+<code>open_set</code> is tracked separately and is never stored in <code>dist_from_start</code>.</p>
+<p>The time complexity of A* depends on the provided heuristic function. In the worst case of an unbounded search space,
+the number of nodes expanded is exponential in the depth of the solution (the shortest path) <code>d</code>. This can be expressed
+as <code>O(b^d)</code>, where <code>b</code> is the branching factor (the average number of successors per state) per stage.</p>
+<p>In weighted graphs, edge weights should be non-negative. Like in the implementation of Dijkstra’s algorithm, A* is
+implemented with the priority queue provided by C++, to perform the repeated selection of minimum (estimated) cost nodes
+to expand. This is the <code>open_set</code>. If the shortest path is not unique, one of the shortest paths is returned.</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/A*_search_algorithm">wikipedia</a></li>
+<li><a href="https://www.redblobgames.com/pathfinding/a-star/introduction.html">Red Blob Games</a></li>
+</ul>
+<h2 id="syntax-6"><a class="header" href="#syntax-6">Syntax</a></h2>
+<p>calculates the shortest path between on start_vertex and one end_vertex using A* search.
+Works on both weighted as well as unweighted graphs. For unweighted graphs, a unit weight is used for each edge.</p>
+<pre><code class="language-cpp">template &lt;typename V, typename E, graph_type T, typename HEURISTIC_T, typename WEIGHT_T = decltype(get_weight(std::declval&lt;E&gt;()))&gt;
+  requires std::is_invocable_r_v&lt;WEIGHT_T, HEURISTIC_T&amp;, vertex_id_t&gt;
+std::optional&lt;graph_path&lt;WEIGHT_T&gt;&gt; a_star_search(
+    const graph&lt;V, E, T&gt; &amp;graph, vertex_id_t start_vertex, vertex_id_t target_vertex,
+    const HEURISTIC_T &amp;heuristic);
+</code></pre>
+<ul>
+<li><strong>graph</strong> The graph to extract shortest path from.</li>
+<li><strong>start_vertex</strong> The vertex id where the shortest path should should start.</li>
+<li><strong>target_vertex</strong> The vertex id where the shortest path should end.</li>
+<li><strong>heuristic</strong> A heuristic function estimating the cost from a vertex to the target.</li>
+<li><strong>return</strong>  An optional containing the shortest path (a list of vertices) if found, or std::nullopt if no such path
+exists.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="bellman-ford-shortest-path"><a class="header" href="#bellman-ford-shortest-path">Bellman-Ford Shortest Path</a></h1>
+<p>Bellman-Ford’s algorithm computes shortest paths from a single source vertex to all of the other vertices in weighted
+graph and unweighted graphs. In weighted graphs, edge weights are allowed to be negative. Bellman-Ford’s algorithm runs
+in <code>O(|E||V|)</code> for connected graphs, where <code>|E|</code> is the number of edges and <code>|V|</code> the number of vertices in the
+graph.</p>
+<p>A limitation is that this implementation doesn’t check for negative-weight cycles.</p>
+<p><a href="https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm">wikipedia</a></p>
+<h2 id="syntax-7"><a class="header" href="#syntax-7">Syntax</a></h2>
+<p>Find the shortest paths from a source vertex to all other vertices using the Bellman-Ford algorithm.</p>
+<pre><code class="language-cpp">template &lt;typename V, typename E, graph_type T, 
+          typename WEIGHT_T = decltype(get_weight(std::declval&lt;E&gt;()))&gt;
+std::unordered_map&lt;vertex_id_t, graph_path&lt;WEIGHT_T&gt;&gt;
+bellman_ford_shortest_paths(const graph&lt;V, E, T&gt;&amp; graph, vertex_id_t start_vertex);
+</code></pre>
+<ul>
+<li><strong>graph</strong> The graph to extract shortest path from.</li>
+<li><strong>start_vertex</strong> The source vertex for the shortest paths.</li>
+<li><strong>return</strong> A map of target vertex IDs to shortest path structures.
+Each value contains a graph_path object representing the shortest path from the source vertex to the respective
+vertex.
+If a vertex is unreachable from the source, its entry will be absent from the map.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="bfs-based-shortest-path"><a class="header" href="#bfs-based-shortest-path">BFS Based Shortest Path</a></h1>
+<p>Breadth-First Search (BFS) is a graph traversal algorithm that efficiently finds the shortest
+path between two vertices in an <strong>unweighted graph</strong> by exploring vertices level by level,
+guaranteeing the shortest path, and has a time complexity of <code>O(|E| + |V|)</code>,
+where <code>|V|</code> is the number of vertices and <code>|E|</code> is the number of edges in the graph.
+BFS uses a queue to iteratively visit neighboring vertices from the source
+vertex, ensuring that the shortest path is discovered before longer paths.</p>
+<p><a href="https://en.wikipedia.org/wiki/Breadth-first_search">wikipedia</a></p>
+<h2 id="syntax-8"><a class="header" href="#syntax-8">Syntax</a></h2>
+<p>Calculates the shortest path between one start_vertex and one
+end_vertex using BFS. This does not consider edge weights.</p>
+<pre><code class="language-cpp">template &lt;typename V, typename E, graph_type T, typename WEIGHT_T = decltype(get_weight(std::declval&lt;E&gt;()))&gt;
+std::optional&lt;graph_path&lt;WEIGHT_T&gt;&gt; bfs_shortest_path(
+    const graph&lt;V, E, T&gt;&amp; graph, vertex_id_t start_vertex, vertex_id_t end_vertex);
+</code></pre>
+<ul>
+<li><strong>graph</strong> The graph to extract shortest path from.</li>
+<li><strong>start_vertex</strong> Vertex id where the shortest path should start.</li>
+<li><strong>end_vertex</strong> Vertex id where the shortest path should end.</li>
+<li><strong>return</strong> An optional with the shortest path (list of vertices) if found.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="dijkstra-shortest-path"><a class="header" href="#dijkstra-shortest-path">Dijkstra Shortest Path</a></h1>
+<p>Dijkstra’s algorithm computes shortest paths between nodes in weighted and unweighted graphs. In weighted graphs,
+edge weights should be non-negative. Dijkstra’s algorithm is implemented with a priority queue and runs
+in <code>O(|E|log|V|)</code> for connected graphs, where <code>|E|</code> is the number of edges and <code>|V|</code> the number of vertices in the
+graph.</p>
+<p><a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">wikipedia</a></p>
+<h2 id="syntax-9"><a class="header" href="#syntax-9">Syntax</a></h2>
+<p>calculates the shortest path between on start_vertex and one end_vertex using Dijkstra’s algorithm. Works on both
+weighted as well as unweighted graphs. For unweighted graphs, a unit weight is used for each edge.</p>
+<pre><code class="language-cpp">template &lt;typename V, typename E, graph_type T, typename WEIGHT_T = decltype(get_weight(std::declval&lt;E&gt;()))&gt;
+std::optional&lt;graph_path&lt;WEIGHT_T&gt;&gt; 
+dijkstra_shortest_path(const graph&lt;V, E, T&gt;&amp; graph, vertex_id_t start_vertex, vertex_id_t end_vertex);
+</code></pre>
+<ul>
+<li><strong>graph</strong> The graph to extract shortest path from.</li>
+<li><strong>start_vertex</strong> Vertex id where the shortest path should start.</li>
+<li><strong>end_vertex</strong> Vertex id where the shortest path should end.</li>
+<li><strong>return</strong> An optional with the shortest path (list of vertices) if found.</li>
+</ul>
+<p>Find the shortest paths from a source vertex to all other vertices in the graph using Dijkstra’s algorithm.</p>
+<pre><code class="language-cpp">template &lt;typename V, typename E, graph_type T, typename WEIGHT_T = decltype(get_weight(std::declval&lt;E&gt;()))&gt;
+[[nodiscard]] std::unordered_map&lt;vertex_id_t, graph_path&lt;WEIGHT_T&gt;&gt;
+dijkstra_shortest_paths(const graph&lt;V, E, T&gt;&amp; graph, vertex_id_t source_vertex);
+</code></pre>
+<ul>
+<li><strong>graph</strong> The graph we want to search.</li>
+<li><strong>source_vertex</strong> The source vertex from which to compute shortest paths.</li>
+<li><strong>return</strong> A map containing the shortest paths from the source vertex to all other vertices. The map keys are target
+vertex IDs, and the values are instances of graph_path, representing the shortest distance and the path (list of
+vertex IDs) from the source to the target. If a vertex is not reachable from the source, its entry will be absent from
+the map.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="floyd-warshall-algorithm"><a class="header" href="#floyd-warshall-algorithm">Floyd-Warshall algorithm</a></h1>
+<p>Floyd-Warshall algorithm computes the shortest path between any two vertices in a graph, both directed and undirected.
+The algorithm does not work for graphs with negative weight cycles.
+The key idea of the algorithm is to relax the weighted shortest path between any two vertices, using any vertex as an
+intermediate one.
+Advantage of the algorithm is that it processes vertices instead of edges. This advantage can be used when the number of
+edges is large enough, aka a dense graph.
+Runtime of the algorithm is O(|V<sup>3</sup>|) and memory consumption is O(|V<sup>2</sup>|).</p>
+<p><a href="https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm">wikipedia</a></p>
+<h2 id="syntax-10"><a class="header" href="#syntax-10">Syntax</a></h2>
+<p>Calculates the shortest path between any two vertices.</p>
+<pre><code class="language-cpp">template &lt;typename V, typename E, graph_type T,
+          typename WEIGHT_T = decltype(get_weight(std::declval&lt;E&gt;()))&gt;
+std::vector&lt;std::vector&lt;WEIGHT_T&gt;&gt; floyd_warshall_shortest_paths(
+    const graph&lt;V, E, T&gt;&amp; graph);
+</code></pre>
+<ul>
+<li><strong>graph</strong> The graph to extract the shortest path from.</li>
+<li><strong>return</strong> Returns a 2D vector of the shortest path. If a path doesn’t exist between two vertices, mark it as
+TYPE_MAX. Rows/columns are indexed by the ascending order of the graph’s vertex IDs: if no vertex has been
+removed from the graph, index <code>i</code> corresponds exactly to vertex <code>i</code>.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="strongly-connected-component-algorithms"><a class="header" href="#strongly-connected-component-algorithms">Strongly Connected Component Algorithms</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="kosarajus-strongly-connected-components"><a class="header" href="#kosarajus-strongly-connected-components">Kosaraju’s Strongly Connected Components</a></h1>
+<p>Kosaraju’s algorithm computes the Strongly Connected Components (SCCs) of a directed graph. An SCC is a subset of vertices
+in the graph for which every vertex is reachable from every other vertex in the subset, i.e. there exists a path between
+all pairs of vertices for the subset of vertices.</p>
+<p>Kosaraju’s algorithm runs in <code>O(|V| + |E|)</code> for directed graphs, where <code>|V|</code> the number of vertices and <code>|E|</code> is the
+number of edges in the graph. So it runs in linear time.</p>
+<p><a href="https://en.wikipedia.org/wiki/Kosaraju%27s_algorithm">wikipedia</a></p>
+<h2 id="syntax-11"><a class="header" href="#syntax-11">Syntax</a></h2>
+<pre><code class="language-cpp">template &lt;typename V, typename E&gt;
+sccs_t kosarajus_strongly_connected_components(const directed_graph&lt;V, E&gt;&amp; graph);
+</code></pre>
+<ul>
+<li><strong>graph</strong> The graph for which to compute SCCs.</li>
+<li><strong>return</strong> A type consisting of a vector of vectors representing SCCs.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="tarjans-strongly-connected-components"><a class="header" href="#tarjans-strongly-connected-components">Tarjan’s Strongly Connected Components</a></h1>
+<p>Tarjan’s algorithm computes the Strongly Connected Components (SCCs) of a directed graph. An SCC is a subset of vertices
+in the graph for which every vertex is reachable from every other vertex in the subset, i.e. there exists a path between
+all pairs of vertices for the subset of vertices.</p>
+<p>Tarjan’s algorithm runs in <code>O(|V| + |E|)</code> for directed graphs, where <code>|V|</code> the number of vertices and <code>|E|</code> is the
+number of edges in the graph. So it runs in linear time.</p>
+<p><a href="https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm">wikipedia</a></p>
+<h2 id="syntax-12"><a class="header" href="#syntax-12">Syntax</a></h2>
+<pre><code class="language-cpp">template &lt;typename V, typename E&gt;
+[[nodiscard]] sccs_t tarjans_strongly_connected_components(const graph&lt;V, E, graph_type::DIRECTED&gt;&amp; graph);
+</code></pre>
+<ul>
+<li><strong>graph</strong> The graph for which to compute SCCs.</li>
+<li><strong>return</strong> A type consisting of a vector of vectors representing SCCs.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="topological-sort-algorithm"><a class="header" href="#topological-sort-algorithm">Topological sort algorithm</a></h1>
+<p>Topological sort algorithm processing DAG(directed acyclic graph) using DFS traversal.
+Each vertex is visited only after all its dependencies are visited.
+The runtime of the algorithm is <code>O(|V|+|E|)</code> and the memory consumption is <code>O(|V|)</code>.</p>
+<p><a href="https://en.wikipedia.org/wiki/Topological_sorting">wikipedia</a></p>
+<h2 id="syntax-13"><a class="header" href="#syntax-13">Syntax</a></h2>
+<pre><code class="language-cpp">template &lt;typename V, typename E&gt;
+[[nodiscard]] std::optional&lt;std::vector&lt;vertex_id_t&gt;&gt; topological_sort(
+    const graph&lt;V, E, graph_type::DIRECTED&gt;&amp; graph);
+</code></pre>
+<ul>
+<li><strong>graph</strong> The directed graph to traverse.</li>
+<li><strong>return</strong> Vector of vertices sorted in topological order. If the graph contains cycles, it returns std::nullopt.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="traversal-algorithms"><a class="header" href="#traversal-algorithms">Traversal Algorithms</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="breadth-first-search-bfs"><a class="header" href="#breadth-first-search-bfs">Breadth First Search (BFS)</a></h1>
+<h2 id="breadth-first-search-bfs-algorithm"><a class="header" href="#breadth-first-search-bfs-algorithm">Breadth First Search (BFS) Algorithm</a></h2>
+<p>Breadth First Search (BFS) is a fundamental graph traversal algorithm used to explore and analyze graphs, be they
+directed or undirected. It operates on the principle of visiting nodes in layers, starting from a given source node and
+gradually expanding outward to neighboring nodes at increasing distances. BFS ensures that all nodes at a particular
+distance from the source are visited before moving on to nodes at a greater distance. This process continues until all
+reachable nodes have been visited, forming a breadth-first exploration of the graph.</p>
+<p>The BFS algorithm can be succinctly described using the following steps:</p>
+<ol>
+<li>
+<p>Begin by selecting a source node as the starting point of the traversal and enqueue it in a queue data structure.</p>
+</li>
+<li>
+<p>While the queue is not empty, repeat the following steps:</p>
+<ul>
+<li>a. Dequeue a node from the front of the queue.</li>
+<li>b. Process the dequeued node, which may involve examining its attributes, marking it as visited, or performing
+other relevant operations.</li>
+<li>c. Enqueue all unvisited neighbors of the dequeued node into the queue.</li>
+</ul>
+</li>
+<li>
+<p>Continue this process until the queue becomes empty, indicating that all reachable nodes have been visited.</p>
+</li>
+</ol>
+<h3 id="bfs-is-particularly-useful-for"><a class="header" href="#bfs-is-particularly-useful-for">BFS is particularly useful for:</a></h3>
+<ul>
+<li>
+<p>P2P - Find neighbor nodes:</p>
+<ul>
+<li>Finds all neighbors, and then all neighbors of these neighbors.</li>
+</ul>
+</li>
+<li>
+<p>Search Engine Crawler:</p>
+<ul>
+<li>Helps in systematically crawling web pages, exploring links layer by layer.</li>
+</ul>
+</li>
+<li>
+<p>Garbage Collection:</p>
+<ul>
+<li>Identifies and marks reachable objects, propagating to related objects.</li>
+</ul>
+</li>
+<li>
+<p>Broadcasting in Networks:</p>
+<ul>
+<li>Efficiently distributes information across nodes in a network.</li>
+</ul>
+</li>
+<li>
+<p>Analyzing the Connectivity of Components:</p>
+<ul>
+<li>Determines the connected components in a graph.</li>
+</ul>
+</li>
+<li>
+<p>Solving Puzzles like the Sliding Tile Puzzle:</p>
+<ul>
+<li>Explores possible moves in a puzzle in a systematic manner.</li>
+</ul>
+</li>
+</ul>
+<h4 id="limitations-of-bfs"><a class="header" href="#limitations-of-bfs">Limitations of BFS:</a></h4>
+<ol>
+<li>
+<p><strong>Memory Usage:</strong> BFS may consume significant memory resources, especially in graphs with many nodes or when
+searching for paths in deep or complex graphs.</p>
+</li>
+<li>
+<p><strong>Performance on Dense Graphs:</strong> In dense graphs, where the number of edges is close to the maximum possible, BFS may
+not perform as efficiently as other algorithms designed specifically for dense graphs.</p>
+</li>
+<li>
+<p><strong>Unweighted Graphs:</strong> BFS doesn’t incorporate edge weights, which makes it less suitable for finding shortest paths
+in graphs with weighted edges.</p>
+</li>
+<li>
+<p><strong>No Negative Weights:</strong> BFS is not suited for graphs with negative edge weights, as it assumes that all edges have a
+non-negative weight. This is because BFS relies on the property that it visits nodes in increasing order of distance
+from the source, and negative weights can lead to unexpected results.</p>
+</li>
+<li>
+<p><strong>No Guarantee of Optimality:</strong> While BFS can find the shortest path in an unweighted graph, it may not guarantee the
+shortest path in graphs with weighted edges or other more complex scenarios. Dijkstra’s algorithm or the Bellman-Ford
+algorithm are better suited for such cases.</p>
+</li>
+</ol>
+<h3 id="complexity-and-performance"><a class="header" href="#complexity-and-performance">Complexity and Performance:</a></h3>
+<p>The BFS algorithm is implemented with a priority queue and runs in <code>O(|V| + |E|)</code> time complexity for connected graphs,
+where <code>|E|</code> is the number of edges and <code>|V|</code> the number of vertices in the graph.</p>
+<p>In summary, Breadth First Search is a powerful and versatile algorithm for exploring graphs, but its limitations in
+handling weighted graphs and negative edge weights should be considered. It provides a straightforward way to explore a
+graph layer by layer and is particularly useful for unweighted graph scenarios and connectivity analysis.</p>
+<p><a href="https://en.wikipedia.org/wiki/Breadth-first_search">wikipedia</a></p>
+<h2 id="syntax-14"><a class="header" href="#syntax-14">Syntax</a></h2>
+<p>The bfs_termination_strategy returns true when a certain condition is met, causing to terminate. The bfs_edge_callback
+is a function that is used as a callback during the BFS traversal to perform some action whenever an edge is traversed.</p>
+<pre><code class="language-cpp">template &lt;
+    typename V, typename E, graph_type T,
+    typename EDGE_CALLBACK_T = detail::noop_callback,
+    typename SEARCH_TERMINATION_STRATEGY_T = detail::exhaustive_search_strategy&gt;
+  requires std::invocable&lt;EDGE_CALLBACK_T &amp;, edge_id_t &amp;&gt; &amp;&amp;
+           std::is_invocable_r_v&lt;bool, SEARCH_TERMINATION_STRATEGY_T &amp;,
+                                 vertex_id_t&gt;
+void breadth_first_traverse(
+    const graph&lt;V, E, T&gt; &amp;graph, vertex_id_t start_vertex,
+    const EDGE_CALLBACK_T &amp;edge_callback,
+    const SEARCH_TERMINATION_STRATEGY_T &amp;search_termination_strategy =
+        SEARCH_TERMINATION_STRATEGY_T{});
+</code></pre>
+<h3 id="explanation-of-parameters"><a class="header" href="#explanation-of-parameters">Explanation of Parameters:</a></h3>
+<ul>
+<li><strong>graph</strong>: The graph to traverse. This parameter represents the graph data structure on which the traversal will be
+performed.</li>
+<li><strong>start_vertex</strong>: Vertex id where the traversal should be started. This parameter specifies the initial vertex from
+which the traversal begins.</li>
+<li><strong>edge_callback</strong>: A callback function that is called for each traversed edge. It should be invocable with
+an <code>edge_id_t</code> object, representing an edge in the graph.</li>
+<li><strong>search_termination_strategy</strong>: A unary predicate that indicates whether the traversal should continue or not. The
+traversal continues while this predicate returns <code>false</code>. This parameter is optional and defaults to a predefined
+search termination strategy, which traverses the graph exhaustively.</li>
+<li><strong>return</strong>: The provided code does not explicitly return a value. The traversal is performed by visiting vertices and
+edges in the graph based on the specified parameters.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="depth-first-search-dfs"><a class="header" href="#depth-first-search-dfs">Depth First Search (DFS)</a></h1>
+<h2 id="depth-first-search-dfs-algorithm"><a class="header" href="#depth-first-search-dfs-algorithm">Depth First Search (DFS) Algorithm</a></h2>
+<p>Depth First Search (DFS) is a fundamental graph traversal algorithm used to explore and analyze graphs, whether they are
+directed or undirected.
+DFS traverses deeper into the graph before backtracking to explore other branches.</p>
+<p>The DFS algorithm can be succinctly described using the following steps:</p>
+<ol>
+<li>
+<p>Begin by selecting a source node as the starting point of the traversal and push it onto a stack data structure.</p>
+</li>
+<li>
+<p>While the stack is not empty, repeat the following steps:</p>
+<ul>
+<li>a. Pop a node from the top of the stack.</li>
+<li>b. Process the popped node, which may involve examining its attributes, marking it as visited, or performing other
+relevant operations.</li>
+<li>c. Push all unvisited neighbors of the popped node onto the stack.</li>
+</ul>
+</li>
+<li>
+<p>Continue this process until the stack becomes empty, indicating that all reachable nodes have been visited.</p>
+</li>
+</ol>
+<p>The main difference to the BFS is the use of a stack instead of a queue.</p>
+<h3 id="dfs-is-particularly-useful-for"><a class="header" href="#dfs-is-particularly-useful-for">DFS is particularly useful for:</a></h3>
+<ul>
+<li>
+<p>Topological Sorting:</p>
+<ul>
+<li>Finds a linear ordering of nodes that respects the partial order imposed by directed edges in a directed acyclic
+graph.</li>
+</ul>
+</li>
+<li>
+<p>Pathfinding:</p>
+<ul>
+<li>Can be used to find paths between nodes, although it may not always find the shortest path.</li>
+</ul>
+</li>
+<li>
+<p>Solving Mazes:</p>
+<ul>
+<li>Navigates through maze-like structures to find a way from a starting point to an end point.</li>
+</ul>
+</li>
+<li>
+<p>Detecting Cycles:</p>
+<ul>
+<li>Helps identify cycles in a graph, which is valuable for various applications.</li>
+</ul>
+</li>
+</ul>
+<h4 id="limitations-of-dfs"><a class="header" href="#limitations-of-dfs">Limitations of DFS:</a></h4>
+<ol>
+<li>
+<p><strong>Completeness:</strong> DFS may not explore all nodes in disconnected graphs unless modifications are made to the
+algorithm.</p>
+</li>
+<li>
+<p><strong>Infinite Graphs:</strong> DFS can get stuck in an infinite loop if applied to graphs with infinite branches.</p>
+</li>
+<li>
+<p><strong>Performance on Dense Graphs:</strong> In dense graphs, DFS might explore many nodes before reaching a solution, making it
+less efficient compared to other algorithms.</p>
+</li>
+<li>
+<p><strong>No Guarantee of Optimality:</strong> Like BFS, DFS may not always find the optimal solution, especially in cases where the
+graph has weighted edges or other complexities.</p>
+</li>
+<li>
+<p><strong>Memory Usage:</strong> DFS on deep graphs may lead to excessive recursion and memory consumption due to the call stack.</p>
+</li>
+<li>
+<p><strong>Biased Exploration:</strong> DFS can lead to biased exploration when some branches are deeper than others, potentially
+missing relevant solutions.</p>
+</li>
+</ol>
+<h3 id="complexity-and-performance-1"><a class="header" href="#complexity-and-performance-1">Complexity and Performance:</a></h3>
+<p>The DFS algorithm is implemented with a stack and runs in <code>O(|V| + |E|)</code> time complexity for connected graphs,
+where <code>|E|</code> is the number of edges and <code>|V|</code> the number of vertices in the graph.</p>
+<p>In summary, Depth First Search is a powerful and versatile algorithm for exploring graphs, but its limitations in
+handling weighted graphs and negative edge weights should be considered. It provides a straightforward way to explore a
+graph layer by layer and is particularly useful for unweighted graph scenarios and connectivity analysis.</p>
+<p><a href="https://en.wikipedia.org/wiki/Depth-first_search">wikipedia</a></p>
+<h2 id="syntax-15"><a class="header" href="#syntax-15">Syntax</a></h2>
+<p>The dfs_termination_strategy returns true when a certain condition is met, causing to terminate. The dfs_edge_callback
+is a function that is used as a callback during the DFS traversal to perform some action whenever an edge is traversed.</p>
+<pre><code class="language-cpp">template &lt;
+    typename V, typename E, graph_type T,
+    typename EDGE_CALLBACK_T = detail::noop_callback,
+    typename SEARCH_TERMINATION_STRATEGY_T = detail::exhaustive_search_strategy&gt;
+  requires std::invocable&lt;EDGE_CALLBACK_T &amp;, edge_id_t &amp;&gt; &amp;&amp;
+           std::is_invocable_r_v&lt;bool, SEARCH_TERMINATION_STRATEGY_T &amp;,
+                                 vertex_id_t&gt;
+void depth_first_traverse(
+    const graph&lt;V, E, T&gt; &amp;graph, vertex_id_t start_vertex,
+    const EDGE_CALLBACK_T &amp;edge_callback,
+    const SEARCH_TERMINATION_STRATEGY_T &amp;search_termination_strategy =
+        SEARCH_TERMINATION_STRATEGY_T{});
+</code></pre>
+<h3 id="explanation-of-parameters-1"><a class="header" href="#explanation-of-parameters-1">Explanation of Parameters:</a></h3>
+<ul>
+<li><strong>graph</strong>: The graph to traverse. This parameter represents the graph data structure on which the traversal will be
+performed.</li>
+<li><strong>start_vertex</strong>: Vertex id where the traversal should be started. This parameter specifies the initial vertex from
+which the traversal begins.</li>
+<li><strong>edge_callback</strong>: A callback function that is called for each traversed edge. It should be invocable with
+an <code>edge_id_t</code> object, representing an edge in the graph.</li>
+<li><strong>search_termination_strategy</strong>: A unary predicate that indicates whether the traversal should continue or not. The
+traversal continues while this predicate returns <code>false</code>. This parameter is optional and defaults to a predefined
+search termination strategy, which traverses the graph exhaustively.</li>
+<li><strong>return</strong>: The provided code does not explicitly return a value. The traversal is performed by visiting vertices and
+edges in the graph based on the specified parameters.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
+<p>This section contains example usages of the Graaf library.
+If there is a usecase you would like to see an example of, please open an issue in
+our <a href="https://github.com/bobluppes/graaf/issues">issue tracker</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="basic-examples"><a class="header" href="#basic-examples">Basic Examples</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="dot-serialization-example"><a class="header" href="#dot-serialization-example">Dot Serialization Example</a></h1>
+<p>The <code>to_dot</code> function as defined under <code>graaf::io</code> can be used to serialize graphs to
+the <a href="https://graphviz.org/doc/info/lang.html">dot format</a>. This can be handy for debugging purposes, as well as for
+post-processing of your graphs in another tool which supports the format.</p>
+<h2 id="numeric-primitive-types"><a class="header" href="#numeric-primitive-types">Numeric primitive types</a></h2>
+<p>Default vertex and edge writers are provided such that you can serialize graphs with numeric primitive vertices and
+edges. For instance:</p>
+<pre><code class="language-c++">graaf::undirected_graph&lt;int, float&gt; my_graph{};
+
+// ...
+
+graaf::io::to_dot(my_graph, path):
+</code></pre>
+<h2 id="user-defined-types"><a class="header" href="#user-defined-types">User defined types</a></h2>
+<p>For user defined vertex and edge types, it is necessary to provide your own vertex and edge writers. These writers
+should take a vertex or edge as a parameter and serialize it to a string. This resulting string is used in the
+dot <a href="https://graphviz.org/doc/info/attrs.html">attribute list</a> of the respective vertex or edge.</p>
+<p>For example, consider the following user defined vertex and edge types:</p>
+<pre><code class="language-c++">struct my_vertex {
+  int number{};
+  std::string name{};
+};
+
+enum class edge_priority { LOW, HIGH };
+
+struct my_edge {
+  edge_priority priority{edge_priority::LOW};
+  float weight{};
+};
+</code></pre>
+<p>We define two lambdas to serialize these vertices and edges. Here we can use any of
+the <a href="https://graphviz.org/doc/info/attrs.html">graphviz attributes</a>. In this example, we
+use <a href="https://github.com/fmtlib/fmt">fmtlib</a> to format our strings.</p>
+<p><strong>Vertex writer</strong></p>
+<pre><code class="language-c++">const auto vertex_writer{[](graaf::vertex_id_t vertex_id,
+                              const my_vertex&amp; vertex) -&gt; std::string {
+  const auto color{vertex.number &lt;= 25 ? "lightcyan" : "mediumspringgreen"};
+  return fmt::format("label=\"{}: {}\", fillcolor={}, style=filled", vertex_id, vertex.name, color);
+}};
+</code></pre>
+<p><strong>Edge writer</strong></p>
+<pre><code class="language-c++">const auto edge_writer{[](const graaf::edge_id_t&amp; /*edge_id*/,
+                            const my_edge&amp; edge) -&gt; std::string {
+  const auto style{edge.priority == edge_priority::HIGH ? "solid" : "dashed"};
+  return fmt::format("label=\"{}\", style={}, color=gray, fontcolor=gray", edge.weight, style);
+}};
+</code></pre>
+<p>Now let’s create a directed graph and serialize it to dot:</p>
+<pre><code class="language-c++">graaf::directed_graph&lt;my_vertex, my_edge&gt; graph{};
+
+const auto vertex_1{graph.add_vertex({10, "some data"})};
+const auto vertex_2{graph.add_vertex({20, "some more data"})};
+// ...
+
+graph.add_edge(vertex_1, vertex_2, {edge_priority::HIGH, 3.3});
+// ...
+
+const std::filesystem::path dof_file_path{"./my_graph.dot"};
+graaf::io::to_dot(my_graph, dof_file_path, vertex_writer, edge_writer);
+</code></pre>
+<p>The contents of <code>my_graph.dot</code> can be processed in any tool which supports dot format. For example, you can use
+the <code>dot</code> command line tool to generate png images:</p>
+<pre><code class="language-bash">dot -Tpng ./my_graph.dot -o my_graph.png
+</code></pre>
+<p>Alternatively, you can
+use <a href="https://dreampuf.github.io/GraphvizOnline/#digraph%20G%20%7B%0A%0A%20%20subgraph%20cluster_0%20%7B%0A%20%20%20%20style%3Dfilled%3B%0A%20%20%20%20color%3Dlightgrey%3B%0A%20%20%20%20node%20%5Bstyle%3Dfilled%2Ccolor%3Dwhite%5D%3B%0A%20%20%20%20a0%20-%3E%20a1%20-%3E%20a2%20-%3E%20a3%3B%0A%20%20%20%20label%20%3D%20%22process%20%231%22%3B%0A%20%20%7D%0A%0A%20%20subgraph%20cluster_1%20%7B%0A%20%20%20%20node%20%5Bstyle%3Dfilled%5D%3B%0A%20%20%20%20b0%20-%3E%20b1%20-%3E%20b2%20-%3E%20b3%3B%0A%20%20%20%20label%20%3D%20%22process%20%232%22%3B%0A%20%20%20%20color%3Dblue%0A%20%20%7D%0A%20%20start%20-%3E%20a0%3B%0A%20%20start%20-%3E%20b0%3B%0A%20%20a1%20-%3E%20b3%3B%0A%20%20b2%20-%3E%20a3%3B%0A%20%20a3%20-%3E%20a0%3B%0A%20%20a3%20-%3E%20end%3B%0A%20%20b3%20-%3E%20end%3B%0A%0A%20%20start%20%5Bshape%3DMdiamond%5D%3B%0A%20%20end%20%5Bshape%3DMsquare%5D%3B%0A%7D">graphviz online</a>
+for easy visualization:</p>
+<pre>
+<p align="center">
+  <img src="img/examples/dot-serialization-graph.png">
+</p>
+
+</pre>
+
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="shortest-path-example"><a class="header" href="#shortest-path-example">Shortest Path Example</a></h1>
+<p>The shortest path algorithm implemented in <code>graaf::algorithm::get_shortest_path</code> can be used to compute the shortest
+path between any two vertices in a graph.</p>
+<p>Consider the following graph:</p>
+<pre>
+<p align="center">
+    <img src="img/examples/shortest-path-graph.png">
+</p>
+
+</pre>
+
+<p>In order to compute the shortest path between <em>vertex 0</em> and <em>vertex 2</em>, we call:</p>
+<pre><code class="language-c++">const auto maybe_shortest_path{bfs_shortest_path(graph, start, target)};
+
+// Assert that we found a path at all
+assert(maybe_shortest_path.has_value());
+auto shortest_path{maybe_shortest_path.value()};
+</code></pre>
+<h2 id="visualizing-the-shortest-path"><a class="header" href="#visualizing-the-shortest-path">Visualizing the shortest path</a></h2>
+<p>If we want to visualize the shortest path on the graph, we can create our own vertex and edge writers. These writers
+then determine the vertex and edge attributes based on whether the vertex or edge is contained in the shortest path.</p>
+<p>First, we create a datastructure of all edges on the shortest path such that we can query it in the edge writer:</p>
+<pre><code class="language-c++">// We use a set here for O(1) time contains checks
+std::unordered_set&lt;graaf::edge_id_t, graaf::vertex_ids_hash&gt; edges_on_shortest_path{};
+
+// Convert the list of vertices on the shortest path to edges
+graaf::vertex_id_t prev{shortest_path.vertices.front()};
+shortest_path.vertices.pop_front();
+for (const auto current : shortest_path.vertices) {
+  edges_on_shortest_path.insert(std::make_pair(prev, current));
+  prev = current;
+}
+</code></pre>
+<p>Now we can specify our custom writers:</p>
+<pre><code class="language-c++">const auto vertex_writer{
+  [start, target](graaf::vertex_id_t vertex_id, int vertex) -&gt; std::string {
+    if (vertex_id == start) {
+      return "label=start";
+    } else if (vertex_id == target) {
+      return "label=target";
+    }
+    return "label=\"\"";
+}};
+
+const auto edge_writer{
+[&amp;edges_on_shortest_path](const graaf::edge_id_t&amp; edge_id, int edge) -&gt; std::string {
+  if (edges_on_shortest_path.contains(edge_id)) {
+    return "label=\"\", color=red";
+  }
+  return "label=\"\", color=gray, style=dashed";
+}};
+</code></pre>
+<p>This yields us the following visualization:</p>
+<pre>
+<p align="center">
+    <img src="img/examples/shortest_path.png">
+</p>
+
+</pre>
+
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="network-example"><a class="header" href="#network-example">Network Example</a></h1>
+<p>This example showcases graph traversal and shortest path algorithms in an undirected graph network. As such, it
+demonstrates the usage of the following classes and algorithms:</p>
+<ul>
+<li>The undirected_graph implemented in <code>graaf::undirected_graph</code></li>
+<li>The shortest path algorithm implemented in <code>graaf::algorithm::get_shortest_path</code></li>
+<li>The graph traversal implemented in <code>graaf::algorithm::graph_traversal</code></li>
+</ul>
+<p>Using the following graph:</p>
+<pre>
+<p align="center">
+    <img src="img/examples/example_usage.png">
+</p>
+
+</pre>
+
+<p>Custom vertex and edge. In order to use Dijkstra, we should provide the get_weight() function for the edge.</p>
+<pre><code class="language-cpp">struct station {
+  std::string name{};
+};
+
+struct railroad : public graaf::weighted_edge&lt;double&gt; {
+  double kilometers{};
+  [[nodiscard]] double get_weight() const noexcept override {
+    return kilometers;
+  }
+  railroad(double distance) : kilometers(distance) {}
+  ~railroad() {}
+};
+</code></pre>
+<h1 id="initializing-graph-start-and-end-vertices"><a class="header" href="#initializing-graph-start-and-end-vertices">Initializing graph, start and end vertices</a></h1>
+<p>First, we create data structure and initializing graph with vertices and edges</p>
+<pre><code class="language-cpp">struct graph_with_start_and_target {
+    graaf::undirected_graph&lt;station, road&gt; graph{};
+    graaf::vertex_id_t start{};
+    graaf::vertex_id_t target{};
+};
+
+graph_with_start_and_target create_graph_with_start_and_target() {
+...
+}
+</code></pre>
+<h2 id="visualizing-graph-traversal-result"><a class="header" href="#visualizing-graph-traversal-result">Visualizing graph traversal result</a></h2>
+<p>For shortest path, colouring edges with red to indicate the shortest path for both weighted and unweighted graph
+We need to specify the start and end vertices in order to find the shortest path between the start and end vertices.</p>
+<p>Result of unweighted shortest path, chosen edges are coloured red</p>
+<pre>
+<p align="center">
+    <img src="img/examples/example_shortest_path_unweighted.png">
+</p>
+
+</pre>
+
+<p>Result of weighted shortest path, chosen edges are coloured red</p>
+<pre>
+<p align="center">
+    <img src="img/examples/example_shortest_path_weighted.png">
+</p>
+
+</pre>
+
+<pre><code class="language-cpp">void print_shortest_path(const graaf::undirected_graph&lt;station, road&gt;&amp; graph,
+                const std::optional&lt;graaf::algorithm::graph_path&lt;int&gt;&gt;&amp; path, const std::string &amp; filepath) {
+...
+}
+
+void print_visited_vertices(const graaf::undirected_graph&lt;station, road&gt;&amp; graph,
+                            seen_vertices_t&amp; seen,
+                            const std::string&amp; filepath) {
+...
+}
+</code></pre>
+<p>Creating an edge callback structure that will be passed as an argument in the graph traverse function
+The function is needed in order to be called inside the traverse function; see graph.tpp for context.</p>
+<pre><code class="language-cpp">using seen_edges_t = std::unordered_set&lt;graaf::edge_id_t, graaf::edge_id_hash&gt;;
+struct record_edges_callback {
+  seen_edges_t&amp; seen_edges;
+
+  record_edges_callback(seen_edges_t&amp; seen_edges)
+      : seen_edges{seen_edges} {}
+
+  void operator()(const graaf::edge_id_t&amp; edge) const {
+    seen_edges.insert(edge);
+  }
+};
+</code></pre>
+<p>Result of shortest path BFS, visited edges are coloured red</p>
+<pre>
+<p align="center">
+    <img src="img/examples/example_traversed_graph_BFS.png">
+</p>
+
+</pre>
+
+<h3 id="graph-example-usage"><a class="header" href="#graph-example-usage">Graph example usage</a></h3>
+<p>First code block: traversing a weighted graph for the shortest path (Dijkstra) and printing the result to *.dot file.
+Second code block: traversing an unweighted graph for the shortest path and printing the result to *.dot file.
+The last one is traversing the graph from a given vertex and printing the result to *.dot file.</p>
+<pre><code class="language-cpp">  const auto [graph, start, target]{create_graph_with_start_and_target()};
+
+  const auto weighted_shortest_path{
+      graaf::algorithm::dijkstra_shortest_path(graph, start, target)};
+  print_shortest_path(graph, weighted_shortest_path,
+                      "example_weighted_graph.dot");
+
+  const auto unweighted_shortest_path{
+      graaf::algorithm::bfs_shortest_path(graph, start, target)};
+  print_shortest_path(graph, unweighted_shortest_path,
+                      "example_unweighted_graph.dot");
+
+  seen_edges_t seen_edges{};
+  graaf::algorithm::breadth_first_traverse(
+      graph, start, record_edges_callback{seen_edges});
+  print_visited_vertices(graph, seen_edges,
+                         "example_traverse_BFS_graph.dot");
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="development-intro"><a href="#development-intro" class="header">Development Intro</a></h1>
+<p>Thank you for considering contributing to Graaf! This wiki contains everything you need to know to start contributing to the project. To ensure a smooth collaboration process, please take a moment to review the guidelines.</p>
+<h2 id="ways-to-contribute"><a class="header" href="#ways-to-contribute">Ways to Contribute</a></h2>
+<ul>
+<li><strong>Bug reports</strong>: If you encounter a bug or unexpected behavior while using Graaf, please open a new issue on our <a href="https://github.com/bobluppes/graaf/issues">issue tracker</a>. Include a clear description of the problem, steps to reproduce it, and any relevant details.</li>
+<li><strong>Feature requests</strong>: If you have a feature idea or enhancement suggestion for Graaf, we encourage you to submit a new issue on the <a href="https://github.com/bobluppes/graaf/issues">issue tracker</a>. Describe the desired functionality and provide any relevant context that could help us understand the request.</li>
+<li><strong>Pull requests</strong>: If you have implemented a bug fix, added a new feature, or made any other improvements to Graaf, feel free to submit a pull request. Please ensure that your code follows our coding conventions and include tests and documentation when applicable.</li>
+</ul>
+<h2 id="code-of-conduct"><a class="header" href="#code-of-conduct">Code of Conduct</a></h2>
+<p>Please note that we have a <a href="#contributor-covenant-code-of-conduct">Code of Conduct</a> in place to ensure a respectful and inclusive community environment. By participating in the Graaf project, you agree to abide by its terms. Instances of abusive, harassing, or otherwise unacceptable behavior should be reported to the project maintainers.</p>
+<p>Thank you for your interest in contributing to Graaf! Your contributions are greatly appreciated and help make the library better for everyone.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="architecture-overview"><a class="header" href="#architecture-overview">Architecture Overview</a></h1>
+<p>From a very high level, the project is structured in two parts:</p>
+<ol>
+<li>The graph classes and core data structures</li>
+<li>Algorithms and additional functionality</li>
+</ol>
+<p>The core data structures are designed to store the graph data without being concerned with any business logic.
+All additional functionality is built on top of these core classes on a higher abstraction level.</p>
+<h2 id="1-graph-classes-and-core-data-structures"><a class="header" href="#1-graph-classes-and-core-data-structures">1) Graph classes and core data structures</a></h2>
+<p>The main class of the library is the <code>graph</code> class. This class handles directedness of graphs (undirected vs. directed)
+and weightedness of the edges. Each graph is an instance of the <code>graph</code> class:</p>
+<pre><code class="language-c++">enum class graph_type { DIRECTED, UNDIRECTED };
+
+template &lt;typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V&gt;
+class graph {...};
+</code></pre>
+<p>The template parameter <code>GRAPH_TYPE_V</code> indicates whether the graph is directed or undirected. This cannot be dynamically
+changed after construction of the graph. A graph can have arbitrary user provided types for the vertices and edges,
+as indicated by the <code>VERTEX_T</code> and <code>EDGE_T</code> template parameters.</p>
+<p>Internally, the graph is stored as an adjacency list. Separate containers hold the values for vertices and edges.</p>
+<pre><code class="language-c++">// N.B. These types are a bit more abstracted in the codebase behind using
+// declarations, but for clarity I have left this out.
+
+// Adjacency information is stored in a set for fast existence checks and fast removal
+std::unordered_map&lt;vertex_id_t, std::unordered_set&lt;vertex_id_t&gt;&gt; adjacency_list_{};
+
+// Storing vertex and edge values in a separate container has the advantage that
+// vertices and edges are only in memory once
+std::unordered_map&lt;vertex_id_t, VERTEX_T&gt; vertices_{};
+std::unordered_map&lt;edge_id_t, EDGE_T&gt; edges_{};
+</code></pre>
+<p>Two <em>using declarations</em> are provided to make it easier to instantiate a directed or undirected graph:</p>
+<pre><code class="language-c++">template &lt;typename VERTEX_T, typename EDGE_T&gt;
+using directed_graph = graph&lt;VERTEX_T, EDGE_T, graph_type::DIRECTED&gt;;
+
+template &lt;typename VERTEX_T, typename EDGE_T&gt;
+using undirected_graph = graph&lt;VERTEX_T, EDGE_T, graph_type::UNDIRECTED&gt;;
+</code></pre>
+<h3 id="weighted-graphs-1"><a class="header" href="#weighted-graphs-1">Weighted graphs</a></h3>
+<p>Certain algorithms (such as A*) operate on weighted graphs. Since the edge type can be any user provided type, we need
+to be careful in defining what a weighted graph is. Therefore, we distinguish three:</p>
+<ol>
+<li>Any graph for which the edge type is derived from the pure virtual class <code>weighted_edge</code> is a weighted graph. More
+details on the <code>weighted_edge</code> class below. The weight of an edge is given by the <code>get_weight</code> function of an edge.</li>
+<li>Any graph with a primitive numeric type for the edge type (<code>int</code>, <code>float</code>, <code>double</code> etc.) is a weighted graph. The
+weight of an edge is simply given by the numeric value.</li>
+<li>In all other cases, the graph is unweighted. In contexts where a weighted graph is required, each edge defaults to a
+unit weight automatically.</li>
+</ol>
+<p>The weight of an edge can be queried using the following <em>overload set</em> of <code>get_weight</code> functions in the <code>graaf</code>
+namespace.</p>
+<p><em>Weighted Edge</em>
+The pure virtual <code>weighted_edge</code> class provides an interface for user provided edge classes which should carry a
+weight.</p>
+<pre><code class="language-c++">template &lt;typename WEIGHT_T = int&gt;
+class weighted_edge {
+ public:
+  using weight_t = WEIGHT_T;
+
+  virtual ~weighted_edge() = default;
+
+  [[nodiscard]] virtual WEIGHT_T get_weight() const noexcept = 0;
+};
+</code></pre>
+<h2 id="2-algorithms-and-additional-functionality"><a class="header" href="#2-algorithms-and-additional-functionality">2) Algorithms and additional functionality</a></h2>
+<p>The idea here is to keep the graph classes as general-purpose as possible, and to not include use case specific logic
+(such as dot serialization) as member functions. Therefore, each algorithm/utility function is implemented as a free
+function.</p>
+<p>The design goal is to keep the algorithms as general purpose as possible, such that their functionality can be reused
+in future algorithms. For example, once we defined BFS/DFS traversal of graphs, search algorithms could be defined
+in terms of these traversal algorithms.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="design-goalsdesign-goalsmd"><a class="header" href="#design-goalsdesign-goalsmd">Design Goals<a href="#design-goalsdesign-goalsmd">design-goals.md</a></a></h1>
+<p>The project follows the following architectural design goals:</p>
+<ul>
+<li>All business logic is completely decouples from the core graph classes. As such business logic is implemented as free functions.</li>
+<li>New algorithm implementations should build on top of existing algorithms (such as <code>breadth_first_traverse</code>) rather than reimplementing similar logic.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="project-structure"><a class="header" href="#project-structure">Project Structure</a></h1>
+<p>The Graaf library loosely follows the <a href="https://api.csswg.org/bikeshed/?force=1&amp;url=https://raw.githubusercontent.com/vector-of-bool/pitchfork/develop/data/spec.bs#tld">Pitchfork Layout</a> (PFL).</p>
+<p><code>docs/</code>: artifacts related to documentation generation</p>
+<p><code>examples/</code>: example usages of the library</p>
+<p><code>include/</code>: the public headers of the library</p>
+<p><code>test/</code>: unit tests</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="getting-a-copy-of-graaf"><a class="header" href="#getting-a-copy-of-graaf">Getting a Copy of Graaf</a></h1>
+<p>If you want to get a copy for development purposes, simply fork it <a href="https://github.com/bobluppes/graaf/fork">here</a>. In case you are looking to install Graaf on your project, please take a look at the <a href="https://github.com/bobluppes/graaf/blob/main/README.md">README</a>.</p>
+<h2 id="cloning-your-fork"><a class="header" href="#cloning-your-fork">Cloning Your Fork</a></h2>
+<p>After <a href="https://github.com/bobluppes/graaf/fork">forking</a> the repository, you can clone it locally as you would any other repo:</p>
+<pre><code class="language-bash">git clone git@github.com:your-user-name/graaf.git
+</code></pre>
+<p>This will clone the repository at your current directory under <code>./graaf</code>, which would already be enough to start making changes and open a pull request.</p>
+<p>However, at some point you might want to sync changes from the upstream repository into your feature branch (for instance when a critical bug has been patched and your feature relies on the fix). By default your clone is set up to your forked repository on Github, you can verify this by:</p>
+<pre><code class="language-bash">$ git remote -v
+origin	git@github.com:your-user-name/graaf.git (fetch)
+origin	git@github.com:your-user-name/graaf.git (push)
+</code></pre>
+<p>To track and sync changes from the upstream, we add a new remote:</p>
+<pre><code class="language-bash">git remote add upstream git@github.com:bobluppes/graaf.git
+</code></pre>
+<p>Now, we can merge changes from the upstream like so:</p>
+<pre><code class="language-bash">git fetch upstream
+git merge upstream/main
+</code></pre>
+<hr>
+<p>For more details on this process see Github’s <a href="https://docs.github.com/en/get-started/quickstart/fork-a-repo">official guide</a> on forking a repo.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="development-setup"><a class="header" href="#development-setup">Development Setup</a></h1>
+<p>This page describes the minimal development setup to facilitate contributing to the project. This document assumes you are working on a Linux system, specific instructions might differ depending on your OS.</p>
+<p>To compile the project locally:</p>
+<pre><code class="language-bash"># 1) Clone the repository - clone your own fork if you want to contribute
+git clone git@github.com:bobluppes/graaf.git
+mkdir -p graaf/build &amp;&amp; cd graaf/build
+
+# 2) Build the project
+cmake ..
+cmake --build .
+
+# Run the tests to ensure everything is working correctly
+ctest
+</code></pre>
+<h2 id="formatting"><a class="header" href="#formatting">Formatting</a></h2>
+<p>All source files are formatted according to the predefined <code>clang-format</code> <code>Google</code> style. In the CI this is enforced by checking the source files with <code>clang-format</code> version 15 using the provided <code>.clang-format</code> file.</p>
+<h3 id="format-locally"><a class="header" href="#format-locally">Format locally</a></h3>
+<p>It is advised to format your changes locally before pushing.</p>
+<h4 id="requirements"><a class="header" href="#requirements">Requirements</a></h4>
+<ul>
+<li><code>clang-format</code> version 15</li>
+</ul>
+<pre><code class="language-bash"># At project root
+clang-format -style=file -i **/*.cpp **/*.h **/*.tpp
+</code></pre>
+<h4 id="integration-with-vscode"><a class="header" href="#integration-with-vscode">Integration with VSCode</a></h4>
+<p>On VSCode you can install the extension <code>xaver.clang-format</code>. With the following <a href="https://code.visualstudio.com/docs/getstarted/settings#_settings-json-file">settings</a>, your IDE can then be configured to use <code>clang-format</code> on saving a file:</p>
+<pre><code class="language-json">"clang-format.executable": "clang-format"
+"clang-format.assumeFilename": ".clang-format"
+
+"editor.defaultFormatter": "xaver.clang-format"
+"editor.formatOnSave": true
+</code></pre>
+<h2 id="coverage"><a class="header" href="#coverage">Coverage</a></h2>
+<p><a href="https://app.codecov.io/github/bobluppes/graaf">Codecov</a> is used to track the coverage of the unit tests. The target coverage is set to 90% but going for full coverage is highly encouraged. When opening a PR, <code>codecov-bot</code> will automatically comment the coverage report. Pushing to the feature branch will update the coverage comment.</p>
+<p>It is possible to generate a coverage report locally. This requires <code>lcov</code> to be installed and to have <a href="https://github.com/bilke/cmake-modules/blob/master/CodeCoverage.cmake">this</a> CMake plugin present under <code>cmake-modules</code>.</p>
+<pre><code class="language-bash">apt-get install lcov -y
+
+# At project root
+git clone https://github.com/bilke/cmake-modules.git
+</code></pre>
+<p>Now we can pass the <code>ENABLE_COVERAGE=True</code> flag to CMake in order to generate the coverage target.</p>
+<pre><code class="language-bash">mkdir build &amp;&amp; cd build
+
+cmake .. -DENABLE_COVERAGE=True
+
+# Generate the coverage report
+make ctest_coverage
+</code></pre>
+<h2 id="documentation"><a class="header" href="#documentation">Documentation</a></h2>
+<p>We are using Docusaurus for the public documentation of the library. This documentation is recorded in markdown files, which are compiled to a static website using Docusaurus. It is possible to build this locally and serve it using a development server:</p>
+<pre><code class="language-bash">cd docs
+
+# Build the documentation
+yarn
+
+# Start the development server
+yarn start
+
+# Generate a production build and perform basic verification
+yarn build
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="c-guidelines"><a class="header" href="#c-guidelines">C++ Guidelines</a></h1>
+<p>We follow a specific code style to maintain consistency throughout the library. The code formatting is specified as a set of <code>clang-format</code> rules (more info <a href="#development-setup">here</a>) and is enforced in the CI. Apart from formatting, please make sure your code adheres to the following:</p>
+<ul>
+<li>use <em>snake case</em> names for variables, functions, and classes.</li>
+<li>Follow descriptive and meaningful variable, function, and class names.</li>
+<li>Add appropriate comments to explain complex code sections or algorithms.</li>
+<li>Keep lines of code within a reasonable length (e.g., 80-120 characters).</li>
+<li>Follow existing naming conventions and code patterns.</li>
+</ul>
+<p>In terms of coding style we aim to follow the <a href="http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines">C++ Core Guidelines</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="tips--tricks"><a class="header" href="#tips--tricks">Tips &amp; Tricks</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="opening-a-pr"><a class="header" href="#opening-a-pr">Opening a PR</a></h1>
+<p>This pages describes the process of opening a pull-request from your fork into the main repo. Note that you can open a <code>Draft PR</code> if you are still working on your code. Before marking it as <code>Ready for review</code>, please consider the following checklist:</p>
+<ul>
+<li><input disabled="" type="checkbox"> PR contains a clear description of the changes</li>
+<li><input disabled="" type="checkbox"> Unit tests added (if implementing an <code>enhancement</code>)</li>
+<li><input disabled="" type="checkbox"> Documentation added when applicable (for instance on the public interface of new features)</li>
+<li><input disabled="" type="checkbox"> All tests pass</li>
+<li><input disabled="" type="checkbox"> Correct labels are added on the PR (see below)</li>
+</ul>
+<p>Congrats, you are now ready to open your PR 🎉 The CI will automatically check the code formatting and the test coverage. See <a href="#development-setup">development setup</a> on how to check this locally.</p>
+<h2 id="changelog-generation"><a class="header" href="#changelog-generation">Changelog generation</a></h2>
+<p>Please put the correct labels on your PR to facilitate our automatic changelog generation.</p>
+<ul>
+<li><strong>breaking-change</strong>: A change which changes the public API</li>
+<li><strong>enhancement</strong>: New feature</li>
+<li><strong>documentation</strong>: Improvements or additions to documentation</li>
+<li><strong>tests</strong>: Improvements to the (unit) tests</li>
+<li><strong>refactor</strong>: A change which does not change any behavior</li>
+<li><strong>tooling</strong>: Any changes to the build process, dev tools, or CI steps</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="contributor-covenant-code-of-conduct"><a class="header" href="#contributor-covenant-code-of-conduct">Contributor Covenant Code of Conduct</a></h1>
+<h2 id="our-pledge"><a class="header" href="#our-pledge">Our Pledge</a></h2>
+<p>We as members, contributors, and leaders pledge to make participation in our
+community a harassment-free experience for everyone, regardless of age, body
+size, visible or invisible disability, ethnicity, sex characteristics, gender
+identity and expression, level of experience, education, socio-economic status,
+nationality, personal appearance, race, caste, color, religion, or sexual
+identity and orientation.</p>
+<p>We pledge to act and interact in ways that contribute to an open, welcoming,
+diverse, inclusive, and healthy community.</p>
+<h2 id="our-standards"><a class="header" href="#our-standards">Our Standards</a></h2>
+<p>Examples of behavior that contributes to a positive environment for our
+community include:</p>
+<ul>
+<li>Demonstrating empathy and kindness toward other people</li>
+<li>Being respectful of differing opinions, viewpoints, and experiences</li>
+<li>Giving and gracefully accepting constructive feedback</li>
+<li>Accepting responsibility and apologizing to those affected by our mistakes,
+and learning from the experience</li>
+<li>Focusing on what is best not just for us as individuals, but for the overall
+community</li>
+</ul>
+<p>Examples of unacceptable behavior include:</p>
+<ul>
+<li>The use of sexualized language or imagery, and sexual attention or advances of
+any kind</li>
+<li>Trolling, insulting or derogatory comments, and personal or political attacks</li>
+<li>Public or private harassment</li>
+<li>Publishing others’ private information, such as a physical or email address,
+without their explicit permission</li>
+<li>Other conduct which could reasonably be considered inappropriate in a
+professional setting</li>
+</ul>
+<h2 id="enforcement-responsibilities"><a class="header" href="#enforcement-responsibilities">Enforcement Responsibilities</a></h2>
+<p>Community leaders are responsible for clarifying and enforcing our standards of
+acceptable behavior and will take appropriate and fair corrective action in
+response to any behavior that they deem inappropriate, threatening, offensive,
+or harmful.</p>
+<p>Community leaders have the right and responsibility to remove, edit, or reject
+comments, commits, code, wiki edits, issues, and other contributions that are
+not aligned to this Code of Conduct, and will communicate reasons for moderation
+decisions when appropriate.</p>
+<h2 id="scope"><a class="header" href="#scope">Scope</a></h2>
+<p>This Code of Conduct applies within all community spaces, and also applies when
+an individual is officially representing the community in public spaces.
+Examples of representing our community include using an official e-mail address,
+posting via an official social media account, or acting as an appointed
+representative at an online or offline event.</p>
+<h2 id="enforcement"><a class="header" href="#enforcement">Enforcement</a></h2>
+<p>Instances of abusive, harassing, or otherwise unacceptable behavior may be
+reported to the community leaders responsible for enforcement.
+All complaints will be reviewed and investigated promptly and fairly.</p>
+<p>All community leaders are obligated to respect the privacy and security of the
+reporter of any incident.</p>
+<h2 id="enforcement-guidelines"><a class="header" href="#enforcement-guidelines">Enforcement Guidelines</a></h2>
+<p>Community leaders will follow these Community Impact Guidelines in determining
+the consequences for any action they deem in violation of this Code of Conduct:</p>
+<h3 id="1-correction"><a class="header" href="#1-correction">1. Correction</a></h3>
+<p><strong>Community Impact</strong>: Use of inappropriate language or other behavior deemed
+unprofessional or unwelcome in the community.</p>
+<p><strong>Consequence</strong>: A private, written warning from community leaders, providing
+clarity around the nature of the violation and an explanation of why the
+behavior was inappropriate. A public apology may be requested.</p>
+<h3 id="2-warning"><a class="header" href="#2-warning">2. Warning</a></h3>
+<p><strong>Community Impact</strong>: A violation through a single incident or series of
+actions.</p>
+<p><strong>Consequence</strong>: A warning with consequences for continued behavior. No
+interaction with the people involved, including unsolicited interaction with
+those enforcing the Code of Conduct, for a specified period of time. This
+includes avoiding interactions in community spaces as well as external channels
+like social media. Violating these terms may lead to a temporary or permanent
+ban.</p>
+<h3 id="3-temporary-ban"><a class="header" href="#3-temporary-ban">3. Temporary Ban</a></h3>
+<p><strong>Community Impact</strong>: A serious violation of community standards, including
+sustained inappropriate behavior.</p>
+<p><strong>Consequence</strong>: A temporary ban from any sort of interaction or public
+communication with the community for a specified period of time. No public or
+private interaction with the people involved, including unsolicited interaction
+with those enforcing the Code of Conduct, is allowed during this period.
+Violating these terms may lead to a permanent ban.</p>
+<h3 id="4-permanent-ban"><a class="header" href="#4-permanent-ban">4. Permanent Ban</a></h3>
+<p><strong>Community Impact</strong>: Demonstrating a pattern of violation of community
+standards, including sustained inappropriate behavior, harassment of an
+individual, or aggression toward or disparagement of classes of individuals.</p>
+<p><strong>Consequence</strong>: A permanent ban from any sort of public interaction within the
+community.</p>
+<h2 id="attribution"><a class="header" href="#attribution">Attribution</a></h2>
+<p>This Code of Conduct is adapted from the <a href="https://www.contributor-covenant.org">Contributor Covenant</a>,
+version 2.1, available at
+<a href="https://www.contributor-covenant.org/version/2/1/code_of_conduct.html">https://www.contributor-covenant.org/version/2/1/code_of_conduct.html</a>.</p>
+<p>Community Impact Guidelines were inspired by
+<a href="https://github.com/mozilla/diversity">Mozilla’s code of conduct enforcement ladder</a>.</p>
+<p>For answers to common questions about this code of conduct, see the FAQ at
+<a href="https://www.contributor-covenant.org/faq">https://www.contributor-covenant.org/faq</a>. Translations are available at
+<a href="https://www.contributor-covenant.org/translations">https://www.contributor-covenant.org/translations</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="adding-an-algorithm"><a class="header" href="#adding-an-algorithm">Adding an Algorithm</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="creating-tests"><a class="header" href="#creating-tests">Creating Tests</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="adding-documentation"><a class="header" href="#adding-documentation">Adding Documentation</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<p>Welcome to the <a href="#development-intro">Graaf wiki</a>!</p>
+<hr>
+<h1 id="architecture"><a class="header" href="#architecture">Architecture</a></h1>
+<ul>
+<li><a href="#architecture-overview">Overview</a></li>
+<li><a href="#design-goalsdesign-goalsmd">Design Goals</a></li>
+<li><a href="#project-structure">Project structure</a></li>
+</ul>
+<h1 id="contributing"><a class="header" href="#contributing">Contributing</a></h1>
+<ul>
+<li><a href="#getting-a-copy-of-graaf">Getting a copy</a></li>
+<li><a href="#development-setup">Development setup</a></li>
+<li><a href="#c-guidelines">C++ guidelines</a></li>
+<li><a href="#tips--tricks">Tips &amp; tricks</a></li>
+<li><a href="#opening-a-pr">Opening a PR</a></li>
+<li><a href="#contributor-covenant-code-of-conduct">Code of Conduct</a></li>
+</ul>
+<h1 id="guides"><a class="header" href="#guides">Guides</a></h1>
+<ul>
+<li><a href="#adding-an-algorithm">Adding an Algorithm</a></li>
+<li><a href="#creating-tests">Creating Tests</a></li>
+<li><a href="#adding-documentation">Adding Documentation</a></li>
+</ul>
+<hr>
+<p>In case anything is unclear, or you encounter any other problems, please reach out on
+<a href="https://discord.gg/cGczwRHJ9K">Discord</a> or open an <a href="https://github.com/bobluppes/graaf/issues">issue</a>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>

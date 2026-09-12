@@ -1,0 +1,36 @@
+# Graaf
+
+> Graaf is a general-purpose, header-only C++20 graph library — a lightweight alternative to the Boost Graph Library (BGL). It supports directed and undirected graphs with user-defined vertex and edge types, and provides a broad set of graph algorithms.
+
+Graaf requires no separate compilation: consume it as a header-only library, or pull it into a CMake project with `FetchContent` and link against the `Graaf::Graaf` target.
+
+## Getting started
+
+- [Installation](https://bobluppes.github.io/graaf/quickstart/installation/installation.html): header-only copy, or CMake `FetchContent` pinned to a release tag such as `v1.2.0`.
+- [Creating your first graph](https://bobluppes.github.io/graaf/quickstart/basics/creating-your-first-graph.html): declare a `directed_graph<V, E>` or `undirected_graph<V, E>`, add vertices and edges.
+- [Using algorithms](https://bobluppes.github.io/graaf/quickstart/basics/using-algorithms.html): call algorithms under the `algorithm` namespace on a graph instance.
+- [Architecture overview](https://bobluppes.github.io/graaf/quickstart/basics/architecture.html): how vertices, edges, and graphs fit together.
+
+## Algorithms
+
+- [Shortest path](https://bobluppes.github.io/graaf/algorithms/shortest-path/README.html): Dijkstra, Bellman-Ford, A*, BFS-based, Floyd-Warshall.
+- [Minimum spanning tree](https://bobluppes.github.io/graaf/algorithms/minimum-spanning-tree/README.html): Kruskal, Prim.
+- [Traversal](https://bobluppes.github.io/graaf/algorithms/traversal/README.html): BFS, DFS.
+- [Cycle detection](https://bobluppes.github.io/graaf/algorithms/cycle-detection/README.html): DFS-based.
+- [Graph coloring](https://bobluppes.github.io/graaf/algorithms/coloring/README.html): greedy, Welsh-Powell.
+- [Strongly connected components](https://bobluppes.github.io/graaf/algorithms/strongly-connected-components/README.html): Kosaraju, Tarjan.
+- [Clique detection](https://bobluppes.github.io/graaf/algorithms/clique-detection/bron_kerbosch.html): Bron-Kerbosch.
+- [Topological sort](https://bobluppes.github.io/graaf/algorithms/topological-sort/topological-sort.html)
+
+## Examples
+
+- [Dot serialization](https://bobluppes.github.io/graaf/examples/example-basics/dot-serialization.html): visualize a graph via built-in DOT format support.
+- [Shortest path example](https://bobluppes.github.io/graaf/examples/example-basics/shortest-path.html)
+- [Network example](https://bobluppes.github.io/graaf/examples/example-basics/transport-example.html)
+
+## Reference
+
+- [Source repository](https://github.com/bobluppes/graaf): issues, releases, and the header-only sources under `include/graaflib`.
+- [Full documentation](https://bobluppes.github.io/graaf/)
+- [Contributor guide](https://bobluppes.github.io/graaf/development/intro.html)
+- [License](https://github.com/bobluppes/graaf/blob/main/LICENSE.md): MIT
