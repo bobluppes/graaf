@@ -17,9 +17,10 @@ std::unordered_map<vertex_id_t, int> greedy_graph_coloring(const GRAPH& graph) {
   // Get the vertices from the graph
   const auto& vertices = graph.get_vertices();
 
-  // graph::get_neighbors() only reports outgoing edges. For a directed graph,
-  // two vertices sharing a common predecessor must still get different
-  // colors, so we additionally need to take incoming edges into account.
+  // graph::get_neighbors() only reports outgoing edges. On a directed graph,
+  // a vertex must also differ in color from each of its predecessors (the
+  // vertices with an edge into it), not just its successors, so we
+  // additionally need to take incoming edges into account.
   std::unordered_map<vertex_id_t, std::unordered_set<vertex_id_t>>
       predecessors{};
   if (graph.is_directed()) {

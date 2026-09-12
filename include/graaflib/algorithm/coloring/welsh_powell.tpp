@@ -15,9 +15,10 @@ template <typename GRAPH>
 std::unordered_map<vertex_id_t, int> welsh_powell_coloring(const GRAPH& graph) {
   using degree_vertex_pair = std::pair<int, vertex_id_t>;
 
-  // graph::get_neighbors() only reports outgoing edges. For a directed graph,
-  // two vertices sharing a common predecessor must still get different
-  // colors, so we additionally need to take incoming edges into account.
+  // graph::get_neighbors() only reports outgoing edges. On a directed graph,
+  // a vertex must also differ in color from each of its predecessors (the
+  // vertices with an edge into it), not just its successors, so we
+  // additionally need to take incoming edges into account.
   std::unordered_map<vertex_id_t, std::unordered_set<vertex_id_t>>
       predecessors{};
   if (graph.is_directed()) {
