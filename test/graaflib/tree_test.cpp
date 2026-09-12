@@ -40,4 +40,20 @@ TEST(TreeTest, CanConstructWithChild) {
   ASSERT_EQ(child->children.size(), 0);
 }
 
+TEST(TreeTest, ForestIsACollectionOfTrees) {
+  // GIVEN
+  using tree_t = tree<int, int>;
+  using forest_t = forest<int, int>;
+
+  // WHEN
+  forest_t forest{};
+  forest.push_back(tree_t{1});
+  forest.push_back(tree_t{2});
+
+  // THEN
+  ASSERT_EQ(forest.size(), 2);
+  ASSERT_EQ(forest[0].root()->value, 1);
+  ASSERT_EQ(forest[1].root()->value, 2);
+}
+
 }  // namespace graaf

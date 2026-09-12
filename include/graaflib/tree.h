@@ -42,6 +42,13 @@ class tree {
   std::unique_ptr<tree_node> root_{};
 };
 
+/**
+ * A collection of disjoint trees, e.g. the result of an algorithm which
+ * operates on a graph which is not fully connected.
+ */
+template <typename VERTEX_T, typename EDGE_T>
+using forest = std::vector<tree<VERTEX_T, EDGE_T>>;
+
 }  // namespace graaf
 
 #include "tree.tpp"
