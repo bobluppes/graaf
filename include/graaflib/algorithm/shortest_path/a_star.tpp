@@ -5,6 +5,25 @@
 
 namespace graaf::algorithm {
 
+namespace detail {
+
+// Open set entries are ordered by f_score (g_score + heuristic), which is
+// only used to pick the next vertex to expand. This is intentionally kept
+// separate from path_vertex::dist_from_start, which reconstruct_path reports
+// as the path's total_weight and therefore must hold the true accumulated
+// cost (g_score), not the heuristic-inflated f_score.
+template <typename WEIGHT_T>
+struct a_star_open_set_item {
+  vertex_id_t id;
+  WEIGHT_T f_score;
+
+  [[nodiscard]] bool operator>(const a_star_open_set_item& other) const {
+    return f_score > other.f_score;
+  }
+};
+
+}  // namespace detail
+
 template <typename V, typename E, graph_type T, typename HEURISTIC_T,
           typename WEIGHT_T>
   requires std::is_invocable_r_v<WEIGHT_T, HEURISTIC_T&, vertex_id_t>
@@ -12,19 +31,12 @@ std::optional<graph_path<WEIGHT_T>> a_star_search(
     const graph<V, E, T>& graph, vertex_id_t start_vertex,
     vertex_id_t target_vertex, const HEURISTIC_T& heuristic) {
   // Define a priority queue for open set of vertices to explore.
-  // This part is similar to dijkstra_shortest_path
-  using weighted_path_item = detail::path_vertex<WEIGHT_T>;
-  // The set of discovered vertices that may need to be (re-)expanded.
-  // f_score represents the estimated total cost of the path from the start
-  // vertex to the goal vertex through the current vertex.
-  // It's a combination of g_score and h_score:
-  // f_score[n] = g_score[n] + h_score[n]
-  // For vertex n, prev_id in path_vertex is the vertex immediately preceding
-  // it on the cheapest path from the start to n currently known. The priority
-  // queue uses internally a binary heap. To get the minimum element, we use
-  // the std::greater comparator.
+  // This part is similar to dijkstra_shortest_path, except the queue is
+  // ordered by f_score rather than the true path cost, see
+  // detail::a_star_open_set_item above.
+  using open_set_item = detail::a_star_open_set_item<WEIGHT_T>;
   using a_star_queue_t =
-      std::priority_queue<weighted_path_item, std::vector<weighted_path_item>,
+      std::priority_queue<open_set_item, std::vector<open_set_item>,
                           std::greater<>>;
   a_star_queue_t open_set{};
 
@@ -34,15 +46,16 @@ std::optional<graph_path<WEIGHT_T>> a_star_search(
   // Initialize g_score map.
   g_score[start_vertex] = 0;
 
+  // vertex_info tracks, for each discovered vertex, the true accumulated
+  // cost from start (dist_from_start = g_score) and its predecessor on the
+  // cheapest known path. This is what reconstruct_path uses to build the
+  // resulting graph_path, including its total_weight.
+  using weighted_path_item = detail::path_vertex<WEIGHT_T>;
   std::unordered_map<vertex_id_t, weighted_path_item> vertex_info;
-  vertex_info[start_vertex] = {
-      start_vertex,
-      heuristic(start_vertex),  // f_score[n] = g_score[n] + h(n), and
-                                // g_score[n] is 0 if n is start_vertex.
-      start_vertex};
+  vertex_info[start_vertex] = {start_vertex, 0, start_vertex};
 
   // Initialize start vertex in open set queue
-  open_set.push(vertex_info[start_vertex]);
+  open_set.push(open_set_item{start_vertex, heuristic(start_vertex)});
 
   while (!open_set.empty()) {
     // Get the vertex with the lowest f_score
@@ -81,14 +94,15 @@ std::optional<graph_path<WEIGHT_T>> a_star_search(
         g_score[neighbor] = tentative_g_score;
         auto f_score = tentative_g_score + heuristic(neighbor);
 
-        // always update vertex_info[neighbor]
+        // always update vertex_info[neighbor] with the true accumulated cost
+        // (g_score), so reconstruct_path reports the correct total_weight.
         vertex_info[neighbor] = {
-            neighbor,   // vertex id
-            f_score,    // f_score = tentative_g_score + h(neighbor)
-            current.id  // neighbor vertex came from current vertex
+            neighbor,           // vertex id
+            tentative_g_score,  // true accumulated cost from start
+            current.id          // neighbor vertex came from current vertex
         };
 
-        open_set.push(vertex_info[neighbor]);
+        open_set.push(open_set_item{neighbor, f_score});
       }
     }
   }

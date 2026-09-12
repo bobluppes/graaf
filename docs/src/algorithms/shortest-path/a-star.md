@@ -33,7 +33,9 @@ In the implementation, the heuristic function `heuristic` provides an estimate o
 actual cost of the path from the start vertex to the current vertex is stored in the `g_score` unordered map, as the
 algorithm progresses.
 
-In the implementation, `dist_from_start` from path_vertex represents the `f_score` of the path.
+In the implementation, `dist_from_start` from `path_vertex` represents the `g_score` (the true accumulated cost from
+the start vertex), which is what is reported as `total_weight` on the resulting path. The `f_score` used to order the
+`open_set` is tracked separately and is never stored in `dist_from_start`.
 
 The time complexity of A\* depends on the provided heuristic function. In the worst case of an unbounded search space,
 the number of nodes expanded is exponential in the depth of the solution (the shortest path) `d`. This can be expressed
