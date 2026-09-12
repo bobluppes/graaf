@@ -2,73 +2,7 @@
 #include <gtest/gtest.h>
 #include <utils/scenarios/scenarios.h>
 
-#include <algorithm>
-#include <tuple>
-#include <vector>
-
 namespace graaf::algorithm {
-
-namespace {
-
-using mst_tree_t = tree<vertex_id_t, int>;
-
-struct tree_edge {
-  vertex_id_t parent;
-  vertex_id_t child;
-  int weight;
-
-  [[nodiscard]] bool operator==(const tree_edge&) const = default;
-};
-
-void collect_edges(const mst_tree_t::tree_node* node,
-                   std::vector<tree_edge>& out) {
-  for (const auto& link : node->children) {
-    out.push_back(tree_edge{node->value, link.child->value, link.value});
-
-    // Every child must point back to the node we reached it from - this is
-    // an invariant of the tree class itself, but it is exactly what an
-    // algorithm producing the tree is responsible for getting right.
-    EXPECT_EQ(link.child->parent, node);
-
-    collect_edges(link.child.get(), out);
-  }
-}
-
-[[nodiscard]] std::size_t count_nodes(const mst_tree_t::tree_node* node) {
-  std::size_t count{1};
-  for (const auto& link : node->children) {
-    count += count_nodes(link.child.get());
-  }
-  return count;
-}
-
-[[nodiscard]] bool compare_mst(const mst_tree_t& actual,
-                               vertex_id_t expected_root,
-                               std::vector<tree_edge> expected_edges) {
-  const auto* root{actual.root()};
-  if (root == nullptr || root->value != expected_root ||
-      root->parent != nullptr) {
-    return false;
-  }
-
-  if (count_nodes(root) != expected_edges.size() + 1) {
-    return false;
-  }
-
-  std::vector<tree_edge> actual_edges{};
-  collect_edges(root, actual_edges);
-
-  const auto sort_key{[](const tree_edge& lhs, const tree_edge& rhs) {
-    return std::tie(lhs.parent, lhs.child, lhs.weight) <
-           std::tie(rhs.parent, rhs.child, rhs.weight);
-  }};
-  std::ranges::sort(actual_edges, sort_key);
-  std::ranges::sort(expected_edges, sort_key);
-
-  return actual_edges == expected_edges;
-}
-
-}  // namespace
 
 TEST(PrimMstTest, SingleVertex) {
   // GIVEN
@@ -82,7 +16,9 @@ TEST(PrimMstTest, SingleVertex) {
 
   // THEN - The mst is a single node with no children
   ASSERT_TRUE(mst.has_value());
-  ASSERT_TRUE(compare_mst(*mst, start_vertex, {}));
+
+  const tree<vertex_id_t, int> expected{start_vertex};
+  ASSERT_TRUE(*mst == expected);
 }
 
 TEST(PrimMstTest, DisconnectedGraph) {
@@ -120,8 +56,10 @@ TEST(PrimMstTest, SingleEdge) {
   // THEN
   ASSERT_TRUE(mst.has_value());
 
-  const std::vector<tree_edge> expected_edges{{start_vertex, vertex_1, 100}};
-  ASSERT_TRUE(compare_mst(*mst, start_vertex, expected_edges));
+  tree<vertex_id_t, int> expected{start_vertex};
+  static_cast<void>(expected.root()->add_child(100, vertex_1));
+
+  ASSERT_TRUE(*mst == expected);
 }
 
 TEST(PrimMstTest, TreeGraphStartAtRoot) {
@@ -140,13 +78,13 @@ TEST(PrimMstTest, TreeGraphStartAtRoot) {
   // oriented away from the start vertex.
   ASSERT_TRUE(mst.has_value());
 
-  const std::vector<tree_edge> expected_edges{
-      {vertex_ids[0], vertex_ids[1], 100},
-      {vertex_ids[0], vertex_ids[2], 200},
-      {vertex_ids[2], vertex_ids[3], 300},
-      {vertex_ids[2], vertex_ids[4], 400}};
+  tree<vertex_id_t, int> expected{start_vertex};
+  static_cast<void>(expected.root()->add_child(100, vertex_ids[1]));
+  auto* node_2{expected.root()->add_child(200, vertex_ids[2])};
+  static_cast<void>(node_2->add_child(300, vertex_ids[3]));
+  static_cast<void>(node_2->add_child(400, vertex_ids[4]));
 
-  ASSERT_TRUE(compare_mst(*mst, start_vertex, expected_edges));
+  ASSERT_TRUE(*mst == expected);
 }
 
 TEST(PrimMstTest, TreeGraphStartAtLeaf) {
@@ -166,13 +104,13 @@ TEST(PrimMstTest, TreeGraphStartAtLeaf) {
   // root.
   ASSERT_TRUE(mst.has_value());
 
-  const std::vector<tree_edge> expected_edges{
-      {vertex_ids[3], vertex_ids[2], 300},
-      {vertex_ids[2], vertex_ids[0], 200},
-      {vertex_ids[2], vertex_ids[4], 400},
-      {vertex_ids[0], vertex_ids[1], 100}};
+  tree<vertex_id_t, int> expected{start_vertex};
+  auto* node_2{expected.root()->add_child(300, vertex_ids[2])};
+  auto* node_0{node_2->add_child(200, vertex_ids[0])};
+  static_cast<void>(node_2->add_child(400, vertex_ids[4]));
+  static_cast<void>(node_0->add_child(100, vertex_ids[1]));
 
-  ASSERT_TRUE(compare_mst(*mst, start_vertex, expected_edges));
+  ASSERT_TRUE(*mst == expected);
 }
 
 TEST(PrimMstTest, SimpleGraph) {
@@ -188,13 +126,13 @@ TEST(PrimMstTest, SimpleGraph) {
   // THEN
   ASSERT_TRUE(mst.has_value());
 
-  const std::vector<tree_edge> expected_edges{
-      {vertex_ids[1], vertex_ids[0], 100},
-      {vertex_ids[1], vertex_ids[2], 200},
-      {vertex_ids[2], vertex_ids[3], 400},
-      {vertex_ids[3], vertex_ids[4], 500}};
+  tree<vertex_id_t, int> expected{start_vertex};
+  static_cast<void>(expected.root()->add_child(100, vertex_ids[0]));
+  auto* node_2{expected.root()->add_child(200, vertex_ids[2])};
+  auto* node_3{node_2->add_child(400, vertex_ids[3])};
+  static_cast<void>(node_3->add_child(500, vertex_ids[4]));
 
-  ASSERT_TRUE(compare_mst(*mst, start_vertex, expected_edges));
+  ASSERT_TRUE(*mst == expected);
 }
 
 }  // namespace graaf::algorithm
