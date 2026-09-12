@@ -14,8 +14,7 @@
 <p align="center">
   <a href="https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml"><img src="https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml/badge.svg" height="20"></a>
   <a href="https://codecov.io/github/bobluppes/graaf"><img src="https://codecov.io/github/bobluppes/graaf/branch/main/graph/badge.svg?token=ZFBLNFN39C" height="20"></a>
-  <a href="https://bobluppes.github.io/graaf/"><img src="https://img.shields.io/badge/user_docs-mdbook-%23ff69b4" height="20"></a>
-  <a href="https://bobluppes.github.io/graaf/development/intro.html"><img src="https://img.shields.io/badge/contributer_docs-mdbook-9cf" height="20"></a>
+  <a href="https://bobluppes.github.io/graaf/"><img src="https://img.shields.io/badge/docs-mdbook-%23ff69b4" height="20"></a>
 </p>
 
 <p align="center">
