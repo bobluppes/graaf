@@ -34,10 +34,12 @@ include(FetchContent)
 FetchContent_Declare(
         graaflib
         GIT_REPOSITORY https://github.com/bobluppes/graaf.git
-        GIT_TAG main
+        GIT_TAG v1.2.0
 )
 FetchContent_MakeAvailable(graaflib)
 ```
+
+Pin `GIT_TAG` to a released version rather than `main` - `main` can contain unreleased, potentially breaking changes.
 
 Now you can link your target against `Graaf::Graaf`:
 
