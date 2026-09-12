@@ -2,8 +2,8 @@
 #include <graaflib/types.h>
 
 #include <queue>
+#include <unordered_map>
 #include <unordered_set>
-#include <vector>
 
 #include "prim.h"
 
@@ -17,7 +17,8 @@ struct prim_candidate_edge {
   vertex_id_t to;
   WEIGHT_T weight;
 
-  [[nodiscard]] bool operator>(const prim_candidate_edge<WEIGHT_T>& other) const {
+  [[nodiscard]] bool operator>(
+      const prim_candidate_edge<WEIGHT_T>& other) const {
     return weight > other.weight;
   }
 };
@@ -25,13 +26,16 @@ struct prim_candidate_edge {
 };  // namespace detail
 
 template <typename V, typename E, typename WEIGHT_T>
-std::optional<std::vector<edge_id_t>> prim_minimum_spanning_tree(
+std::optional<tree<vertex_id_t, WEIGHT_T>> prim_minimum_spanning_tree(
     const graph<V, E, graph_type::UNDIRECTED>& graph,
     vertex_id_t start_vertex) {
   const auto vertex_count{graph.vertex_count()};
 
-  std::vector<edge_id_t> edges_in_mst{};
-  edges_in_mst.reserve(vertex_count > 0 ? vertex_count - 1 : 0);
+  tree<vertex_id_t, WEIGHT_T> mst_tree{start_vertex};
+
+  using tree_node_t = typename tree<vertex_id_t, WEIGHT_T>::tree_node;
+  std::unordered_map<vertex_id_t, tree_node_t*> tree_node_for_vertex{
+      {start_vertex, mst_tree.root()}};
 
   std::unordered_set<vertex_id_t> in_mst{start_vertex};
 
@@ -63,7 +67,11 @@ std::optional<std::vector<edge_id_t>> prim_minimum_spanning_tree(
     }
 
     in_mst.insert(candidate.to);
-    edges_in_mst.emplace_back(candidate.from, candidate.to);
+
+    auto* parent_node{tree_node_for_vertex.at(candidate.from)};
+    auto* child_node{parent_node->add_child(candidate.weight, candidate.to)};
+    tree_node_for_vertex.emplace(candidate.to, child_node);
+
     push_edges_from(candidate.to);
   }
 
@@ -72,7 +80,7 @@ std::optional<std::vector<edge_id_t>> prim_minimum_spanning_tree(
     return std::nullopt;
   }
 
-  return edges_in_mst;
+  return mst_tree;
 }
 
 };  // namespace graaf::algorithm
