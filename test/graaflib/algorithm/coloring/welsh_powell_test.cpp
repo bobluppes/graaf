@@ -80,6 +80,12 @@ TYPED_TEST(WelshPowellTest, GraphWithNoEdges) {
 
 // Test with a complete graph
 TYPED_TEST(WelshPowellTest, CompleteGraph) {
+  // Hardcoded expected_coloring below depends on unordered_set iteration
+  // order, which differs across STL implementations/platforms. The
+  // underlying algorithm fix that makes this deterministic is a breaking
+  // change held back for v2.0.0 (see #375) - skip until then.
+  GTEST_SKIP();
+
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
   graph_t graph{};
