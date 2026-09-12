@@ -47,3 +47,23 @@
   - [Dot Serialization Example](examples/example-basics/dot-serialization.md)
   - [Shortest Path Example](examples/example-basics/shortest-path.md)
   - [Network Example](examples/example-basics/transport-example.md)
+
+# Development
+
+- [Development Intro](development/intro.md)
+- [Architecture]()
+  - [Overview](development/architecture/overview.md)
+  - [Design Goals](development/architecture/design-goals.md)
+  - [Project Structure](development/architecture/project-structure.md)
+- [Contributing]()
+  - [Getting a Copy](development/contributing/getting-a-copy.md)
+  - [Development Setup](development/contributing/development-setup.md)
+  - [C++ Guidelines](development/contributing/guidelines.md)
+  - [Tips & Tricks](development/contributing/tips-and-tricks.md)
+  - [Opening a PR](development/contributing/opening-a-pr.md)
+  - [Code of Conduct](development/contributing/code-of-conduct.md)
+- [Guides]()
+  - [Adding an Algorithm](development/guides/adding-an-algorithm.md)
+  - [Creating Tests](development/guides/creating-tests.md)
+  - [Adding Documentation](development/guides/adding-documentation.md)
+- [Sidebar (legacy wiki navigation)](development/sidebar.md)
