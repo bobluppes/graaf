@@ -82,8 +82,8 @@ TEST(DirectedGraphPropertiesTest, VertexDegreeWithSelfLoop) {
   graph.add_edge(vertex_id_1, vertex_id_2, 200);
 
   // THEN
-  // In a directed graph, the self-loop already contributes one to the
-  // outdegree and one to the indegree of vertex_id_1.
+  // In a directed graph, the self-loop contributes one to the outdegree
+  // and one to the indegree of vertex_id_1.
   ASSERT_EQ(vertex_outdegree(graph, vertex_id_1), 2);
   ASSERT_EQ(vertex_indegree(graph, vertex_id_1), 1);
   ASSERT_EQ(vertex_degree(graph, vertex_id_1), 3);
@@ -123,9 +123,12 @@ TEST(UndirectedGraphPropertiesTest, VertexOutDegreeWithSelfLoop) {
 
   // THEN
   // The self-loop on vertex_id_1 contributes two to its degree, per the
-  // standard graph-theory convention.
+  // standard graph-theory convention. For an undirected graph, indegree
+  // is equal to outdegree.
   ASSERT_EQ(vertex_outdegree(graph, vertex_id_1), 3);
   ASSERT_EQ(vertex_outdegree(graph, vertex_id_2), 1);
+  ASSERT_EQ(vertex_indegree(graph, vertex_id_1), 3);
+  ASSERT_EQ(vertex_indegree(graph, vertex_id_2), 1);
 }
 
 TEST(UndirectedGraphPropertiesTest, VertexDegreeWithSelfLoop) {
