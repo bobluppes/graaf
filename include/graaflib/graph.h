@@ -166,6 +166,13 @@ class graph {
   /**
    * Get a list of neighbour vertices
    *
+   * For a directed graph, this returns the out-neighbors (successors) only,
+   * i.e. the vertices reachable via an outgoing edge from vertex_id - matching
+   * the vertices you'd find in Adj[vertex_id] in an adjacency-list
+   * representation. It does not include predecessors (in-neighbors). For an
+   * undirected graph, out- and in-neighbors coincide, so this returns all
+   * adjacent vertices.
+   *
    * @param  vertex_id The ID of the vertex
    * @return vertices_t - A list of neighboring vertices
    */
