@@ -5,6 +5,9 @@ vertices have the same color.
 
 If the graph has different connected components, each component will be treated as a separate simple connected graph.
 
+For a directed graph, this colors the underlying undirected graph: two vertices are considered adjacent if there is
+an edge between them in either direction.
+
 The algorithm is heuristic and does not guarantee an optimal number of different colors (that is, equal to the chromatic
 number of a simple, connected graph).
 

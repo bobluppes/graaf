@@ -1,5 +1,6 @@
 #include <graaflib/algorithm/coloring/welsh_powell.h>
 #include <gtest/gtest.h>
+#include <utils/assertions/coloring_assertions.h>
 #include <utils/fixtures/fixtures.h>
 
 #include <unordered_map>
@@ -7,25 +8,7 @@
 
 namespace graaf::algorithm {
 
-namespace {
-
-// A coloring is proper iff no two vertices connected by an edge share the
-// same color. Note that graph::get_neighbors() returns an unordered_set, so
-// the exact colors assigned to individual vertices are not guaranteed to be
-// stable across STL implementations/platforms - only this invariant is.
-template <typename GRAPH>
-bool is_proper_coloring(const GRAPH& graph,
-                        const std::unordered_map<vertex_id_t, int>& coloring) {
-  for (const auto& [edge_id, edge] : graph.get_edges()) {
-    const auto [u, v]{edge_id};
-    if (coloring.at(u) == coloring.at(v)) {
-      return false;
-    }
-  }
-  return true;
-}
-
-}  // namespace
+using utils::assertions::is_proper_coloring;
 
 template <typename T>
 struct WelshPowellTest : public testing::Test {
@@ -148,6 +131,34 @@ TYPED_TEST(WelshPowellTest, DisconnectedComponents) {
   graph.add_edge(vertex_3, vertex_4,
                  1);  // Component 2: Vertex 3 and 4 are
                       // Component 3: connected Vertex 5 is disconnected
+  // WHEN
+  auto coloring = welsh_powell_coloring(graph);
+
+  // THEN
+  ASSERT_TRUE(is_proper_coloring(graph, coloring));
+}
+
+template <typename T>
+struct WelshPowellDirectedTest : public testing::Test {
+  using graph_t = T;
+};
+
+TYPED_TEST_SUITE(WelshPowellDirectedTest,
+                 utils::fixtures::minimal_directed_graph_type);
+
+// Regression test for https://github.com/bobluppes/graaf/issues/379.
+TYPED_TEST(WelshPowellDirectedTest, ConvergingEdgesColoredDifferently) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  graph_t graph{};
+
+  const auto vertex_a{graph.add_vertex(1)};
+  const auto vertex_b{graph.add_vertex(2)};
+  const auto vertex_c{graph.add_vertex(3)};
+
+  graph.add_edge(vertex_a, vertex_b, 1);
+  graph.add_edge(vertex_a, vertex_c, 1);
+
   // WHEN
   auto coloring = welsh_powell_coloring(graph);
 

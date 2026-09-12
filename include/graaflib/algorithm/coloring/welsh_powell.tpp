@@ -1,9 +1,8 @@
 #pragma once
 #include <graaflib/algorithm/coloring/welsh_powell.h>
-#include <graaflib/properties/vertex_properties.h>
+#include <graaflib/algorithm/utils.h>
 
 #include <algorithm>
-#include <iostream>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -16,10 +15,25 @@ template <typename GRAPH>
 std::unordered_map<vertex_id_t, int> welsh_powell_coloring(const GRAPH& graph) {
   using degree_vertex_pair = std::pair<int, vertex_id_t>;
 
-  // Step 1: Sort vertices by degree in descending order
+  // graph::get_neighbors() only reports outgoing edges. On a directed graph,
+  // a vertex must also differ in color from each of its predecessors (the
+  // vertices with an edge into it), not just its successors, so we
+  // additionally need to take incoming edges into account.
+  std::unordered_map<vertex_id_t, std::unordered_set<vertex_id_t>>
+      predecessors{};
+  if (graph.is_directed()) {
+    predecessors = get_predecessors(graph);
+  }
+
+  // Step 1: Sort vertices by degree in descending order. The degree is the
+  // number of outgoing edges plus, for a directed graph, the number of
+  // incoming edges (from the predecessors map computed above).
   std::vector<degree_vertex_pair> degree_vertex_pairs;
   for (const auto& [vertex_id, _] : graph.get_vertices()) {
-    int degree = properties::vertex_degree(graph, vertex_id);
+    int degree = static_cast<int>(graph.get_neighbors(vertex_id).size());
+    if (const auto it{predecessors.find(vertex_id)}; it != predecessors.end()) {
+      degree += static_cast<int>(it->second.size());
+    }
     degree_vertex_pairs.emplace_back(degree, vertex_id);
   }
 
@@ -34,9 +48,21 @@ std::unordered_map<vertex_id_t, int> welsh_powell_coloring(const GRAPH& graph) {
     // iteration order, since graph::get_neighbors() returns an
     // unordered_set whose iteration order is unspecified.
     std::unordered_set<int> neighbor_colors;
-    for (const auto& neighbor : graph.get_neighbors(current_vertex)) {
-      if (const auto it{color_map.find(neighbor)}; it != color_map.end()) {
+
+    const auto collect_neighbor_color{[&](vertex_id_t neighbor_id) {
+      if (const auto it{color_map.find(neighbor_id)}; it != color_map.end()) {
         neighbor_colors.insert(it->second);
+      }
+    }};
+
+    for (const auto& neighbor : graph.get_neighbors(current_vertex)) {
+      collect_neighbor_color(neighbor);
+    }
+
+    if (const auto it{predecessors.find(current_vertex)};
+        it != predecessors.end()) {
+      for (const auto& predecessor : it->second) {
+        collect_neighbor_color(predecessor);
       }
     }
 

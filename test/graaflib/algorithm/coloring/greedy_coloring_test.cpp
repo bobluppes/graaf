@@ -1,11 +1,14 @@
 #include <graaflib/algorithm/coloring/greedy_graph_coloring.h>
 #include <gtest/gtest.h>
+#include <utils/assertions/coloring_assertions.h>
 #include <utils/fixtures/fixtures.h>
 
 #include <unordered_map>
 #include <unordered_set>
 
 namespace graaf::algorithm {
+
+using utils::assertions::is_proper_coloring;
 
 namespace {
 
@@ -120,6 +123,34 @@ TYPED_TEST(GreedyGraphColoringTest, CompleteGraph) {
     ASSERT_FALSE(color_set.count(color) > 0);  // Check if the color is unique
     color_set.insert(color);
   }
+}
+
+// Regression test for https://github.com/bobluppes/graaf/issues/379.
+TYPED_TEST(GreedyGraphColoringTest, ConvergingEdgesColoredDifferently) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  graph_t graph{};
+
+  // Triple 1: predecessors added before the sink.
+  const auto vertex_a1{graph.add_vertex(1)};
+  const auto vertex_b1{graph.add_vertex(2)};
+  const auto vertex_c1{graph.add_vertex(3)};
+  graph.add_edge(vertex_a1, vertex_c1, 1);
+  graph.add_edge(vertex_b1, vertex_c1, 1);
+
+  // Triple 2: sink added before its predecessors, so both visiting orders
+  // are covered by this test.
+  const auto vertex_c2{graph.add_vertex(4)};
+  const auto vertex_a2{graph.add_vertex(5)};
+  const auto vertex_b2{graph.add_vertex(6)};
+  graph.add_edge(vertex_a2, vertex_c2, 1);
+  graph.add_edge(vertex_b2, vertex_c2, 1);
+
+  // WHEN
+  auto coloring = greedy_graph_coloring(graph);
+
+  // THEN
+  ASSERT_TRUE(is_proper_coloring(graph, coloring));
 }
 
 TYPED_TEST(GreedyGraphColoringTest, DisconnectedComponents) {
