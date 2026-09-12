@@ -152,8 +152,12 @@ TYPED_TEST(AStarShortestPathTest, AStarSuboptimalPath) {
   const auto path = a_star_search(graph, vertex_id_1, vertex_id_3, heuristic);
 
   // THEN
-  ASSERT_TRUE(path.has_value());  // Check if optional has a value
-  // Note: The path might not be the shortest, but it should still be valid
+  // The heuristic returns the same value for every vertex, so it is
+  // consistent (it trivially satisfies the triangle inequality) and does not
+  // break optimality: the shortest path (1 -> 3 directly, cost 4) is still
+  // found.
+  const graph_path<weight_t> expected_path{{vertex_id_1, vertex_id_3}, 4};
+  ASSERT_EQ(path, expected_path);
 }
 
 // Negative Weight Test
@@ -239,10 +243,7 @@ TYPED_TEST(AStarShortestPathTest, AStarHeuristicImpact) {
   // THEN
   // The heuristic only affects the order in which vertices are explored, not
   // the cost reported for the resulting path: total_weight must always be
-  // the true accumulated edge weight, never inflated by the heuristic value
-  // (e.g. heuristic2 returns 10 at every vertex, including the target, so a
-  // bug that reported the f-score instead of the true cost would surface
-  // here as 13 instead of 3).
+  // the true accumulated edge weight, never inflated by the heuristic value.
   ASSERT_TRUE(path_with_underestimating_heuristic.has_value());
   ASSERT_TRUE(path_with_overestimating_heuristic.has_value());
 
