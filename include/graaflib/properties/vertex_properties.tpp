@@ -25,7 +25,15 @@ std::size_t vertex_degree(const graaf::graph<V, E, T>& graph,
 template <typename V, typename E, graph_type T>
 std::size_t vertex_outdegree(const graaf::graph<V, E, T>& graph,
                              vertex_id_t vertex_id) {
-  return (graph.get_neighbors(vertex_id)).size();
+  const auto& neighbors{graph.get_neighbors(vertex_id)};
+
+  if constexpr (T == graph_type::UNDIRECTED) {
+    // A self-loop is stored once in the neighbor set, but conventionally
+    // contributes two to the degree of a vertex in an undirected graph.
+    return neighbors.size() + (neighbors.contains(vertex_id) ? 1 : 0);
+  }
+
+  return neighbors.size();
 }
 
 template <typename V, typename E, graph_type T>
