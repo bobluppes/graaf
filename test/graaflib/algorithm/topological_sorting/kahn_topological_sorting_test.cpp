@@ -3,7 +3,6 @@
 #include <utils/fixtures/fixtures.h>
 
 #include <algorithm>
-#include <stdexcept>
 #include <unordered_map>
 #include <vector>
 
@@ -64,7 +63,7 @@ TYPED_TEST(TypedKahnTopologicalSort, EmptyGraph) {
   const auto sorted_vertices{kahn_topological_sort(graph)};
 
   // THEN
-  ASSERT_TRUE(sorted_vertices.empty());
+  ASSERT_EQ(std::vector<vertex_id_t>{}, sorted_vertices);
 }
 
 TYPED_TEST(TypedKahnTopologicalSort, SingleVertex) {
@@ -125,9 +124,10 @@ TYPED_TEST(TypedKahnTopologicalSort, RhombusShapeGraph) {
   const auto sorted_vertices{kahn_topological_sort(graph)};
 
   // THEN
-  ASSERT_TRUE(is_topological_order(graph, sorted_vertices));
-  ASSERT_EQ(vertex_1, sorted_vertices.front());
-  ASSERT_EQ(vertex_4, sorted_vertices.back());
+  ASSERT_TRUE(sorted_vertices.has_value());
+  ASSERT_TRUE(is_topological_order(graph, *sorted_vertices));
+  ASSERT_EQ(vertex_1, sorted_vertices->front());
+  ASSERT_EQ(vertex_4, sorted_vertices->back());
 }
 
 TYPED_TEST(TypedKahnTopologicalSort, SimpleGraph) {
@@ -156,9 +156,10 @@ TYPED_TEST(TypedKahnTopologicalSort, SimpleGraph) {
   const auto sorted_vertices{kahn_topological_sort(graph)};
 
   // THEN
-  ASSERT_TRUE(is_topological_order(graph, sorted_vertices));
-  ASSERT_EQ(vertex_1, sorted_vertices.front());
-  ASSERT_EQ(vertex_7, sorted_vertices.back());
+  ASSERT_TRUE(sorted_vertices.has_value());
+  ASSERT_TRUE(is_topological_order(graph, *sorted_vertices));
+  ASSERT_EQ(vertex_1, sorted_vertices->front());
+  ASSERT_EQ(vertex_7, sorted_vertices->back());
 }
 
 TYPED_TEST(TypedKahnTopologicalSort, DisconnectedGraph) {
@@ -185,8 +186,9 @@ TYPED_TEST(TypedKahnTopologicalSort, DisconnectedGraph) {
   const auto sorted_vertices{kahn_topological_sort(graph)};
 
   // THEN
-  ASSERT_EQ(graph.vertex_count(), sorted_vertices.size());
-  ASSERT_TRUE(is_topological_order(graph, sorted_vertices));
+  ASSERT_TRUE(sorted_vertices.has_value());
+  ASSERT_EQ(graph.vertex_count(), sorted_vertices->size());
+  ASSERT_TRUE(is_topological_order(graph, *sorted_vertices));
 }
 
 TYPED_TEST(TypedKahnTopologicalSort, DisconnectedGraphWithIsolatedVertices) {
@@ -207,12 +209,13 @@ TYPED_TEST(TypedKahnTopologicalSort, DisconnectedGraphWithIsolatedVertices) {
   const auto sorted_vertices{kahn_topological_sort(graph)};
 
   // THEN
-  ASSERT_EQ(4, sorted_vertices.size());
-  ASSERT_TRUE(is_topological_order(graph, sorted_vertices));
-  ASSERT_NE(sorted_vertices.end(),
-            std::ranges::find(sorted_vertices, vertex_3));
-  ASSERT_NE(sorted_vertices.end(),
-            std::ranges::find(sorted_vertices, vertex_4));
+  ASSERT_TRUE(sorted_vertices.has_value());
+  ASSERT_EQ(4, sorted_vertices->size());
+  ASSERT_TRUE(is_topological_order(graph, *sorted_vertices));
+  ASSERT_NE(sorted_vertices->end(),
+            std::ranges::find(*sorted_vertices, vertex_3));
+  ASSERT_NE(sorted_vertices->end(),
+            std::ranges::find(*sorted_vertices, vertex_4));
 }
 
 TYPED_TEST(TypedKahnTopologicalSort, CycleGraph) {
@@ -230,9 +233,11 @@ TYPED_TEST(TypedKahnTopologicalSort, CycleGraph) {
   graph.add_edge(vertex_3, vertex_4, 45);
   graph.add_edge(vertex_4, vertex_1, 55);
 
-  // WHEN - THEN
-  ASSERT_THROW(std::ignore = kahn_topological_sort(graph),
-               std::invalid_argument);
+  // WHEN
+  const auto sorted_vertices{kahn_topological_sort(graph)};
+
+  // THEN
+  ASSERT_EQ(std::nullopt, sorted_vertices);
 }
 
 TYPED_TEST(TypedKahnTopologicalSort, SelfLoop) {
@@ -246,9 +251,11 @@ TYPED_TEST(TypedKahnTopologicalSort, SelfLoop) {
   graph.add_edge(vertex_1, vertex_1, -1);
   graph.add_edge(vertex_1, vertex_2, 15);
 
-  // WHEN - THEN
-  ASSERT_THROW(std::ignore = kahn_topological_sort(graph),
-               std::invalid_argument);
+  // WHEN
+  const auto sorted_vertices{kahn_topological_sort(graph)};
+
+  // THEN
+  ASSERT_EQ(std::nullopt, sorted_vertices);
 }
 
 TYPED_TEST(TypedKahnTopologicalSort, CycleInOneComponentOnly) {
@@ -268,10 +275,12 @@ TYPED_TEST(TypedKahnTopologicalSort, CycleInOneComponentOnly) {
   graph.add_edge(vertex_3, vertex_4, 25);
   graph.add_edge(vertex_4, vertex_3, 35);
 
-  // WHEN - THEN
+  // WHEN
+  const auto sorted_vertices{kahn_topological_sort(graph)};
+
+  // THEN
   // A cycle anywhere in the graph makes a topological order impossible
-  ASSERT_THROW(std::ignore = kahn_topological_sort(graph),
-               std::invalid_argument);
+  ASSERT_EQ(std::nullopt, sorted_vertices);
 }
 
 };  // namespace graaf::algorithm

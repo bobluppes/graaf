@@ -2,8 +2,8 @@
 #include <graaflib/algorithm/topological_sorting/kahn_topological_sorting.h>
 
 #include <cstddef>
+#include <optional>
 #include <queue>
-#include <stdexcept>
 #include <unordered_map>
 #include <vector>
 
@@ -40,7 +40,7 @@ template <typename V, typename E>
 };  // namespace detail
 
 template <typename V, typename E>
-std::vector<vertex_id_t> kahn_topological_sort(
+std::optional<std::vector<vertex_id_t>> kahn_topological_sort(
     const graph<V, E, graph_type::DIRECTED>& graph) {
   auto indegrees{detail::compute_indegrees(graph)};
 
@@ -73,7 +73,7 @@ std::vector<vertex_id_t> kahn_topological_sort(
   // lies on a cycle or is reachable from one. A self-loop is covered by this
   // as well, since it contributes one to the in-degree of its own vertex.
   if (sorted_vertices.size() != graph.vertex_count()) {
-    throw std::invalid_argument{"Cycle detected in the graph."};
+    return std::nullopt;
   }
 
   return sorted_vertices;

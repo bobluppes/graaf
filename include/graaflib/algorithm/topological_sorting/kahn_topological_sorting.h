@@ -2,6 +2,7 @@
 
 #include <graaflib/graph.h>
 
+#include <optional>
 #include <vector>
 
 namespace graaf::algorithm {
@@ -17,11 +18,11 @@ namespace graaf::algorithm {
  * @tparam V The vertex type of the graph.
  * @tparam E The edge type of the graph.
  * @param graph The input graph.
- * @return Vector of vertices sorted in topological order
- * @throws std::invalid_argument If the graph contains a cycle.
+ * @return Vector of vertices sorted in topological order. If the graph
+ * contains a cycle, returns std::nullopt.
  */
 template <typename V, typename E>
-[[nodiscard]] std::vector<vertex_id_t> kahn_topological_sort(
+[[nodiscard]] std::optional<std::vector<vertex_id_t>> kahn_topological_sort(
     const graph<V, E, graph_type::DIRECTED>& graph);
 
 }  // namespace graaf::algorithm
