@@ -16,3 +16,8 @@ template <typename V, typename E>
 
 - **graph** The directed graph to traverse.
 - **return** Vector of vertices sorted in topological order. If the graph contains cycles, it returns std::nullopt.
+
+## Similar algorithms
+
+Graaf also implements [Kahn's algorithm](kahn.md), the BFS/in-degree based alternative. That page includes a
+side-by-side comparison of the two approaches.

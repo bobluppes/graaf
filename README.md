@@ -124,7 +124,9 @@ take a look at the [docs](https://bobluppes.github.io/graaf/algorithms/intro.htm
 5. [**Strongly Connected Components Algorithms**](https://bobluppes.github.io/graaf/algorithms/strongly-connected-components/):
    - [Tarjan's Strongly Connected Components](https://bobluppes.github.io/graaf/algorithms/strongly-connected-components/tarjan.html)
    - [Kosaraju's Strongly Connected Components](https://bobluppes.github.io/graaf/algorithms/strongly-connected-components/kosarajus.html)
-6. [**Topological Sorting Algorithms**](https://bobluppes.github.io/graaf/algorithms/topological-sort/topological-sort.html):
+6. [**Topological Sorting Algorithms**](https://bobluppes.github.io/graaf/algorithms/topological-sort/):
+   - [DFS Based Topological Sort](https://bobluppes.github.io/graaf/algorithms/topological-sort/topological-sort.html)
+   - [Kahn's Algorithm](https://bobluppes.github.io/graaf/algorithms/topological-sort/kahn.html)
 7. [**Traversal Algorithms**](https://bobluppes.github.io/graaf/algorithms/traversal/):
    - [Breadth-First Search (BFS)](https://bobluppes.github.io/graaf/algorithms/traversal/breadth-first-search.html)
    - [Depth-First Search (DFS)](https://bobluppes.github.io/graaf/algorithms/traversal/depth-first-search.html)
