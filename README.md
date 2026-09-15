@@ -1,33 +1,24 @@
 <p align="center"><img src="docs/src/img/graaf.png" width="231"></p>
-<h1 align="center">Graaf Library</h1>
+<h1 align="center">Graaf</h1>
 
-<p align="center">
-  Graaf is a <b>general-purpose header-only graph library</b> implemented in C++. It is designed as a lightweight alternative to the <a href="https://www.boost.org/doc/libs/1_82_0/libs/graph/doc/index.html">Boost Graph Library (BGL)</a>.
-</p>
-
-<br/>
-
-<p align="center">
-  Want to try Graaf without installing anything? Give it a spin on <a href="https://godbolt.org/z/dxnf7bzMc">Compiler Explorer</a>!
-</p>
 
 <p align="center">
   <a href="https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml"><img src="https://github.com/bobluppes/graaf/actions/workflows/main-ci.yml/badge.svg" height="20"></a>
   <a href="https://codecov.io/github/bobluppes/graaf"><img src="https://codecov.io/github/bobluppes/graaf/branch/main/graph/badge.svg?token=ZFBLNFN39C" height="20"></a>
   <a href="https://bobluppes.github.io/graaf/"><img src="https://img.shields.io/badge/docs-mdbook-%23ff69b4" height="20"></a>
-</p>
-
-<p align="center">
   <a href="https://discord.gg/cGczwRHJ9K"><img src="https://img.shields.io/badge/chat-discord-%237289DA?style=flat&logo=discord&labelColor=white" height="20"></a>
   <a href="https://GitHub.com/bobluppes/graaf/releases/"><img src="https://img.shields.io/github/v/release/bobluppes/graaf?color=%23F7DE3A&include_prereleases"></a>
   <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-black" height="20"></a>
 </p>
 
-<p align="center">
+<h4 align="center">Graphs without the manual.</h2>
 
+<p align="center">
+  Try without installing?<br> Give Graaf a spin on <a href="https://godbolt.org/z/dxnf7bzMc">Compiler Explorer</a>!
 </p>
 
 # About
+Graaf is a <b>general-purpose header-only graph library</b> implemented in C++. It is designed as a lightweight alternative to the <a href="https://www.boost.org/doc/libs/1_82_0/libs/graph/doc/index.html">Boost Graph Library (BGL)</a>.
 
 Graph is an abstract data type that is widely used in computer science. It is a collection of vertices (nodes) and edges
 that connect these vertices. Graphs are used to model many real-world problems, such as social networks, road networks,
