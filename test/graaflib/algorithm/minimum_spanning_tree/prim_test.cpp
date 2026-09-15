@@ -2,7 +2,54 @@
 #include <gtest/gtest.h>
 #include <utils/scenarios/scenarios.h>
 
+#include <cstddef>
+#include <vector>
+
 namespace graaf::algorithm {
+
+namespace {
+
+using mst_tree_t = tree<vertex_id_t, int>;
+
+// Recursive on purpose: only used in this test file to compare the small,
+// hand-built trees below, so recursion depth is bounded by construction and
+// can never approach a real call-stack limit. graaf::tree deliberately does
+// not expose this as operator== - a general-purpose comparison would need to
+// either accept that risk for arbitrarily large trees or take on much more
+// complexity to avoid it, and no production code needs tree equality today.
+[[nodiscard]] bool trees_equal(const mst_tree_t::tree_node& lhs,
+                               const mst_tree_t::tree_node& rhs) {
+  if (lhs.value != rhs.value || lhs.children.size() != rhs.children.size()) {
+    return false;
+  }
+
+  // Children can be added in a different order (e.g. depending on the
+  // graph's neighbor iteration order), so match them as an unordered
+  // collection rather than comparing positionally.
+  std::vector<bool> rhs_matched(rhs.children.size(), false);
+  for (const auto& lhs_link : lhs.children) {
+    bool found_match{false};
+    for (std::size_t i{0}; i < rhs.children.size(); ++i) {
+      if (!rhs_matched[i] && lhs_link.value == rhs.children[i].value &&
+          trees_equal(*lhs_link.child, *rhs.children[i].child)) {
+        rhs_matched[i] = true;
+        found_match = true;
+        break;
+      }
+    }
+    if (!found_match) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+[[nodiscard]] bool trees_equal(const mst_tree_t& lhs, const mst_tree_t& rhs) {
+  return trees_equal(*lhs.root(), *rhs.root());
+}
+
+}  // namespace
 
 TEST(PrimMstTest, SingleVertex) {
   // GIVEN
@@ -17,8 +64,8 @@ TEST(PrimMstTest, SingleVertex) {
   // THEN - The mst is a single node with no children
   ASSERT_TRUE(mst.has_value());
 
-  const tree<vertex_id_t, int> expected{start_vertex};
-  ASSERT_TRUE(*mst == expected);
+  const mst_tree_t expected{start_vertex};
+  ASSERT_TRUE(trees_equal(*mst, expected));
 }
 
 TEST(PrimMstTest, DisconnectedGraph) {
@@ -56,10 +103,10 @@ TEST(PrimMstTest, SingleEdge) {
   // THEN
   ASSERT_TRUE(mst.has_value());
 
-  tree<vertex_id_t, int> expected{start_vertex};
+  mst_tree_t expected{start_vertex};
   static_cast<void>(expected.root()->add_child(100, vertex_1));
 
-  ASSERT_TRUE(*mst == expected);
+  ASSERT_TRUE(trees_equal(*mst, expected));
 }
 
 TEST(PrimMstTest, TreeGraphStartAtRoot) {
@@ -78,13 +125,13 @@ TEST(PrimMstTest, TreeGraphStartAtRoot) {
   // oriented away from the start vertex.
   ASSERT_TRUE(mst.has_value());
 
-  tree<vertex_id_t, int> expected{start_vertex};
+  mst_tree_t expected{start_vertex};
   static_cast<void>(expected.root()->add_child(100, vertex_ids[1]));
   auto* node_2{expected.root()->add_child(200, vertex_ids[2])};
   static_cast<void>(node_2->add_child(300, vertex_ids[3]));
   static_cast<void>(node_2->add_child(400, vertex_ids[4]));
 
-  ASSERT_TRUE(*mst == expected);
+  ASSERT_TRUE(trees_equal(*mst, expected));
 }
 
 TEST(PrimMstTest, TreeGraphStartAtLeaf) {
@@ -104,13 +151,13 @@ TEST(PrimMstTest, TreeGraphStartAtLeaf) {
   // root.
   ASSERT_TRUE(mst.has_value());
 
-  tree<vertex_id_t, int> expected{start_vertex};
+  mst_tree_t expected{start_vertex};
   auto* node_2{expected.root()->add_child(300, vertex_ids[2])};
   auto* node_0{node_2->add_child(200, vertex_ids[0])};
   static_cast<void>(node_2->add_child(400, vertex_ids[4]));
   static_cast<void>(node_0->add_child(100, vertex_ids[1]));
 
-  ASSERT_TRUE(*mst == expected);
+  ASSERT_TRUE(trees_equal(*mst, expected));
 }
 
 TEST(PrimMstTest, SimpleGraph) {
@@ -126,13 +173,13 @@ TEST(PrimMstTest, SimpleGraph) {
   // THEN
   ASSERT_TRUE(mst.has_value());
 
-  tree<vertex_id_t, int> expected{start_vertex};
+  mst_tree_t expected{start_vertex};
   static_cast<void>(expected.root()->add_child(100, vertex_ids[0]));
   auto* node_2{expected.root()->add_child(200, vertex_ids[2])};
   auto* node_3{node_2->add_child(400, vertex_ids[3])};
   static_cast<void>(node_3->add_child(500, vertex_ids[4]));
 
-  ASSERT_TRUE(*mst == expected);
+  ASSERT_TRUE(trees_equal(*mst, expected));
 }
 
 }  // namespace graaf::algorithm
