@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 #include <utils/scenarios/scenarios.h>
 
-#include <algorithm>
+#include <functional>
 #include <unordered_set>
 
 namespace graaf::algorithm {
@@ -18,35 +18,48 @@ using mst_tree_t = tree<vertex_id_t, int>;
 // either accept that risk for arbitrarily large trees or take on much more
 // complexity to avoid it, and no production code needs tree equality today.
 [[nodiscard]] bool trees_equal(const mst_tree_t::tree_node& lhs,
-                               const mst_tree_t::tree_node& rhs) {
+                               const mst_tree_t::tree_node& rhs);
+
+// A child, keyed by the edge value towards it and its subtree. Equality
+// recurses back into trees_equal, so two child_keys are equal iff their
+// whole subtrees are. Hashing only needs to agree with that (equal children
+// always have the same root vertex, since trees_equal checks that first),
+// not capture the full subtree, so hashing just the root vertex is enough.
+struct child_key {
+  int edge_value;
+  const mst_tree_t::tree_node* node;
+
+  [[nodiscard]] bool operator==(const child_key& other) const {
+    return edge_value == other.edge_value && trees_equal(*node, *other.node);
+  }
+};
+
+struct child_key_hash {
+  [[nodiscard]] std::size_t operator()(const child_key& key) const {
+    return std::hash<vertex_id_t>{}(key.node->value);
+  }
+};
+
+bool trees_equal(const mst_tree_t::tree_node& lhs,
+                 const mst_tree_t::tree_node& rhs) {
   if (lhs.value != rhs.value) {
     return false;
   }
 
-  // A node can't have two children pointing at the same vertex, so comparing
-  // the sets of child vertex ids already tells us whether every child on one
-  // side has a matching child on the other - order-independent, unlike
-  // comparing `children` positionally.
-  const auto child_values{[](const auto& node) {
-    std::unordered_set<vertex_id_t> values{};
+  const auto children_of{[](const auto& node) {
+    std::unordered_set<child_key, child_key_hash> children{};
     for (const auto& link : node.children) {
-      values.insert(link.child->value);
+      children.insert(child_key{link.value, link.child.get()});
     }
-    return values;
+    return children;
   }};
 
-  if (child_values(lhs) != child_values(rhs)) {
-    return false;
-  }
-
-  return std::ranges::all_of(lhs.children, [&](const auto& lhs_link) {
-    const auto rhs_link{
-        std::ranges::find_if(rhs.children, [&](const auto& link) {
-          return link.child->value == lhs_link.child->value;
-        })};
-    return lhs_link.value == rhs_link->value &&
-           trees_equal(*lhs_link.child, *rhs_link->child);
-  });
+  // unordered_set::operator== compares the two sets element for element
+  // regardless of insertion order, using child_key::operator== (which
+  // recurses back into trees_equal) - so the order-independent matching of
+  // children is handled entirely by the standard library, not hand-rolled
+  // here.
+  return children_of(lhs) == children_of(rhs);
 }
 
 [[nodiscard]] bool trees_equal(const mst_tree_t& lhs, const mst_tree_t& rhs) {
