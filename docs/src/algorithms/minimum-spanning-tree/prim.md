@@ -16,11 +16,14 @@ Prim's MST is often used in network design, such as electrical wiring and teleco
 ## Syntax
 
 ```cpp
-template <typename V, typename E>
-[[nodiscard]] std::optional<std::vector<edge_id_t> > prim_minimum_spanning_tree(
-    const graph<V, E, graph_type::UNDIRECTED>& graph, vertex_id_t start_vertex);
+template <typename V, typename E,
+          typename WEIGHT_T = decltype(get_weight(std::declval<E>()))>
+[[nodiscard]] std::optional<tree<vertex_id_t, WEIGHT_T>>
+prim_minimum_spanning_tree(const graph<V, E, graph_type::UNDIRECTED>& graph,
+                           vertex_id_t start_vertex);
 ```
 
 - **graph** The undirected graph for which we want to compute the MST.
 - **start_vertex** The vertex ID which should be the root of the MST.
-- **return** Returns a vector of edges that form MST if the graph is connected, otherwise returns an empty optional.
+- **return** Returns a `tree` rooted at `start_vertex`, where each edge value is the weight of the corresponding edge
+  in the graph, if the graph is connected, otherwise returns an empty optional.
