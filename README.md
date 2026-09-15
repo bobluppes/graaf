@@ -14,7 +14,8 @@
 <h4 align="center">Graphs without the manual.</h2>
 
 <p align="center">
-  Try without installing?<br> Give Graaf a spin on <a href="https://godbolt.org/z/dxnf7bzMc">Compiler Explorer</a>!
+  Designed as a <b>lightweight</b>, <b>easy to use</b>, and <b>header-only</b> C++ graph library which doesn't sacrifice on performance.<br>
+  Try without installing? Give Graaf a spin on <a href="https://godbolt.org/z/dxnf7bzMc">Compiler Explorer</a>!
 </p>
 
 # About
