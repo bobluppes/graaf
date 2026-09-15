@@ -27,6 +27,9 @@ class tree {
    * has the same value, the same edge value towards its parent, and the same
    * set of children (order-independent). Parent back-pointers are internal
    * bookkeeping and are not part of a tree's identity, so they are ignored.
+   *
+   * Assumes vertex values are unique within a tree - true for any tree built
+   * from a graph traversal, since a vertex is visited at most once.
    */
   [[nodiscard]] bool operator==(const tree& other) const {
     return *root_ == *other.root_;
