@@ -101,7 +101,7 @@ take a look at the [docs](https://bobluppes.github.io/graaf/algorithms/intro.htm
    - [DFS-Based Cycle Detection](https://bobluppes.github.io/graaf/algorithms/cycle-detection/dfs-based.html)
 2. [**Graph Coloring Algorithms**](https://bobluppes.github.io/graaf/algorithms/coloring/):
    - [Greedy Graph Coloring](https://bobluppes.github.io/graaf/algorithms/coloring/greedy-graph-coloring.html)
-   - [Welsh-Powell Algorithm]
+   - [Welsh-Powell Algorithm](https://bobluppes.github.io/graaf/algorithms/coloring/welsh-powell.html)
 3. [**Minimum Spanning Tree (MST) Algorithms**](https://bobluppes.github.io/graaf/algorithms/minimum-spanning-tree/)
    - [Kruskal's Algorithm](https://bobluppes.github.io/graaf/algorithms/minimum-spanning-tree/kruskal.html)
    - [Prim's Algorithm](https://bobluppes.github.io/graaf/algorithms/minimum-spanning-tree/prim.html)
