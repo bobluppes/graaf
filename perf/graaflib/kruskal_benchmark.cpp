@@ -7,7 +7,7 @@ namespace {
 
 static void bm_kruskal(benchmark::State& state,
                        const utils::dataset& dataset_name) {
-  static const auto graph{utils::construct_graph_from_file(dataset_name)};
+  const auto& graph{utils::construct_graph_from_file(dataset_name)};
 
   for (auto _ : state) {
     auto result = graaf::algorithm::kruskal_minimum_spanning_tree(graph);
