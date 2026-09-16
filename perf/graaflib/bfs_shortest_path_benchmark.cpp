@@ -69,15 +69,15 @@ static void bm_bfs_shortest_path(benchmark::State& state,
   // The farthest-id vertex in the subgraph is as good a target as any: it is
   // guaranteed to be reachable from start_vertex since it was discovered by
   // the BFS which built the subgraph.
-  const auto end_vertex{std::ranges::max(
-      connected_subgraph.get_vertices() | std::views::keys)};
+  const auto end_vertex{
+      std::ranges::max(connected_subgraph.get_vertices() | std::views::keys)};
 
   state.counters["subgraph_vertices_used"] =
       static_cast<double>(connected_subgraph.vertex_count());
 
   for (auto _ : state) {
-    auto result = graaf::algorithm::bfs_shortest_path(
-        connected_subgraph, start_vertex, end_vertex);
+    auto result = graaf::algorithm::bfs_shortest_path(connected_subgraph,
+                                                      start_vertex, end_vertex);
     benchmark::DoNotOptimize(result);
   }
 }
