@@ -8,7 +8,7 @@ namespace {
 static void bm_dijkstra_shortest_paths(benchmark::State& state,
                                        const utils::dataset& dataset_name,
                                        const graaf::vertex_id_t start_vertex) {
-  static const auto graph{utils::construct_graph_from_file(dataset_name)};
+  const auto& graph{utils::construct_graph_from_file(dataset_name)};
 
   for (auto _ : state) {
     auto result =
