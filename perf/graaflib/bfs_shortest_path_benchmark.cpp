@@ -63,7 +63,7 @@ constexpr std::size_t MAX_SUBGRAPH_VERTICES{50'000};
 static void bm_bfs_shortest_path(benchmark::State& state,
                                  const utils::dataset& dataset_name,
                                  const graaf::vertex_id_t start_vertex) {
-  static const auto graph{utils::construct_graph_from_file(dataset_name)};
+  const auto& graph{utils::construct_graph_from_file(dataset_name)};
   const auto connected_subgraph{
       compute_connected_subgraph(graph, start_vertex, MAX_SUBGRAPH_VERTICES)};
 
