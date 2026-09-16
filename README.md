@@ -19,8 +19,6 @@
 </p>
 
 # About
-Graaf is a <b>general-purpose header-only graph library</b> implemented in C++. It is designed as a lightweight alternative to the <a href="https://www.boost.org/doc/libs/1_82_0/libs/graph/doc/index.html">Boost Graph Library (BGL)</a>.
-
 Graph is an abstract data type that is widely used in computer science. It is a collection of vertices (nodes) and edges
 that connect these vertices. Graphs are used to model many real-world problems, such as social networks, road networks,
 and computer networks. As such, graph algorithms are used in many applications, including route planning, network
