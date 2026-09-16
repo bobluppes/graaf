@@ -29,7 +29,13 @@ namespace {
 // of millions of times for a graph with only a few million edges, which is
 // itself slow enough to reintroduce the runtime problem this cap exists to
 // avoid.
-constexpr std::size_t MAX_SUBGRAPH_VERTICES{2'400};
+//
+// The cap is chosen per dataset (rather than sharing one constant) because
+// the two giant components don't grow in density at the same rate as the
+// BFS explores them: web-BerkStan's component hits a much denser cluster at
+// a smaller vertex count than web-Google's does, so the same cap makes Prim
+// run for very different amounts of time on each dataset. The two values
+// below were found empirically to bring both benchmarks close to 1 second.
 
 [[nodiscard]] utils::graph_t compute_connected_subgraph(
     const utils::graph_t& graph, const graaf::vertex_id_t start_vertex,
@@ -71,10 +77,11 @@ constexpr std::size_t MAX_SUBGRAPH_VERTICES{2'400};
 }
 
 static void bm_prim(benchmark::State& state, const utils::dataset& dataset_name,
-                    const graaf::vertex_id_t start_vertex) {
-  static const auto graph{utils::construct_graph_from_file(dataset_name)};
+                    const graaf::vertex_id_t start_vertex,
+                    const std::size_t max_subgraph_vertices) {
+  const auto& graph{utils::construct_graph_from_file(dataset_name)};
   const auto connected_subgraph{
-      compute_connected_subgraph(graph, start_vertex, MAX_SUBGRAPH_VERTICES)};
+      compute_connected_subgraph(graph, start_vertex, max_subgraph_vertices)};
 
   state.counters["subgraph_vertices_used"] =
       static_cast<double>(connected_subgraph.vertex_count());
@@ -89,5 +96,6 @@ static void bm_prim(benchmark::State& state, const utils::dataset& dataset_name,
 }  // namespace
 
 // Register the benchmarks
-BENCHMARK_CAPTURE(bm_prim, web_google, utils::dataset::WEB_GOOGLE, 1);
-BENCHMARK_CAPTURE(bm_prim, web_berkstan, utils::dataset::WEB_BERK_STAN, 1);
+BENCHMARK_CAPTURE(bm_prim, web_google, utils::dataset::WEB_GOOGLE, 1, 330'000);
+BENCHMARK_CAPTURE(bm_prim, web_berkstan, utils::dataset::WEB_BERK_STAN, 1,
+                  190'000);

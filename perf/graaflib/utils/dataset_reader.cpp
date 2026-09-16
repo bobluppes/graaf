@@ -4,6 +4,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <map>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -27,9 +28,14 @@ int UNIT_WEIGHT{1};
 
 }  // namespace
 
-graph_t construct_graph_from_file(const dataset& dataset_name) {
-  const auto& dataset{DATASETS.at(dataset_name)};
-  const auto path{std::filesystem::path(DATASET_DIR) / dataset.filename};
+const graph_t& construct_graph_from_file(const dataset& dataset_name) {
+  static std::map<dataset, graph_t> cache{};
+  if (const auto it{cache.find(dataset_name)}; it != cache.end()) {
+    return it->second;
+  }
+
+  const auto& dataset_file{DATASETS.at(dataset_name)};
+  const auto path{std::filesystem::path(DATASET_DIR) / dataset_file.filename};
 
   std::ifstream file{};
   file.open(path);
@@ -43,7 +49,7 @@ graph_t construct_graph_from_file(const dataset& dataset_name) {
   std::string line;
 
   // Skip the header lines
-  for (int i{0}; i < dataset.number_of_header_lines; ++i) {
+  for (int i{0}; i < dataset_file.number_of_header_lines; ++i) {
     std::getline(file, line);
   }
 
@@ -70,7 +76,9 @@ graph_t construct_graph_from_file(const dataset& dataset_name) {
     }
   }
 
-  return graph;
+  const auto [inserted_it,
+              inserted]{cache.emplace(dataset_name, std::move(graph))};
+  return inserted_it->second;
 }
 
 }  // namespace utils
