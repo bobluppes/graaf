@@ -2,9 +2,6 @@
 #include <graaflib/algorithm/graph_traversal/breadth_first_search.h>
 #include <graaflib/algorithm/shortest_path/bfs_shortest_path.h>
 
-#include <algorithm>
-#include <ranges>
-
 #include "utils/dataset_reader.h"
 
 namespace {
@@ -18,7 +15,11 @@ namespace {
 // millions of times, which is slow enough that the benchmark never finishes
 // in a reasonable time. We therefore run the shortest path search on a
 // bounded subgraph, same as the Prim MST benchmark does for the same reason.
-constexpr std::size_t MAX_SUBGRAPH_VERTICES{2'400};
+//
+// 50k vertices was chosen empirically (see PR discussion) to bring the
+// search close to 1 second on both datasets despite the above re-enqueue
+// effect already being present at this scale.
+constexpr std::size_t MAX_SUBGRAPH_VERTICES{50'000};
 
 [[nodiscard]] utils::graph_t compute_connected_subgraph(
     const utils::graph_t& graph, const graaf::vertex_id_t start_vertex,
@@ -66,11 +67,19 @@ static void bm_bfs_shortest_path(benchmark::State& state,
   const auto connected_subgraph{
       compute_connected_subgraph(graph, start_vertex, MAX_SUBGRAPH_VERTICES)};
 
-  // The farthest-id vertex in the subgraph is as good a target as any: it is
-  // guaranteed to be reachable from start_vertex since it was discovered by
-  // the BFS which built the subgraph.
-  const auto end_vertex{
-      std::ranges::max(connected_subgraph.get_vertices() | std::views::keys)};
+  // Pick the vertex an exhaustive BFS over the subgraph dequeues last, so the
+  // shortest-path search below has to do close to the maximum possible
+  // amount of work before it can terminate early. An arbitrary vertex (e.g.
+  // the highest id) would give no such guarantee and can make the search
+  // terminate after visiting only a tiny, unrepresentative fraction of the
+  // subgraph.
+  graaf::vertex_id_t end_vertex{start_vertex};
+  graaf::algorithm::breadth_first_traverse(
+      connected_subgraph, start_vertex, [](const graaf::edge_id_t&) {},
+      [&end_vertex](graaf::vertex_id_t current) {
+        end_vertex = current;
+        return false;
+      });
 
   state.counters["subgraph_vertices_used"] =
       static_cast<double>(connected_subgraph.vertex_count());
