@@ -14,7 +14,11 @@ namespace {
 // millions of times, which is slow enough that the benchmark never finishes
 // in a reasonable time. We therefore cap the traversal to a bounded
 // subgraph, same as the Prim MST benchmark does for the same reason.
-constexpr std::size_t MAX_SUBGRAPH_VERTICES{2'400};
+//
+// 45k vertices was chosen empirically (see PR discussion) to bring the
+// traversal itself close to 1 second on both datasets despite the above
+// re-enqueue effect already being present at this scale.
+constexpr std::size_t MAX_SUBGRAPH_VERTICES{45'000};
 
 [[nodiscard]] utils::graph_t compute_connected_subgraph(
     const utils::graph_t& graph, const graaf::vertex_id_t start_vertex,
