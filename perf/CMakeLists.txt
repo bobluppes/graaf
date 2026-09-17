@@ -116,3 +116,48 @@ target_link_libraries(
   benchmark
   fmt::fmt
 )
+
+# A separate, opt-in executable which benchmarks Boost Graph Library on the
+# same datasets and algorithms as perf/graaflib, for direct comparison. Off
+# by default so that Boost - not otherwise a dependency of Graaf - is never
+# required to configure or build the project.
+option(GRAAF_BUILD_BOOST_PERF
+  "Build a separate perf executable benchmarking Boost Graph Library for comparison"
+  OFF)
+
+if(GRAAF_BUILD_BOOST_PERF)
+  # Fetched as a single, hash-verified tarball for a reproducible build
+  # regardless of what Boost version, if any, is installed on the machine.
+  # BOOST_INCLUDE_LIBRARIES limits the configure/build to Boost.Graph and
+  # its own dependencies rather than all of Boost.
+  set(BOOST_INCLUDE_LIBRARIES graph)
+  set(BOOST_ENABLE_CMAKE ON)
+  FetchContent_Declare(
+    Boost
+    URL https://github.com/boostorg/boost/releases/download/boost-1.84.0/boost-1.84.0.tar.gz
+    URL_HASH SHA256=4d27e9efed0f6f152dc28db6430b9d3dfb40c0345da7342eaa5a987dde57bd95
+  )
+  FetchContent_MakeAvailable(Boost)
+
+  file(GLOB PERF_BOOST_SOURCES "boost/*.cpp" "boost/*/*.cpp")
+  add_executable(
+    ${PROJECT_NAME}_perf_boost
+    ${PERF_BOOST_SOURCES}
+  )
+
+  # perf/common holds graph-library-agnostic dataset/subgraph utilities
+  # shared across perf benchmark targets; this lets us
+  # #include "common/dataset.h" etc.
+  target_include_directories(${PROJECT_NAME}_perf_boost PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
+  # Include the generated dataset_dir.h
+  target_include_directories(${PROJECT_NAME}_perf_boost PRIVATE ${GRAAF_PERF_GENERATED_DIR})
+
+  target_link_libraries(
+    ${PROJECT_NAME}_perf_boost
+    PRIVATE
+    benchmark
+    fmt::fmt
+    Boost::graph
+  )
+endif()
