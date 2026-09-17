@@ -25,8 +25,7 @@ const graph_t& construct_graph_from_file(const dataset& dataset_name) {
   // the largest vertex ID seen in the dataset before any edges are added.
   std::size_t max_vertex_id{0};
   perf_common::read_dataset_edges(
-      dataset_name,
-      [&max_vertex_id](std::size_t source, std::size_t target) {
+      dataset_name, [&max_vertex_id](std::size_t source, std::size_t target) {
         max_vertex_id = std::max({max_vertex_id, source, target});
       });
 
