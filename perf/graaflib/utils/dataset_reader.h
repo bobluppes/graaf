@@ -2,9 +2,11 @@
 
 #include <graaflib/graph.h>
 
+#include "common/dataset.h"
+
 namespace utils {
 
-enum class dataset : int64_t { WEB_GOOGLE, WEB_BERK_STAN };
+using dataset = perf_common::dataset;
 
 struct no_data {};
 using graph_t = graaf::undirected_graph<no_data, int>;

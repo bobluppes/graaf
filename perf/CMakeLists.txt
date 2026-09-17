@@ -84,9 +84,12 @@ endif()
 
 # Generated unconditionally so the dataset-backed benchmarks always compile,
 # even when GRAAF_DOWNLOAD_PERF_DATASETS is off (they just can't be run).
+# GRAAF_PERF_GENERATED_DIR is used (rather than a literal path) so that other
+# perf benchmark targets can add the same directory to their own include path.
+set(GRAAF_PERF_GENERATED_DIR ${CMAKE_CURRENT_BINARY_DIR}/generated)
 configure_file(
-  graaflib/utils/dataset_dir.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/generated/graaflib/utils/dataset_dir.h
+  common/dataset_dir.h.in
+  ${GRAAF_PERF_GENERATED_DIR}/common/dataset_dir.h
   @ONLY
 )
 
@@ -99,8 +102,13 @@ add_executable(
 # Include src such that we can #include <graaflib/*> in the sources
 target_include_directories(${PROJECT_NAME}_perf PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
+# perf/common holds graph-library-agnostic dataset/subgraph utilities meant
+# to be shared across perf benchmark targets; this lets us
+# #include "common/dataset.h" etc.
+target_include_directories(${PROJECT_NAME}_perf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
 # Include the generated dataset_dir.h
-target_include_directories(${PROJECT_NAME}_perf PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated)
+target_include_directories(${PROJECT_NAME}_perf PRIVATE ${GRAAF_PERF_GENERATED_DIR})
 
 target_link_libraries(
   ${PROJECT_NAME}_perf
