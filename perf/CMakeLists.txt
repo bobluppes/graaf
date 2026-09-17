@@ -126,14 +126,10 @@ option(GRAAF_BUILD_BOOST_PERF
   OFF)
 
 if(GRAAF_BUILD_BOOST_PERF)
-  # Fetched from the "boost-1.84.0.tar.gz" GitHub release asset - a single
-  # tarball with all of Boost's git submodules already checked out into it -
-  # rather than cloning the boostorg/boost git superproject directly, which
-  # would otherwise require a separate clone per submodule. This gives a
-  # reproducible, hash-verified, single-download fetch regardless of
-  # whether - or which version of - Boost happens to be installed on the
-  # machine. BOOST_INCLUDE_LIBRARIES limits the actual configure/build to
-  # Boost.Graph and its own dependencies rather than all of Boost.
+  # Fetched as a single, hash-verified tarball for a reproducible build
+  # regardless of what Boost version, if any, is installed on the machine.
+  # BOOST_INCLUDE_LIBRARIES limits the configure/build to Boost.Graph and
+  # its own dependencies rather than all of Boost.
   set(BOOST_INCLUDE_LIBRARIES graph)
   set(BOOST_ENABLE_CMAKE ON)
   FetchContent_Declare(
