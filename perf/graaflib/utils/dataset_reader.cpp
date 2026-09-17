@@ -6,6 +6,12 @@
 
 namespace utils {
 
+namespace {
+
+int UNIT_WEIGHT{1};
+
+}  // namespace
+
 const graph_t& construct_graph_from_file(const dataset& dataset_name) {
   static std::map<dataset, graph_t> cache{};
   if (const auto it{cache.find(dataset_name)}; it != cache.end()) {
@@ -24,7 +30,7 @@ const graph_t& construct_graph_from_file(const dataset& dataset_name) {
           graph.add_vertex(no_data{}, target);
         }
 
-        graph.add_edge(source, target, 1);
+        graph.add_edge(source, target, UNIT_WEIGHT);
       });
 
   const auto [inserted_it,

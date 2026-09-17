@@ -28,9 +28,8 @@ static void bm_bfs_shortest_path(benchmark::State& state,
                                  const utils::dataset& dataset_name,
                                  const graaf::vertex_id_t start_vertex,
                                  const std::size_t max_subgraph_vertices) {
-  const auto& graph{utils::construct_graph_from_file(dataset_name)};
-  const auto connected_subgraph{utils::compute_connected_subgraph(
-      graph, dataset_name, start_vertex, max_subgraph_vertices)};
+  const auto connected_subgraph{utils::construct_connected_subgraph(
+      dataset_name, start_vertex, max_subgraph_vertices)};
 
   // Pick the vertex an exhaustive BFS over the subgraph dequeues last, so the
   // shortest-path search below has to do close to the maximum possible

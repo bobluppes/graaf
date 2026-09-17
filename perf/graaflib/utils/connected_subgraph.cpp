@@ -4,10 +4,10 @@
 
 namespace utils {
 
-graph_t compute_connected_subgraph(const graph_t& graph,
-                                   const dataset& dataset_name,
-                                   const graaf::vertex_id_t start_vertex,
-                                   const std::size_t max_vertices) {
+graph_t construct_connected_subgraph(const dataset& dataset_name,
+                                     const graaf::vertex_id_t start_vertex,
+                                     const std::size_t max_vertices) {
+  const auto& graph{construct_graph_from_file(dataset_name)};
   const auto raw{perf_common::compute_connected_subgraph(
       dataset_name, start_vertex, max_vertices)};
 

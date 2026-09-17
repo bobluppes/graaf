@@ -84,9 +84,8 @@ endif()
 
 # Generated unconditionally so the dataset-backed benchmarks always compile,
 # even when GRAAF_DOWNLOAD_PERF_DATASETS is off (they just can't be run).
-# GRAAF_PERF_GENERATED_DIR is used (rather than a literal path) so that
-# perf/boost/CMakeLists.txt - added as a subdirectory below - can add the
-# same directory to its own include path.
+# GRAAF_PERF_GENERATED_DIR is used (rather than a literal path) so that other
+# perf benchmark targets can add the same directory to their own include path.
 set(GRAAF_PERF_GENERATED_DIR ${CMAKE_CURRENT_BINARY_DIR}/generated)
 configure_file(
   common/dataset_dir.h.in
@@ -103,9 +102,9 @@ add_executable(
 # Include src such that we can #include <graaflib/*> in the sources
 target_include_directories(${PROJECT_NAME}_perf PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
-# perf/common holds the graph-library-agnostic dataset/subgraph utilities
-# shared between this target and perf/boost's comparison benchmarks; this
-# lets both #include "common/dataset.h" etc.
+# perf/common holds graph-library-agnostic dataset/subgraph utilities meant
+# to be shared across perf benchmark targets; this lets us
+# #include "common/dataset.h" etc.
 target_include_directories(${PROJECT_NAME}_perf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Include the generated dataset_dir.h
