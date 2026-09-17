@@ -16,17 +16,20 @@ namespace {
 // in a reasonable time. We therefore cap the traversal to a bounded
 // subgraph, same as the Prim MST benchmark does for the same reason.
 //
-// 45k vertices was chosen empirically (see PR discussion) to bring the
-// traversal itself close to 1 second on both datasets despite the above
-// re-enqueue effect already being present at this scale.
-constexpr std::size_t MAX_SUBGRAPH_VERTICES{45'000};
-
+// The cap is chosen per dataset (rather than sharing one constant) because
+// the two giant components don't grow in density at the same rate as the
+// BFS explores them: web-BerkStan's component hits a much denser cluster at
+// a smaller vertex count than web-Google's does, so the same cap makes this
+// traversal run for very different amounts of time on each dataset. The two
+// values below were found empirically to bring both benchmarks close to 1
+// second.
 static void bm_breadth_first_search(benchmark::State& state,
                                     const utils::dataset& dataset_name,
-                                    const graaf::vertex_id_t start_vertex) {
+                                    const graaf::vertex_id_t start_vertex,
+                                    const std::size_t max_subgraph_vertices) {
   const auto& graph{utils::construct_graph_from_file(dataset_name)};
   const auto connected_subgraph{utils::compute_connected_subgraph(
-      graph, start_vertex, MAX_SUBGRAPH_VERTICES)};
+      graph, dataset_name, start_vertex, max_subgraph_vertices)};
 
   state.counters["subgraph_vertices_used"] =
       static_cast<double>(connected_subgraph.vertex_count());
@@ -44,6 +47,6 @@ static void bm_breadth_first_search(benchmark::State& state,
 
 // Register the benchmarks
 BENCHMARK_CAPTURE(bm_breadth_first_search, web_google,
-                  utils::dataset::WEB_GOOGLE, 1);
+                  utils::dataset::WEB_GOOGLE, 1, 7'500);
 BENCHMARK_CAPTURE(bm_breadth_first_search, web_berkstan,
-                  utils::dataset::WEB_BERK_STAN, 1);
+                  utils::dataset::WEB_BERK_STAN, 1, 1'050);

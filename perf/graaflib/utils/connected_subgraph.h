@@ -4,12 +4,13 @@
 
 namespace utils {
 
-// Explores graph breadth-first from start_vertex and returns the subgraph
-// made up of the first max_vertices vertices discovered (and the edges
-// between them). Used by benchmarks that need to bound how much of a large,
-// real-world dataset they run against.
+// Builds the subgraph made up of the first max_vertices vertices discovered
+// by a breadth-first exploration of dataset_name's edge list, starting from
+// start_vertex. Vertex/edge values are copied from the corresponding
+// entries in `graph`, which must already hold the full dataset (e.g. as
+// returned by construct_graph_from_file(dataset_name)).
 [[nodiscard]] graph_t compute_connected_subgraph(
-    const graph_t& graph, graaf::vertex_id_t start_vertex,
-    std::size_t max_vertices);
+    const graph_t& graph, const dataset& dataset_name,
+    graaf::vertex_id_t start_vertex, std::size_t max_vertices);
 
 }  // namespace utils

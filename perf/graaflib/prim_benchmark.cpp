@@ -21,15 +21,6 @@ namespace {
 // the connected-subgraph BFS explores to keep the benchmark bounded
 // regardless of which component the start vertex falls into.
 //
-// We deliberately do not also run an unbounded BFS to report the true full
-// component size here: graaf::algorithm::breadth_first_traverse only marks a
-// vertex as seen when it is popped, not when it is pushed, so it can
-// re-enqueue and re-scan the same (especially high-degree) vertex many times
-// before that. On the giant component this makes the edge callback fire tens
-// of millions of times for a graph with only a few million edges, which is
-// itself slow enough to reintroduce the runtime problem this cap exists to
-// avoid.
-//
 // The cap is chosen per dataset (rather than sharing one constant) because
 // the two giant components don't grow in density at the same rate as the
 // BFS explores them: web-BerkStan's component hits a much denser cluster at
@@ -42,7 +33,7 @@ static void bm_prim(benchmark::State& state, const utils::dataset& dataset_name,
                     const std::size_t max_subgraph_vertices) {
   const auto& graph{utils::construct_graph_from_file(dataset_name)};
   const auto connected_subgraph{utils::compute_connected_subgraph(
-      graph, start_vertex, max_subgraph_vertices)};
+      graph, dataset_name, start_vertex, max_subgraph_vertices)};
 
   state.counters["subgraph_vertices_used"] =
       static_cast<double>(connected_subgraph.vertex_count());
@@ -57,6 +48,6 @@ static void bm_prim(benchmark::State& state, const utils::dataset& dataset_name,
 }  // namespace
 
 // Register the benchmarks
-BENCHMARK_CAPTURE(bm_prim, web_google, utils::dataset::WEB_GOOGLE, 1, 330'000);
+BENCHMARK_CAPTURE(bm_prim, web_google, utils::dataset::WEB_GOOGLE, 1, 85'000);
 BENCHMARK_CAPTURE(bm_prim, web_berkstan, utils::dataset::WEB_BERK_STAN, 1,
-                  190'000);
+                  80'000);
