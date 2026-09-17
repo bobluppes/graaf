@@ -63,6 +63,9 @@ There are multiple CMake Options available to choose how you want to build Graaf
 - `GRAAF_DOWNLOAD_PERF_DATASETS`
   - Default: `OFF`
   - Some benchmarks run against large real-world graph datasets. Enabling this downloads those datasets so these benchmarks can run; leaving it off still builds them, it just skips downloading the data.
+- `GRAAF_BUILD_BOOST_PERF`
+  - Default: `OFF`
+  - Builds a separate `Graaf_perf_boost` executable which benchmarks Boost Graph Library on the same datasets and algorithms as `Graaf_perf`, for direct comparison. Enabling this fetches Boost as a source dependency; it is not otherwise required by Graaf.
 
 These Options can be set while executing the cmake command
 ```bash
