@@ -9,7 +9,7 @@ directed_graph<VERTEX_T, EDGE_T> get_transposed_graph(
   directed_graph<VERTEX_T, EDGE_T> transposed_graph{};
 
   for (const auto& [vertex_id, vertex_value] : graph.get_vertices()) {
-    transposed_graph.add_vertex(vertex_value, vertex_id);
+    transposed_graph.add_vertex_with_id(vertex_value, vertex_id);
   }
 
   for (auto [edge_vertices, edge_type] : graph.get_edges()) {

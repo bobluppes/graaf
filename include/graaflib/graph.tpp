@@ -143,8 +143,8 @@ vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex(auto&& vertex) {
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
-vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex(auto&& vertex,
-                                                              vertex_id_t id) {
+vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex_with_id(
+    auto&& vertex, vertex_id_t id) {
   if (has_vertex(id)) {
     throw std::invalid_argument{"Vertex already exists at ID [" +
                                 std::to_string(id) + "]"};

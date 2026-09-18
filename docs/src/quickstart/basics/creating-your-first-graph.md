@@ -50,3 +50,25 @@ int main()
 ### Congratulations! You just created the following graph 🎉
 
 ![Directed graph example](../../img/quickstart/Graph.png)
+
+## Importing data with existing IDs
+
+`add_vertex()` always has the graph assign the new vertex's ID. If you're
+importing data that already has its own IDs (e.g. row numbers from a
+database, or IDs from a file format), keep a map from those external IDs to
+the graph-assigned `vertex_id_t`s and use it to translate IDs when adding
+edges:
+
+```c++
+std::unordered_map<int, graaf::vertex_id_t> external_id_to_vertex_id;
+
+for (const auto& record : records) {
+    const auto vertex_id = g.add_vertex(record.data);
+    external_id_to_vertex_id[record.external_id] = vertex_id;
+}
+
+for (const auto& [from_external_id, to_external_id] : record_links) {
+    g.add_edge(external_id_to_vertex_id.at(from_external_id),
+              external_id_to_vertex_id.at(to_external_id), 1);
+}
+```
