@@ -7,9 +7,9 @@
 namespace graaf::utils::assertions {
 
 // A coloring is proper iff no two vertices connected by an edge share the
-// same color. Note that graph::get_neighbors() returns an unordered_set, so
-// the exact colors assigned to individual vertices are not guaranteed to be
-// stable across STL implementations/platforms - only this invariant is.
+// same color. Note that the exact colors assigned to individual vertices are
+// not guaranteed to be stable across STL implementations/platforms (the vertex
+// iteration order comes from an unordered_map) - only this invariant is.
 template <typename GRAPH>
 bool is_proper_coloring(const GRAPH& graph,
                         const std::unordered_map<vertex_id_t, int>& coloring) {
