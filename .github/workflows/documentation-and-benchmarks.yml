@@ -1,0 +1,118 @@
+name: Documentation and Benchmarks
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      perf: ${{ steps.filter.outputs.perf }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            perf:
+              - 'include/**'
+              - 'perf/**'
+              - 'CMakeLists.txt'
+              - '.github/workflows/documentation-and-benchmarks.yml'
+
+  benchmark:
+    needs: changes
+    if: needs.changes.outputs.perf == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      # Avoid re-downloading ~40MB from Stanford SNAP on every run.
+      - name: Cache perf datasets
+        uses: actions/cache@v4
+        with:
+          path: .cache/perf_datasets
+          key: perf-datasets-${{ hashFiles('perf/CMakeLists.txt') }}
+
+      - name: Configure CMake
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release -DSKIP_EXAMPLES=ON -DSKIP_TESTS=ON -DGRAAF_DOWNLOAD_PERF_DATASETS=ON
+
+      - name: Build benchmarks
+        working-directory: ${{github.workspace}}/build
+        run: cmake --build . --target Graaf_perf -j
+
+      - name: Run benchmarks
+        working-directory: ${{github.workspace}}/build
+        run: ./perf/Graaf_perf --benchmark_out=raw_result.json --benchmark_out_format=json
+
+      # Drop BigO/RMS rows added by ->Complexity() - not per-run timings.
+      - name: Strip BigO/RMS complexity aggregate entries
+        working-directory: ${{github.workspace}}/build
+        run: |
+          jq '.benchmarks |= map(select(.run_type == "iteration"))' \
+            raw_result.json > benchmark_result.json
+
+      - name: Store benchmark result
+        uses: benchmark-action/github-action-benchmark@v1.22.1
+        with:
+          tool: 'googlecpp'
+          output-file-path: build/benchmark_result.json
+          gh-pages-branch: benchmark-data
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-push: true
+          alert-threshold: '150%'
+          comment-on-alert: true
+          fail-on-alert: false
+
+  documentation:
+    needs: [changes, benchmark]
+    # Deploy regardless of benchmark's outcome; a failed job still marks
+    # the overall workflow run red, so failures stay visible.
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Graaf repository
+        uses: actions/checkout@v7
+
+      - name: Install mdBook
+        uses: ./.github/actions/setup-mdbook
+
+      - name: Build mdBook website
+        working-directory: docs
+        run: mdbook build
+
+      - name: Checkout benchmark data
+        uses: actions/checkout@v7
+        continue-on-error: true
+        with:
+          ref: benchmark-data
+          path: benchmark-data
+
+      # gh-pages only supports one published source, so the benchmark
+      # chart is merged into the docs site under /benchmarks/.
+      - name: Merge benchmark chart into the docs site
+        run: |
+          if [ -d benchmark-data/dev/bench ]; then
+            mkdir -p docs/book/benchmarks
+            cp -r benchmark-data/dev/bench/. docs/book/benchmarks/
+          else
+            echo "No benchmark-data/dev/bench found; publishing docs without a benchmark chart."
+          fi
+
+      - name: Deploy to GitHub Pages
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v5
+        with:
+          target_branch: gh-pages
+          build_dir: docs/book
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
