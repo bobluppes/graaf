@@ -70,18 +70,24 @@ TEST(UtilsTest, TransposedGraphAddVertexSkipsExistingIds) {
   // id bookkeeping starts out unaware any of them exist.
   using graph_t = directed_graph<int, int>;
   graph_t graph{};
-  [[maybe_unused]] const auto vertex_id_1 = graph.add_vertex(1);
-  [[maybe_unused]] const auto vertex_id_2 = graph.add_vertex(2);
-  [[maybe_unused]] const auto vertex_id_3 = graph.add_vertex(3);
+  const auto vertex_id_1 = graph.add_vertex(1);
+  const auto vertex_id_2 = graph.add_vertex(2);
+  const auto vertex_id_3 = graph.add_vertex(3);
 
   graph_t transposed_graph = get_transposed_graph(graph);
 
   // WHEN adding a new vertex to the transposed graph
   const auto new_vertex_id = transposed_graph.add_vertex(4);
 
-  // THEN it must not collide with any of the preserved ids
-  ASSERT_TRUE(transposed_graph.has_vertex(new_vertex_id));
-  EXPECT_EQ(transposed_graph.vertex_count(), 4);
+  // THEN the new vertex gets an id distinct from all three preserved ones,
+  // rather than colliding with one of them - a collision would make
+  // add_vertex()'s emplace() a silent no-op, leaving the vertex count at 3
+  // and the colliding id's value overwritten by neither insert.
+  EXPECT_NE(new_vertex_id, vertex_id_1);
+  EXPECT_NE(new_vertex_id, vertex_id_2);
+  EXPECT_NE(new_vertex_id, vertex_id_3);
+  ASSERT_EQ(transposed_graph.vertex_count(), 4);
+  EXPECT_EQ(transposed_graph.get_vertex(new_vertex_id), 4);
 }
 
 TEST(UtilsTest, GetPredecessorsDirectedGraph) {
