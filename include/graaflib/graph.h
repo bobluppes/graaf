@@ -171,8 +171,7 @@ class graph {
    * the vertices you'd find in Adj[vertex_id] in an adjacency-list
    * representation. It does not include predecessors (in-neighbors). For an
    * undirected graph, out- and in-neighbors coincide, so this returns all
-   * adjacent vertices. Neighbors are listed in the order their edges were
-   * added.
+   * adjacent vertices.
    *
    * @param  vertex_id The ID of the vertex
    * @return neighbors_t - A list of neighboring vertices

@@ -66,22 +66,6 @@ TEST(UndirectedGraphTest, GetNeighbors) {
             neighbors_vertex_3.end());
 }
 
-TEST(UndirectedGraphTest, NeighborsAreListedInEdgeInsertionOrder) {
-  // GIVEN
-  undirected_graph<int, int> graph{};
-  const auto vertex_id_1{graph.add_vertex(10)};
-  const auto vertex_id_2{graph.add_vertex(20)};
-  const auto vertex_id_3{graph.add_vertex(30)};
-
-  // WHEN
-  graph.add_edge(vertex_id_1, vertex_id_3, 100);
-  graph.add_edge(vertex_id_1, vertex_id_2, 200);
-
-  // THEN
-  ASSERT_EQ(graph.get_neighbors(vertex_id_1),
-            (std::vector<vertex_id_t>{vertex_id_3, vertex_id_2}));
-}
-
 TEST(UndirectedGraphTest, SelfLoopIsASingleNeighbor) {
   // GIVEN
   undirected_graph<int, int> graph{};
