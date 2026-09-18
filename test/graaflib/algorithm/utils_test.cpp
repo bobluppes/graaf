@@ -64,6 +64,26 @@ TEST(UtilsTest, TransposePreservesIsolatedVertices) {
   EXPECT_FALSE(transposed_graph.has_edge(vertex_id_1, vertex_id_2));
 }
 
+TEST(UtilsTest, TransposedGraphAddVertexSkipsExistingIds) {
+  // GIVEN a transposed graph, whose vertices were all inserted through the
+  // id-preserving internal hook rather than through add_vertex(), so its own
+  // id bookkeeping starts out unaware any of them exist.
+  using graph_t = directed_graph<int, int>;
+  graph_t graph{};
+  [[maybe_unused]] const auto vertex_id_1 = graph.add_vertex(1);
+  [[maybe_unused]] const auto vertex_id_2 = graph.add_vertex(2);
+  [[maybe_unused]] const auto vertex_id_3 = graph.add_vertex(3);
+
+  graph_t transposed_graph = get_transposed_graph(graph);
+
+  // WHEN adding a new vertex to the transposed graph
+  const auto new_vertex_id = transposed_graph.add_vertex(4);
+
+  // THEN it must not collide with any of the preserved ids
+  ASSERT_TRUE(transposed_graph.has_vertex(new_vertex_id));
+  EXPECT_EQ(transposed_graph.vertex_count(), 4);
+}
+
 TEST(UtilsTest, GetPredecessorsDirectedGraph) {
   // GIVEN
   using graph_t = directed_graph<int, int>;

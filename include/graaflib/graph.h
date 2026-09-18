@@ -254,12 +254,12 @@ class graph {
   vertex_id_to_vertex_t vertices_{};
   edge_id_to_edge_t edges_{};
 
-  size_t vertex_id_supplier_{0};
-
   // IDs freed by remove_vertex(), handed out again by add_vertex() before
   // growing vertex_id_supplier_. Keeps ids bounded by the high-water mark of
   // concurrently live vertices rather than the total ever created.
   std::vector<vertex_id_t> free_vertex_ids_{};
+
+  size_t vertex_id_supplier_{0};
 };
 
 }  // namespace graaf

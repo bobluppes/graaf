@@ -139,6 +139,12 @@ vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex(auto&& vertex) {
     vertex_id = free_vertex_ids_.back();
     free_vertex_ids_.pop_back();
   } else {
+    // add_vertex_with_id() inserts directly, bypassing both
+    // free_vertex_ids_ and vertex_id_supplier_, so the supplier can lag
+    // behind ids that already exist (e.g. a freshly transposed graph, whose
+    // vertices were all inserted that way). A single increment isn't
+    // enough in that case, so this has to scan forward until it finds an
+    // actually free id.
     while (has_vertex(vertex_id_supplier_)) {
       ++vertex_id_supplier_;
     }
