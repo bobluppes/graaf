@@ -1,10 +1,10 @@
 #include <benchmark/benchmark.h>
 
-#include <algorithm>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
 #include <vector>
 
 #include "utils/dataset_reader.h"
+#include "utils/farthest_vertex.h"
 
 namespace {
 
@@ -29,28 +29,11 @@ class stop_at_target_visitor : public boost::default_dijkstra_visitor {
   std::size_t target_;
 };
 
-// Picks the vertex farthest (by total edge weight) from start_vertex, so the
-// single-pair search below has to explore close to the entire reachable
-// graph before it can terminate early. A hardcoded/arbitrary target vertex
-// id can happen to sit very close to start_vertex in one dataset and far in
-// another, making the two datasets' results incomparable.
-[[nodiscard]] std::size_t find_farthest_vertex(const utils::graph_t& graph,
-                                               std::size_t start_vertex) {
-  std::vector<int> distances(boost::num_vertices(graph));
-  boost::dijkstra_shortest_paths(
-      graph, start_vertex,
-      boost::distance_map(boost::make_iterator_property_map(
-          distances.begin(), boost::get(boost::vertex_index, graph))));
-
-  return static_cast<std::size_t>(
-      std::max_element(distances.begin(), distances.end()) - distances.begin());
-}
-
 static void bm_dijkstra_shortest_path(benchmark::State& state,
                                       const utils::dataset& dataset_name,
                                       const std::size_t start_vertex) {
   const auto& graph{utils::construct_graph_from_file(dataset_name)};
-  const auto end_vertex{find_farthest_vertex(graph, start_vertex)};
+  const auto end_vertex{utils::find_farthest_vertex(graph, start_vertex)};
 
   std::vector<int> distances(boost::num_vertices(graph));
 
