@@ -80,9 +80,7 @@ TEST(UtilsTest, TransposedGraphAddVertexSkipsExistingIds) {
   const auto new_vertex_id = transposed_graph.add_vertex(4);
 
   // THEN the new vertex gets an id distinct from all three preserved ones,
-  // rather than colliding with one of them - a collision would make
-  // add_vertex()'s emplace() a silent no-op, leaving the vertex count at 3
-  // and the colliding id's value overwritten by neither insert.
+  // rather than colliding with one of them.
   EXPECT_NE(new_vertex_id, vertex_id_1);
   EXPECT_NE(new_vertex_id, vertex_id_2);
   EXPECT_NE(new_vertex_id, vertex_id_3);
