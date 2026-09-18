@@ -119,16 +119,17 @@ graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_edge(
   return get_edge(vertex_id_lhs, vertex_id_rhs);
 }
 
-static const std::unordered_set<vertex_id_t> empty_list;
+static const std::vector<vertex_id_t> empty_list;
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
-const typename graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::vertices_t&
+const typename graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::neighbors_t&
 graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_neighbors(
     vertex_id_t vertex_id) const {
-  if (!adjacency_list_.contains(vertex_id)) {
+  const auto it{adjacency_list_.find(vertex_id)};
+  if (it == adjacency_list_.end()) {
     return empty_list;
   }
-  return adjacency_list_.at(vertex_id);
+  return it->second;
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
@@ -166,7 +167,7 @@ void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::remove_vertex(
   vertices_.erase(vertex_id);
 
   for (auto& [source_vertex_id, neighbors] : adjacency_list_) {
-    neighbors.erase(vertex_id);
+    std::erase(neighbors, vertex_id);
     edges_.erase({source_vertex_id, vertex_id});
   }
 }
@@ -192,13 +193,16 @@ void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_edge(vertex_id_t vertex_id_lhs,
 
   using enum graph_type;
   if constexpr (GRAPH_TYPE_V == DIRECTED) {
-    adjacency_list_[vertex_id_lhs].insert(vertex_id_rhs);
+    adjacency_list_[vertex_id_lhs].push_back(vertex_id_rhs);
     edges_.emplace(std::make_pair(vertex_id_lhs, vertex_id_rhs),
                    std::forward<decltype(edge)>(edge));
     return;
   } else if constexpr (GRAPH_TYPE_V == UNDIRECTED) {
-    adjacency_list_[vertex_id_lhs].insert(vertex_id_rhs);
-    adjacency_list_[vertex_id_rhs].insert(vertex_id_lhs);
+    adjacency_list_[vertex_id_lhs].push_back(vertex_id_rhs);
+    // A self-loop is a single neighbor entry
+    if (vertex_id_lhs != vertex_id_rhs) {
+      adjacency_list_[vertex_id_rhs].push_back(vertex_id_lhs);
+    }
     edges_.emplace(detail::make_sorted_pair(vertex_id_lhs, vertex_id_rhs),
                    std::forward<decltype(edge)>(edge));
     return;
@@ -220,12 +224,12 @@ void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::remove_edge(
 
   using enum graph_type;
   if constexpr (GRAPH_TYPE_V == DIRECTED) {
-    adjacency_list_.at(vertex_id_lhs).erase(vertex_id_rhs);
+    std::erase(adjacency_list_.at(vertex_id_lhs), vertex_id_rhs);
     edges_.erase(std::make_pair(vertex_id_lhs, vertex_id_rhs));
     return;
   } else if constexpr (GRAPH_TYPE_V == UNDIRECTED) {
-    adjacency_list_.at(vertex_id_lhs).erase(vertex_id_rhs);
-    adjacency_list_.at(vertex_id_rhs).erase(vertex_id_lhs);
+    std::erase(adjacency_list_.at(vertex_id_lhs), vertex_id_rhs);
+    std::erase(adjacency_list_.at(vertex_id_rhs), vertex_id_lhs);
     edges_.erase(detail::make_sorted_pair(vertex_id_lhs, vertex_id_rhs));
     return;
   }

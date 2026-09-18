@@ -1,6 +1,8 @@
 #include <graaflib/graph.h>
 #include <gtest/gtest.h>
 
+#include <algorithm>
+
 namespace graaf {
 
 TEST(DirectedGraphTest, DirectedGraphIsNoUndirectedGraph) {
@@ -44,8 +46,10 @@ TEST(DirectedGraphTest, GetNeighbors) {
   // WHEN - THEN
   const auto neighbors_vertex_1{graph.get_neighbors(vertex_id_1)};
   ASSERT_EQ(neighbors_vertex_1.size(), 2);
-  ASSERT_TRUE(neighbors_vertex_1.contains(vertex_id_2));
-  ASSERT_TRUE(neighbors_vertex_1.contains(vertex_id_3));
+  ASSERT_NE(std::ranges::find(neighbors_vertex_1, vertex_id_2),
+            neighbors_vertex_1.end());
+  ASSERT_NE(std::ranges::find(neighbors_vertex_1, vertex_id_3),
+            neighbors_vertex_1.end());
 
   // WHEN - THEN
   // The graph is directed so vertex 2 has no neighbors

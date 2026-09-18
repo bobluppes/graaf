@@ -28,9 +28,10 @@ std::size_t vertex_outdegree(const graaf::graph<V, E, T>& graph,
   const auto& neighbors{graph.get_neighbors(vertex_id)};
 
   if constexpr (T == graph_type::UNDIRECTED) {
-    // A self-loop is stored once in the neighbor set, but conventionally
+    // A self-loop is stored once in the neighbor list, but conventionally
     // contributes two to the degree of a vertex in an undirected graph.
-    return neighbors.size() + (neighbors.contains(vertex_id) ? 1 : 0);
+    return neighbors.size() +
+           (std::ranges::find(neighbors, vertex_id) != neighbors.end() ? 1 : 0);
   }
 
   return neighbors.size();
@@ -47,7 +48,8 @@ std::size_t vertex_indegree(const graaf::graph<V, E, T>& graph,
         [&graph,
          vertex_id](const typename vertex_id_to_vertex_t::value_type& kv_pair) {
           const auto& [current_vertex_id, _]{kv_pair};
-          return graph.get_neighbors(current_vertex_id).contains(vertex_id);
+          const auto& neighbors{graph.get_neighbors(current_vertex_id)};
+          return std::ranges::find(neighbors, vertex_id) != neighbors.end();
         });
   }
 

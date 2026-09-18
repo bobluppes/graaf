@@ -5,7 +5,7 @@
 
 #include <memory>
 #include <unordered_map>
-#include <unordered_set>
+#include <vector>
 
 namespace graaf {
 
@@ -17,7 +17,7 @@ class graph {
   using vertex_t = VERTEX_T;
   using edge_t = EDGE_T;
 
-  using vertices_t = std::unordered_set<vertex_id_t>;
+  using neighbors_t = std::vector<vertex_id_t>;
 
   using vertex_id_to_vertex_t = std::unordered_map<vertex_id_t, VERTEX_T>;
   using edge_id_to_edge_t = std::unordered_map<edge_id_t, edge_t, edge_id_hash>;
@@ -171,12 +171,13 @@ class graph {
    * the vertices you'd find in Adj[vertex_id] in an adjacency-list
    * representation. It does not include predecessors (in-neighbors). For an
    * undirected graph, out- and in-neighbors coincide, so this returns all
-   * adjacent vertices.
+   * adjacent vertices. Neighbors are listed in the order their edges were
+   * added.
    *
    * @param  vertex_id The ID of the vertex
-   * @return vertices_t - A list of neighboring vertices
+   * @return neighbors_t - A list of neighboring vertices
    */
-  [[nodiscard]] const vertices_t& get_neighbors(vertex_id_t vertex_id) const;
+  [[nodiscard]] const neighbors_t& get_neighbors(vertex_id_t vertex_id) const;
 
   /**
    * Add a vertex to the graph
@@ -227,7 +228,7 @@ class graph {
   void remove_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs);
 
  private:
-  std::unordered_map<vertex_id_t, vertices_t> adjacency_list_{};
+  std::unordered_map<vertex_id_t, neighbors_t> adjacency_list_{};
 
   vertex_id_to_vertex_t vertices_{};
   edge_id_to_edge_t edges_{};

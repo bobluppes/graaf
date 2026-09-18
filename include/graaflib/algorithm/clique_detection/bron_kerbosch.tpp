@@ -17,6 +17,10 @@ namespace detail {
 using clique_collection_t = std::vector<std::vector<vertex_id_t>>;
 using vertex_set_t = std::unordered_set<vertex_id_t>;
 
+vertex_set_t to_vertex_set(const std::vector<vertex_id_t>& vertices) {
+  return vertex_set_t{vertices.begin(), vertices.end()};
+}
+
 vertex_set_t do_get_intersection(const vertex_set_t& lhs,
                                  const vertex_set_t& rhs) {
   vertex_set_t intersection{};
@@ -65,11 +69,11 @@ void do_bron_kerbosch_maximal_clique(
       [&graph](vertex_id_t id) { return graph.get_neighbors(id).size(); });
 
   // vertices_to_process = candidate_vertices \ N(pivot_vertex)
-  auto vertices_to_process =
-      set_difference(vertices, graph.get_neighbors(pivot_vertex));
+  auto vertices_to_process = set_difference(
+      vertices, to_vertex_set(graph.get_neighbors(pivot_vertex)));
 
   for (const auto& vertex : vertices_to_process) {
-    auto vertex_neighbors = graph.get_neighbors(vertex);
+    const auto vertex_neighbors = to_vertex_set(graph.get_neighbors(vertex));
 
     // Intersection candidate_vertices ⋂ N(vertex)
     std::unordered_set<vertex_id_t> vertices_intersection{};
