@@ -51,6 +51,13 @@ int main()
 
 ![Directed graph example](../../img/quickstart/Graph.png)
 
+## Vertex ID lifecycle
+
+A vertex's ID is only valid for as long as that vertex exists. Once a vertex
+is removed via `remove_vertex()`, its ID may be handed out again to a
+different vertex added afterwards. Don't hold on to a `vertex_id_t` past the
+removal of the vertex it identifies.
+
 ## Importing data with existing IDs
 
 `add_vertex()` always has the graph assign the new vertex's ID. If you're

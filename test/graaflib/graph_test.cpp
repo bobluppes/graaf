@@ -84,6 +84,36 @@ TYPED_TEST(GraphTest, RemoveVertex) {
   ASSERT_FALSE(graph.has_edge(invalid_vertex_id, vertex_id_3));
 }
 
+TYPED_TEST(GraphTest, AddVertexReusesIdFreedByRemoveVertex) {
+  // GIVEN a graph with a removed vertex in the middle of the id range
+  using graph_t = typename TestFixture::graph_t;
+  graph_t graph{};
+  const auto vertex_id_1{graph.add_vertex(10)};
+  const auto vertex_id_2{graph.add_vertex(20)};
+  const auto vertex_id_3{graph.add_vertex(30)};
+
+  graph.remove_vertex(vertex_id_2);
+  ASSERT_FALSE(graph.has_vertex(vertex_id_2));
+
+  // WHEN adding a new vertex
+  const auto vertex_id_4{graph.add_vertex(40)};
+
+  // THEN the freed id is reused rather than growing past vertex_id_3
+  ASSERT_EQ(vertex_id_4, vertex_id_2);
+  ASSERT_EQ(graph.get_vertex(vertex_id_4), 40);
+  ASSERT_EQ(graph.vertex_count(), 3);
+  ASSERT_TRUE(graph.has_vertex(vertex_id_1));
+  ASSERT_TRUE(graph.has_vertex(vertex_id_3));
+
+  // WHEN removing an id that was never assigned
+  const auto never_assigned_id = vertex_id_1 + vertex_id_2 + vertex_id_3 + 100;
+  graph.remove_vertex(never_assigned_id);
+
+  // THEN it must not be handed out by a later add_vertex()
+  const auto vertex_id_5{graph.add_vertex(50)};
+  ASSERT_NE(vertex_id_5, never_assigned_id);
+}
+
 TYPED_TEST(GraphTest, RemoveEdge) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;

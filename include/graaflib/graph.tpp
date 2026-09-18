@@ -134,10 +134,17 @@ graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_neighbors(
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
 vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex(auto&& vertex) {
-  while (has_vertex(vertex_id_supplier_)) {
-    ++vertex_id_supplier_;
+  vertex_id_t vertex_id;
+  if (!free_vertex_ids_.empty()) {
+    vertex_id = free_vertex_ids_.back();
+    free_vertex_ids_.pop_back();
+  } else {
+    while (has_vertex(vertex_id_supplier_)) {
+      ++vertex_id_supplier_;
+    }
+    vertex_id = vertex_id_supplier_;
   }
-  const auto vertex_id{vertex_id_supplier_};
+
   vertices_.emplace(vertex_id, std::forward<decltype(vertex)>(vertex));
   return vertex_id;
 }
@@ -157,6 +164,11 @@ vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex_with_id(
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
 void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::remove_vertex(
     vertex_id_t vertex_id) {
+  // Only ids that were actually in use get freed for reuse - otherwise
+  // removing an id that was never assigned would leak it into
+  // free_vertex_ids_ and have a later add_vertex() hand it out.
+  const bool existed{has_vertex(vertex_id)};
+
   if (adjacency_list_.contains(vertex_id)) {
     for (auto& target_vertex_id : adjacency_list_.at(vertex_id)) {
       edges_.erase({vertex_id, target_vertex_id});
@@ -169,6 +181,10 @@ void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::remove_vertex(
   for (auto& [source_vertex_id, neighbors] : adjacency_list_) {
     std::erase(neighbors, vertex_id);
     edges_.erase({source_vertex_id, vertex_id});
+  }
+
+  if (existed) {
+    free_vertex_ids_.push_back(vertex_id);
   }
 }
 

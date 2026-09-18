@@ -197,6 +197,10 @@ class graph {
   /**
    * Add a vertex to the graph
    *
+   * IDs are not permanently retired once assigned: a previously removed
+   * vertex's ID may be handed out again to a later vertex. Do not hold on to
+   * an ID past the removal of the vertex it identifies.
+   *
    * @param  vertex The vertex to be added
    * @return vertices_id_t - The ID of the new vertex
    */
@@ -204,6 +208,9 @@ class graph {
 
   /**
    * Remove a vertex from the graph and update all its neighbors
+   *
+   * The removed ID may be reassigned to a vertex added afterwards - see
+   * add_vertex().
    *
    * @param  vertex_id - The ID of the vertex
    */
@@ -248,6 +255,11 @@ class graph {
   edge_id_to_edge_t edges_{};
 
   size_t vertex_id_supplier_{0};
+
+  // IDs freed by remove_vertex(), handed out again by add_vertex() before
+  // growing vertex_id_supplier_. Keeps ids bounded by the high-water mark of
+  // concurrently live vertices rather than the total ever created.
+  std::vector<vertex_id_t> free_vertex_ids_{};
 };
 
 }  // namespace graaf
