@@ -20,9 +20,9 @@ using directed_graph = graph<VERTEX_T, EDGE_T, graph_type::DIRECTED>;
 template <typename VERTEX_T, typename EDGE_T>
 using undirected_graph = graph<VERTEX_T, EDGE_T, graph_type::UNDIRECTED>;
 
-// Forward declared so it can be granted friend access below: it needs to
-// copy vertices under their original ids to keep edges valid across the
-// transpose, which the public API intentionally does not allow.
+// Forward declared so it can be granted friend access below: algorithms
+// which require fine grained control over vertex id assignment get it
+// through a private hook rather than through the public API.
 template <typename VERTEX_T, typename EDGE_T>
 directed_graph<VERTEX_T, EDGE_T> get_transposed_graph(
     const directed_graph<VERTEX_T, EDGE_T>& graph);
@@ -237,9 +237,9 @@ class graph {
   friend directed_graph<V, E> get_transposed_graph(
       const directed_graph<V, E>& graph);
 
-  // Only reachable by the befriended get_transposed_graph(): the public API
-  // deliberately does not let callers pick a vertex's id, so that the graph
-  // stays free to assign them densely.
+  // Only reachable by befriended algorithms: the public API deliberately
+  // does not let callers pick a vertex's id, so that the graph stays free to
+  // optimize how it assigns them.
   vertex_id_t add_vertex_with_id(auto&& vertex, vertex_id_t id);
 
   std::unordered_map<vertex_id_t, neighbors_t> adjacency_list_{};

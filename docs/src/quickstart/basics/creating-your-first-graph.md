@@ -53,11 +53,11 @@ int main()
 
 ## Importing data with existing IDs
 
-`add_vertex()` always has the graph assign the new vertex's ID, so IDs stay
-densely packed. If you're importing data that already has its own IDs (e.g.
-row numbers from a database, or IDs from a file format), keep a map from
-those external IDs to the graph-assigned `vertex_id_t`s and use it to
-translate IDs when adding edges:
+`add_vertex()` always has the graph assign the new vertex's ID. If you're
+importing data that already has its own IDs (e.g. row numbers from a
+database, or IDs from a file format), keep a map from those external IDs to
+the graph-assigned `vertex_id_t`s and use it to translate IDs when adding
+edges:
 
 ```c++
 std::unordered_map<int, graaf::vertex_id_t> external_id_to_vertex_id;

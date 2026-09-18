@@ -14,10 +14,9 @@ struct connected_subgraph_result {
 // start_vertex.
 //
 // Unlike utils::construct_graph_from_file(), the returned graph's vertex IDs
-// are not the original dataset vertex IDs: the graph assigns its own dense
-// IDs, so the (sparse, large) dataset IDs are remapped to compact ones. The
-// caller gets the remapped start vertex back alongside the graph for this
-// reason.
+// are not the original dataset vertex IDs: the graph assigns its own IDs, so
+// the original dataset IDs are remapped. The caller gets the remapped start
+// vertex back alongside the graph for this reason.
 [[nodiscard]] connected_subgraph_result construct_connected_subgraph(
     const dataset& dataset_name, graaf::vertex_id_t start_vertex,
     std::size_t max_vertices);

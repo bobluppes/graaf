@@ -31,9 +31,9 @@ namespace {
 static void bm_prim(benchmark::State& state, const utils::dataset& dataset_name,
                     const graaf::vertex_id_t start_vertex,
                     const std::size_t max_subgraph_vertices) {
-  const auto [connected_subgraph, subgraph_start_vertex]{
-      utils::construct_connected_subgraph(dataset_name, start_vertex,
-                                          max_subgraph_vertices)};
+  const auto [connected_subgraph,
+              subgraph_start_vertex]{utils::construct_connected_subgraph(
+      dataset_name, start_vertex, max_subgraph_vertices)};
 
   state.counters["subgraph_vertices_used"] =
       static_cast<double>(connected_subgraph.vertex_count());
