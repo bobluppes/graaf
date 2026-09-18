@@ -1,9 +1,10 @@
 #include <benchmark/benchmark.h>
 
 #include <boost/graph/breadth_first_search.hpp>
+#include <cstddef>
 #include <vector>
 
-#include "utils/connected_subgraph.h"
+#include "utils/dataset_reader.h"
 
 namespace {
 
@@ -21,12 +22,12 @@ class track_last_examined_vertex_visitor : public boost::default_bfs_visitor {
   vertex_t& last_;
 };
 
-// Picks the vertex an exhaustive BFS over the subgraph examines last, so the
+// Picks the vertex an exhaustive BFS over the graph examines last, so the
 // shortest-path search below has to do close to the maximum possible amount
 // of work before it can terminate early. An arbitrary vertex (e.g. the
 // highest id) would give no such guarantee and can make the search
 // terminate after visiting only a tiny, unrepresentative fraction of the
-// subgraph.
+// graph.
 [[nodiscard]] vertex_t find_last_examined_vertex(const utils::graph_t& graph,
                                                  vertex_t start_vertex) {
   vertex_t last{start_vertex};
@@ -60,26 +61,20 @@ class stop_at_target_visitor : public boost::default_bfs_visitor {
 
 static void bm_bfs_shortest_path(benchmark::State& state,
                                  const utils::dataset& dataset_name,
-                                 const std::size_t start_vertex,
-                                 const std::size_t max_subgraph_vertices) {
-  const auto subgraph{utils::construct_connected_subgraph(
-      dataset_name, start_vertex, max_subgraph_vertices)};
-  const auto end_vertex{
-      find_last_examined_vertex(subgraph.graph, subgraph.start_vertex)};
+                                 const std::size_t start_vertex) {
+  const auto& graph{utils::construct_graph_from_file(dataset_name)};
+  const auto end_vertex{find_last_examined_vertex(graph, start_vertex)};
 
-  state.counters["subgraph_vertices_used"] =
-      static_cast<double>(boost::num_vertices(subgraph.graph));
-
-  std::vector<vertex_t> predecessors(boost::num_vertices(subgraph.graph));
+  std::vector<vertex_t> predecessors(boost::num_vertices(graph));
 
   for (auto _ : state) {
     try {
       boost::breadth_first_search(
-          subgraph.graph, subgraph.start_vertex,
+          graph, start_vertex,
           boost::visitor(stop_at_target_visitor{end_vertex})
               .predecessor_map(boost::make_iterator_property_map(
                   predecessors.begin(),
-                  boost::get(boost::vertex_index, subgraph.graph))));
+                  boost::get(boost::vertex_index, graph))));
     } catch (const target_reached&) {
     }
     benchmark::DoNotOptimize(predecessors[end_vertex]);
@@ -90,6 +85,6 @@ static void bm_bfs_shortest_path(benchmark::State& state,
 
 // Register the benchmarks
 BENCHMARK_CAPTURE(bm_bfs_shortest_path, web_google, utils::dataset::WEB_GOOGLE,
-                  1, 20'000);
+                  1);
 BENCHMARK_CAPTURE(bm_bfs_shortest_path, web_berkstan,
-                  utils::dataset::WEB_BERK_STAN, 1, 1'700);
+                  utils::dataset::WEB_BERK_STAN, 1);
