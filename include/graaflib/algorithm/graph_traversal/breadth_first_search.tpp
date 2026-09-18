@@ -19,6 +19,9 @@ void breadth_first_traverse(
   std::unordered_set<vertex_id_t> seen_vertices{};
   std::queue<vertex_id_t> to_explore{};
 
+  // Vertices are marked as seen when enqueued rather than when dequeued, so
+  // each vertex enters the queue at most once.
+  seen_vertices.insert(start_vertex);
   to_explore.push(start_vertex);
 
   while (!to_explore.empty()) {
@@ -29,9 +32,8 @@ void breadth_first_traverse(
       return;
     }
 
-    seen_vertices.insert(current);
     for (const auto neighbor_vertex : graph.get_neighbors(current)) {
-      if (!seen_vertices.contains(neighbor_vertex)) {
+      if (seen_vertices.insert(neighbor_vertex).second) {
         edge_callback(edge_id_t{current, neighbor_vertex});
         to_explore.push(neighbor_vertex);
       }
