@@ -12,7 +12,8 @@ namespace graaf {
  * Get transposed version of a given directed graph
  *
  * @param  graph The directed graph that is to be transposed
- * @return directed_graph<VERTEX_T, EDGE_T> The transposed graph
+ * @return directed_graph<VERTEX_T, EDGE_T> The transposed graph, with
+ * vertices keeping the same IDs as in the input graph.
  */
 template <typename VERTEX_T, typename EDGE_T>
 directed_graph<VERTEX_T, EDGE_T> get_transposed_graph(

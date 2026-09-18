@@ -46,14 +46,14 @@ TEST(KosarajuTest, EmptySCCS) {
 TEST(KosarajuTest, EqualOutputSCCS) {
   // GIVEN
   directed_graph<int, int> graph{};
-  const auto vertex_id_1 = graph.add_vertex(1, 1);
-  const auto vertex_id_2 = graph.add_vertex(2, 2);
-  const auto vertex_id_3 = graph.add_vertex(3, 3);
-  const auto vertex_id_4 = graph.add_vertex(4, 4);
-  const auto vertex_id_5 = graph.add_vertex(5, 5);
-  const auto vertex_id_6 = graph.add_vertex(6, 6);
-  const auto vertex_id_7 = graph.add_vertex(7, 7);
-  const auto vertex_id_8 = graph.add_vertex(8, 8);
+  const auto vertex_id_1 = graph.add_vertex(1);
+  const auto vertex_id_2 = graph.add_vertex(2);
+  const auto vertex_id_3 = graph.add_vertex(3);
+  const auto vertex_id_4 = graph.add_vertex(4);
+  const auto vertex_id_5 = graph.add_vertex(5);
+  const auto vertex_id_6 = graph.add_vertex(6);
+  const auto vertex_id_7 = graph.add_vertex(7);
+  const auto vertex_id_8 = graph.add_vertex(8);
 
   graph.add_edge(vertex_id_1, vertex_id_2, 1);
   graph.add_edge(vertex_id_2, vertex_id_3, 1);
@@ -68,7 +68,10 @@ TEST(KosarajuTest, EqualOutputSCCS) {
 
   // WHEN
   sccs_t sccs = kosarajus_strongly_connected_components(graph);
-  sccs_t expected_sccs = {{1, 2, 3}, {4}, {5, 6, 7}, {8}};
+  sccs_t expected_sccs = {{vertex_id_1, vertex_id_2, vertex_id_3},
+                          {vertex_id_4},
+                          {vertex_id_5, vertex_id_6, vertex_id_7},
+                          {vertex_id_8}};
 
   // THEN
   ASSERT_TRUE(are_set_vectors_equal(sccs, expected_sccs));
@@ -77,10 +80,10 @@ TEST(KosarajuTest, EqualOutputSCCS) {
 TEST(KosarajuTest, KiteStructureEqualOutputSCCS) {
   // GIVEN
   directed_graph<int, int> graph{};
-  const auto vertex_id_1 = graph.add_vertex(1, 1);
-  const auto vertex_id_2 = graph.add_vertex(2, 2);
-  const auto vertex_id_3 = graph.add_vertex(3, 3);
-  const auto vertex_id_4 = graph.add_vertex(4, 4);
+  const auto vertex_id_1 = graph.add_vertex(1);
+  const auto vertex_id_2 = graph.add_vertex(2);
+  const auto vertex_id_3 = graph.add_vertex(3);
+  const auto vertex_id_4 = graph.add_vertex(4);
 
   graph.add_edge(vertex_id_1, vertex_id_2, 1);
   graph.add_edge(vertex_id_2, vertex_id_3, 1);
@@ -89,7 +92,8 @@ TEST(KosarajuTest, KiteStructureEqualOutputSCCS) {
 
   // WHEN
   sccs_t sccs = kosarajus_strongly_connected_components(graph);
-  sccs_t expected_sccs = {{1, 2, 3}, {4}};
+  sccs_t expected_sccs = {{vertex_id_1, vertex_id_2, vertex_id_3},
+                          {vertex_id_4}};
 
   // THEN
   ASSERT_TRUE(are_set_vectors_equal(sccs, expected_sccs));

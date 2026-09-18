@@ -12,6 +12,22 @@ namespace graaf {
 enum class graph_type { DIRECTED, UNDIRECTED };
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
+class graph;
+
+template <typename VERTEX_T, typename EDGE_T>
+using directed_graph = graph<VERTEX_T, EDGE_T, graph_type::DIRECTED>;
+
+template <typename VERTEX_T, typename EDGE_T>
+using undirected_graph = graph<VERTEX_T, EDGE_T, graph_type::UNDIRECTED>;
+
+// Forward declared so it can be granted friend access below: it needs to
+// copy vertices under their original ids to keep edges valid across the
+// transpose, which the public API intentionally does not allow.
+template <typename VERTEX_T, typename EDGE_T>
+directed_graph<VERTEX_T, EDGE_T> get_transposed_graph(
+    const directed_graph<VERTEX_T, EDGE_T>& graph);
+
+template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
 class graph {
  public:
   using vertex_t = VERTEX_T;
@@ -187,16 +203,6 @@ class graph {
   [[nodiscard]] vertex_id_t add_vertex(auto&& vertex);
 
   /**
-   * Add a vertex to the graph with a specific ID
-   *
-   * @param  vertex The vertex to be added
-   * @param  id The requested ID for the new vertex
-   * @return vertices_id_t - The ID of the new vertex
-   * @throws std::invalid_argument - If the relevant ID is already in use
-   */
-  vertex_id_t add_vertex(auto&& vertex, vertex_id_t id);
-
-  /**
    * Remove a vertex from the graph and update all its neighbors
    *
    * @param  vertex_id - The ID of the vertex
@@ -227,6 +233,15 @@ class graph {
   void remove_edge(vertex_id_t vertex_id_lhs, vertex_id_t vertex_id_rhs);
 
  private:
+  template <typename V, typename E>
+  friend directed_graph<V, E> get_transposed_graph(
+      const directed_graph<V, E>& graph);
+
+  // Only reachable by the befriended get_transposed_graph(): the public API
+  // deliberately does not let callers pick a vertex's id, so that the graph
+  // stays free to assign them densely.
+  vertex_id_t add_vertex_with_id(auto&& vertex, vertex_id_t id);
+
   std::unordered_map<vertex_id_t, neighbors_t> adjacency_list_{};
 
   vertex_id_to_vertex_t vertices_{};
@@ -235,11 +250,6 @@ class graph {
   size_t vertex_id_supplier_{0};
 };
 
-template <typename VERTEX_T, typename EDGE_T>
-using directed_graph = graph<VERTEX_T, EDGE_T, graph_type::DIRECTED>;
-
-template <typename VERTEX_T, typename EDGE_T>
-using undirected_graph = graph<VERTEX_T, EDGE_T, graph_type::UNDIRECTED>;
 }  // namespace graaf
 
 #include "graph.tpp"
