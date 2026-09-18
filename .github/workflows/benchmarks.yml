@@ -1,0 +1,66 @@
+name: Benchmarks
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'include/**'
+      - 'perf/**'
+      - 'CMakeLists.txt'
+      - '.github/workflows/benchmarks.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      # Datasets rarely change, so this is keyed on the CMakeLists.txt that
+      # declares their download URLs, to avoid re-downloading ~40MB from
+      # Stanford SNAP on every run.
+      - name: Cache perf datasets
+        uses: actions/cache@v4
+        with:
+          path: .cache/perf_datasets
+          key: perf-datasets-${{ hashFiles('perf/CMakeLists.txt') }}
+
+      - name: Configure CMake
+        # Release build for representative numbers. Examples and tests are
+        # skipped since only the Graaf_perf target is needed here.
+        # GRAAF_DOWNLOAD_PERF_DATASETS is on so the full benchmark suite -
+        # including the dataset-backed benchmarks - actually runs.
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release -DSKIP_EXAMPLES=ON -DSKIP_TESTS=ON -DGRAAF_DOWNLOAD_PERF_DATASETS=ON
+
+      - name: Build benchmarks
+        working-directory: ${{github.workspace}}/build
+        run: cmake --build . --target Graaf_perf -j
+
+      - name: Run benchmarks
+        working-directory: ${{github.workspace}}/build
+        run: ./perf/Graaf_perf --benchmark_out=raw_result.json --benchmark_out_format=json
+
+      - name: Strip BigO/RMS complexity aggregate entries
+        # bron_kerbosch_benchmark.cpp registers ->Complexity(), which adds
+        # BigOAggregate/RMSAggregate rows alongside the normal per-run
+        # timings. Those aren't per-run timings, so they aren't something we
+        # want tracked as a benchmark result over time.
+        working-directory: ${{github.workspace}}/build
+        run: |
+          jq '.benchmarks |= map(select(.run_type == "iteration"))' \
+            raw_result.json > benchmark_result.json
+
+      - name: Store benchmark result
+        uses: benchmark-action/github-action-benchmark@v1.22.1
+        with:
+          tool: 'googlecpp'
+          output-file-path: build/benchmark_result.json
+          gh-pages-branch: benchmark-data
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-push: true
+          alert-threshold: '150%'
+          comment-on-alert: true
+          fail-on-alert: false
