@@ -122,6 +122,8 @@ take a look at the [docs](https://bobluppes.github.io/graaf/algorithms/intro.htm
    - [Depth-First Search (DFS)](https://bobluppes.github.io/graaf/algorithms/traversal/depth-first-search.html)
 8. [**Clique Detection**](https://bobluppes.github.io/graaf/algorithms/clique-detection/)
     - [Bron-Kerbosch](https://bobluppes.github.io/graaf/algorithms/clique-detection/bron_kerbosch.html)
+9. [**Ranking Algorithms**](https://bobluppes.github.io/graaf/algorithms/ranking/)
+   - [PageRank](https://bobluppes.github.io/graaf/algorithms/ranking/pagerank.html)
 
 # Contributing
 
