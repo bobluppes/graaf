@@ -247,7 +247,10 @@ class graph {
   // optimize how it assigns them.
   vertex_id_t add_vertex_with_id(auto&& vertex, vertex_id_t id);
 
-  std::unordered_map<vertex_id_t, neighbors_t> adjacency_list_{};
+  // Indexed directly by vertex_id_t, kept the same size as vertices_ at all
+  // times. A removed vertex's slot is cleared, not erased, so its (empty)
+  // neighbor list stays at the same index for reuse.
+  std::vector<neighbors_t> adjacency_list_{};
 
   // Indexed directly by vertex_id_t. A vertex_id_t below vertices_.size()
   // with no value is a tombstone left by remove_vertex(), pending reuse in

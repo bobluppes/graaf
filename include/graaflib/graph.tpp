@@ -189,11 +189,10 @@ template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
 const typename graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::neighbors_t&
 graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_neighbors(
     vertex_id_t vertex_id) const {
-  const auto it{adjacency_list_.find(vertex_id)};
-  if (it == adjacency_list_.end()) {
+  if (vertex_id >= adjacency_list_.size()) {
     return empty_list;
   }
-  return it->second;
+  return adjacency_list_[vertex_id];
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
@@ -217,6 +216,7 @@ vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex(auto&& vertex) {
 
   if (vertex_id >= vertices_.size()) {
     vertices_.resize(vertex_id + 1);
+    adjacency_list_.resize(vertex_id + 1);
   }
   vertices_[vertex_id].emplace(std::forward<decltype(vertex)>(vertex));
   ++vertex_count_;
@@ -233,6 +233,7 @@ vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex_with_id(
 
   if (id >= vertices_.size()) {
     vertices_.resize(id + 1);
+    adjacency_list_.resize(id + 1);
   }
   vertices_[id].emplace(std::forward<decltype(vertex)>(vertex));
   ++vertex_count_;
@@ -249,17 +250,19 @@ void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::remove_vertex(
     return;
   }
 
-  if (adjacency_list_.contains(vertex_id)) {
-    for (auto& target_vertex_id : adjacency_list_.at(vertex_id)) {
-      edges_.erase({vertex_id, target_vertex_id});
-    }
+  for (const auto& target_vertex_id : adjacency_list_[vertex_id]) {
+    edges_.erase({vertex_id, target_vertex_id});
   }
+  adjacency_list_[vertex_id].clear();
 
-  adjacency_list_.erase(vertex_id);
-
-  for (auto& [source_vertex_id, neighbors] : adjacency_list_) {
-    std::erase(neighbors, vertex_id);
-    edges_.erase({source_vertex_id, vertex_id});
+  for (vertex_id_t source_vertex_id{0};
+       source_vertex_id < adjacency_list_.size(); ++source_vertex_id) {
+    // Skips the (majority, for a sparse graph) case where vertex_id was
+    // never a neighbor of source_vertex_id to begin with, so there's no
+    // corresponding entry in edges_ to look up and erase either.
+    if (std::erase(adjacency_list_[source_vertex_id], vertex_id) > 0) {
+      edges_.erase({source_vertex_id, vertex_id});
+    }
   }
 
   vertices_[vertex_id].reset();
