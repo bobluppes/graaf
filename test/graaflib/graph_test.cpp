@@ -141,6 +141,29 @@ TYPED_TEST(GraphTest, AddVertexReusesIdFreedByRemoveVertex) {
   ASSERT_NE(vertex_id_5, never_assigned_id);
 }
 
+TYPED_TEST(GraphTest, RemoveVertexWithHigherIdRemovesAllItsEdges) {
+  // GIVEN a vertex whose id is higher than the vertices it is connected to
+  using graph_t = typename TestFixture::graph_t;
+  graph_t graph{};
+  const auto vertex_id_1{graph.add_vertex(10)};
+  const auto vertex_id_2{graph.add_vertex(20)};
+  const auto vertex_id_3{graph.add_vertex(30)};
+
+  graph.add_edge(vertex_id_1, vertex_id_3, 100);
+  graph.add_edge(vertex_id_2, vertex_id_3, 200);
+
+  // WHEN removing the highest-id vertex, which is the target of both edges
+  graph.remove_vertex(vertex_id_3);
+
+  // THEN both edges are gone, regardless of which vertex in the pair has
+  // the higher id
+  ASSERT_EQ(graph.edge_count(), 0);
+  ASSERT_FALSE(graph.has_edge(vertex_id_1, vertex_id_3));
+  ASSERT_FALSE(graph.has_edge(vertex_id_3, vertex_id_1));
+  ASSERT_FALSE(graph.has_edge(vertex_id_2, vertex_id_3));
+  ASSERT_FALSE(graph.has_edge(vertex_id_3, vertex_id_2));
+}
+
 TYPED_TEST(GraphTest, RemoveEdge) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
