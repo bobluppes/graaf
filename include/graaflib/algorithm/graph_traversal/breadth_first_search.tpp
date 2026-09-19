@@ -1,8 +1,7 @@
 #pragma once
-#include <graaflib/algorithm/vertex_id_storage.h>
-
 #include <algorithm>
 #include <queue>
+#include <vector>
 
 #include "breadth_first_search.h"
 
@@ -17,12 +16,27 @@ void breadth_first_traverse(
     const graph<V, E, T>& graph, vertex_id_t start_vertex,
     const EDGE_CALLBACK_T& edge_callback,
     const SEARCH_TERMINATION_STRATEGY_T& search_termination_strategy) {
-  detail::vertex_id_set seen_vertices{};
+  // Indexed directly by vertex_id_t rather than an unordered_set: ids are
+  // dense, and the graph is unmodified for the duration of the traversal
+  // (it's taken by const reference), so a plain vector that grows as new
+  // ids are discovered is a direct, allocation-light fit.
+  std::vector<bool> seen_vertices{};
+  const auto mark_seen{[&](vertex_id_t id) {
+    if (id >= seen_vertices.size()) {
+      seen_vertices.resize(id + 1, false);
+    }
+    if (seen_vertices[id]) {
+      return false;
+    }
+    seen_vertices[id] = true;
+    return true;
+  }};
+
   std::queue<vertex_id_t> to_explore{};
 
   // Vertices are marked as seen when enqueued rather than when dequeued, so
   // each vertex enters the queue at most once.
-  seen_vertices.insert(start_vertex);
+  mark_seen(start_vertex);
   to_explore.push(start_vertex);
 
   while (!to_explore.empty()) {
@@ -34,7 +48,7 @@ void breadth_first_traverse(
     }
 
     for (const auto neighbor_vertex : graph.get_neighbors(current)) {
-      if (seen_vertices.insert(neighbor_vertex)) {
+      if (mark_seen(neighbor_vertex)) {
         edge_callback(edge_id_t{current, neighbor_vertex});
         to_explore.push(neighbor_vertex);
       }
