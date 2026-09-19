@@ -40,13 +40,9 @@ std::size_t vertex_outdegree(const graaf::graph<V, E, T>& graph,
 template <typename V, typename E, graph_type T>
 std::size_t vertex_indegree(const graaf::graph<V, E, T>& graph,
                             vertex_id_t vertex_id) {
-  using vertex_id_to_vertex_t = std::unordered_map<vertex_id_t, V>;
-
   if constexpr (T == graph_type::DIRECTED) {
     return std::ranges::count_if(
-        graph.get_vertices(),
-        [&graph,
-         vertex_id](const typename vertex_id_to_vertex_t::value_type& kv_pair) {
+        graph.get_vertices(), [&graph, vertex_id](const auto& kv_pair) {
           const auto& [current_vertex_id, _]{kv_pair};
           const auto& neighbors{graph.get_neighbors(current_vertex_id)};
           return std::ranges::find(neighbors, vertex_id) != neighbors.end();

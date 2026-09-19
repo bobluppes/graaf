@@ -37,6 +37,33 @@ TYPED_TEST(GraphTest, VertexCount) {
   ASSERT_EQ(graph.get_vertex(vertex_id_2), 20);
 }
 
+TYPED_TEST(GraphTest, GetVerticesCanBeStoredAsConst) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  graph_t graph{};
+  const auto vertex_id_1{graph.add_vertex(10)};
+  const auto vertex_id_2{graph.add_vertex(20)};
+
+  // WHEN - THEN
+  // Unlike a std::views::filter-based range, get_vertices() must be usable
+  // when stored in a const variable, not just iterated directly.
+  const auto by_value{graph.get_vertices()};
+  std::size_t count{0};
+  for (const auto &[id, value] : by_value) {
+    ASSERT_TRUE(id == vertex_id_1 || id == vertex_id_2);
+    ++count;
+  }
+  ASSERT_EQ(count, 2);
+
+  const auto &by_reference{graph.get_vertices()};
+  count = 0;
+  for (const auto &[id, value] : by_reference) {
+    ASSERT_TRUE(id == vertex_id_1 || id == vertex_id_2);
+    ++count;
+  }
+  ASSERT_EQ(count, 2);
+}
+
 TYPED_TEST(GraphTest, RemoveVertex) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
