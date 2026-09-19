@@ -1,6 +1,8 @@
 #pragma once
+#include <optional>
 #include <queue>
 #include <sstream>
+#include <vector>
 
 #include "dijkstra_shortest_paths.h"
 
@@ -10,24 +12,36 @@ template <typename V, typename E, graph_type T, typename WEIGHT_T>
 [[nodiscard]] std::unordered_map<vertex_id_t, graph_path<WEIGHT_T>>
 dijkstra_shortest_paths(const graph<V, E, T>& graph,
                         vertex_id_t source_vertex) {
-  std::unordered_map<vertex_id_t, graph_path<WEIGHT_T>> shortest_paths;
-
   using weighted_path_item = detail::path_vertex<WEIGHT_T>;
   using dijkstra_queue_t =
       std::priority_queue<weighted_path_item, std::vector<weighted_path_item>,
                           std::greater<>>;
   dijkstra_queue_t to_explore{};
 
-  shortest_paths[source_vertex].total_weight = 0;
-  shortest_paths[source_vertex].vertices.push_back(source_vertex);
-  to_explore.push(weighted_path_item{source_vertex, 0});
+  // Indexed directly by vertex_id_t rather than an unordered_map, grown
+  // lazily as vertices are discovered. Tracks only (dist_from_start,
+  // prev_id) per vertex during the search - each reachable vertex's full
+  // path is reconstructed once at the end via backtracking, rather than
+  // copied on every relaxation.
+  std::vector<std::optional<weighted_path_item>> vertex_info{};
+  const auto has_info{[&](vertex_id_t id) {
+    return id < vertex_info.size() && vertex_info[id].has_value();
+  }};
+  const auto set_info{[&](vertex_id_t id, weighted_path_item item) {
+    if (id >= vertex_info.size()) {
+      vertex_info.resize(id + 1);
+    }
+    vertex_info[id] = item;
+  }};
+
+  set_info(source_vertex, {source_vertex, 0, source_vertex});
+  to_explore.push(*vertex_info[source_vertex]);
 
   while (!to_explore.empty()) {
     auto current{to_explore.top()};
     to_explore.pop();
 
-    if (shortest_paths.contains(current.id) &&
-        current.dist_from_start > shortest_paths[current.id].total_weight) {
+    if (current.dist_from_start > vertex_info[current.id]->dist_from_start) {
       continue;
     }
 
@@ -44,14 +58,31 @@ dijkstra_shortest_paths(const graph<V, E, T>& graph,
 
       WEIGHT_T distance = current.dist_from_start + edge_weight;
 
-      if (!shortest_paths.contains(neighbor) ||
-          distance < shortest_paths[neighbor].total_weight) {
-        shortest_paths[neighbor].total_weight = distance;
-        shortest_paths[neighbor].vertices = shortest_paths[current.id].vertices;
-        shortest_paths[neighbor].vertices.push_back(neighbor);
-        to_explore.push(weighted_path_item{neighbor, distance});
+      if (!has_info(neighbor) ||
+          distance < vertex_info[neighbor]->dist_from_start) {
+        set_info(neighbor, {neighbor, distance, current.id});
+        to_explore.push(*vertex_info[neighbor]);
       }
     }
+  }
+
+  std::unordered_map<vertex_id_t, graph_path<WEIGHT_T>> shortest_paths;
+  for (vertex_id_t id{0}; id < vertex_info.size(); ++id) {
+    if (!vertex_info[id].has_value()) {
+      continue;
+    }
+
+    graph_path<WEIGHT_T> path;
+    path.total_weight = vertex_info[id]->dist_from_start;
+
+    auto current{id};
+    while (current != source_vertex) {
+      path.vertices.push_front(current);
+      current = vertex_info[current]->prev_id;
+    }
+    path.vertices.push_front(source_vertex);
+
+    shortest_paths.emplace(id, std::move(path));
   }
 
   return shortest_paths;
