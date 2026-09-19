@@ -14,9 +14,6 @@ std::unordered_map<vertex_id_t, int> greedy_graph_coloring(const GRAPH& graph) {
   // Initialize a map to store the coloring
   std::unordered_map<vertex_id_t, int> coloring{};
 
-  // Get the vertices from the graph
-  const auto& vertices = graph.get_vertices();
-
   // graph::get_neighbors() only reports outgoing edges. On a directed graph,
   // a vertex must also differ in color from each of its predecessors (the
   // vertices with an edge into it), not just its successors, so we
@@ -28,7 +25,7 @@ std::unordered_map<vertex_id_t, int> greedy_graph_coloring(const GRAPH& graph) {
   }
 
   // Iterate through each vertex
-  for (const auto& [current_vertex_id, _] : vertices) {
+  for (const auto& [current_vertex_id, _] : graph.get_vertices()) {
     // Iterate through neighboring vertices
     // Find the smallest available color for the current vertex
     int available_color{0};

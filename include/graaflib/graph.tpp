@@ -22,7 +22,7 @@ inline std::pair<vertex_id_t, vertex_id_t> make_sorted_pair(
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
 std::size_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::vertex_count()
     const noexcept {
-  return vertices_.size();
+  return vertex_count_;
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
@@ -33,7 +33,7 @@ std::size_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::edge_count() const noexcept {
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
 bool graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::has_vertex(
     vertex_id_t vertex_id) const noexcept {
-  return vertices_.contains(vertex_id);
+  return vertex_id < vertices_.size() && vertices_[vertex_id].has_value();
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
@@ -69,7 +69,7 @@ const VERTEX_T& graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_vertex(
     throw std::invalid_argument{"Vertex with ID [" + std::to_string(vertex_id) +
                                 "] not found in graph."};
   }
-  return vertices_.at(vertex_id);
+  return *vertices_[vertex_id];
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
@@ -151,7 +151,11 @@ vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex(auto&& vertex) {
     vertex_id = vertex_id_supplier_;
   }
 
-  vertices_.emplace(vertex_id, std::forward<decltype(vertex)>(vertex));
+  if (vertex_id >= vertices_.size()) {
+    vertices_.resize(vertex_id + 1);
+  }
+  vertices_[vertex_id].emplace(std::forward<decltype(vertex)>(vertex));
+  ++vertex_count_;
   return vertex_id;
 }
 
@@ -163,7 +167,11 @@ vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex_with_id(
                                 std::to_string(id) + "]"};
   }
 
-  vertices_.emplace(id, std::forward<decltype(vertex)>(vertex));
+  if (id >= vertices_.size()) {
+    vertices_.resize(id + 1);
+  }
+  vertices_[id].emplace(std::forward<decltype(vertex)>(vertex));
+  ++vertex_count_;
   return id;
 }
 
@@ -182,7 +190,6 @@ void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::remove_vertex(
   }
 
   adjacency_list_.erase(vertex_id);
-  vertices_.erase(vertex_id);
 
   for (auto& [source_vertex_id, neighbors] : adjacency_list_) {
     std::erase(neighbors, vertex_id);
@@ -190,6 +197,8 @@ void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::remove_vertex(
   }
 
   if (existed) {
+    vertices_[vertex_id].reset();
+    --vertex_count_;
     free_vertex_ids_.push_back(vertex_id);
   }
 }

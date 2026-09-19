@@ -4,6 +4,8 @@
 #include <graaflib/types.h>
 
 #include <memory>
+#include <optional>
+#include <ranges>
 #include <unordered_map>
 #include <vector>
 
@@ -35,7 +37,6 @@ class graph {
 
   using neighbors_t = std::vector<vertex_id_t>;
 
-  using vertex_id_to_vertex_t = std::unordered_map<vertex_id_t, VERTEX_T>;
   using edge_id_to_edge_t = std::unordered_map<edge_id_t, edge_t, edge_id_hash>;
 
   /**
@@ -71,13 +72,23 @@ class graph {
   [[nodiscard]] std::size_t edge_count() const noexcept;
 
   /**
-   * @brief Get the internal vertices
+   * @brief Get a read-only view over the graph's vertices
    *
-   * @return const vertex_id_to_vertex_t& Map from vertex id to the user
-   * provided vertex.
+   * If you store the result in a variable rather than using it directly in a
+   * range-based for loop, store it as non-const (e.g. `auto`, not
+   * `const auto&`) - a filtering range can't be iterated through a const
+   * reference.
+   *
+   * @return A range yielding a (vertex_id_t, const VERTEX_T&) pair for every
+   * vertex currently in the graph.
    */
-  [[nodiscard]] const vertex_id_to_vertex_t& get_vertices() const noexcept {
-    return vertices_;
+  [[nodiscard]] auto get_vertices() const noexcept {
+    return std::views::iota(vertex_id_t{0}, vertices_.size()) |
+           std::views::filter(
+               [this](vertex_id_t id) { return vertices_[id].has_value(); }) |
+           std::views::transform([this](vertex_id_t id) {
+             return std::pair<vertex_id_t, const VERTEX_T&>(id, *vertices_[id]);
+           });
   }
 
   /**
@@ -251,7 +262,12 @@ class graph {
 
   std::unordered_map<vertex_id_t, neighbors_t> adjacency_list_{};
 
-  vertex_id_to_vertex_t vertices_{};
+  // Indexed directly by vertex_id_t. A vertex_id_t below vertices_.size()
+  // with no value is a tombstone left by remove_vertex(), pending reuse in
+  // free_vertex_ids_.
+  std::vector<std::optional<VERTEX_T>> vertices_{};
+  std::size_t vertex_count_{0};
+
   edge_id_to_edge_t edges_{};
 
   // IDs freed by remove_vertex(), handed out again by add_vertex() before

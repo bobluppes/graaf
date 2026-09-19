@@ -49,7 +49,7 @@ sccs_t kosarajus_strongly_connected_components(
     const directed_graph<V, E>& graph) {
   sccs_t sccs{};
 
-  if (graph.get_vertices().size() == 0) {
+  if (graph.vertex_count() == 0) {
     return sccs;
   }
 
