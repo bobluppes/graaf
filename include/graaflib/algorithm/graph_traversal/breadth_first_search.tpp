@@ -21,7 +21,9 @@ void breadth_first_traverse(
   // (it's taken by const reference), so a plain vector that grows as new
   // ids are discovered is a direct, allocation-light fit.
   std::vector<bool> seen_vertices{};
-  const auto mark_seen{[&](vertex_id_t id) {
+  // Marks id as seen, returning whether it was not already seen (mirrors
+  // std::unordered_set::insert().second).
+  const auto try_mark_seen{[&](vertex_id_t id) {
     if (id >= seen_vertices.size()) {
       seen_vertices.resize(id + 1, false);
     }
@@ -36,7 +38,7 @@ void breadth_first_traverse(
 
   // Vertices are marked as seen when enqueued rather than when dequeued, so
   // each vertex enters the queue at most once.
-  mark_seen(start_vertex);
+  try_mark_seen(start_vertex);
   to_explore.push(start_vertex);
 
   while (!to_explore.empty()) {
@@ -48,7 +50,7 @@ void breadth_first_traverse(
     }
 
     for (const auto neighbor_vertex : graph.get_neighbors(current)) {
-      if (mark_seen(neighbor_vertex)) {
+      if (try_mark_seen(neighbor_vertex)) {
         edge_callback(edge_id_t{current, neighbor_vertex});
         to_explore.push(neighbor_vertex);
       }
