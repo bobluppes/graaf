@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 #include <cstdlib>
 #include <iterator>
 #include <stdexcept>
@@ -216,7 +217,6 @@ vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex(auto&& vertex) {
 
   if (vertex_id >= vertices_.size()) {
     vertices_.resize(vertex_id + 1);
-    adjacency_list_.resize(vertex_id + 1);
   }
   vertices_[vertex_id].emplace(std::forward<decltype(vertex)>(vertex));
   ++vertex_count_;
@@ -233,7 +233,6 @@ vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex_with_id(
 
   if (id >= vertices_.size()) {
     vertices_.resize(id + 1);
-    adjacency_list_.resize(id + 1);
   }
   vertices_[id].emplace(std::forward<decltype(vertex)>(vertex));
   ++vertex_count_;
@@ -250,10 +249,14 @@ void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::remove_vertex(
     return;
   }
 
-  for (const auto& target_vertex_id : adjacency_list_[vertex_id]) {
-    edges_.erase({vertex_id, target_vertex_id});
+  // adjacency_list_ is grown lazily by add_edge(), so a vertex that never
+  // had an edge added to/from it may not have a slot yet.
+  if (vertex_id < adjacency_list_.size()) {
+    for (const auto& target_vertex_id : adjacency_list_[vertex_id]) {
+      edges_.erase({vertex_id, target_vertex_id});
+    }
+    adjacency_list_[vertex_id].clear();
   }
-  adjacency_list_[vertex_id].clear();
 
   for (vertex_id_t source_vertex_id{0};
        source_vertex_id < adjacency_list_.size(); ++source_vertex_id) {
@@ -287,6 +290,15 @@ void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_edge(vertex_id_t vertex_id_lhs,
         "An edge already exists between vertices with ID [" +
         std::to_string(vertex_id_lhs) + "] and [" +
         std::to_string(vertex_id_rhs) + "]."};
+  }
+
+  // adjacency_list_ is grown lazily, on the first edge touching a given
+  // vertex, rather than eagerly in add_vertex() - most vertices in a large,
+  // sparse graph never need it, and growing it unconditionally on every
+  // add_vertex() call regressed vertex-only workloads.
+  const auto max_id{std::max(vertex_id_lhs, vertex_id_rhs)};
+  if (max_id >= adjacency_list_.size()) {
+    adjacency_list_.resize(max_id + 1);
   }
 
   using enum graph_type;
