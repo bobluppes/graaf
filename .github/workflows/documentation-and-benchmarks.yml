@@ -38,7 +38,7 @@ jobs:
 
       # Avoid re-downloading ~40MB from Stanford SNAP on every run.
       - name: Cache perf datasets
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: .cache/perf_datasets
           key: perf-datasets-${{ hashFiles('perf/CMakeLists.txt') }}
