@@ -7,9 +7,9 @@
 #include <vector>
 
 namespace {
-// Generating random number of vertices (1- 30) for a clique
-std::random_device dev;
-std::mt19937 rng(dev());
+// Generating random number of vertices (1- 30) for a clique.
+// Fixed seed so the benchmark input is reproducible across runs.
+std::mt19937 rng(42);
 std::uniform_int_distribution<std::mt19937::result_type> random_clique_size(1,
                                                                             30);
 template <typename EDGE_T>
