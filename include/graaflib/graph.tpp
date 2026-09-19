@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdlib>
+#include <iterator>
 #include <stdexcept>
 #include <string>
 
@@ -17,12 +18,75 @@ inline std::pair<vertex_id_t, vertex_id_t> make_sorted_pair(
   return std::make_pair(vertex_id_rhs, vertex_id_lhs);
 }
 
+// A read-only view over a dense, tombstoned vertex_id_t -> VERTEX_T vector,
+// yielding (id, value) pairs for the live slots only. Hand-rolled rather
+// than composed from std::views: std::views::filter's begin() caches state
+// on first call and so can't be const, which would rule out storing the
+// result of graph::get_vertices() in a const variable.
+template <typename VERTEX_T>
+class vertex_view {
+ public:
+  using dense_vertices_t = std::vector<std::optional<VERTEX_T>>;
+
+  class iterator {
+   public:
+    using value_type = std::pair<vertex_id_t, const VERTEX_T&>;
+    using difference_type = std::ptrdiff_t;
+    using iterator_category = std::forward_iterator_tag;
+
+    iterator() = default;
+    iterator(const dense_vertices_t& data, vertex_id_t idx)
+        : data_{&data}, idx_{idx} {}
+
+    value_type operator*() const { return {idx_, *(*data_)[idx_]}; }
+
+    iterator& operator++() {
+      do {
+        ++idx_;
+      } while (idx_ < data_->size() && !(*data_)[idx_].has_value());
+      return *this;
+    }
+
+    iterator operator++(int) {
+      auto tmp{*this};
+      ++*this;
+      return tmp;
+    }
+
+    bool operator==(const iterator& other) const = default;
+
+   private:
+    const dense_vertices_t* data_{nullptr};
+    vertex_id_t idx_{0};
+  };
+
+  explicit vertex_view(const dense_vertices_t& data) : data_{&data} {}
+
+  [[nodiscard]] iterator begin() const {
+    vertex_id_t idx{0};
+    while (idx < data_->size() && !(*data_)[idx].has_value()) {
+      ++idx;
+    }
+    return {*data_, idx};
+  }
+
+  [[nodiscard]] iterator end() const { return {*data_, data_->size()}; }
+
+ private:
+  const dense_vertices_t* data_;
+};
+
 }  // namespace detail
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
 std::size_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::vertex_count()
     const noexcept {
   return vertex_count_;
+}
+
+template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
+auto graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::get_vertices() const noexcept {
+  return detail::vertex_view<VERTEX_T>{vertices_};
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
@@ -178,10 +242,13 @@ vertex_id_t graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::add_vertex_with_id(
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>
 void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::remove_vertex(
     vertex_id_t vertex_id) {
-  // Only ids that were actually in use get freed for reuse - otherwise
-  // removing an id that was never assigned would leak it into
-  // free_vertex_ids_ and have a later add_vertex() hand it out.
-  const bool existed{has_vertex(vertex_id)};
+  // A vertex_id that was never assigned can't be anyone's neighbor, so
+  // there's nothing to clean up in adjacency_list_/edges_, and it must not
+  // be freed for reuse (that would leak an arbitrary id into
+  // free_vertex_ids_ for a later add_vertex() to hand out).
+  if (!has_vertex(vertex_id)) {
+    return;
+  }
 
   if (adjacency_list_.contains(vertex_id)) {
     for (auto& target_vertex_id : adjacency_list_.at(vertex_id)) {
@@ -196,11 +263,9 @@ void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::remove_vertex(
     edges_.erase({source_vertex_id, vertex_id});
   }
 
-  if (existed) {
-    vertices_[vertex_id].reset();
-    --vertex_count_;
-    free_vertex_ids_.push_back(vertex_id);
-  }
+  vertices_[vertex_id].reset();
+  --vertex_count_;
+  free_vertex_ids_.push_back(vertex_id);
 }
 
 template <typename VERTEX_T, typename EDGE_T, graph_type GRAPH_TYPE_V>

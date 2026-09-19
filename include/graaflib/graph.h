@@ -5,7 +5,6 @@
 
 #include <memory>
 #include <optional>
-#include <ranges>
 #include <unordered_map>
 #include <vector>
 
@@ -74,22 +73,10 @@ class graph {
   /**
    * @brief Get a read-only view over the graph's vertices
    *
-   * If you store the result in a variable rather than using it directly in a
-   * range-based for loop, store it as non-const (e.g. `auto`, not
-   * `const auto&`) - a filtering range can't be iterated through a const
-   * reference.
-   *
    * @return A range yielding a (vertex_id_t, const VERTEX_T&) pair for every
    * vertex currently in the graph.
    */
-  [[nodiscard]] auto get_vertices() const noexcept {
-    return std::views::iota(vertex_id_t{0}, vertices_.size()) |
-           std::views::filter(
-               [this](vertex_id_t id) { return vertices_[id].has_value(); }) |
-           std::views::transform([this](vertex_id_t id) {
-             return std::pair<vertex_id_t, const VERTEX_T&>(id, *vertices_[id]);
-           });
-  }
+  [[nodiscard]] auto get_vertices() const noexcept;
 
   /**
    * @brief Get the internal edges
