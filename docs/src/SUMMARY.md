@@ -26,6 +26,8 @@
 - [Minimum Spanning Tree](algorithms/minimum-spanning-tree/README.md)
   - [Kruskal's Algorithm](algorithms/minimum-spanning-tree/kruskal.md)
   - [Prim's Algorithm](algorithms/minimum-spanning-tree/prim.md)
+- [Ranking Algorithms](algorithms/ranking/README.md)
+  - [PageRank](algorithms/ranking/pagerank.md)
 - [Shortest Path Algorithms](algorithms/shortest-path/README.md)
   - [A\* Search Algorithm](algorithms/shortest-path/a-star.md)
   - [Bellman-Ford Shortest Path](algorithms/shortest-path/bellman-ford.md)

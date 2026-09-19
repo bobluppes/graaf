@@ -21,6 +21,7 @@ Graaf requires no separate compilation: consume it as a header-only library, or 
 - [Strongly connected components](https://bobluppes.github.io/graaf/algorithms/strongly-connected-components/README.html): Kosaraju, Tarjan.
 - [Clique detection](https://bobluppes.github.io/graaf/algorithms/clique-detection/bron_kerbosch.html): Bron-Kerbosch.
 - [Topological sort](https://bobluppes.github.io/graaf/algorithms/topological-sort/README.html): DFS-based, Kahn.
+- [Ranking](https://bobluppes.github.io/graaf/algorithms/ranking/README.html): PageRank.
 
 ## Examples
 
