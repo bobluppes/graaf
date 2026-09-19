@@ -8,12 +8,7 @@
 
 namespace {
 // Generating random number of vertices (1- 30) for a clique.
-//
-// Fixed seed rather than std::random_device: bron_kerbosch's runtime is
-// highly sensitive to the exact clique-size distribution of its input, so a
-// non-deterministic seed would make bron_kerbosh_(connected_)random_cliques
-// benchmark a different graph on every run - indistinguishable from an
-// actual regression when tracking benchmark history over time.
+// Fixed seed so the benchmark input is reproducible across runs.
 std::mt19937 rng(42);
 std::uniform_int_distribution<std::mt19937::result_type> random_clique_size(1,
                                                                             30);
