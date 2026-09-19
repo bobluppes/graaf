@@ -1,6 +1,8 @@
 #pragma once
+#include <optional>
 #include <queue>
 #include <sstream>
+#include <vector>
 
 #include "dijkstra_shortest_path.h"
 
@@ -15,10 +17,25 @@ std::optional<graph_path<WEIGHT_T>> dijkstra_shortest_path(
       std::priority_queue<weighted_path_item, std::vector<weighted_path_item>,
                           std::greater<>>;
   dijkstra_queue_t to_explore{};
-  std::unordered_map<vertex_id_t, weighted_path_item> vertex_info;
 
-  vertex_info[start_vertex] = {start_vertex, 0, start_vertex};
-  to_explore.push(vertex_info[start_vertex]);
+  // Indexed directly by vertex_id_t rather than an unordered_map, grown
+  // lazily as vertices are discovered during the search. reconstruct_path()
+  // isn't reused here since it's typed against the unordered_map version,
+  // still used by a_star_search() - backtracking the path is only a few
+  // lines, not worth forcing both algorithms to convert together.
+  std::vector<std::optional<weighted_path_item>> vertex_info{};
+  const auto has_info{[&](vertex_id_t id) {
+    return id < vertex_info.size() && vertex_info[id].has_value();
+  }};
+  const auto set_info{[&](vertex_id_t id, weighted_path_item item) {
+    if (id >= vertex_info.size()) {
+      vertex_info.resize(id + 1);
+    }
+    vertex_info[id] = item;
+  }};
+
+  set_info(start_vertex, {start_vertex, 0, start_vertex});
+  to_explore.push(*vertex_info[start_vertex]);
 
   while (!to_explore.empty()) {
     auto current{to_explore.top()};
@@ -41,15 +58,27 @@ std::optional<graph_path<WEIGHT_T>> dijkstra_shortest_path(
 
       WEIGHT_T distance = current.dist_from_start + edge_weight;
 
-      if (!vertex_info.contains(neighbor) ||
-          distance < vertex_info[neighbor].dist_from_start) {
-        vertex_info[neighbor] = {neighbor, distance, current.id};
-        to_explore.push(vertex_info[neighbor]);
+      if (!has_info(neighbor) ||
+          distance < vertex_info[neighbor]->dist_from_start) {
+        set_info(neighbor, {neighbor, distance, current.id});
+        to_explore.push(*vertex_info[neighbor]);
       }
     }
   }
 
-  return reconstruct_path(start_vertex, end_vertex, vertex_info);
+  if (!has_info(end_vertex)) {
+    return std::nullopt;
+  }
+
+  graph_path<WEIGHT_T> path;
+  auto current{end_vertex};
+  while (current != start_vertex) {
+    path.vertices.push_front(current);
+    current = vertex_info[current]->prev_id;
+  }
+  path.vertices.push_front(start_vertex);
+  path.total_weight = vertex_info[end_vertex]->dist_from_start;
+  return path;
 }
 
 }  // namespace graaf::algorithm
