@@ -247,9 +247,12 @@ class graph {
   // optimize how it assigns them.
   vertex_id_t add_vertex_with_id(auto&& vertex, vertex_id_t id);
 
-  // Indexed directly by vertex_id_t, kept the same size as vertices_ at all
-  // times. A removed vertex's slot is cleared, not erased, so its (empty)
-  // neighbor list stays at the same index for reuse.
+  // Indexed directly by vertex_id_t, grown lazily by add_edge() rather than
+  // eagerly by add_vertex() - so its size is a high-water mark of edge
+  // endpoints seen so far, which may be smaller than vertices_.size() for a
+  // graph with vertices that have no edges yet. A removed vertex's slot (if
+  // it has one) is cleared, not erased, so it stays at the same index for
+  // reuse.
   std::vector<neighbors_t> adjacency_list_{};
 
   // Indexed directly by vertex_id_t. A vertex_id_t below vertices_.size()
