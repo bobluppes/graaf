@@ -62,7 +62,7 @@ jobs:
             raw_result.json > benchmark_result.json
 
       - name: Store benchmark result
-        uses: benchmark-action/github-action-benchmark@v1.22.1
+        uses: benchmark-action/github-action-benchmark@v1.22.2
         with:
           tool: 'googlecpp'
           output-file-path: build/benchmark_result.json
