@@ -244,8 +244,7 @@ void graph<VERTEX_T, EDGE_T, GRAPH_TYPE_V>::remove_vertex(
     vertex_id_t vertex_id) {
   // A vertex_id that was never assigned can't be anyone's neighbor, so
   // there's nothing to clean up in adjacency_list_/edges_, and it must not
-  // be freed for reuse (that would leak an arbitrary id into
-  // free_vertex_ids_ for a later add_vertex() to hand out).
+  // be freed for reuse.
   if (!has_vertex(vertex_id)) {
     return;
   }
