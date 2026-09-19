@@ -1,7 +1,8 @@
 #pragma once
+#include <graaflib/algorithm/vertex_id_storage.h>
+
 #include <algorithm>
 #include <queue>
-#include <unordered_set>
 
 #include "breadth_first_search.h"
 
@@ -16,7 +17,7 @@ void breadth_first_traverse(
     const graph<V, E, T>& graph, vertex_id_t start_vertex,
     const EDGE_CALLBACK_T& edge_callback,
     const SEARCH_TERMINATION_STRATEGY_T& search_termination_strategy) {
-  std::unordered_set<vertex_id_t> seen_vertices{};
+  detail::vertex_id_set seen_vertices{};
   std::queue<vertex_id_t> to_explore{};
 
   // Vertices are marked as seen when enqueued rather than when dequeued, so
@@ -33,7 +34,7 @@ void breadth_first_traverse(
     }
 
     for (const auto neighbor_vertex : graph.get_neighbors(current)) {
-      if (seen_vertices.insert(neighbor_vertex).second) {
+      if (seen_vertices.insert(neighbor_vertex)) {
         edge_callback(edge_id_t{current, neighbor_vertex});
         to_explore.push(neighbor_vertex);
       }
