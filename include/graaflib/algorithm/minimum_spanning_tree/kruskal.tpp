@@ -2,24 +2,30 @@
 #include <graaflib/types.h>
 
 #include <algorithm>
-#include <unordered_map>
-#include <unordered_set>
+#include <vector>
 
 #include "kruskal.h"
 
 namespace graaf::algorithm {
 
-// Disjoint Set Union to maintain sets of vertices
+// Disjoint Set Union to maintain sets of vertices.
+//
+// parent/rank are indexed directly by vertex_id_t: do_make_set() is called
+// once per vertex up front, before any find/merge, so by the time a
+// vertex_id_t reaches do_find_set() or do_merge_sets() its slot is already
+// there.
 namespace detail {
-void do_make_set(vertex_id_t v,
-                 std::unordered_map<vertex_id_t, vertex_id_t>& parent,
-                 std::unordered_map<vertex_id_t, vertex_id_t>& rank) {
+void do_make_set(vertex_id_t v, std::vector<vertex_id_t>& parent,
+                 std::vector<vertex_id_t>& rank) {
+  if (v >= parent.size()) {
+    parent.resize(v + 1);
+    rank.resize(v + 1);
+  }
   parent[v] = v;
   rank[v] = 0;
 }
 
-vertex_id_t do_find_set(vertex_id_t vertex,
-                        std::unordered_map<vertex_id_t, vertex_id_t>& parent) {
+vertex_id_t do_find_set(vertex_id_t vertex, std::vector<vertex_id_t>& parent) {
   if (vertex == parent[vertex]) {
     return vertex;
   }
@@ -27,8 +33,8 @@ vertex_id_t do_find_set(vertex_id_t vertex,
 }
 
 void do_merge_sets(vertex_id_t vertex_a, vertex_id_t vertex_b,
-                   std::unordered_map<vertex_id_t, vertex_id_t>& parent,
-                   std::unordered_map<vertex_id_t, vertex_id_t>& rank) {
+                   std::vector<vertex_id_t>& parent,
+                   std::vector<vertex_id_t>& rank) {
   vertex_a = do_find_set(vertex_a, parent);
   vertex_b = do_find_set(vertex_b, parent);
 
@@ -67,8 +73,7 @@ struct edge_to_process {
 template <typename V, typename E>
 std::vector<edge_id_t> kruskal_minimum_spanning_tree(
     const graph<V, E, graph_type::UNDIRECTED>& graph) {
-  // unordered_map in case of deletion of vertices
-  std::unordered_map<vertex_id_t, vertex_id_t> rank, parent;
+  std::vector<vertex_id_t> rank, parent;
   std::vector<detail::edge_to_process<E>> edges_to_process{};
   std::vector<edge_id_t> mst_edges{};
 
