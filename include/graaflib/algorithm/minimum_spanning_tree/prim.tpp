@@ -34,11 +34,10 @@ std::optional<tree<vertex_id_t, WEIGHT_T>> prim_minimum_spanning_tree(
 
   using tree_node_t = typename tree<vertex_id_t, WEIGHT_T>::tree_node;
 
-  // Indexed directly by vertex_id_t rather than an unordered_map: doubles as
-  // the "is this vertex in the MST yet" membership check via a null entry,
-  // and grows lazily as vertices are added to the tree. vertices_in_tree
-  // tracks the count separately, since a null-filled vector slot isn't the
-  // same as an absent unordered_map entry for sizing purposes.
+  // Indexed directly by vertex_id_t and grown lazily as vertices are added
+  // to the tree. A null entry doubles as the "is this vertex in the MST
+  // yet" membership check. vertices_in_tree tracks the count separately,
+  // since a null-filled slot still counts towards the vector's size.
   std::vector<tree_node_t*> tree_node_for_vertex{};
   std::size_t vertices_in_tree{0};
 
