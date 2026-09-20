@@ -1,12 +1,14 @@
 #pragma once
 #include <graaflib/algorithm/ranking/pagerank.h>
 
+#include <algorithm>
 #include <cmath>
 #include <cstddef>
 #include <optional>
 #include <sstream>
 #include <stdexcept>
 #include <unordered_map>
+#include <vector>
 
 namespace graaf::algorithm {
 
@@ -44,55 +46,70 @@ std::optional<std::unordered_map<vertex_id_t, double>> pagerank(
   detail::validate_pagerank_parameters(damping_factor, tolerance,
                                        max_iterations);
 
-  std::unordered_map<vertex_id_t, double> ranks{};
   if (graph.vertex_count() == 0) {
-    return ranks;
+    return std::unordered_map<vertex_id_t, double>{};
   }
 
   const auto vertex_count{static_cast<double>(graph.vertex_count())};
   const double teleport_rank{(1.0 - damping_factor) / vertex_count};
 
-  ranks.reserve(graph.vertex_count());
+  // Ranks are indexed directly by vertex_id_t: every iteration follows each
+  // edge and looks up the rank of its target, so that lookup sits on the hot
+  // path. Ids of removed vertices leave gaps, so the vectors span the largest
+  // live id while only the live ids collected here are iterated.
+  std::vector<vertex_id_t> vertex_ids{};
+  vertex_ids.reserve(graph.vertex_count());
+  vertex_id_t max_vertex_id{0};
   for (const auto& [vertex_id, _] : graph.get_vertices()) {
-    ranks.emplace(vertex_id, 1.0 / vertex_count);
+    vertex_ids.push_back(vertex_id);
+    max_vertex_id = std::max(max_vertex_id, vertex_id);
   }
 
-  auto next_ranks{ranks};
+  std::vector<double> ranks(max_vertex_id + 1, 0.0);
+  std::vector<double> next_ranks(max_vertex_id + 1, 0.0);
+  for (const auto vertex_id : vertex_ids) {
+    ranks[vertex_id] = 1.0 / vertex_count;
+  }
 
   for (std::size_t iteration{0}; iteration < max_iterations; ++iteration) {
     // Rank held by vertices without outgoing edges would otherwise leak out
     // of the system, so it is spread evenly over all vertices instead. This
     // keeps the ranks summing to one.
     double dangling_rank{0.0};
-    for (auto& [_, next_rank] : next_ranks) {
-      next_rank = 0.0;
-    }
+    std::fill(next_ranks.begin(), next_ranks.end(), 0.0);
 
-    for (const auto& [vertex_id, rank] : ranks) {
+    for (const auto vertex_id : vertex_ids) {
       const auto& neighbors{graph.get_neighbors(vertex_id)};
       if (neighbors.empty()) {
-        dangling_rank += rank;
+        dangling_rank += ranks[vertex_id];
         continue;
       }
 
-      const double share{rank / static_cast<double>(neighbors.size())};
-      for (const auto& neighbor : neighbors) {
-        next_ranks.at(neighbor) += share;
+      const double share{ranks[vertex_id] /
+                         static_cast<double>(neighbors.size())};
+      for (const auto neighbor : neighbors) {
+        next_ranks[neighbor] += share;
       }
     }
 
     const double base_rank{teleport_rank +
                            damping_factor * dangling_rank / vertex_count};
     double total_change{0.0};
-    for (auto& [vertex_id, next_rank] : next_ranks) {
+    for (const auto vertex_id : vertex_ids) {
+      auto& next_rank{next_ranks[vertex_id]};
       next_rank = base_rank + damping_factor * next_rank;
-      total_change += std::abs(next_rank - ranks.at(vertex_id));
+      total_change += std::abs(next_rank - ranks[vertex_id]);
     }
 
     ranks.swap(next_ranks);
 
     if (total_change <= tolerance) {
-      return ranks;
+      std::unordered_map<vertex_id_t, double> ranks_by_vertex{};
+      ranks_by_vertex.reserve(vertex_ids.size());
+      for (const auto vertex_id : vertex_ids) {
+        ranks_by_vertex.emplace(vertex_id, ranks[vertex_id]);
+      }
+      return ranks_by_vertex;
     }
   }
 
