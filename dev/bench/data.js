@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1789905164754,
+  "lastUpdate": 1789905272701,
   "repoUrl": "https://github.com/bobluppes/graaf",
   "entries": {
     "Benchmark": [
@@ -9612,6 +9612,540 @@ window.BENCHMARK_DATA = {
             "value": 1040305617.9999908,
             "unit": "ns/iter",
             "extra": "iterations: 1\ncpu: 1037630293.0000066 ns\nthreads: 1"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "bobluppes@gmail.com",
+            "name": "Bob Luppes",
+            "username": "bobluppes"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "0a05e6fee3a0e98664e221aaef1c07ee61c8a69b",
+          "message": "perf: back greedy_graph_coloring's per-edge lookups with a vector (#455)\n\n* perf: back greedy_graph_coloring's per-edge lookups with a vector\n\nSixth of a staged series for #443 (BFS in #449, Kruskal in #451, Prim\nin #452, dijkstra_shortest_path in #453, dijkstra_shortest_paths in\n#454).\n\nThe function's return type (unordered_map<vertex_id_t, int>) is a\ndocumented public contract, so it's unchanged - same situation as\ndijkstra_shortest_paths in #454. The hot path is consider_neighbor(),\ncalled once per (neighbor, predecessor) pair for every vertex - i.e.\nO(E) times total - which looked up the in-progress coloring by hash\nmap. That's now a dense vector, indexed directly by id and grown\nlazily; the public map is only built once, in a single O(V) pass at\nthe end.\n\npredecessors (from the shared get_predecessors() utility) is\nunchanged: it's looked up once per vertex, not once per edge, so it\nisn't the hot path this issue targets.\n\nBenchmarked (Release, perf/graaflib/greedy_graph_coloring_benchmark.cpp,\nreal datasets):\n\n                        before        after      speedup\nweb_google            2159.6ms     1410.7ms       1.53x\nweb_berkstan          1068.9ms      889.8ms       1.20x\n\nNarrows the gap against the Boost.Graph comparison target\n(perf/boost, GRAAF_BUILD_BOOST_PERF):\n- web_google: 3.25x -> 2.13x\n- web_berkstan: 9.25x -> 7.70x\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>\n\n* docs: trim greedy_graph_coloring comment to only explain what was done\n\n---------\n\nCo-authored-by: Claude Sonnet 5 <noreply@anthropic.com>",
+          "timestamp": "2026-09-20T13:51:18+02:00",
+          "tree_id": "4d5ecabfb668a60bd649b07cd50592b5256d0e5a",
+          "url": "https://github.com/bobluppes/graaf/commit/0a05e6fee3a0e98664e221aaef1c07ee61c8a69b"
+        },
+        "date": 1789905271941,
+        "tool": "googlecpp",
+        "benches": [
+          {
+            "name": "bm_add_primitive_numeric_edge/1000",
+            "value": 43363.77145658804,
+            "unit": "ns/iter",
+            "extra": "iterations: 16312\ncpu: 43356.41711623349 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_add_primitive_numeric_edge/4096",
+            "value": 220581.60920294622,
+            "unit": "ns/iter",
+            "extra": "iterations: 3086\ncpu: 220556.13350615092 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_add_primitive_numeric_edge/10000",
+            "value": 668971.6295546755,
+            "unit": "ns/iter",
+            "extra": "iterations: 988\ncpu: 669019.1831983763 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_add_user_defined_edge/1000",
+            "value": 56195.77541488817,
+            "unit": "ns/iter",
+            "extra": "iterations: 12414\ncpu: 56191.09030127066 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_add_user_defined_edge/4096",
+            "value": 301691.97279794747,
+            "unit": "ns/iter",
+            "extra": "iterations: 2316\ncpu: 301708.93609672005 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_add_user_defined_edge/10000",
+            "value": 903263.8423912989,
+            "unit": "ns/iter",
+            "extra": "iterations: 736\ncpu: 903247.979619553 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_add_primitive_numeric_vertex/1000",
+            "value": 2447.1519226177215,
+            "unit": "ns/iter",
+            "extra": "iterations: 255459\ncpu: 2446.709021799977 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_add_primitive_numeric_vertex/4096",
+            "value": 10141.724907934426,
+            "unit": "ns/iter",
+            "extra": "iterations: 59740\ncpu: 10139.689638433214 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_add_primitive_numeric_vertex/32768",
+            "value": 98334.0569123912,
+            "unit": "ns/iter",
+            "extra": "iterations: 8926\ncpu: 98316.91788034952 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_add_primitive_numeric_vertex/262144",
+            "value": 684548.1973203367,
+            "unit": "ns/iter",
+            "extra": "iterations: 821\ncpu: 684336.9573690621 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_add_primitive_numeric_vertex/2097152",
+            "value": 5208738.647058813,
+            "unit": "ns/iter",
+            "extra": "iterations: 119\ncpu: 5202102.815126061 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_add_primitive_numeric_vertex/10000000",
+            "value": 25063351.846153654,
+            "unit": "ns/iter",
+            "extra": "iterations: 26\ncpu: 25058916.461538512 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_add_user_defined_vertex/1000",
+            "value": 23201.63868466274,
+            "unit": "ns/iter",
+            "extra": "iterations: 27339\ncpu: 23144.651962398053 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_add_user_defined_vertex/4096",
+            "value": 92464.23270530706,
+            "unit": "ns/iter",
+            "extra": "iterations: 6953\ncpu: 92282.55141665453 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_add_user_defined_vertex/32768",
+            "value": 925113.3634175755,
+            "unit": "ns/iter",
+            "extra": "iterations: 831\ncpu: 923337.139590854 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_add_user_defined_vertex/262144",
+            "value": 6180229.205882296,
+            "unit": "ns/iter",
+            "extra": "iterations: 102\ncpu: 6166440.931372571 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_add_user_defined_vertex/2097152",
+            "value": 50848808.75000053,
+            "unit": "ns/iter",
+            "extra": "iterations: 12\ncpu: 50690631.74999992 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_add_user_defined_vertex/10000000",
+            "value": 265707818.99999928,
+            "unit": "ns/iter",
+            "extra": "iterations: 2\ncpu: 265183174.00000057 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_bfs_shortest_path/web_google",
+            "value": 510488485.9999999,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 510387118.0000006 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_bfs_shortest_path/web_berkstan",
+            "value": 362894662.4999969,
+            "unit": "ns/iter",
+            "extra": "iterations: 2\ncpu: 362825455.99999946 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_breadth_first_search/web_google",
+            "value": 134442058.99999985,
+            "unit": "ns/iter",
+            "extra": "iterations: 5\ncpu: 134431941.20000044 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_breadth_first_search/web_berkstan",
+            "value": 93240804.28571334,
+            "unit": "ns/iter",
+            "extra": "iterations: 7\ncpu: 93220786.85714327 ns\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/100/2",
+            "value": 0.0532341173961024,
+            "unit": "ms/iter",
+            "extra": "iterations: 13595\ncpu: 0.05323016712026498 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/512/2",
+            "value": 1.00659713104326,
+            "unit": "ms/iter",
+            "extra": "iterations: 786\ncpu: 1.0064889681933873 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/4096/2",
+            "value": 84.808755600001,
+            "unit": "ms/iter",
+            "extra": "iterations: 10\ncpu: 84.80228860000025 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/10000/2",
+            "value": 595.5153470000027,
+            "unit": "ms/iter",
+            "extra": "iterations: 1\ncpu: 595.4829700000062 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/100/8",
+            "value": 0.10758645033721691,
+            "unit": "ms/iter",
+            "extra": "iterations: 6524\ncpu: 0.10757549724095573 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/512/8",
+            "value": 1.7783624689826285,
+            "unit": "ms/iter",
+            "extra": "iterations: 403\ncpu: 1.7781855210918027 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/4096/8",
+            "value": 121.91195600000053,
+            "unit": "ms/iter",
+            "extra": "iterations: 6\ncpu: 121.89228649999961 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/10000/8",
+            "value": 1385.8710149999922,
+            "unit": "ms/iter",
+            "extra": "iterations: 1\ncpu: 1385.7924630000014 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/100/32",
+            "value": 0.38409820361247754,
+            "unit": "ms/iter",
+            "extra": "iterations: 1827\ncpu: 0.38406415325670534 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/512/32",
+            "value": 4.381722033112611,
+            "unit": "ms/iter",
+            "extra": "iterations: 151\ncpu: 4.381155105960254 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/4096/32",
+            "value": 94.34065085714239,
+            "unit": "ms/iter",
+            "extra": "iterations: 7\ncpu: 94.33397900000021 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/10000/32",
+            "value": 548.798091000009,
+            "unit": "ms/iter",
+            "extra": "iterations: 1\ncpu: 548.7647690000017 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/100/2",
+            "value": 0.07009846005482796,
+            "unit": "ms/iter",
+            "extra": "iterations: 10214\ncpu: 0.07008442363422705 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/512/2",
+            "value": 1.140955483870978,
+            "unit": "ms/iter",
+            "extra": "iterations: 589\ncpu: 1.1408572393887948 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/4096/2",
+            "value": 87.73739974999906,
+            "unit": "ms/iter",
+            "extra": "iterations: 8\ncpu: 87.7317612499997 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/10000/2",
+            "value": 579.2164749999955,
+            "unit": "ms/iter",
+            "extra": "iterations: 1\ncpu: 579.1501209999979 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/100/8",
+            "value": 0.15641721594982225,
+            "unit": "ms/iter",
+            "extra": "iterations: 4464\ncpu: 0.15640610707885377 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/512/8",
+            "value": 2.1260958799999887,
+            "unit": "ms/iter",
+            "extra": "iterations: 325\ncpu: 2.125700593846143 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/4096/8",
+            "value": 129.85805920000075,
+            "unit": "ms/iter",
+            "extra": "iterations: 5\ncpu: 129.85305140000065 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/10000/8",
+            "value": 1614.0376160000046,
+            "unit": "ms/iter",
+            "extra": "iterations: 1\ncpu: 1613.918531000003 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/100/32",
+            "value": 0.6095148433945775,
+            "unit": "ms/iter",
+            "extra": "iterations: 1143\ncpu: 0.609475311461065 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/512/32",
+            "value": 6.135708060869621,
+            "unit": "ms/iter",
+            "extra": "iterations: 115\ncpu: 6.1349047217391375 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/4096/32",
+            "value": 166.19462499999926,
+            "unit": "ms/iter",
+            "extra": "iterations: 4\ncpu: 166.18107424999982 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/10000/32",
+            "value": 1635.311600999998,
+            "unit": "ms/iter",
+            "extra": "iterations: 1\ncpu: 1635.209470999996 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/100/1000",
+            "value": 4.500681513661209,
+            "unit": "ms/iter",
+            "extra": "iterations: 183\ncpu: 4.500286573770476 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/512/1000",
+            "value": 248.50151400000087,
+            "unit": "ms/iter",
+            "extra": "iterations: 4\ncpu: 248.4806117500007 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/1000/1000",
+            "value": 785.636580000002,
+            "unit": "ms/iter",
+            "extra": "iterations: 1\ncpu: 785.4953969999912 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/100/10",
+            "value": 0.1300453969282016,
+            "unit": "ms/iter",
+            "extra": "iterations: 5404\ncpu: 0.13003898519615129 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/512/10",
+            "value": 1.9307434039900397,
+            "unit": "ms/iter",
+            "extra": "iterations: 401\ncpu: 1.930463571072313 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/4096/10",
+            "value": 138.74527419999936,
+            "unit": "ms/iter",
+            "extra": "iterations: 5\ncpu: 138.73637320000114 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/10000/10",
+            "value": 1769.8583889999923,
+            "unit": "ms/iter",
+            "extra": "iterations: 1\ncpu: 1769.670406000003 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/100/60",
+            "value": 0.5022594129316672,
+            "unit": "ms/iter",
+            "extra": "iterations: 1361\ncpu: 0.5021903144746472 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/512/60",
+            "value": 10.800608558823528,
+            "unit": "ms/iter",
+            "extra": "iterations: 68\ncpu: 10.79937249999992 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/4096/60",
+            "value": 152.34808440000052,
+            "unit": "ms/iter",
+            "extra": "iterations: 5\ncpu: 152.34145299999966 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_cliques/10000/60",
+            "value": 767.1848669999974,
+            "unit": "ms/iter",
+            "extra": "iterations: 1\ncpu: 767.0915359999952 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/100/10",
+            "value": 0.20194044752309218,
+            "unit": "ms/iter",
+            "extra": "iterations: 3573\ncpu: 0.2019320176322387 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/512/10",
+            "value": 2.282015562091544,
+            "unit": "ms/iter",
+            "extra": "iterations: 306\ncpu: 2.2816681732026005 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/4096/10",
+            "value": 97.85826224999994,
+            "unit": "ms/iter",
+            "extra": "iterations: 8\ncpu: 97.85143487500036 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/10000/10",
+            "value": 518.0197050000004,
+            "unit": "ms/iter",
+            "extra": "iterations: 1\ncpu: 517.9668779999957 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/100/60",
+            "value": 0.6247466172381837,
+            "unit": "ms/iter",
+            "extra": "iterations: 1079\ncpu: 0.6246946311399466 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/512/60",
+            "value": 12.57700085365863,
+            "unit": "ms/iter",
+            "extra": "iterations: 41\ncpu: 12.576935804878046 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/4096/60",
+            "value": 180.75108800000095,
+            "unit": "ms/iter",
+            "extra": "iterations: 4\ncpu: 180.71644824999922 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_cliques/10000/60",
+            "value": 2370.09008199999,
+            "unit": "ms/iter",
+            "extra": "iterations: 1\ncpu: 2369.9645459999915 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_random_cliques/100",
+            "value": 0.48684266092144135,
+            "unit": "ms/iter",
+            "extra": "iterations: 3017\ncpu: 0.4867989917136257 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_random_cliques/512",
+            "value": 4.607343494444333,
+            "unit": "ms/iter",
+            "extra": "iterations: 180\ncpu: 4.607198949999969 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_random_cliques/4096",
+            "value": 105.97060416666675,
+            "unit": "ms/iter",
+            "extra": "iterations: 6\ncpu: 105.95900000000096 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_random_cliques/10000",
+            "value": 790.8106940000152,
+            "unit": "ms/iter",
+            "extra": "iterations: 1\ncpu: 790.7958610000065 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_random_cliques/100",
+            "value": 0.2964803772915423,
+            "unit": "ms/iter",
+            "extra": "iterations: 1691\ncpu: 0.29644289828504355 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_random_cliques/512",
+            "value": 4.782683563492117,
+            "unit": "ms/iter",
+            "extra": "iterations: 126\ncpu: 4.782471023809474 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_random_cliques/4096",
+            "value": 156.53088214285813,
+            "unit": "ms/iter",
+            "extra": "iterations: 7\ncpu: 156.51671971428576 ms\nthreads: 1"
+          },
+          {
+            "name": "bron_kerbosh_connected_random_cliques/10000",
+            "value": 1178.2591169999819,
+            "unit": "ms/iter",
+            "extra": "iterations: 1\ncpu: 1178.2181439999988 ms\nthreads: 1"
+          },
+          {
+            "name": "bm_dijkstra_shortest_path/web_google",
+            "value": 2929260291.00002,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 2928950935.0000033 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_dijkstra_shortest_path/web_berkstan",
+            "value": 3200525032.0000014,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 3200173039.000006 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_dijkstra_shortest_paths/web_google",
+            "value": 4236344140,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 4235881019.999994 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_dijkstra_shortest_paths/web_berkstan",
+            "value": 4617895433.99999,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 4617394415.999996 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_greedy_graph_coloring/web_google",
+            "value": 629590253.999993,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 629518470.9999973 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_greedy_graph_coloring/web_berkstan",
+            "value": 446729242.99999297,
+            "unit": "ns/iter",
+            "extra": "iterations: 2\ncpu: 446693146.99999774 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_kruskal/web_google",
+            "value": 1007618145.0000092,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 1007527182.000004 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_kruskal/web_berkstan",
+            "value": 1297288391.9999845,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 1297011126.9999905 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_prim/web_google",
+            "value": 112334611.4999985,
+            "unit": "ns/iter",
+            "extra": "iterations: 6\ncpu: 112313458.49999742 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_prim/web_berkstan",
+            "value": 137570440.799999,
+            "unit": "ns/iter",
+            "extra": "iterations: 5\ncpu: 137549566.00000128 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_welsh_powell_coloring/web_google",
+            "value": 1276746321.0000188,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 1276575024.9999995 ns\nthreads: 1"
+          },
+          {
+            "name": "bm_welsh_powell_coloring/web_berkstan",
+            "value": 935947963.999979,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 935824547.9999994 ns\nthreads: 1"
           }
         ]
       }
