@@ -3,6 +3,7 @@
 #include <graaflib/algorithm/utils.h>
 
 #include <algorithm>
+#include <optional>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -39,8 +40,21 @@ std::unordered_map<vertex_id_t, int> welsh_powell_coloring(const GRAPH& graph) {
 
   std::sort(degree_vertex_pairs.rbegin(), degree_vertex_pairs.rend());
 
-  // Step 2: Assign colors to vertices
-  std::unordered_map<vertex_id_t, int> color_map;
+  // Step 2: Assign colors to vertices.
+  //
+  // Indexed directly by vertex_id_t rather than an unordered_map for the
+  // per-edge lookups in collect_neighbor_color() below - the public
+  // unordered_map<vertex_id_t, int> contract is only built once, at the end.
+  std::vector<std::optional<int>> coloring{};
+  const auto get_color{[&](vertex_id_t id) -> std::optional<int> {
+    return id < coloring.size() ? coloring[id] : std::nullopt;
+  }};
+  const auto set_color{[&](vertex_id_t id, int color) {
+    if (id >= coloring.size()) {
+      coloring.resize(id + 1);
+    }
+    coloring[id] = color;
+  }};
 
   for (const auto [_, current_vertex] : degree_vertex_pairs) {
     // Collect the colors already used by neighbors of the current vertex.
@@ -50,8 +64,8 @@ std::unordered_map<vertex_id_t, int> welsh_powell_coloring(const GRAPH& graph) {
     std::unordered_set<int> neighbor_colors;
 
     const auto collect_neighbor_color{[&](vertex_id_t neighbor_id) {
-      if (const auto it{color_map.find(neighbor_id)}; it != color_map.end()) {
-        neighbor_colors.insert(it->second);
+      if (const auto color{get_color(neighbor_id)}; color.has_value()) {
+        neighbor_colors.insert(*color);
       }
     }};
 
@@ -73,9 +87,15 @@ std::unordered_map<vertex_id_t, int> welsh_powell_coloring(const GRAPH& graph) {
       color++;
     }
 
-    color_map[current_vertex] = color;
+    set_color(current_vertex, color);
   }
 
+  std::unordered_map<vertex_id_t, int> color_map{};
+  for (vertex_id_t id{0}; id < coloring.size(); ++id) {
+    if (coloring[id].has_value()) {
+      color_map.emplace(id, *coloring[id]);
+    }
+  }
   return color_map;
 }
 
