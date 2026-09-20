@@ -18,11 +18,10 @@ dijkstra_shortest_paths(const graph<V, E, T>& graph,
                           std::greater<>>;
   dijkstra_queue_t to_explore{};
 
-  // Indexed directly by vertex_id_t rather than an unordered_map, grown
-  // lazily as vertices are discovered. Tracks only (dist_from_start,
-  // prev_id) per vertex during the search - each reachable vertex's full
-  // path is reconstructed once at the end via backtracking, rather than
-  // copied on every relaxation.
+  // Indexed directly by vertex_id_t, grown lazily as vertices are
+  // discovered. Tracks only (dist_from_start, prev_id) per vertex during
+  // the search; each reachable vertex's full path is reconstructed once at
+  // the end via backtracking.
   std::vector<std::optional<weighted_path_item>> vertex_info{};
   const auto has_info{[&](vertex_id_t id) {
     return id < vertex_info.size() && vertex_info[id].has_value();

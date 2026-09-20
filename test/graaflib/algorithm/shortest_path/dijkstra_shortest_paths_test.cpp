@@ -115,6 +115,35 @@ TYPED_TEST(DijkstraShortestPathsTest, DijkstraMoreComplexShortestPathTree) {
   ASSERT_EQ(path_map, expected_path_map);
 }
 
+TYPED_TEST(DijkstraShortestPathsTest,
+           DijkstraUnreachableVertexExcludedFromMap) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  using edge_t = typename TestFixture::edge_t;
+  using weight_t = decltype(get_weight(std::declval<edge_t>()));
+
+  graph_t graph{};
+
+  const auto vertex_id_1{graph.add_vertex(10)};
+  const auto vertex_id_2{graph.add_vertex(20)};
+  const auto vertex_id_3{graph.add_vertex(30)};
+  graph.add_edge(vertex_id_1, vertex_id_2, edge_t{static_cast<weight_t>(1)});
+  // vertex_id_3 is left unconnected to the rest of the graph.
+
+  // WHEN
+  const auto path_map = dijkstra_shortest_paths(graph, vertex_id_1);
+
+  // THEN
+  const graph_path<weight_t> path1{{vertex_id_1}, 0};
+  const graph_path<weight_t> path2{{vertex_id_1, vertex_id_2}, 1};
+
+  std::unordered_map<vertex_id_t, graph_path<weight_t>> expected_path_map;
+  expected_path_map[vertex_id_1] = path1;
+  expected_path_map[vertex_id_2] = path2;
+  ASSERT_EQ(path_map, expected_path_map);
+  ASSERT_FALSE(path_map.contains(vertex_id_3));
+}
+
 TYPED_TEST(DijkstraShortestPathsSignedTypesTest, DijkstraNegativeWeightTree) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
