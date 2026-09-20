@@ -18,11 +18,10 @@ std::optional<graph_path<WEIGHT_T>> dijkstra_shortest_path(
                           std::greater<>>;
   dijkstra_queue_t to_explore{};
 
-  // Indexed directly by vertex_id_t rather than an unordered_map, grown
-  // lazily as vertices are discovered during the search. reconstruct_path()
-  // isn't reused here since it's typed against the unordered_map version,
-  // still used by a_star_search() - backtracking the path is only a few
-  // lines, not worth forcing both algorithms to convert together.
+  // Indexed directly by vertex_id_t, grown lazily as vertices are
+  // discovered during the search. Path reconstruction is inlined below
+  // rather than going through reconstruct_path(), since backtracking is
+  // only a few lines.
   std::vector<std::optional<weighted_path_item>> vertex_info{};
   const auto has_info{[&](vertex_id_t id) {
     return id < vertex_info.size() && vertex_info[id].has_value();
