@@ -10,10 +10,10 @@ namespace graaf::algorithm {
 
 // Disjoint Set Union to maintain sets of vertices.
 //
-// parent/rank are indexed directly by vertex_id_t rather than keyed in an
-// unordered_map: do_make_set() is called once per vertex up front, before
-// any find/merge, so by the time a vertex_id_t reaches do_find_set() or
-// do_merge_sets() its slot is already there - no lazy growth needed here.
+// parent/rank are indexed directly by vertex_id_t: do_make_set() is called
+// once per vertex up front, before any find/merge, so by the time a
+// vertex_id_t reaches do_find_set() or do_merge_sets() its slot is already
+// there.
 namespace detail {
 void do_make_set(vertex_id_t v, std::vector<vertex_id_t>& parent,
                  std::vector<vertex_id_t>& rank) {
