@@ -23,9 +23,9 @@ std::unordered_map<vertex_id_t, int> greedy_graph_coloring(const GRAPH& graph) {
     predecessors = get_predecessors(graph);
   }
 
-  // Indexed directly by vertex_id_t rather than an unordered_map for the
-  // per-edge lookups in consider_neighbor() below - the public
-  // unordered_map<vertex_id_t, int> contract is only built once, at the end.
+  // Indexed directly by vertex_id_t for the per-edge lookups in
+  // consider_neighbor() below. The public unordered_map<vertex_id_t, int>
+  // contract is only built once, at the end.
   std::vector<std::optional<int>> coloring{};
   const auto get_color{[&](vertex_id_t id) -> std::optional<int> {
     return id < coloring.size() ? coloring[id] : std::nullopt;
