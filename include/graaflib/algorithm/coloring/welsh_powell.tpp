@@ -42,9 +42,9 @@ std::unordered_map<vertex_id_t, int> welsh_powell_coloring(const GRAPH& graph) {
 
   // Step 2: Assign colors to vertices.
   //
-  // Indexed directly by vertex_id_t rather than an unordered_map for the
-  // per-edge lookups in collect_neighbor_color() below - the public
-  // unordered_map<vertex_id_t, int> contract is only built once, at the end.
+  // Indexed directly by vertex_id_t for the per-edge lookups in
+  // collect_neighbor_color() below. The public unordered_map<vertex_id_t,
+  // int> contract is only built once, at the end.
   std::vector<std::optional<int>> coloring{};
   const auto get_color{[&](vertex_id_t id) -> std::optional<int> {
     return id < coloring.size() ? coloring[id] : std::nullopt;
