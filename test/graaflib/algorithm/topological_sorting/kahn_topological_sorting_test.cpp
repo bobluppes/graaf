@@ -54,6 +54,62 @@ template <typename graph_t>
 
 };  // namespace
 
+// Every test below asserts through is_topological_order, so these pin down
+// what it rejects, using orderings a correct topological sort never returns.
+TYPED_TEST(TypedKahnTopologicalSort, TopologicalOrderHelperRejectsWrongSize) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  graph_t graph{};
+  const auto vertex_1{graph.add_vertex(10)};
+  const auto vertex_2{graph.add_vertex(20)};
+  graph.add_edge(vertex_1, vertex_2, 100);
+
+  // WHEN - THEN
+  EXPECT_FALSE(is_topological_order(graph, {vertex_1}));
+}
+
+TYPED_TEST(TypedKahnTopologicalSort, TopologicalOrderHelperRejectsDuplicate) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  graph_t graph{};
+  const auto vertex_1{graph.add_vertex(10)};
+  const auto vertex_2{graph.add_vertex(20)};
+  graph.add_edge(vertex_1, vertex_2, 100);
+
+  // WHEN - THEN
+  EXPECT_FALSE(is_topological_order(graph, {vertex_1, vertex_1}));
+}
+
+TYPED_TEST(TypedKahnTopologicalSort,
+           TopologicalOrderHelperRejectsMissingVertex) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  graph_t graph{};
+  const auto vertex_1{graph.add_vertex(10)};
+  const auto vertex_2{graph.add_vertex(20)};
+
+  // A vertex of the graph is replaced by an id that is not in it, which keeps
+  // the size right and every entry unique
+  const vertex_id_t absent_vertex{vertex_1 + vertex_2 + 1};
+
+  // WHEN - THEN
+  EXPECT_FALSE(is_topological_order(graph, {vertex_1, absent_vertex}));
+}
+
+TYPED_TEST(TypedKahnTopologicalSort,
+           TopologicalOrderHelperRejectsBackwardEdge) {
+  // GIVEN
+  using graph_t = typename TestFixture::graph_t;
+  graph_t graph{};
+  const auto vertex_1{graph.add_vertex(10)};
+  const auto vertex_2{graph.add_vertex(20)};
+  graph.add_edge(vertex_1, vertex_2, 100);
+
+  // WHEN - THEN
+  EXPECT_TRUE(is_topological_order(graph, {vertex_1, vertex_2}));
+  EXPECT_FALSE(is_topological_order(graph, {vertex_2, vertex_1}));
+}
+
 TYPED_TEST(TypedKahnTopologicalSort, EmptyGraph) {
   // GIVEN
   using graph_t = typename TestFixture::graph_t;
