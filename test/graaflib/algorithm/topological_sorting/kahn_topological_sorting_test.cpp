@@ -1,13 +1,16 @@
 #include <graaflib/algorithm/topological_sorting/kahn_topological_sorting.h>
 #include <gtest/gtest.h>
+#include <utils/assertions/topological_order_assertions.h>
 #include <utils/fixtures/fixtures.h>
 
 #include <algorithm>
-#include <unordered_map>
 #include <vector>
 
 namespace graaf::algorithm {
 namespace {
+
+using utils::assertions::is_topological_order;
+
 template <typename T>
 struct TypedKahnTopologicalSort : public testing::Test {
   using graph_t = T;
@@ -16,99 +19,7 @@ struct TypedKahnTopologicalSort : public testing::Test {
 TYPED_TEST_SUITE(TypedKahnTopologicalSort,
                  utils::fixtures::minimal_directed_graph_type);
 
-// Kahn's algorithm picks its next source from an unordered container, so a
-// graph usually admits several valid orderings. Rather than enumerating them
-// all, we assert the two properties that define a topological order: the
-// result contains every vertex exactly once, and every edge points forward.
-template <typename graph_t>
-[[nodiscard]] bool is_topological_order(
-    const graph_t& graph, const std::vector<vertex_id_t>& sorted_vertices) {
-  if (sorted_vertices.size() != graph.vertex_count()) {
-    return false;
-  }
-
-  std::unordered_map<vertex_id_t, std::size_t> position{};
-  for (std::size_t index{0}; index < sorted_vertices.size(); ++index) {
-    const auto [_,
-                inserted]{position.try_emplace(sorted_vertices[index], index)};
-    if (!inserted) {
-      // Duplicate vertex in the result
-      return false;
-    }
-  }
-
-  for (const auto& [vertex_id, _] : graph.get_vertices()) {
-    if (!position.contains(vertex_id)) {
-      return false;
-    }
-
-    for (const auto& neighbor : graph.get_neighbors(vertex_id)) {
-      if (position.at(vertex_id) >= position.at(neighbor)) {
-        return false;
-      }
-    }
-  }
-
-  return true;
-}
-
 };  // namespace
-
-// Every test below asserts through is_topological_order, so these pin down
-// what it rejects, using orderings a correct topological sort never returns.
-TYPED_TEST(TypedKahnTopologicalSort, TopologicalOrderHelperRejectsWrongSize) {
-  // GIVEN
-  using graph_t = typename TestFixture::graph_t;
-  graph_t graph{};
-  const auto vertex_1{graph.add_vertex(10)};
-  const auto vertex_2{graph.add_vertex(20)};
-  graph.add_edge(vertex_1, vertex_2, 100);
-
-  // WHEN - THEN
-  EXPECT_FALSE(is_topological_order(graph, {vertex_1}));
-}
-
-TYPED_TEST(TypedKahnTopologicalSort, TopologicalOrderHelperRejectsDuplicate) {
-  // GIVEN
-  using graph_t = typename TestFixture::graph_t;
-  graph_t graph{};
-  const auto vertex_1{graph.add_vertex(10)};
-  const auto vertex_2{graph.add_vertex(20)};
-  graph.add_edge(vertex_1, vertex_2, 100);
-
-  // WHEN - THEN
-  EXPECT_FALSE(is_topological_order(graph, {vertex_1, vertex_1}));
-}
-
-TYPED_TEST(TypedKahnTopologicalSort,
-           TopologicalOrderHelperRejectsMissingVertex) {
-  // GIVEN
-  using graph_t = typename TestFixture::graph_t;
-  graph_t graph{};
-  const auto vertex_1{graph.add_vertex(10)};
-  const auto vertex_2{graph.add_vertex(20)};
-
-  // A vertex of the graph is replaced by an id that is not in it, which keeps
-  // the size right and every entry unique
-  const vertex_id_t absent_vertex{vertex_1 + vertex_2 + 1};
-
-  // WHEN - THEN
-  EXPECT_FALSE(is_topological_order(graph, {vertex_1, absent_vertex}));
-}
-
-TYPED_TEST(TypedKahnTopologicalSort,
-           TopologicalOrderHelperRejectsBackwardEdge) {
-  // GIVEN
-  using graph_t = typename TestFixture::graph_t;
-  graph_t graph{};
-  const auto vertex_1{graph.add_vertex(10)};
-  const auto vertex_2{graph.add_vertex(20)};
-  graph.add_edge(vertex_1, vertex_2, 100);
-
-  // WHEN - THEN
-  EXPECT_TRUE(is_topological_order(graph, {vertex_1, vertex_2}));
-  EXPECT_FALSE(is_topological_order(graph, {vertex_2, vertex_1}));
-}
 
 TYPED_TEST(TypedKahnTopologicalSort, EmptyGraph) {
   // GIVEN
