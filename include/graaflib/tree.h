@@ -22,6 +22,15 @@ class tree {
   [[nodiscard]] tree_node* root() { return root_.get(); }
   [[nodiscard]] const tree_node* root() const { return root_.get(); }
 
+  /**
+   * Sums the values of all edges in the tree, e.g. the total weight of a
+   * minimum spanning tree.
+   *
+   * @return The sum of all edge values in the tree. EDGE_T{} if the tree
+   * only consists of a root node.
+   */
+  [[nodiscard]] EDGE_T total_weight() const;
+
   struct tree_node {
     // TODO(b.luppes): we are leaking implementation details regarding memory
     // management of children using std::unique_ptr. Consider providing a
@@ -40,6 +49,8 @@ class tree {
 
  private:
   std::unique_ptr<tree_node> root_{};
+
+  static EDGE_T accumulate_weight(const tree_node* node);
 };
 
 /**

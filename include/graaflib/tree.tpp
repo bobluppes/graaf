@@ -13,4 +13,18 @@ tree<VERTEX_T, EDGE_T>::tree_node* tree<VERTEX_T, EDGE_T>::tree_node::add_child(
   return children.back().child.get();
 }
 
+template <typename VERTEX_T, typename EDGE_T>
+EDGE_T tree<VERTEX_T, EDGE_T>::total_weight() const {
+  return accumulate_weight(root_.get());
+}
+
+template <typename VERTEX_T, typename EDGE_T>
+EDGE_T tree<VERTEX_T, EDGE_T>::accumulate_weight(const tree_node* node) {
+  EDGE_T total{};
+  for (const auto& link : node->children) {
+    total += link.value + accumulate_weight(link.child.get());
+  }
+  return total;
+}
+
 }  // namespace graaf
