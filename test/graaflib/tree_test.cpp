@@ -40,6 +40,36 @@ TEST(TreeTest, CanConstructWithChild) {
   ASSERT_EQ(child->children.size(), 0);
 }
 
+TEST(TreeTest, TotalWeightOfRootOnlyTreeIsZero) {
+  // GIVEN
+  using tree_t = tree<int, int>;
+  tree_t tree{42};
+
+  // WHEN / THEN
+  ASSERT_EQ(tree.total_weight(), 0);
+}
+
+TEST(TreeTest, TotalWeightSumsAllEdgeValues) {
+  // GIVEN
+  // clang-format off
+  //       42
+  //     /    \
+  //   100    200
+  //   /       /  \
+  // 300      400  500
+  // clang-format on
+  using tree_t = tree<int, int>;
+  tree_t tree{42};
+  auto* child_1{tree.root()->add_child(100, 1)};
+  auto* child_2{tree.root()->add_child(200, 2)};
+  [[maybe_unused]] auto* child_3{child_1->add_child(300, 3)};
+  [[maybe_unused]] auto* child_4{child_2->add_child(400, 4)};
+  [[maybe_unused]] auto* child_5{child_2->add_child(500, 5)};
+
+  // WHEN / THEN
+  ASSERT_EQ(tree.total_weight(), 100 + 200 + 300 + 400 + 500);
+}
+
 TEST(TreeTest, ForestIsACollectionOfTrees) {
   // GIVEN
   using tree_t = tree<int, int>;
