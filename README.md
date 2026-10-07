@@ -124,6 +124,9 @@ take a look at the [docs](https://bobluppes.github.io/graaf/algorithms/intro.htm
     - [Bron-Kerbosch](https://bobluppes.github.io/graaf/algorithms/clique-detection/bron_kerbosch.html)
 9. [**Ranking Algorithms**](https://bobluppes.github.io/graaf/algorithms/ranking/)
    - [PageRank](https://bobluppes.github.io/graaf/algorithms/ranking/pagerank.html)
+10. [**Connectivity Algorithms**](https://bobluppes.github.io/graaf/algorithms/connectivity/):
+    - [Articulation Points](https://bobluppes.github.io/graaf/algorithms/connectivity/articulation-points.html)
+    - [Bridges](https://bobluppes.github.io/graaf/algorithms/connectivity/bridges.html)
 
 # Contributing
 
