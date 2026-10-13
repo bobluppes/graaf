@@ -3,6 +3,9 @@
 #include <gtest/gtest.h>
 #include <utils/fixtures/fixtures.h>
 
+#include <limits>
+#include <random>
+
 namespace graaf::algorithm {
 
 namespace {
@@ -252,6 +255,135 @@ TYPED_TEST(AStarShortestPathTest, AStarHeuristicImpact) {
             expected_total_weight);
   ASSERT_EQ(path_with_overestimating_heuristic->total_weight,
             expected_total_weight);
+}
+
+TEST(AStarDenseStorageTest, GrowsAcrossHolesAndUpdatesDiscoveredVertices) {
+  graph<int, int, graph_type::DIRECTED> graph;
+  std::vector<vertex_id_t> ids;
+  for (int i{0}; i < 257; ++i) {
+    ids.push_back(graph.add_vertex(0));
+  }
+  const auto start{ids[7]};
+  const auto via{ids[65]};
+  const auto target{ids[256]};
+  for (const auto id : ids) {
+    if (id != start && id != via && id != target) {
+      graph.remove_vertex(id);
+    }
+  }
+  graph.add_edge(start, target, 20);
+  graph.add_edge(start, via, 2);
+  graph.add_edge(via, target, 3);
+
+  const auto heuristic{
+      [target](vertex_id_t id) { return id == target ? 0 : 1; }};
+  const auto path{a_star_search(graph, start, target, heuristic)};
+  const graph_path<int> expected{{start, via, target}, 5};
+  ASSERT_EQ(path, expected);
+}
+
+TEST(AStarDenseStorageTest, HandlesLargeAbsentIdsWithoutIndexedAllocation) {
+  graph<int, int, graph_type::DIRECTED> graph;
+  const auto start{graph.add_vertex(0)};
+  const auto absent{std::numeric_limits<vertex_id_t>::max()};
+  int heuristic_calls{0};
+  const auto heuristic{[&](vertex_id_t) {
+    ++heuristic_calls;
+    return 0;
+  }};
+
+  EXPECT_FALSE(a_star_search(graph, absent, start, heuristic));
+  EXPECT_FALSE(a_star_search(graph, start, absent, heuristic));
+  const graph_path<int> trivial{{absent}, 0};
+  EXPECT_EQ(a_star_search(graph, absent, absent, heuristic), trivial);
+  EXPECT_EQ(heuristic_calls, 3);
+}
+
+TEST(AStarDenseStorageTest, DisconnectedTargetDoesNotAppearDiscovered) {
+  graph<int, int, graph_type::UNDIRECTED> graph;
+  const auto start{graph.add_vertex(0)};
+  const auto target{graph.add_vertex(0)};
+  vertex_id_t neighbor{};
+  std::vector<vertex_id_t> removed;
+  for (int i{0}; i < 63; ++i) {
+    neighbor = graph.add_vertex(0);
+    removed.push_back(neighbor);
+  }
+  removed.pop_back();
+  for (const auto id : removed) {
+    graph.remove_vertex(id);
+  }
+  graph.add_edge(start, neighbor, 0);
+  graph.add_edge(neighbor, neighbor, 0);
+
+  EXPECT_FALSE(
+      a_star_search(graph, start, target, [](vertex_id_t) { return 0; }));
+}
+
+TEST(AStarDenseStorageTest, MatchesIndependentAllPairsDistances) {
+  // Floyd-Warshall supplies an independent oracle. Sparse ids exercise lazy
+  // growth, and zero weights and cycles exercise repeated discovery.
+  constexpr std::size_t vertex_count{12};
+  constexpr int infinity{100000};
+  std::mt19937 generator{463};
+  for (int sample{0}; sample < 24; ++sample) {
+    graph<int, int, graph_type::DIRECTED> graph;
+    std::vector<vertex_id_t> ids;
+    std::vector<std::vector<int>> distances(
+        vertex_count, std::vector<int>(vertex_count, infinity));
+    for (std::size_t i{0}; i < vertex_count; ++i) {
+      [[maybe_unused]] const auto gap_1{graph.add_vertex(0)};
+      [[maybe_unused]] const auto gap_2{graph.add_vertex(0)};
+      ids.push_back(graph.add_vertex(0));
+      distances[i][i] = 0;
+    }
+    for (vertex_id_t id{0}; id < 3 * vertex_count; ++id) {
+      if (id % 3 != 2) {
+        graph.remove_vertex(id);
+      }
+    }
+    for (std::size_t from{0}; from < vertex_count; ++from) {
+      for (std::size_t to{0}; to < vertex_count; ++to) {
+        if (from != to && generator() % 5 == 0) {
+          const auto weight{static_cast<int>(generator() % 10)};
+          graph.add_edge(ids[from], ids[to], weight);
+          distances[from][to] = weight;
+        }
+      }
+    }
+    for (std::size_t via{0}; via < vertex_count; ++via) {
+      for (std::size_t from{0}; from < vertex_count; ++from) {
+        for (std::size_t to{0}; to < vertex_count; ++to) {
+          distances[from][to] = std::min(
+              distances[from][to], distances[from][via] + distances[via][to]);
+        }
+      }
+    }
+    for (std::size_t from{0}; from < vertex_count; ++from) {
+      for (std::size_t to{0}; to < vertex_count; ++to) {
+        SCOPED_TRACE(testing::Message() << "sample=" << sample
+                                        << " from=" << from << " to=" << to);
+        const auto path{a_star_search(graph, ids[from], ids[to],
+                                      [](vertex_id_t) { return 0; })};
+        if (distances[from][to] == infinity) {
+          EXPECT_FALSE(path);
+          continue;
+        }
+        ASSERT_TRUE(path);
+        EXPECT_EQ(path->total_weight, distances[from][to]);
+        EXPECT_EQ(path->vertices.front(), ids[from]);
+        EXPECT_EQ(path->vertices.back(), ids[to]);
+        int total{0};
+        auto current{path->vertices.begin()};
+        for (auto next{std::next(current)}; next != path->vertices.end();
+             ++current, ++next) {
+          ASSERT_TRUE(graph.has_edge(*current, *next));
+          total += graph.get_edge(*current, *next);
+        }
+        EXPECT_EQ(total, path->total_weight);
+      }
+    }
+  }
 }
 
 }  // namespace graaf::algorithm

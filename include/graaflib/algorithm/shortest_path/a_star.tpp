@@ -1,5 +1,6 @@
 #pragma once
 #include <queue>
+#include <vector>
 
 #include "a_star.h"
 
@@ -9,7 +10,7 @@ namespace detail {
 
 // Open set entries are ordered by f_score (g_score + heuristic), which is
 // only used to pick the next vertex to expand. This is intentionally kept
-// separate from path_vertex::dist_from_start, which reconstruct_path reports
+// separate from path_vertex::dist_from_start, which path reconstruction reports
 // as the path's total_weight and therefore must hold the true accumulated
 // cost (g_score), not the heuristic-inflated f_score.
 template <typename WEIGHT_T>
@@ -40,22 +41,36 @@ std::optional<graph_path<WEIGHT_T>> a_star_search(
                           std::greater<>>;
   a_star_queue_t open_set{};
 
-  // For vertex n, g_score[n] is the cost of the cheapest path from start to n
-  // currently known. It tracks the cost of reaching each vertex
-  std::unordered_map<vertex_id_t, WEIGHT_T> g_score;
-  // Initialize g_score map.
-  g_score[start_vertex] = 0;
+  // Preserve the existing heuristic call and trivial-path behavior even for
+  // an absent start vertex, without allocating storage indexed by an invalid
+  // (potentially very large) id.
+  const auto initial_f_score{heuristic(start_vertex)};
+  if (start_vertex == target_vertex) {
+    return graph_path<WEIGHT_T>{{start_vertex}, 0};
+  }
+  if (!graph.has_vertex(start_vertex)) {
+    return std::nullopt;
+  }
 
-  // vertex_info tracks, for each discovered vertex, the true accumulated
-  // cost from start (dist_from_start = g_score) and its predecessor on the
-  // cheapest known path. This is what reconstruct_path uses to build the
-  // resulting graph_path, including its total_weight.
+  // An empty slot denotes an undiscovered vertex. Grow lazily by vertex id,
+  // including holes left by removed vertices. dist_from_start stores g_score,
+  // so a second container for the same accumulated cost is unnecessary.
   using weighted_path_item = detail::path_vertex<WEIGHT_T>;
-  std::unordered_map<vertex_id_t, weighted_path_item> vertex_info;
-  vertex_info[start_vertex] = {start_vertex, 0, start_vertex};
+  std::vector<std::optional<weighted_path_item>> vertex_info{};
+  const auto has_info{[&](vertex_id_t id) {
+    return id < vertex_info.size() && vertex_info[id].has_value();
+  }};
+  const auto set_info{
+      [&](vertex_id_t id, WEIGHT_T distance, vertex_id_t predecessor) {
+        if (id >= vertex_info.size()) {
+          vertex_info.resize(id + 1);
+        }
+        vertex_info[id] = weighted_path_item{id, distance, predecessor};
+      }};
+  set_info(start_vertex, 0, start_vertex);
 
   // Initialize start vertex in open set queue
-  open_set.push(open_set_item{start_vertex, heuristic(start_vertex)});
+  open_set.push(open_set_item{start_vertex, initial_f_score});
 
   while (!open_set.empty()) {
     // Get the vertex with the lowest f_score
@@ -64,7 +79,15 @@ std::optional<graph_path<WEIGHT_T>> a_star_search(
 
     // Check if current vertex is the target
     if (current.id == target_vertex) {
-      return reconstruct_path(start_vertex, target_vertex, vertex_info);
+      graph_path<WEIGHT_T> path;
+      auto vertex{target_vertex};
+      while (vertex != start_vertex) {
+        path.vertices.push_front(vertex);
+        vertex = vertex_info[vertex]->prev_id;
+      }
+      path.vertices.push_front(start_vertex);
+      path.total_weight = vertex_info[target_vertex]->dist_from_start;
+      return path;
     }
 
     // Iterate through neighboring vertices
@@ -81,26 +104,22 @@ std::optional<graph_path<WEIGHT_T>> a_star_search(
 
       // tentative_g_score is the distance from start to the neighbor through
       // current_vertex
-      WEIGHT_T tentative_g_score = g_score[current.id] + edge_weight;
+      WEIGHT_T tentative_g_score =
+          vertex_info[current.id]->dist_from_start + edge_weight;
 
       // Checks if vertex_info doesn't contain neighbor yet.
       // But if it contains it, and the tentative_g_score is smaller,
       // we need to update vertex_info and add it to the open set.
-      if (!vertex_info.contains(neighbor) ||
-          tentative_g_score < g_score[neighbor]) {
+      if (!has_info(neighbor) ||
+          tentative_g_score < vertex_info[neighbor]->dist_from_start) {
         // This path to neighbor is better than any previous one, so we need
         // to update our data. Update neighbor's g_score, f_score and previous
         // vertex on the path
-        g_score[neighbor] = tentative_g_score;
         auto f_score = tentative_g_score + heuristic(neighbor);
 
         // always update vertex_info[neighbor] with the true accumulated cost
-        // (g_score), so reconstruct_path reports the correct total_weight.
-        vertex_info[neighbor] = {
-            neighbor,           // vertex id
-            tentative_g_score,  // true accumulated cost from start
-            current.id          // neighbor vertex came from current vertex
-        };
+        // (g_score), so the resulting path reports the correct total_weight.
+        set_info(neighbor, tentative_g_score, current.id);
 
         open_set.push(open_set_item{neighbor, f_score});
       }

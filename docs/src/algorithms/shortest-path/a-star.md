@@ -30,8 +30,10 @@ Where:
 - `h_score` is the heuristic estimate of the cost from the current vertex to the goal vertex.
 
 In the implementation, the heuristic function `heuristic` provides an estimate of `h_score` for each vertex, and the
-actual cost of the path from the start vertex to the current vertex is stored in the `g_score` unordered map, as the
-algorithm progresses.
+actual cost of the path from the start vertex to the current vertex is stored in `vertex_info`, alongside its
+predecessor. This vector is indexed by vertex id and grows as vertices are discovered; empty slots represent
+undiscovered vertices, including gaps from removed vertices. Storage is proportional to the largest discovered id
+plus one, rather than just the number of discovered vertices. This matches the graph's own vector storage.
 
 In the implementation, `dist_from_start` from `path_vertex` represents the `g_score` (the true accumulated cost from
 the start vertex), which is what is reported as `total_weight` on the resulting path. The `f_score` used to order the
