@@ -18,6 +18,7 @@ Graaf requires no separate compilation: consume it as a header-only library, or 
 - [Traversal](https://bobluppes.github.io/graaf/algorithms/traversal/README.html): BFS, DFS.
 - [Cycle detection](https://bobluppes.github.io/graaf/algorithms/cycle-detection/README.html): DFS-based.
 - [Graph coloring](https://bobluppes.github.io/graaf/algorithms/coloring/README.html): greedy, Welsh-Powell.
+- [Connectivity](https://bobluppes.github.io/graaf/algorithms/connectivity/README.html): articulation points, bridges.
 - [Strongly connected components](https://bobluppes.github.io/graaf/algorithms/strongly-connected-components/README.html): Kosaraju, Tarjan.
 - [Clique detection](https://bobluppes.github.io/graaf/algorithms/clique-detection/bron_kerbosch.html): Bron-Kerbosch.
 - [Topological sort](https://bobluppes.github.io/graaf/algorithms/topological-sort/README.html): DFS-based, Kahn.

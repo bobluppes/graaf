@@ -21,6 +21,8 @@
 - [Graph Coloring Algorithms](algorithms/coloring/README.md)
   - [Greedy Graph Coloring Algorithm](algorithms/coloring/greedy-graph-coloring.md)
   - [Welsh Powell Algorithm](algorithms/coloring/welsh-powell.md)
+- [Connectivity Algorithms](algorithms/connectivity/README.md)
+  - [Articulation Points and Bridges](algorithms/connectivity/articulation-points-and-bridges.md)
 - [Cycle Detection Algorithms](algorithms/cycle-detection/README.md)
   - [DFS Based Cycle Detection](algorithms/cycle-detection/dfs-based.md)
 - [Minimum Spanning Tree](algorithms/minimum-spanning-tree/README.md)
