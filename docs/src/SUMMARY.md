@@ -16,6 +16,9 @@
 # Algorithms
 
 - [Algorithms Overview](algorithms/intro.md)
+- [Centrality Algorithms](algorithms/centrality/README.md)
+  - [Betweenness Centrality](algorithms/centrality/betweenness.md)
+  - [Closeness Centrality](algorithms/centrality/closeness.md)
 - [Clique Detection](algorithms/clique-detection/README.md)
   - [Bron-Kerbosch algorithm](algorithms/clique-detection/bron_kerbosch.md)
 - [Graph Coloring Algorithms](algorithms/coloring/README.md)
